@@ -1,7 +1,7 @@
 FROM debian:stretch
 
 # JSON RPC port
-EXPOSE 8899/tcp
+EXPOSE 10099/tcp
 
 # Install libssl
 RUN apt update && \

@@ -180,11 +180,11 @@ FLAGS:
 
 OPTIONS:
         --drone-host <IP ADDRESS>    Drone host to use [default: same as --host]
-        --drone-port <PORT>          Drone port to use [default: 9900]
+        --drone-port <PORT>          Drone port to use [default: 11100]
     -n, --host <IP ADDRESS>          Host to use for both RPC and drone [default: 127.0.0.1]
     -k, --keypair <PATH>             /path/to/id.json
         --rpc-host <IP ADDRESS>      RPC host to use [default: same as --host]
-        --rpc-port <PORT>            RPC port to use [default: 8899]
+        --rpc-port <PORT>            RPC port to use [default: 10099]
 
 SUBCOMMANDS:
     address                  Get your public key

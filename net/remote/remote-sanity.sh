@@ -109,7 +109,7 @@ echo "+++ $sanityTargetIp: node count ($numSanityNodes expected)"
     nodeArg="num-nodes-exactly"
   fi
 
-  timeout 2m $morgan_gossip --entrypoint "$sanityTargetIp:8001" \
+  timeout 2m $morgan_gossip --entrypoint "$sanityTargetIp:10001" \
     spy --$nodeArg "$numSanityNodes" \
 )
 
@@ -119,13 +119,13 @@ echo "--- $sanityTargetIp: RPC API: getTransactionCount"
   curl --retry 5 --retry-delay 2 --retry-connrefused \
     -X POST -H 'Content-Type: application/json' \
     -d '{"jsonrpc":"2.0","id":1, "method":"getTransactionCount"}' \
-    http://"$sanityTargetIp":8899
+    http://"$sanityTargetIp":10099
 )
 
 echo "--- $sanityTargetIp: wallet sanity"
 (
   set -x
-  scripts/wallet-sanity.sh --url http://"$sanityTargetIp":8899
+  scripts/wallet-sanity.sh --url http://"$sanityTargetIp":10099
 )
 
 echo "--- $sanityTargetIp: verify ledger"
@@ -154,7 +154,7 @@ if $validatorSanity; then
     set -x -o pipefail
     timeout 10s ./multinode-demo/validator-x.sh --stake 0 \
       "$entrypointRsyncUrl" \
-      "$sanityTargetIp:8001" 2>&1 | tee validator-sanity.log
+      "$sanityTargetIp:10001" 2>&1 | tee validator-sanity.log
   ) || {
     exitcode=$?
     [[ $exitcode -eq 124 ]] || exit $exitcode
@@ -182,7 +182,7 @@ if $installCheck && [[ -r update_manifest_keypair.json ]]; then
     $morgan_install init \
       --no-modify-path \
       --data-dir install-data-dir \
-      --url http://"$sanityTargetIp":8899 \
+      --url http://"$sanityTargetIp":10099 \
       --pubkey "$update_manifest_pubkey"
 
     $morgan_install info

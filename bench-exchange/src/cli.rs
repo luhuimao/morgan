@@ -23,7 +23,7 @@ pub struct Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            entrypoint_addr: SocketAddr::from(([127, 0, 0, 1], 8001)),
+            entrypoint_addr: SocketAddr::from(([127, 0, 0, 1], 10001)),
             drone_addr: SocketAddr::from(([127, 0, 0, 1], DRONE_PORT)),
             identity: Keypair::new(),
             num_nodes: 1,
@@ -49,8 +49,8 @@ pub fn build_args<'a, 'b>() -> App<'a, 'b> {
                 .value_name("HOST:PORT")
                 .takes_value(true)
                 .required(false)
-                .default_value("127.0.0.1:8001")
-                .help("Cluster entry point; defaults to 127.0.0.1:8001"),
+                .default_value("127.0.0.1:10001")
+                .help("Cluster entry point; defaults to 127.0.0.1:10001"),
         )
         .arg(
             Arg::with_name("drone")
@@ -59,8 +59,8 @@ pub fn build_args<'a, 'b>() -> App<'a, 'b> {
                 .value_name("HOST:PORT")
                 .takes_value(true)
                 .required(false)
-                .default_value("127.0.0.1:9900")
-                .help("Location of the drone; defaults to 127.0.0.1:9900"),
+                .default_value("127.0.0.1:11100")
+                .help("Location of the drone; defaults to 127.0.0.1:11100"),
         )
         .arg(
             Arg::with_name("identity")
