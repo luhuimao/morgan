@@ -448,7 +448,7 @@ impl Replicator {
                 .unwrap()
                 > 0
         );
-        // ...or no lamports for fees
+        // ...or no difs for fees
         assert!(client.poll_get_balance(&self.keypair.pubkey()).unwrap() > 0);
 
         let (blockhash, _) = client.get_recent_blockhash().expect("No recent blockhash");

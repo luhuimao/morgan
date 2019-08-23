@@ -112,7 +112,7 @@ pub fn build_args<'a, 'b>() -> App<'a, 'b> {
                 .takes_value(true)
                 .required(false)
                 .default_value("100000")
-                .help("Number of lamports to fund to each signer"),
+                .help("Number of difs to fund to each signer"),
         )
         .arg(
             Arg::with_name("batch-size")

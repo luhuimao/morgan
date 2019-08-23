@@ -17,10 +17,10 @@ pub fn test_multisig_tx() -> Transaction {
     let keypair0 = Keypair::new();
     let keypair1 = Keypair::new();
     let keypairs = vec![&keypair0, &keypair1];
-    let lamports = 5;
+    let difs = 5;
     let blockhash = Hash::default();
 
-    let transfer_instruction = SystemInstruction::Transfer { lamports };
+    let transfer_instruction = SystemInstruction::Transfer { difs };
 
     let program_ids = vec![system_program::id(), solana_budget_api::id()];
 

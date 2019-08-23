@@ -102,7 +102,7 @@ impl Transaction {
     /// Create a signed transaction
     /// * `from_keypairs` - The keys used to sign the transaction.
     /// * `keys` - The keys for the transaction.  These are the program state
-    ///    instances or lamport recipient keys.
+    ///    instances or dif recipient keys.
     /// * `recent_blockhash` - The PoH hash.
     /// * `program_ids` - The keys that identify programs used in the `instruction` vector.
     /// * `instructions` - Instructions that will be executed atomically.

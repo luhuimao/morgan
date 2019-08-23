@@ -14,7 +14,7 @@ $ solana-wallet address
 <PUBKEY>
 ```
 
-#### Airdrop Lamports
+#### Airdrop Difs
 
 ```sh
 // Command
@@ -78,7 +78,7 @@ $ solana-wallet pay <PUBKEY> 123 \
 
 #### Authorized Transfer
 
-A third party must send a signature to unlock the lamports.
+A third party must send a signature to unlock the difs.
 ```sh
 // Command
 $ solana-wallet pay <PUBKEY> 123 \
@@ -188,7 +188,7 @@ OPTIONS:
 
 SUBCOMMANDS:
     address                  Get your public key
-    airdrop                  Request a batch of lamports
+    airdrop                  Request a batch of difs
     balance                  Get your balance
     cancel                   Cancel a transfer
     confirm                  Confirm transaction by signature
@@ -214,7 +214,7 @@ FLAGS:
 
 ```manpage
 solana-wallet-airdrop
-Request a batch of lamports
+Request a batch of difs
 
 USAGE:
     solana-wallet airdrop <NUM>
@@ -224,7 +224,7 @@ FLAGS:
     -V, --version    Prints version information
 
 ARGS:
-    <NUM>    The number of lamports to request
+    <NUM>    The number of difs to request
 ```
 
 ```manpage
@@ -311,11 +311,11 @@ FLAGS:
 OPTIONS:
         --after <DATETIME>                      A timestamp after which transaction will execute
         --require-timestamp-from <PUBKEY>       Require timestamp from this third party
-        --require-signature-from <PUBKEY>...    Any third party signatures required to unlock the lamports
+        --require-signature-from <PUBKEY>...    Any third party signatures required to unlock the difs
 
 ARGS:
     <PUBKEY>    The pubkey of recipient
-    <NUM>       The number of lamports to send
+    <NUM>       The number of difs to send
 ```
 
 ```manpage

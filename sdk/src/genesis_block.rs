@@ -26,14 +26,14 @@ pub struct GenesisBlock {
 }
 
 // useful for basic tests
-pub fn create_genesis_block(lamports: u64) -> (GenesisBlock, Keypair) {
+pub fn create_genesis_block(difs: u64) -> (GenesisBlock, Keypair) {
     let mint_keypair = Keypair::new();
     (
         GenesisBlock::new(
             &Pubkey::default(),
             &[(
                 mint_keypair.pubkey(),
-                Account::new(lamports, 0, &system_program::id()),
+                Account::new(difs, 0, &system_program::id()),
             )],
             &[],
         ),
@@ -117,7 +117,7 @@ mod tests {
         );
         assert_eq!(block.accounts.len(), 2);
         assert!(block.accounts.iter().any(
-            |(pubkey, account)| *pubkey == mint_keypair.pubkey() && account.lamports == 10_000
+            |(pubkey, account)| *pubkey == mint_keypair.pubkey() && account.difs == 10_000
         ));
 
         let path = &make_tmp_path("genesis_block");

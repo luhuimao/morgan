@@ -168,7 +168,7 @@ mod tests {
     use crate::blocktree::tests::make_slot_entries;
     use crate::genesis_utils::create_genesis_block;
     use crate::genesis_utils::{
-        create_genesis_block_with_leader, GenesisBlockInfo, BOOTSTRAP_LEADER_LAMPORTS,
+        create_genesis_block_with_leader, GenesisBlockInfo, BOOTSTRAP_LEADER_DIFS,
     };
     use crate::staking_utils::tests::setup_vote_and_stake_accounts;
     use solana_runtime::bank::Bank;
@@ -263,9 +263,9 @@ mod tests {
     fn test_next_leader_slot() {
         let pubkey = Pubkey::new_rand();
         let mut genesis_block = create_genesis_block_with_leader(
-            BOOTSTRAP_LEADER_LAMPORTS,
+            BOOTSTRAP_LEADER_DIFS,
             &pubkey,
-            BOOTSTRAP_LEADER_LAMPORTS,
+            BOOTSTRAP_LEADER_DIFS,
         )
         .genesis_block;
         genesis_block.epoch_warmup = false;
@@ -304,9 +304,9 @@ mod tests {
     fn test_next_leader_slot_blocktree() {
         let pubkey = Pubkey::new_rand();
         let mut genesis_block = create_genesis_block_with_leader(
-            BOOTSTRAP_LEADER_LAMPORTS,
+            BOOTSTRAP_LEADER_DIFS,
             &pubkey,
-            BOOTSTRAP_LEADER_LAMPORTS,
+            BOOTSTRAP_LEADER_DIFS,
         )
         .genesis_block;
         genesis_block.epoch_warmup = false;
@@ -392,7 +392,7 @@ mod tests {
             &mint_keypair,
             &vote_pubkey,
             &node_pubkey,
-            BOOTSTRAP_LEADER_LAMPORTS,
+            BOOTSTRAP_LEADER_DIFS,
         );
 
         // Have to wait until the epoch at after the epoch stakes generated at genesis

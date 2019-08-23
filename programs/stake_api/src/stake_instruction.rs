@@ -45,13 +45,13 @@ pub enum StakeInstruction {
 pub fn create_delegate_account(
     from_pubkey: &Pubkey,
     staker_pubkey: &Pubkey,
-    lamports: u64,
+    difs: u64,
 ) -> Vec<Instruction> {
     vec![
         system_instruction::create_account(
             from_pubkey,
             staker_pubkey,
-            lamports,
+            difs,
             std::mem::size_of::<StakeState>() as u64,
             &id(),
         ),
@@ -69,13 +69,13 @@ pub fn create_delegate_account(
 pub fn create_mining_pool_account(
     from_pubkey: &Pubkey,
     staker_pubkey: &Pubkey,
-    lamports: u64,
+    difs: u64,
 ) -> Vec<Instruction> {
     vec![
         system_instruction::create_account(
             from_pubkey,
             staker_pubkey,
-            lamports,
+            difs,
             std::mem::size_of::<StakeState>() as u64,
             &id(),
         ),

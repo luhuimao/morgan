@@ -107,11 +107,12 @@ organization that launched it.
 
 # What are Sols?
 
-A sol is the name of Solana's native token, which can be passed to nodes in a
-Solana cluster in exchange for running an on-chain program or validating its
-output. The Solana protocol defines that only 1 billion sols will ever exist,
-but that the system may perform micropayments of fractional sols, and that a sol
-may be split as many as 34 times. The fractional sol is called a *lamport*. It
-is named in honor of Solana's biggest technical influence, [Leslie
-Lamport](https://en.wikipedia.org/wiki/Leslie_Lamport). A lamport has a value
-of approximately 0.0000000000582 sol (2^-34).
+A BUS is the name of Bitconch's native token, which can be passed to nodes in a
+Bitconch cluster in exchange for running an on-chain program or validating its
+output. The Bitconch protocol defines that only 1 billion sols will ever exist,
+but that the system may perform micropayments of fractional sols, and that a BUS
+may be split as many as 34 times. The fractional sol is called a *dif*. It
+is named in honor of Bitconch's biggest technical influence, [Whitfield
+Diffie](https://en.wikipedia.org/wiki/Whitfield
+Diffie). A dif has a value
+of approximately 0.001 BUS (2^-3).

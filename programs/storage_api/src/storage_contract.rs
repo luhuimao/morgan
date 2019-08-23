@@ -64,8 +64,8 @@ pub enum StorageContract {
 }
 
 // utility function, used by Bank, tests, genesis
-pub fn create_validator_storage_account(lamports: u64) -> Account {
-    let mut storage_account = Account::new(lamports, STORAGE_ACCOUNT_SPACE as usize, &crate::id());
+pub fn create_validator_storage_account(difs: u64) -> Account {
+    let mut storage_account = Account::new(difs, STORAGE_ACCOUNT_SPACE as usize, &crate::id());
 
     storage_account
         .set_state(&StorageContract::ValidatorStorage {
@@ -309,8 +309,8 @@ impl<'a> StorageAccount<'a> {
                     .unwrap_or_default(),
             );
             let reward = TOTAL_VALIDATOR_REWARDS * num_validations;
-            mining_pool.account.lamports -= reward;
-            self.account.lamports += reward;
+            mining_pool.account.difs -= reward;
+            self.account.difs += reward;
             self.account.set_state(storage_contract)
         } else if let StorageContract::ReplicatorStorage {
             proofs,
@@ -357,8 +357,8 @@ impl<'a> StorageAccount<'a> {
             let num_validations = count_valid_proofs(&checked_proofs);
             let reward =
                 num_validations * TOTAL_REPLICATOR_REWARDS * (num_validations / total_proofs);
-            mining_pool.account.lamports -= reward;
-            self.account.lamports += reward;
+            mining_pool.account.difs -= reward;
+            self.account.difs += reward;
             self.account.set_state(storage_contract)
         } else {
             Err(InstructionError::InvalidArgument)?
@@ -472,7 +472,7 @@ mod tests {
     fn test_process_validation() {
         let mut account = StorageAccount {
             account: &mut Account {
-                lamports: 0,
+                difs: 0,
                 data: vec![],
                 owner: id(),
                 executable: false,

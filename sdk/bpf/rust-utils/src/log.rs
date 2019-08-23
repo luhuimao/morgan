@@ -65,8 +65,8 @@ pub fn sol_log_params(ka: &[Option<SolKeyedAccount>], data: &[u8]) {
             sol_log_64(0, 0, 0, 0, k.is_signer as u64);
             sol_log("- Key");
             sol_log_key(&k.key);
-            sol_log("- Lamports");
-            sol_log_64(0, 0, 0, 0, k.lamports);
+            sol_log("- Difs");
+            sol_log_64(0, 0, 0, 0, k.difs);
             sol_log("- AccountData");
             sol_log_slice(k.data);
             sol_log("- Owner");

@@ -590,15 +590,15 @@ where
     false
 }
 
-pub fn fund_keys(client: &Client, source: &Keypair, dests: &[Arc<Keypair>], lamports: u64) {
-    let total = lamports * (dests.len() as u64 + 1);
+pub fn fund_keys(client: &Client, source: &Keypair, dests: &[Arc<Keypair>], difs: u64) {
+    let total = difs * (dests.len() as u64 + 1);
     let mut funded: Vec<(&Keypair, u64)> = vec![(source, total)];
     let mut notfunded: Vec<&Arc<Keypair>> = dests.iter().collect();
 
     info!(
-        "  Funding {} keys with {} lamports each",
+        "  Funding {} keys with {} difs each",
         dests.len(),
-        lamports
+        difs
     );
     while !notfunded.is_empty() {
         if funded.is_empty() {
@@ -610,12 +610,12 @@ pub fn fund_keys(client: &Client, source: &Keypair, dests: &[Arc<Keypair>], lamp
         for f in &mut funded {
             let max_units = cmp::min(
                 cmp::min(notfunded.len() as u64, MAX_TRANSFERS_PER_TX),
-                (f.1 - lamports) / lamports,
+                (f.1 - difs) / difs,
             );
             if max_units == 0 {
                 continue;
             }
-            let per_unit = ((f.1 - lamports) / lamports / max_units) * lamports;
+            let per_unit = ((f.1 - difs) / difs / max_units) * difs;
             f.1 -= per_unit * max_units;
             let start = notfunded.len() - max_units as usize;
             let moves: Vec<_> = notfunded[start..]
@@ -701,7 +701,7 @@ pub fn fund_keys(client: &Client, source: &Keypair, dests: &[Arc<Keypair>], lamp
         });
         funded.append(&mut new_funded);
         funded.retain(|(k, b)| {
-            client.get_balance(&k.pubkey()).unwrap_or(0) > lamports && *b > lamports
+            client.get_balance(&k.pubkey()).unwrap_or(0) > difs && *b > difs
         });
         debug!("  Funded: {} left: {}", funded.len(), notfunded.len());
     }
@@ -837,7 +837,7 @@ fn generate_keypairs(num: u64) -> Vec<Keypair> {
     rnd.gen_n_keypairs(num)
 }
 
-pub fn airdrop_lamports(client: &Client, drone_addr: &SocketAddr, id: &Keypair, amount: u64) {
+pub fn airdrop_difs(client: &Client, drone_addr: &SocketAddr, id: &Keypair, amount: u64) {
     let balance = client.get_balance(&id.pubkey());
     let balance = balance.unwrap_or(0);
     if balance >= amount {
@@ -847,7 +847,7 @@ pub fn airdrop_lamports(client: &Client, drone_addr: &SocketAddr, id: &Keypair, 
     let amount_to_drop = amount - balance;
 
     info!(
-        "Airdropping {:?} lamports from {} for {}",
+        "Airdropping {:?} difs from {} for {}",
         amount_to_drop,
         drone_addr,
         id.pubkey(),
@@ -928,7 +928,7 @@ mod tests {
 
         let cluster = LocalCluster::new(&ClusterConfig {
             node_stakes: vec![100_000; NUM_NODES],
-            cluster_lamports: 100_000_000_000_000,
+            cluster_difs: 100_000_000_000_000,
             validator_config,
             native_instruction_processors: [solana_exchange_program!()].to_vec(),
             ..ClusterConfig::default()
@@ -963,7 +963,7 @@ mod tests {
         }
 
         const NUM_SIGNERS: u64 = 2;
-        airdrop_lamports(
+        airdrop_difs(
             &clients[0],
             &drone_addr,
             &config.identity,

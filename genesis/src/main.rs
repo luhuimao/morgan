@@ -28,12 +28,12 @@ use solana_vote_api::vote_state;
 use std::error;
 use std::time::{Duration, Instant};
 
-pub const BOOTSTRAP_LEADER_LAMPORTS: u64 = 42;
+pub const BOOTSTRAP_LEADER_DIFS: u64 = 42;
 
 fn main() -> Result<(), Box<dyn error::Error>> {
-    let default_bootstrap_leader_lamports = &BOOTSTRAP_LEADER_LAMPORTS.to_string();
-    let default_lamports_per_signature =
-        &FeeCalculator::default().lamports_per_signature.to_string();
+    let default_bootstrap_leader_difs = &BOOTSTRAP_LEADER_DIFS.to_string();
+    let default_difs_per_signature =
+        &FeeCalculator::default().difs_per_signature.to_string();
     let default_target_tick_duration =
         &timing::duration_as_ms(&PohConfig::default().target_tick_duration).to_string();
     let default_ticks_per_slot = &timing::DEFAULT_TICKS_PER_SLOT.to_string();
@@ -61,13 +61,13 @@ fn main() -> Result<(), Box<dyn error::Error>> {
                 .help("Use directory as persistent ledger location"),
         )
         .arg(
-            Arg::with_name("lamports")
+            Arg::with_name("difs")
                 .short("t")
-                .long("lamports")
-                .value_name("LAMPORTS")
+                .long("difs")
+                .value_name("DIFS")
                 .takes_value(true)
                 .required(true)
-                .help("Number of lamports to create in the mint"),
+                .help("Number of difs to create in the mint"),
         )
         .arg(
             Arg::with_name("mint_keypair_file")
@@ -105,21 +105,21 @@ fn main() -> Result<(), Box<dyn error::Error>> {
                 .help("Path to file containing the bootstrap leader's storage keypair"),
         )
         .arg(
-            Arg::with_name("bootstrap_leader_lamports")
-                .long("bootstrap-leader-lamports")
-                .value_name("LAMPORTS")
+            Arg::with_name("bootstrap_leader_difs")
+                .long("bootstrap-leader-difs")
+                .value_name("DIFS")
                 .takes_value(true)
-                .default_value(default_bootstrap_leader_lamports)
+                .default_value(default_bootstrap_leader_difs)
                 .required(true)
-                .help("Number of lamports to assign to the bootstrap leader"),
+                .help("Number of difs to assign to the bootstrap leader"),
         )
         .arg(
-            Arg::with_name("lamports_per_signature")
-                .long("lamports-per-signature")
-                .value_name("LAMPORTS")
+            Arg::with_name("difs_per_signature")
+                .long("difs-per-signature")
+                .value_name("DIFS")
                 .takes_value(true)
-                .default_value(default_lamports_per_signature)
-                .help("Number of lamports the cluster will charge for signature verification"),
+                .default_value(default_difs_per_signature)
+                .help("Number of difs the cluster will charge for signature verification"),
         )
         .arg(
             Arg::with_name("target_tick_duration")
@@ -167,9 +167,9 @@ fn main() -> Result<(), Box<dyn error::Error>> {
         matches.value_of("bootstrap_storage_keypair_file").unwrap();
     let mint_keypair_file = matches.value_of("mint_keypair_file").unwrap();
     let ledger_path = matches.value_of("ledger_path").unwrap();
-    let lamports = value_t_or_exit!(matches, "lamports", u64);
-    let bootstrap_leader_stake_lamports =
-        value_t_or_exit!(matches, "bootstrap_leader_lamports", u64);
+    let difs = value_t_or_exit!(matches, "difs", u64);
+    let bootstrap_leader_stake_difs =
+        value_t_or_exit!(matches, "bootstrap_leader_difs", u64);
 
     let bootstrap_leader_keypair = read_keypair(bootstrap_leader_keypair_file)?;
     let bootstrap_vote_keypair = read_keypair(bootstrap_vote_keypair_file)?;
@@ -184,7 +184,7 @@ fn main() -> Result<(), Box<dyn error::Error>> {
         &bootstrap_vote_keypair.pubkey(),
         &bootstrap_leader_keypair.pubkey(),
         0,
-        bootstrap_leader_stake_lamports,
+        bootstrap_leader_stake_difs,
     );
 
     let mut genesis_block = GenesisBlock::new(
@@ -193,7 +193,7 @@ fn main() -> Result<(), Box<dyn error::Error>> {
             // the mint
             (
                 mint_keypair.pubkey(),
-                Account::new(lamports, 0, &system_program::id()),
+                Account::new(difs, 0, &system_program::id()),
             ),
             // node needs an account to issue votes from
             (
@@ -208,7 +208,7 @@ fn main() -> Result<(), Box<dyn error::Error>> {
                 stake_state::create_delegate_stake_account(
                     &bootstrap_vote_keypair.pubkey(),
                     &vote_state,
-                    bootstrap_leader_stake_lamports,
+                    bootstrap_leader_stake_difs,
                 ),
             ),
         ],
@@ -223,8 +223,8 @@ fn main() -> Result<(), Box<dyn error::Error>> {
     );
     genesis_block.add_storage_program(&bootstrap_storage_keypair.pubkey());
 
-    genesis_block.fee_calculator.lamports_per_signature =
-        value_t_or_exit!(matches, "lamports_per_signature", u64);
+    genesis_block.fee_calculator.difs_per_signature =
+        value_t_or_exit!(matches, "difs_per_signature", u64);
     genesis_block.ticks_per_slot = value_t_or_exit!(matches, "ticks_per_slot", u64);
     genesis_block.slots_per_epoch = value_t_or_exit!(matches, "slots_per_epoch", u64);
     genesis_block.poh_config.target_tick_duration =

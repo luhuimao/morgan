@@ -17,7 +17,7 @@ fullnode_usage() {
   cat <<EOF
 
 Fullnode Usage:
-usage: $0 [--blockstream PATH] [--init-complete-file FILE] [--label LABEL] [--stake LAMPORTS] [--no-voting] [--rpc-port port] [rsync network path to bootstrap leader configuration] [cluster entry point]
+usage: $0 [--blockstream PATH] [--init-complete-file FILE] [--label LABEL] [--stake DIFS] [--no-voting] [--rpc-port port] [rsync network path to bootstrap leader configuration] [cluster entry point]
 
 Start a validator or a replicator
 
@@ -25,7 +25,7 @@ Start a validator or a replicator
   --init-complete-file FILE - create this file, if it doesn't already exist, once node initialization is complete
   --label LABEL             - Append the given label to the configuration files, useful when running
                               multiple fullnodes in the same workspace
-  --stake LAMPORTS          - Number of lamports to stake
+  --stake DIFS          - Number of difs to stake
   --no-voting               - start node without vote signer
   --rpc-port port           - custom RPC port for this node
   --no-restart              - do not restart the node if it exits
@@ -165,7 +165,7 @@ ledger_not_setup() {
 
 args=()
 node_type=validator
-stake=42 # number of lamports to assign as stake
+stake=42 # number of difs to assign as stake
 poll_for_new_genesis_block=0
 label=
 identity_keypair_path=

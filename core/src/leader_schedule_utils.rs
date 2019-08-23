@@ -58,14 +58,14 @@ mod tests {
     use super::*;
     use crate::staking_utils;
     use solana_runtime::genesis_utils::{
-        create_genesis_block_with_leader, BOOTSTRAP_LEADER_LAMPORTS,
+        create_genesis_block_with_leader, BOOTSTRAP_LEADER_DIFS,
     };
 
     #[test]
     fn test_leader_schedule_via_bank() {
         let pubkey = Pubkey::new_rand();
         let genesis_block =
-            create_genesis_block_with_leader(0, &pubkey, BOOTSTRAP_LEADER_LAMPORTS).genesis_block;
+            create_genesis_block_with_leader(0, &pubkey, BOOTSTRAP_LEADER_DIFS).genesis_block;
         let bank = Bank::new(&genesis_block);
 
         let pubkeys_and_stakes: Vec<_> = staking_utils::staked_nodes(&bank).into_iter().collect();
@@ -86,9 +86,9 @@ mod tests {
     fn test_leader_scheduler1_basic() {
         let pubkey = Pubkey::new_rand();
         let genesis_block = create_genesis_block_with_leader(
-            BOOTSTRAP_LEADER_LAMPORTS,
+            BOOTSTRAP_LEADER_DIFS,
             &pubkey,
-            BOOTSTRAP_LEADER_LAMPORTS,
+            BOOTSTRAP_LEADER_DIFS,
         )
         .genesis_block;
         let bank = Bank::new(&genesis_block);

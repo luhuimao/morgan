@@ -697,7 +697,7 @@ pub mod tests {
             entries.push(entry);
 
             // Add a second Transaction that will produce a
-            // InstructionError<0, ResultWithNegativeLamports> error when processed
+            // InstructionError<0, ResultWithNegativeDifs> error when processed
             let keypair2 = Keypair::new();
             let tx = system_transaction::create_user_account(
                 &keypair,
@@ -931,7 +931,7 @@ pub mod tests {
         )
         .is_err());
 
-        // First transaction in first entry succeeded, so keypair1 lost 1 lamport
+        // First transaction in first entry succeeded, so keypair1 lost 1 dif
         assert_eq!(bank.get_balance(&keypair1.pubkey()), 3);
         assert_eq!(bank.get_balance(&keypair2.pubkey()), 4);
 
@@ -1181,7 +1181,7 @@ pub mod tests {
             bank.transfer(10_001, &mint_keypair, &pubkey),
             Err(TransactionError::InstructionError(
                 0,
-                InstructionError::new_result_with_negative_lamports(),
+                InstructionError::new_result_with_negative_difs(),
             ))
         );
         assert_eq!(
@@ -1264,7 +1264,7 @@ pub mod tests {
         const NUM_TRANSFERS: usize = 100;
         let keypairs: Vec<_> = (0..NUM_TRANSFERS * 2).map(|_| Keypair::new()).collect();
 
-        // give everybody one lamport
+        // give everybody one dif
         for keypair in &keypairs {
             bank.transfer(1, &mint_keypair, &keypair.pubkey())
                 .expect("funding failed");

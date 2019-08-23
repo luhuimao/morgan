@@ -252,7 +252,7 @@ impl RpcClient {
     /// until the server sends a response. If the response packet is dropped
     /// by the network, this method will hang indefinitely.
     pub fn get_balance(&self, pubkey: &Pubkey) -> io::Result<u64> {
-        self.get_account(pubkey).map(|account| account.lamports)
+        self.get_account(pubkey).map(|account| account.difs)
     }
 
     /// Request the transaction count.  If the response packet is dropped by the network,

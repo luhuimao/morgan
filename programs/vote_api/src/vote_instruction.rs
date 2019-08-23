@@ -48,11 +48,11 @@ pub fn create_account(
     vote_pubkey: &Pubkey,
     node_pubkey: &Pubkey,
     commission: u32,
-    lamports: u64,
+    difs: u64,
 ) -> Vec<Instruction> {
     let space = VoteState::size_of() as u64;
     let create_ix =
-        system_instruction::create_account(from_pubkey, vote_pubkey, lamports, space, &id());
+        system_instruction::create_account(from_pubkey, vote_pubkey, difs, space, &id());
     let init_ix = initialize_account(from_pubkey, vote_pubkey, node_pubkey, commission);
     vec![create_ix, init_ix]
 }

@@ -3,18 +3,18 @@ use crate::message::Message;
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct FeeCalculator {
-    pub lamports_per_signature: u64,
+    pub difs_per_signature: u64,
 }
 
 impl FeeCalculator {
-    pub fn new(lamports_per_signature: u64) -> Self {
+    pub fn new(difs_per_signature: u64) -> Self {
         Self {
-            lamports_per_signature,
+            difs_per_signature,
         }
     }
 
     pub fn calculate_fee(&self, message: &Message) -> u64 {
-        self.lamports_per_signature * u64::from(message.header.num_required_signatures)
+        self.difs_per_signature * u64::from(message.header.num_required_signatures)
     }
 }
 

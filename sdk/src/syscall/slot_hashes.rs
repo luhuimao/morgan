@@ -60,8 +60,8 @@ impl Deref for SlotHashes {
     }
 }
 
-pub fn create_account(lamports: u64) -> Account {
-    Account::new(lamports, SlotHashes::size_of(), &syscall::id())
+pub fn create_account(difs: u64) -> Account {
+    Account::new(difs, SlotHashes::size_of(), &syscall::id())
 }
 
 #[cfg(test)]
@@ -82,8 +82,8 @@ mod tests {
 
     #[test]
     fn test_slot_hashes_create_account() {
-        let lamports = 42;
-        let account = create_account(lamports);
+        let difs = 42;
+        let account = create_account(difs);
         let slot_hashes = SlotHashes::from(&account);
         assert_eq!(slot_hashes, Some(SlotHashes { inner: vec![] }));
         let mut slot_hashes = slot_hashes.unwrap();

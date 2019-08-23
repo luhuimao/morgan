@@ -17,7 +17,7 @@ pub fn check_id(program_id: &Pubkey) -> bool {
 /// Create an executable account with the given shared object name.
 pub fn create_loadable_account(name: &str) -> Account {
     Account {
-        lamports: 1,
+        difs: 1,
         owner: id(),
         data: name.as_bytes().to_vec(),
         executable: true,

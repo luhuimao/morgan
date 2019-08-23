@@ -3,8 +3,8 @@
 A client *app* interacts with a Solana cluster by sending it *transactions*
 with one or more *instructions*. The Solana *runtime* passes those instructions
 to user-contributed *programs*. An instruction might, for example, tell a
-program to transfer *lamports* from one *account* to another or create an interactive
-contract that governs how lamports are transfered. Instructions are executed
+program to transfer *difs* from one *account* to another or create an interactive
+contract that governs how difs are transfered. Instructions are executed
 atomically. If any instruction is invalid, any changes made within the
 transaction are discarded.
 
@@ -32,9 +32,9 @@ the lifetime of a program. Also like a file, an account includes metadata that
 tells the runtime who is allowed to access the data and how. Unlike a file, the
 account includes metadata for the lifetime of the file. That lifetime is
 expressed in "tokens", which is a number of fractional native tokens, called
-*lamports*. Accounts are held in validator memory and pay "rent" to stay there.
+*difs*. Accounts are held in validator memory and pay "rent" to stay there.
 Each fullnode periodically scan all accounts and collects rent. Any account
-that drops to zero lamports is purged.
+that drops to zero difs is purged.
 
 If an account is marked "executable", it will only be used by a *loader* to run
 programs. For example, a BPF-compiled program is marked executable and loaded

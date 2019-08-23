@@ -44,13 +44,13 @@ pub enum StorageInstruction {
 pub fn create_validator_storage_account(
     from_pubkey: &Pubkey,
     storage_pubkey: &Pubkey,
-    lamports: u64,
+    difs: u64,
 ) -> Vec<Instruction> {
     vec![
         system_instruction::create_account(
             from_pubkey,
             storage_pubkey,
-            lamports,
+            difs,
             STORAGE_ACCOUNT_SPACE,
             &id(),
         ),
@@ -65,13 +65,13 @@ pub fn create_validator_storage_account(
 pub fn create_replicator_storage_account(
     from_pubkey: &Pubkey,
     storage_pubkey: &Pubkey,
-    lamports: u64,
+    difs: u64,
 ) -> Vec<Instruction> {
     vec![
         system_instruction::create_account(
             from_pubkey,
             storage_pubkey,
-            lamports,
+            difs,
             STORAGE_ACCOUNT_SPACE,
             &id(),
         ),
@@ -86,13 +86,13 @@ pub fn create_replicator_storage_account(
 pub fn create_mining_pool_account(
     from_pubkey: &Pubkey,
     storage_pubkey: &Pubkey,
-    lamports: u64,
+    difs: u64,
 ) -> Vec<Instruction> {
     vec![
         system_instruction::create_account(
             from_pubkey,
             storage_pubkey,
-            lamports,
+            difs,
             STORAGE_ACCOUNT_SPACE,
             &id(),
         ),

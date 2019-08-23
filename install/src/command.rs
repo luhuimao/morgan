@@ -202,7 +202,7 @@ fn new_update_manifest(
         let new_account = config_instruction::create_account::<SignedUpdateManifest>(
             &from_keypair.pubkey(),
             &update_manifest_keypair.pubkey(),
-            1, // lamports
+            1, // difs
         );
         let mut transaction = Transaction::new_unsigned_instructions(vec![new_account]);
         transaction.sign(&[from_keypair], recent_blockhash);

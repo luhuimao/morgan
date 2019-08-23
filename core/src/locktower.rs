@@ -50,10 +50,10 @@ impl EpochStakes {
             delegate_pubkey: *delegate_pubkey,
         }
     }
-    pub fn new_for_tests(lamports: u64) -> Self {
+    pub fn new_for_tests(difs: u64) -> Self {
         Self::new(
             0,
-            vec![(Pubkey::default(), lamports)].into_iter().collect(),
+            vec![(Pubkey::default(), difs)].into_iter().collect(),
             &Pubkey::default(),
         )
     }
@@ -114,8 +114,8 @@ impl Locktower {
     {
         let mut stake_lockouts = HashMap::new();
         for (key, (_, account)) in vote_accounts {
-            let lamports: u64 = *self.epoch_stakes.stakes.get(&key).unwrap_or(&0);
-            if lamports == 0 {
+            let difs: u64 = *self.epoch_stakes.stakes.get(&key).unwrap_or(&0);
+            if difs == 0 {
                 continue;
             }
             let vote_state = VoteState::from(&account);
@@ -191,7 +191,7 @@ impl Locktower {
             );
             if let Some(vote) = vote_state.nth_recent_vote(1) {
                 // Update all the parents of this last vote with the stake of this vote account
-                Self::update_ancestor_stakes(&mut stake_lockouts, vote.slot, lamports, ancestors);
+                Self::update_ancestor_stakes(&mut stake_lockouts, vote.slot, difs, ancestors);
             }
         }
         stake_lockouts
@@ -354,14 +354,14 @@ impl Locktower {
     fn update_ancestor_stakes(
         stake_lockouts: &mut HashMap<u64, StakeLockout>,
         slot: u64,
-        lamports: u64,
+        difs: u64,
         ancestors: &HashMap<u64, HashSet<u64>>,
     ) {
         let mut slot_with_ancestors = vec![slot];
         slot_with_ancestors.extend(ancestors.get(&slot).unwrap_or(&HashSet::new()));
         for slot in slot_with_ancestors {
             let entry = &mut stake_lockouts.entry(slot).or_default();
-            entry.stake += lamports;
+            entry.stake += difs;
         }
     }
 
@@ -410,10 +410,10 @@ mod test {
 
     fn gen_stakes(stake_votes: &[(u64, &[u64])]) -> Vec<(Pubkey, (u64, Account))> {
         let mut stakes = vec![];
-        for (lamports, votes) in stake_votes {
+        for (difs, votes) in stake_votes {
             let mut account = Account::default();
             account.data = vec![0; 1024];
-            account.lamports = *lamports;
+            account.difs = *difs;
             let mut vote_state = VoteState::default();
             for slot in *votes {
                 vote_state.process_slot_vote_unchecked(*slot);
@@ -421,7 +421,7 @@ mod test {
             vote_state
                 .serialize(&mut account.data)
                 .expect("serialize state");
-            stakes.push((Pubkey::new_rand(), (*lamports, account)));
+            stakes.push((Pubkey::new_rand(), (*difs, account)));
         }
         stakes
     }
@@ -758,10 +758,10 @@ mod test {
     fn test_stake_is_updated_for_entire_branch() {
         let mut stake_lockouts = HashMap::new();
         let mut account = Account::default();
-        account.lamports = 1;
+        account.difs = 1;
         let set: HashSet<u64> = vec![0u64, 1u64].into_iter().collect();
         let ancestors: HashMap<u64, HashSet<u64>> = [(2u64, set)].into_iter().cloned().collect();
-        Locktower::update_ancestor_stakes(&mut stake_lockouts, 2, account.lamports, &ancestors);
+        Locktower::update_ancestor_stakes(&mut stake_lockouts, 2, account.difs, &ancestors);
         assert_eq!(stake_lockouts[&0].stake, 1);
         assert_eq!(stake_lockouts[&1].stake, 1);
         assert_eq!(stake_lockouts[&2].stake, 1);

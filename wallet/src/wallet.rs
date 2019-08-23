@@ -61,7 +61,7 @@ pub enum WalletCommand {
     ShowStorageAccount(Pubkey),
     Deploy(String),
     GetTransactionCount,
-    // Pay(lamports, to, timestamp, timestamp_pubkey, witness(es), cancelable)
+    // Pay(difs, to, timestamp, timestamp_pubkey, witness(es), cancelable)
     Pay(
         u64,
         Pubkey,
@@ -165,8 +165,8 @@ pub fn parse_command(
     let response = match matches.subcommand() {
         ("address", Some(_address_matches)) => Ok(WalletCommand::Address),
         ("airdrop", Some(airdrop_matches)) => {
-            let lamports = airdrop_matches.value_of("lamports").unwrap().parse()?;
-            Ok(WalletCommand::Airdrop(lamports))
+            let difs = airdrop_matches.value_of("difs").unwrap().parse()?;
+            Ok(WalletCommand::Airdrop(difs))
         }
         ("balance", Some(balance_matches)) => {
             let pubkey = pubkey_of(&balance_matches, "pubkey").unwrap_or(*pubkey);
@@ -193,12 +193,12 @@ pub fn parse_command(
             } else {
                 0
             };
-            let lamports = matches.value_of("lamports").unwrap().parse()?;
+            let difs = matches.value_of("difs").unwrap().parse()?;
             Ok(WalletCommand::CreateVoteAccount(
                 voting_account_pubkey,
                 node_pubkey,
                 commission,
-                lamports,
+                difs,
             ))
         }
         ("authorize-voter", Some(matches)) => {
@@ -220,19 +220,19 @@ pub fn parse_command(
         }
         ("create-stake-account", Some(matches)) => {
             let staking_account_pubkey = pubkey_of(matches, "staking_account_pubkey").unwrap();
-            let lamports = matches.value_of("lamports").unwrap().parse()?;
+            let difs = matches.value_of("difs").unwrap().parse()?;
             Ok(WalletCommand::CreateStakeAccount(
                 staking_account_pubkey,
-                lamports,
+                difs,
             ))
         }
         ("create-mining-pool-account", Some(matches)) => {
             let mining_pool_account_pubkey =
                 pubkey_of(matches, "mining_pool_account_pubkey").unwrap();
-            let lamports = matches.value_of("lamports").unwrap().parse()?;
+            let difs = matches.value_of("difs").unwrap().parse()?;
             Ok(WalletCommand::CreateMiningPoolAccount(
                 mining_pool_account_pubkey,
-                lamports,
+                difs,
             ))
         }
         ("delegate-stake", Some(matches)) => {
@@ -262,10 +262,10 @@ pub fn parse_command(
         ("create-storage-mining-pool-account", Some(matches)) => {
             let storage_mining_pool_account_pubkey =
                 pubkey_of(matches, "storage_mining_pool_account_pubkey").unwrap();
-            let lamports = matches.value_of("lamports").unwrap().parse()?;
+            let difs = matches.value_of("difs").unwrap().parse()?;
             Ok(WalletCommand::CreateStorageMiningPoolAccount(
                 storage_mining_pool_account_pubkey,
-                lamports,
+                difs,
             ))
         }
         ("create-replicator-storage-account", Some(matches)) => {
@@ -303,7 +303,7 @@ pub fn parse_command(
         )),
         ("get-transaction-count", Some(_matches)) => Ok(WalletCommand::GetTransactionCount),
         ("pay", Some(pay_matches)) => {
-            let lamports = pay_matches.value_of("lamports").unwrap().parse()?;
+            let difs = pay_matches.value_of("difs").unwrap().parse()?;
             let to = pubkey_of(&pay_matches, "to").unwrap_or(*pubkey);
             let timestamp = if pay_matches.is_present("timestamp") {
                 // Parse input for serde_json
@@ -325,7 +325,7 @@ pub fn parse_command(
             };
 
             Ok(WalletCommand::Pay(
-                lamports,
+                difs,
                 to,
                 timestamp,
                 timestamp_pubkey,
@@ -375,20 +375,20 @@ fn process_airdrop(
     rpc_client: &RpcClient,
     config: &WalletConfig,
     drone_addr: SocketAddr,
-    lamports: u64,
+    difs: u64,
 ) -> ProcessResult {
     println!(
-        "Requesting airdrop of {:?} lamports from {}",
-        lamports, drone_addr
+        "Requesting airdrop of {:?} difs from {}",
+        difs, drone_addr
     );
     let previous_balance = match rpc_client.retry_get_balance(&config.keypair.pubkey(), 5)? {
-        Some(lamports) => lamports,
+        Some(difs) => difs,
         None => Err(WalletError::RpcRequestError(
             "Received result of an unexpected type".to_string(),
         ))?,
     };
 
-    request_and_confirm_airdrop(&rpc_client, &drone_addr, &config.keypair.pubkey(), lamports)?;
+    request_and_confirm_airdrop(&rpc_client, &drone_addr, &config.keypair.pubkey(), difs)?;
 
     let current_balance = rpc_client
         .retry_get_balance(&config.keypair.pubkey(), 5)?
@@ -400,11 +400,11 @@ fn process_airdrop(
             current_balance, previous_balance
         ))?;
     }
-    if current_balance - previous_balance < lamports {
+    if current_balance - previous_balance < difs {
         Err(format!(
             "Airdrop failed: Account balance increased by {} instead of {}",
             current_balance - previous_balance,
-            lamports
+            difs
         ))?;
     }
     Ok(format!("Your balance is: {:?}", current_balance))
@@ -413,9 +413,9 @@ fn process_airdrop(
 fn process_balance(pubkey: &Pubkey, rpc_client: &RpcClient) -> ProcessResult {
     let balance = rpc_client.retry_get_balance(pubkey, 5)?;
     match balance {
-        Some(lamports) => {
-            let ess = if lamports == 1 { "" } else { "s" };
-            Ok(format!("{:?} lamport{}", lamports, ess))
+        Some(difs) => {
+            let ess = if difs == 1 { "" } else { "s" };
+            Ok(format!("{:?} dif{}", difs, ess))
         }
         None => Err(WalletError::RpcRequestError(
             "Received result of an unexpected type".to_string(),
@@ -448,14 +448,14 @@ fn process_create_vote_account(
     voting_account_pubkey: &Pubkey,
     node_pubkey: &Pubkey,
     commission: u32,
-    lamports: u64,
+    difs: u64,
 ) -> ProcessResult {
     let ixs = vote_instruction::create_account(
         &config.keypair.pubkey(),
         voting_account_pubkey,
         node_pubkey,
         commission,
-        lamports,
+        difs,
     );
     let (recent_blockhash, _fee_calculator) = rpc_client.get_recent_blockhash()?;
     let mut tx = Transaction::new_signed_instructions(&[&config.keypair], ixs, recent_blockhash);
@@ -493,7 +493,7 @@ fn process_show_vote_account(
     voting_account_pubkey: &Pubkey,
 ) -> ProcessResult {
     use solana_vote_api::vote_state::VoteState;
-    let vote_account_lamports = rpc_client.retry_get_balance(voting_account_pubkey, 5)?;
+    let vote_account_difs = rpc_client.retry_get_balance(voting_account_pubkey, 5)?;
     let vote_account_data = rpc_client.get_account_data(voting_account_pubkey)?;
     let vote_state = VoteState::deserialize(&vote_account_data).map_err(|_| {
         WalletError::RpcRequestError(
@@ -501,7 +501,7 @@ fn process_show_vote_account(
         )
     })?;
 
-    println!("account lamports: {}", vote_account_lamports.unwrap());
+    println!("account difs: {}", vote_account_difs.unwrap());
     println!("node id: {}", vote_state.node_pubkey);
     println!(
         "authorized voter pubkey: {}",
@@ -535,13 +535,13 @@ fn process_create_stake_account(
     rpc_client: &RpcClient,
     config: &WalletConfig,
     staking_account_pubkey: &Pubkey,
-    lamports: u64,
+    difs: u64,
 ) -> ProcessResult {
     let (recent_blockhash, _fee_calculator) = rpc_client.get_recent_blockhash()?;
     let ixs = stake_instruction::create_delegate_account(
         &config.keypair.pubkey(),
         staking_account_pubkey,
-        lamports,
+        difs,
     );
     let mut tx = Transaction::new_signed_instructions(&[&config.keypair], ixs, recent_blockhash);
     let signature_str = rpc_client.send_and_confirm_transaction(&mut tx, &[&config.keypair])?;
@@ -552,13 +552,13 @@ fn process_create_mining_pool_account(
     rpc_client: &RpcClient,
     config: &WalletConfig,
     mining_pool_account_pubkey: &Pubkey,
-    lamports: u64,
+    difs: u64,
 ) -> ProcessResult {
     let (recent_blockhash, _fee_calculator) = rpc_client.get_recent_blockhash()?;
     let ixs = stake_instruction::create_mining_pool_account(
         &config.keypair.pubkey(),
         mining_pool_account_pubkey,
-        lamports,
+        difs,
     );
     let mut tx = Transaction::new_signed_instructions(&[&config.keypair], ixs, recent_blockhash);
     let signature_str = rpc_client.send_and_confirm_transaction(&mut tx, &[&config.keypair])?;
@@ -618,13 +618,13 @@ fn process_show_stake_account(
             voter_pubkey,
             credits_observed,
         }) => {
-            println!("account lamports: {}", stake_account.lamports);
+            println!("account difs: {}", stake_account.difs);
             println!("voter pubkey: {}", voter_pubkey);
             println!("credits observed: {}", credits_observed);
             Ok("".to_string())
         }
         Ok(StakeState::MiningPool) => {
-            println!("account lamports: {}", stake_account.lamports);
+            println!("account difs: {}", stake_account.difs);
             Ok("".to_string())
         }
         _ => Err(WalletError::RpcRequestError(
@@ -637,13 +637,13 @@ fn process_create_storage_mining_pool_account(
     rpc_client: &RpcClient,
     config: &WalletConfig,
     storage_account_pubkey: &Pubkey,
-    lamports: u64,
+    difs: u64,
 ) -> ProcessResult {
     let (recent_blockhash, _fee_calculator) = rpc_client.get_recent_blockhash()?;
     let ixs = storage_instruction::create_mining_pool_account(
         &config.keypair.pubkey(),
         storage_account_pubkey,
-        lamports,
+        difs,
     );
     let mut tx = Transaction::new_signed_instructions(&[&config.keypair], ixs, recent_blockhash);
     let signature_str = rpc_client.send_and_confirm_transaction(&mut tx, &[&config.keypair])?;
@@ -717,7 +717,7 @@ fn process_show_storage_account(
         )
     })?;
     println!("{:?}", storage_contract);
-    println!("account lamports: {}", account.lamports);
+    println!("account difs: {}", account.difs);
     Ok("".to_string())
 }
 
@@ -727,8 +727,8 @@ fn process_deploy(
     program_location: &str,
 ) -> ProcessResult {
     let balance = rpc_client.retry_get_balance(&config.keypair.pubkey(), 5)?;
-    if let Some(lamports) = balance {
-        if lamports < 1 {
+    if let Some(difs) = balance {
+        if difs < 1 {
             Err(WalletError::DynamicProgramError(
                 "Insufficient funds".to_string(),
             ))?
@@ -800,7 +800,7 @@ fn process_deploy(
 fn process_pay(
     rpc_client: &RpcClient,
     config: &WalletConfig,
-    lamports: u64,
+    difs: u64,
     to: &Pubkey,
     timestamp: Option<DateTime<Utc>>,
     timestamp_pubkey: Option<Pubkey>,
@@ -810,7 +810,7 @@ fn process_pay(
     let (blockhash, _fee_calculator) = rpc_client.get_recent_blockhash()?;
 
     if timestamp == None && *witnesses == None {
-        let mut tx = system_transaction::transfer(&config.keypair, to, lamports, blockhash);
+        let mut tx = system_transaction::transfer(&config.keypair, to, difs, blockhash);
         let result = rpc_client.send_and_confirm_transaction(&mut tx, &[&config.keypair]);
         let signature_str = log_instruction_custom_error::<SystemError>(result)?;
         Ok(signature_str.to_string())
@@ -831,7 +831,7 @@ fn process_pay(
             dt,
             &dt_pubkey,
             cancelable,
-            lamports,
+            difs,
         );
         let mut tx = Transaction::new_signed_instructions(&[&config.keypair], ixs, blockhash);
         let result = rpc_client.send_and_confirm_transaction(&mut tx, &[&config.keypair]);
@@ -862,7 +862,7 @@ fn process_pay(
             &contract_state.pubkey(),
             &witness,
             cancelable,
-            lamports,
+            difs,
         );
         let mut tx = Transaction::new_signed_instructions(&[&config.keypair], ixs, blockhash);
         let result = rpc_client.send_and_confirm_transaction(&mut tx, &[&config.keypair]);
@@ -964,8 +964,8 @@ pub fn process_command(config: &WalletConfig) -> ProcessResult {
         WalletCommand::Address => unreachable!(),
 
         // Request an airdrop from Solana Drone;
-        WalletCommand::Airdrop(lamports) => {
-            process_airdrop(&rpc_client, config, drone_addr, *lamports)
+        WalletCommand::Airdrop(difs) => {
+            process_airdrop(&rpc_client, config, drone_addr, *difs)
         }
 
         // Check client balance
@@ -982,14 +982,14 @@ pub fn process_command(config: &WalletConfig) -> ProcessResult {
             voting_account_pubkey,
             node_pubkey,
             commission,
-            lamports,
+            difs,
         ) => process_create_vote_account(
             &rpc_client,
             config,
             &voting_account_pubkey,
             &node_pubkey,
             *commission,
-            *lamports,
+            *difs,
         ),
         // Configure staking account already created
         WalletCommand::AuthorizeVoter(
@@ -1009,16 +1009,16 @@ pub fn process_command(config: &WalletConfig) -> ProcessResult {
         }
 
         // Create stake account
-        WalletCommand::CreateStakeAccount(staking_account_pubkey, lamports) => {
-            process_create_stake_account(&rpc_client, config, &staking_account_pubkey, *lamports)
+        WalletCommand::CreateStakeAccount(staking_account_pubkey, difs) => {
+            process_create_stake_account(&rpc_client, config, &staking_account_pubkey, *difs)
         }
 
-        WalletCommand::CreateMiningPoolAccount(mining_pool_account_pubkey, lamports) => {
+        WalletCommand::CreateMiningPoolAccount(mining_pool_account_pubkey, difs) => {
             process_create_mining_pool_account(
                 &rpc_client,
                 config,
                 &mining_pool_account_pubkey,
-                *lamports,
+                *difs,
             )
         }
 
@@ -1047,12 +1047,12 @@ pub fn process_command(config: &WalletConfig) -> ProcessResult {
             process_show_stake_account(&rpc_client, config, &staking_account_pubkey)
         }
 
-        WalletCommand::CreateStorageMiningPoolAccount(storage_account_pubkey, lamports) => {
+        WalletCommand::CreateStorageMiningPoolAccount(storage_account_pubkey, difs) => {
             process_create_storage_mining_pool_account(
                 &rpc_client,
                 config,
                 &storage_account_pubkey,
-                *lamports,
+                *difs,
             )
         }
 
@@ -1087,9 +1087,9 @@ pub fn process_command(config: &WalletConfig) -> ProcessResult {
 
         WalletCommand::GetTransactionCount => process_get_transaction_count(&rpc_client),
 
-        // If client has positive balance, pay lamports to another address
+        // If client has positive balance, pay difs to another address
         WalletCommand::Pay(
-            lamports,
+            difs,
             to,
             timestamp,
             timestamp_pubkey,
@@ -1098,7 +1098,7 @@ pub fn process_command(config: &WalletConfig) -> ProcessResult {
         ) => process_pay(
             &rpc_client,
             config,
-            *lamports,
+            *difs,
             &to,
             *timestamp,
             *timestamp_pubkey,
@@ -1129,10 +1129,10 @@ impl DroneKeypair {
     fn new_keypair(
         drone_addr: &SocketAddr,
         to_pubkey: &Pubkey,
-        lamports: u64,
+        difs: u64,
         blockhash: Hash,
     ) -> Result<Self, Box<dyn error::Error>> {
-        let transaction = request_airdrop_transaction(drone_addr, to_pubkey, lamports, blockhash)?;
+        let transaction = request_airdrop_transaction(drone_addr, to_pubkey, difs, blockhash)?;
         Ok(Self { transaction })
     }
 
@@ -1160,13 +1160,13 @@ pub fn request_and_confirm_airdrop(
     rpc_client: &RpcClient,
     drone_addr: &SocketAddr,
     to_pubkey: &Pubkey,
-    lamports: u64,
+    difs: u64,
 ) -> Result<(), Box<dyn error::Error>> {
     let (blockhash, _fee_calculator) = rpc_client.get_recent_blockhash()?;
     let keypair = {
         let mut retries = 5;
         loop {
-            let result = DroneKeypair::new_keypair(drone_addr, to_pubkey, lamports, blockhash);
+            let result = DroneKeypair::new_keypair(drone_addr, to_pubkey, difs, blockhash);
             if result.is_ok() || retries == 0 {
                 break result;
             }
@@ -1224,14 +1224,14 @@ pub fn app<'ab, 'v>(name: &str, about: &'ab str, version: &'v str) -> App<'ab, '
         .subcommand(SubCommand::with_name("address").about("Get your public key"))
         .subcommand(
             SubCommand::with_name("airdrop")
-                .about("Request a batch of lamports")
+                .about("Request a batch of difs")
                 .arg(
-                    Arg::with_name("lamports")
+                    Arg::with_name("difs")
                         .index(1)
                         .value_name("NUM")
                         .takes_value(true)
                         .required(true)
-                        .help("The number of lamports to request"),
+                        .help("The number of difs to request"),
                 ),
         )
         .subcommand(
@@ -1323,12 +1323,12 @@ pub fn app<'ab, 'v>(name: &str, about: &'ab str, version: &'v str) -> App<'ab, '
                         .help("Node that will vote in this account"),
                 )
                 .arg(
-                    Arg::with_name("lamports")
+                    Arg::with_name("difs")
                         .index(3)
                         .value_name("NUM")
                         .takes_value(true)
                         .required(true)
-                        .help("The number of lamports to send to the vote account"),
+                        .help("The number of difs to send to the vote account"),
                 )
                 .arg(
                     Arg::with_name("commission")
@@ -1364,12 +1364,12 @@ pub fn app<'ab, 'v>(name: &str, about: &'ab str, version: &'v str) -> App<'ab, '
                         .help("Staking mining pool account address to fund"),
                 )
                 .arg(
-                    Arg::with_name("lamports")
+                    Arg::with_name("difs")
                         .index(2)
                         .value_name("NUM")
                         .takes_value(true)
                         .required(true)
-                        .help("The number of lamports to assign to the mining pool account"),
+                        .help("The number of difs to assign to the mining pool account"),
                 ),
         )
        .subcommand(
@@ -1385,12 +1385,12 @@ pub fn app<'ab, 'v>(name: &str, about: &'ab str, version: &'v str) -> App<'ab, '
                         .help("Staking account address to fund"),
                 )
                 .arg(
-                    Arg::with_name("lamports")
+                    Arg::with_name("difs")
                         .index(2)
                         .value_name("NUM")
                         .takes_value(true)
                         .required(true)
-                        .help("The number of lamports to send to staking account"),
+                        .help("The number of difs to send to staking account"),
                 ),
         )
         .subcommand(
@@ -1471,12 +1471,12 @@ pub fn app<'ab, 'v>(name: &str, about: &'ab str, version: &'v str) -> App<'ab, '
                         .help("Storage mining pool account address to fund"),
                 )
                 .arg(
-                    Arg::with_name("lamports")
+                    Arg::with_name("difs")
                         .index(2)
                         .value_name("NUM")
                         .takes_value(true)
                         .required(true)
-                        .help("The number of lamports to assign to the storage mining pool account"),
+                        .help("The number of difs to assign to the storage mining pool account"),
                 ),
         )
         .subcommand(
@@ -1575,12 +1575,12 @@ pub fn app<'ab, 'v>(name: &str, about: &'ab str, version: &'v str) -> App<'ab, '
                         .help("The pubkey of recipient"),
                 )
                 .arg(
-                    Arg::with_name("lamports")
+                    Arg::with_name("difs")
                         .index(2)
                         .value_name("NUM")
                         .takes_value(true)
                         .required(true)
-                        .help("The number of lamports to send"),
+                        .help("The number of difs to send"),
                 )
                 .arg(
                     Arg::with_name("timestamp")
@@ -1606,7 +1606,7 @@ pub fn app<'ab, 'v>(name: &str, about: &'ab str, version: &'v str) -> App<'ab, '
                         .multiple(true)
                         .use_delimiter(true)
                         .validator(is_pubkey)
-                        .help("Any third party signatures required to unlock the lamports"),
+                        .help("Any third party signatures required to unlock the difs"),
                 )
                 .arg(
                     Arg::with_name("cancelable")
@@ -1970,7 +1970,7 @@ mod tests {
         assert_eq!(process_command(&config).unwrap(), pubkey);
 
         config.command = WalletCommand::Balance(config.keypair.pubkey());
-        assert_eq!(process_command(&config).unwrap(), "50 lamports");
+        assert_eq!(process_command(&config).unwrap(), "50 difs");
 
         let process_id = Pubkey::new_rand();
         config.command = WalletCommand::Cancel(process_id);

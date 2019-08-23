@@ -7,7 +7,7 @@ use solana_stake_api::stake_state;
 use solana_vote_api::vote_state;
 
 // The default stake placed with the bootstrap leader
-pub const BOOTSTRAP_LEADER_LAMPORTS: u64 = 42;
+pub const BOOTSTRAP_LEADER_DIFS: u64 = 42;
 
 pub struct GenesisBlockInfo {
     pub genesis_block: GenesisBlock,
@@ -16,9 +16,9 @@ pub struct GenesisBlockInfo {
 }
 
 pub fn create_genesis_block_with_leader(
-    mint_lamports: u64,
+    mint_difs: u64,
     bootstrap_leader_pubkey: &Pubkey,
-    bootstrap_leader_stake_lamports: u64,
+    bootstrap_leader_stake_difs: u64,
 ) -> GenesisBlockInfo {
     let mint_keypair = Keypair::new();
     let voting_keypair = Keypair::new();
@@ -30,7 +30,7 @@ pub fn create_genesis_block_with_leader(
         &voting_keypair.pubkey(),
         &bootstrap_leader_pubkey,
         0,
-        bootstrap_leader_stake_lamports,
+        bootstrap_leader_stake_difs,
     );
 
     let genesis_block = GenesisBlock::new(
@@ -39,7 +39,7 @@ pub fn create_genesis_block_with_leader(
             // the mint
             (
                 mint_keypair.pubkey(),
-                Account::new(mint_lamports, 0, &system_program::id()),
+                Account::new(mint_difs, 0, &system_program::id()),
             ),
             // node needs an account to issue votes and storage proofs from, this will require
             //  airdrops at some point to cover fees...
@@ -55,7 +55,7 @@ pub fn create_genesis_block_with_leader(
                 stake_state::create_delegate_stake_account(
                     &voting_keypair.pubkey(),
                     &vote_state,
-                    bootstrap_leader_stake_lamports,
+                    bootstrap_leader_stake_difs,
                 ),
             ),
         ],

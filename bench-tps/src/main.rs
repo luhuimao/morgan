@@ -1,7 +1,7 @@
 mod bench;
 mod cli;
 
-use crate::bench::{do_bench_tps, generate_and_fund_keypairs, Config, NUM_LAMPORTS_PER_ACCOUNT};
+use crate::bench::{do_bench_tps, generate_and_fund_keypairs, Config, NUM_DIFS_PER_ACCOUNT};
 use solana::gossip_service::{discover_cluster, get_clients};
 use std::process::exit;
 
@@ -45,7 +45,7 @@ fn main() {
         Some(drone_addr),
         &id,
         tx_count,
-        NUM_LAMPORTS_PER_ACCOUNT,
+        NUM_DIFS_PER_ACCOUNT,
     );
 
     let config = Config {

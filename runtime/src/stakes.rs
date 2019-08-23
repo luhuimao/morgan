@@ -22,7 +22,7 @@ impl Stakes {
             .filter(|(_, stake_account)| {
                 Some(*voter_pubkey) == StakeState::voter_pubkey_from(stake_account)
             })
-            .map(|(_, stake_account)| stake_account.lamports)
+            .map(|(_, stake_account)| stake_account.difs)
             .sum()
     }
 
@@ -32,7 +32,7 @@ impl Stakes {
 
     pub fn store(&mut self, pubkey: &Pubkey, account: &Account) {
         if solana_vote_api::check_id(&account.owner) {
-            if account.lamports == 0 {
+            if account.difs == 0 {
                 self.vote_accounts.remove(pubkey);
             } else {
                 // update the stake of this entry
@@ -44,14 +44,14 @@ impl Stakes {
                 self.vote_accounts.insert(*pubkey, (stake, account.clone()));
             }
         } else if solana_stake_api::check_id(&account.owner) {
-            //  old_stake is stake lamports and voter_pubkey from the pre-store() version
+            //  old_stake is stake difs and voter_pubkey from the pre-store() version
             let old_stake = self.stake_accounts.get(pubkey).and_then(|old_account| {
                 StakeState::voter_pubkey_from(old_account)
-                    .map(|old_voter_pubkey| (old_account.lamports, old_voter_pubkey))
+                    .map(|old_voter_pubkey| (old_account.difs, old_voter_pubkey))
             });
 
             let stake = StakeState::voter_pubkey_from(account)
-                .map(|voter_pubkey| (account.lamports, voter_pubkey));
+                .map(|voter_pubkey| (account.difs, voter_pubkey));
 
             // if adjustments need to be made...
             if stake != old_stake {
@@ -67,7 +67,7 @@ impl Stakes {
                 }
             }
 
-            if account.lamports == 0 {
+            if account.difs == 0 {
                 self.stake_accounts.remove(pubkey);
             } else {
                 self.stake_accounts.insert(*pubkey, account.clone());
@@ -120,7 +120,7 @@ mod tests {
             assert_eq!(vote_accounts.get(&vote_pubkey).unwrap().0, 10);
         }
 
-        stake_account.lamports = 42;
+        stake_account.difs = 42;
         stakes.store(&stake_pubkey, &stake_account);
         {
             let vote_accounts = stakes.vote_accounts();
@@ -128,7 +128,7 @@ mod tests {
             assert_eq!(vote_accounts.get(&vote_pubkey).unwrap().0, 42);
         }
 
-        stake_account.lamports = 0;
+        stake_account.difs = 0;
         stakes.store(&stake_pubkey, &stake_account);
         {
             let vote_accounts = stakes.vote_accounts();
@@ -153,14 +153,14 @@ mod tests {
             assert_eq!(vote_accounts.get(&vote_pubkey).unwrap().0, 10);
         }
 
-        vote_account.lamports = 0;
+        vote_account.difs = 0;
         stakes.store(&vote_pubkey, &vote_account);
 
         {
             let vote_accounts = stakes.vote_accounts();
             assert!(vote_accounts.get(&vote_pubkey).is_none());
         }
-        vote_account.lamports = 1;
+        vote_account.difs = 1;
         stakes.store(&vote_pubkey, &vote_account);
 
         {
