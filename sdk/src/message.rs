@@ -130,8 +130,8 @@ pub struct MessageHeader {
     pub num_required_signatures: u8,
 
     /// The last num_credit_only_signed_accounts of the signed keys are credit-only accounts.
-    /// Programs may process multiple transactions that add lamports to the same credit-only
-    /// account within a single PoH entry, but are not permitted to debit lamports or modify
+    /// Programs may process multiple transactions that add difs to the same credit-only
+    /// account within a single PoH entry, but are not permitted to debit difs or modify
     /// account data. Transactions targeting the same debit account are evaluated sequentially.
     pub num_credit_only_signed_accounts: u8,
 

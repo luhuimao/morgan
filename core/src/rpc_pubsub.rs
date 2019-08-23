@@ -426,7 +426,7 @@ mod tests {
            "params": {
                "result": {
                    "owner": budget_program_id,
-                   "lamports": 51,
+                   "difs": 51,
                    "data": expected_data,
                     "executable": executable,
                },
@@ -570,7 +570,7 @@ mod tests {
            "params": {
                "result": {
                    "owner": system_program::id(),
-                   "lamports": 100,
+                   "difs": 100,
                    "data": [],
                    "executable": false,
                },

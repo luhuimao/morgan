@@ -114,7 +114,7 @@ pub(crate) mod tests {
     use super::*;
     use crate::genesis_utils::{
         create_genesis_block, create_genesis_block_with_leader, GenesisBlockInfo,
-        BOOTSTRAP_LEADER_LAMPORTS,
+        BOOTSTRAP_LEADER_DIFS,
     };
     use hashbrown::HashSet;
     use solana_sdk::instruction::Instruction;
@@ -136,7 +136,7 @@ pub(crate) mod tests {
             genesis_block,
             voting_keypair,
             ..
-        } = create_genesis_block_with_leader(1, &Pubkey::new_rand(), BOOTSTRAP_LEADER_LAMPORTS);
+        } = create_genesis_block_with_leader(1, &Pubkey::new_rand(), BOOTSTRAP_LEADER_DIFS);
 
         let bank = Bank::new(&genesis_block);
 
@@ -145,7 +145,7 @@ pub(crate) mod tests {
         assert_eq!(vote_account_stakes_at_epoch(&bank, 10), None);
 
         // First epoch has the bootstrap leader
-        expected.insert(voting_keypair.pubkey(), BOOTSTRAP_LEADER_LAMPORTS);
+        expected.insert(voting_keypair.pubkey(), BOOTSTRAP_LEADER_DIFS);
         let expected = Some(expected);
         assert_eq!(vote_account_stakes_at_epoch(&bank, 0), expected);
 
@@ -226,7 +226,7 @@ pub(crate) mod tests {
         let vote_pubkey = Pubkey::new_rand();
 
         // Give the validator some stake but don't setup a staking account
-        // Validator has no lamports staked, so they get filtered out. Only the bootstrap leader
+        // Validator has no difs staked, so they get filtered out. Only the bootstrap leader
         // created by the genesis block will get included
         bank.transfer(1, &mint_keypair, &validator.pubkey())
             .unwrap();
@@ -254,11 +254,11 @@ pub(crate) mod tests {
         let bank = new_from_parent(&Arc::new(bank), slot);
 
         let result: Vec<_> = epoch_stakes_and_lockouts(&bank, 0);
-        assert_eq!(result, vec![(BOOTSTRAP_LEADER_LAMPORTS, None)]);
+        assert_eq!(result, vec![(BOOTSTRAP_LEADER_DIFS, None)]);
 
         let result: HashSet<_> = HashSet::from_iter(epoch_stakes_and_lockouts(&bank, epoch));
         let expected: HashSet<_> =
-            HashSet::from_iter(vec![(BOOTSTRAP_LEADER_LAMPORTS, None), (stake, None)]);
+            HashSet::from_iter(vec![(BOOTSTRAP_LEADER_DIFS, None), (stake, None)]);
         assert_eq!(result, expected);
     }
 

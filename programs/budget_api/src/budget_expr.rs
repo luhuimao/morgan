@@ -18,13 +18,13 @@ pub enum Witness {
     Signature,
 }
 
-/// Some amount of lamports that should be sent to the `to` `Pubkey`.
+/// Some amount of difs that should be sent to the `to` `Pubkey`.
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct Payment {
     /// Amount to be paid.
-    pub lamports: u64,
+    pub difs: u64,
 
-    /// The `Pubkey` that `lamports` should be paid to.
+    /// The `Pubkey` that `difs` should be paid to.
     pub to: Pubkey,
 }
 
@@ -70,92 +70,92 @@ pub enum BudgetExpr {
 }
 
 impl BudgetExpr {
-    /// Create the simplest budget - one that pays `lamports` to Pubkey.
-    pub fn new_payment(lamports: u64, to: &Pubkey) -> Self {
-        BudgetExpr::Pay(Payment { lamports, to: *to })
+    /// Create the simplest budget - one that pays `difs` to Pubkey.
+    pub fn new_payment(difs: u64, to: &Pubkey) -> Self {
+        BudgetExpr::Pay(Payment { difs, to: *to })
     }
 
-    /// Create a budget that pays `lamports` to `to` after being witnessed by `from`.
-    pub fn new_authorized_payment(from: &Pubkey, lamports: u64, to: &Pubkey) -> Self {
+    /// Create a budget that pays `difs` to `to` after being witnessed by `from`.
+    pub fn new_authorized_payment(from: &Pubkey, difs: u64, to: &Pubkey) -> Self {
         BudgetExpr::After(
             Condition::Signature(*from),
-            Box::new(Self::new_payment(lamports, to)),
+            Box::new(Self::new_payment(difs, to)),
         )
     }
 
-    /// Create a budget that pays `lamports` to `to` after being witnessed by `witness` unless
+    /// Create a budget that pays `difs` to `to` after being witnessed by `witness` unless
     /// canceled with a signature from `from`.
     pub fn new_cancelable_authorized_payment(
         witness: &Pubkey,
-        lamports: u64,
+        difs: u64,
         to: &Pubkey,
         from: Option<Pubkey>,
     ) -> Self {
         if from.is_none() {
-            return Self::new_authorized_payment(witness, lamports, to);
+            return Self::new_authorized_payment(witness, difs, to);
         }
         let from = from.unwrap();
         BudgetExpr::Or(
             (
                 Condition::Signature(*witness),
-                Box::new(BudgetExpr::new_payment(lamports, to)),
+                Box::new(BudgetExpr::new_payment(difs, to)),
             ),
             (
                 Condition::Signature(from),
-                Box::new(BudgetExpr::new_payment(lamports, &from)),
+                Box::new(BudgetExpr::new_payment(difs, &from)),
             ),
         )
     }
 
-    /// Create a budget that pays lamports` to `to` after being witnessed by 2x `from`s
+    /// Create a budget that pays difs` to `to` after being witnessed by 2x `from`s
     pub fn new_2_2_multisig_payment(
         from0: &Pubkey,
         from1: &Pubkey,
-        lamports: u64,
+        difs: u64,
         to: &Pubkey,
     ) -> Self {
         BudgetExpr::And(
             Condition::Signature(*from0),
             Condition::Signature(*from1),
-            Box::new(Self::new_payment(lamports, to)),
+            Box::new(Self::new_payment(difs, to)),
         )
     }
 
-    /// Create a budget that pays `lamports` to `to` after the given DateTime signed
+    /// Create a budget that pays `difs` to `to` after the given DateTime signed
     /// by `dt_pubkey`.
     pub fn new_future_payment(
         dt: DateTime<Utc>,
         dt_pubkey: &Pubkey,
-        lamports: u64,
+        difs: u64,
         to: &Pubkey,
     ) -> Self {
         BudgetExpr::After(
             Condition::Timestamp(dt, *dt_pubkey),
-            Box::new(Self::new_payment(lamports, to)),
+            Box::new(Self::new_payment(difs, to)),
         )
     }
 
-    /// Create a budget that pays `lamports` to `to` after the given DateTime
+    /// Create a budget that pays `difs` to `to` after the given DateTime
     /// signed by `dt_pubkey` unless canceled by `from`.
     pub fn new_cancelable_future_payment(
         dt: DateTime<Utc>,
         dt_pubkey: &Pubkey,
-        lamports: u64,
+        difs: u64,
         to: &Pubkey,
         from: Option<Pubkey>,
     ) -> Self {
         if from.is_none() {
-            return Self::new_future_payment(dt, dt_pubkey, lamports, to);
+            return Self::new_future_payment(dt, dt_pubkey, difs, to);
         }
         let from = from.unwrap();
         BudgetExpr::Or(
             (
                 Condition::Timestamp(dt, *dt_pubkey),
-                Box::new(Self::new_payment(lamports, to)),
+                Box::new(Self::new_payment(difs, to)),
             ),
             (
                 Condition::Signature(from),
-                Box::new(Self::new_payment(lamports, &from)),
+                Box::new(Self::new_payment(difs, &from)),
             ),
         )
     }
@@ -168,15 +168,15 @@ impl BudgetExpr {
         }
     }
 
-    /// Return true if the budget spends exactly `spendable_lamports`.
-    pub fn verify(&self, spendable_lamports: u64) -> bool {
+    /// Return true if the budget spends exactly `spendable_difs`.
+    pub fn verify(&self, spendable_difs: u64) -> bool {
         match self {
-            BudgetExpr::Pay(payment) => payment.lamports == spendable_lamports,
+            BudgetExpr::Pay(payment) => payment.difs == spendable_difs,
             BudgetExpr::After(_, sub_expr) | BudgetExpr::And(_, _, sub_expr) => {
-                sub_expr.verify(spendable_lamports)
+                sub_expr.verify(spendable_difs)
             }
             BudgetExpr::Or(a, b) => {
-                a.1.verify(spendable_lamports) && b.1.verify(spendable_lamports)
+                a.1.verify(spendable_difs) && b.1.verify(spendable_difs)
             }
         }
     }

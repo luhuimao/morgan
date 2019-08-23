@@ -546,8 +546,8 @@ mod test {
         try_calc(1000,   50,  100,   50,  101,  0,45,  5,   49, Tokens::new(   1, 0, 0, 0)).unwrap();
     }
 
-    fn create_bank(lamports: u64) -> (Bank, Keypair) {
-        let (genesis_block, mint_keypair) = create_genesis_block(lamports);
+    fn create_bank(difs: u64) -> (Bank, Keypair) {
+        let (genesis_block, mint_keypair) = create_genesis_block(difs);
         let mut bank = Bank::new(&genesis_block);
         bank.add_instruction_processor(id(), process_instruction);
         (bank, mint_keypair)

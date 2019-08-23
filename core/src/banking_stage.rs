@@ -1056,7 +1056,7 @@ mod tests {
         } = create_genesis_block(2);
         let (verified_sender, verified_receiver) = channel();
 
-        // Process a batch that includes a transaction that receives two lamports.
+        // Process a batch that includes a transaction that receives two difs.
         let alice = Keypair::new();
         let tx = system_transaction::create_user_account(
             &mint_keypair,
@@ -1072,7 +1072,7 @@ mod tests {
             .collect();
         verified_sender.send(packets).unwrap();
 
-        // Process a second batch that spends one of those lamports.
+        // Process a second batch that spends one of those difs.
         let tx = system_transaction::create_user_account(
             &alice,
             &mint_keypair.pubkey(),
@@ -1134,7 +1134,7 @@ mod tests {
                     .for_each(|x| assert_eq!(*x, Ok(())));
             }
 
-            // Assert the user holds one lamport, not two. If the stage only outputs one
+            // Assert the user holds one dif, not two. If the stage only outputs one
             // entry, then the second transaction will be rejected, because it drives
             // the account balance below zero before the credit is added.
             assert_eq!(bank.get_balance(&alice.pubkey()), 1);
@@ -1197,7 +1197,7 @@ mod tests {
             // InstructionErrors should still be recorded
             results[0] = Err(TransactionError::InstructionError(
                 1,
-                InstructionError::new_result_with_negative_lamports(),
+                InstructionError::new_result_with_negative_difs(),
             ));
             BankingStage::record_transactions(
                 &bank,

@@ -793,7 +793,7 @@ impl Bank {
     }
 
     /// Create, sign, and process a Transaction from `keypair` to `to` of
-    /// `n` lamports where `blockhash` is the last Entry ID observed by the client.
+    /// `n` difs where `blockhash` is the last Entry ID observed by the client.
     pub fn transfer(&self, n: u64, keypair: &Keypair, to: &Pubkey) -> Result<Signature> {
         let blockhash = self.last_blockhash();
         let tx = system_transaction::create_user_account(keypair, to, n, blockhash);
@@ -802,7 +802,7 @@ impl Bank {
     }
 
     pub fn read_balance(account: &Account) -> u64 {
-        account.lamports
+        account.difs
     }
     /// Each program would need to be able to introspect its own state
     /// this is hard-coded to the Budget language
@@ -831,14 +831,14 @@ impl Bank {
         }
     }
 
-    pub fn withdraw(&self, pubkey: &Pubkey, lamports: u64) -> Result<()> {
+    pub fn withdraw(&self, pubkey: &Pubkey, difs: u64) -> Result<()> {
         match self.get_account(pubkey) {
             Some(mut account) => {
-                if lamports > account.lamports {
+                if difs > account.difs {
                     return Err(TransactionError::InsufficientFundsForFee);
                 }
 
-                account.lamports -= lamports;
+                account.difs -= difs;
                 self.store(pubkey, &account);
 
                 Ok(())
@@ -847,9 +847,9 @@ impl Bank {
         }
     }
 
-    pub fn deposit(&self, pubkey: &Pubkey, lamports: u64) {
+    pub fn deposit(&self, pubkey: &Pubkey, difs: u64) {
         let mut account = self.get_account(pubkey).unwrap_or_default();
-        account.lamports += lamports;
+        account.difs += difs;
         self.store(pubkey, &account);
     }
 
@@ -1016,7 +1016,7 @@ mod tests {
     use super::*;
     use crate::epoch_schedule::MINIMUM_SLOT_LENGTH;
     use crate::genesis_utils::{
-        create_genesis_block_with_leader, GenesisBlockInfo, BOOTSTRAP_LEADER_LAMPORTS,
+        create_genesis_block_with_leader, GenesisBlockInfo, BOOTSTRAP_LEADER_DIFS,
     };
     use solana_sdk::genesis_block::create_genesis_block;
     use solana_sdk::hash;
@@ -1030,23 +1030,23 @@ mod tests {
     #[test]
     fn test_bank_new() {
         let dummy_leader_pubkey = Pubkey::new_rand();
-        let dummy_leader_lamports = BOOTSTRAP_LEADER_LAMPORTS;
-        let mint_lamports = 10_000;
+        let dummy_leader_difs = BOOTSTRAP_LEADER_DIFS;
+        let mint_difs = 10_000;
         let GenesisBlockInfo {
             genesis_block,
             mint_keypair,
             voting_keypair,
             ..
         } = create_genesis_block_with_leader(
-            mint_lamports,
+            mint_difs,
             &dummy_leader_pubkey,
-            dummy_leader_lamports,
+            dummy_leader_difs,
         );
         let bank = Bank::new(&genesis_block);
-        assert_eq!(bank.get_balance(&mint_keypair.pubkey()), mint_lamports);
+        assert_eq!(bank.get_balance(&mint_keypair.pubkey()), mint_difs);
         assert_eq!(
             bank.get_balance(&voting_keypair.pubkey()),
-            dummy_leader_lamports /* 1 token goes to the vote account associated with dummy_leader_lamports */
+            dummy_leader_difs /* 1 token goes to the vote account associated with dummy_leader_difs */
         );
     }
 
@@ -1105,7 +1105,7 @@ mod tests {
             bank.process_transaction(&tx).unwrap_err(),
             TransactionError::InstructionError(
                 1,
-                InstructionError::new_result_with_negative_lamports(),
+                InstructionError::new_result_with_negative_difs(),
             )
         );
         assert_eq!(bank.get_balance(&mint_keypair.pubkey()), 1);
@@ -1137,7 +1137,7 @@ mod tests {
     fn test_detect_failed_duplicate_transactions() {
         let (genesis_block, mint_keypair) = create_genesis_block(2);
         let mut bank = Bank::new(&genesis_block);
-        bank.fee_calculator.lamports_per_signature = 1;
+        bank.fee_calculator.difs_per_signature = 1;
 
         let dest = Keypair::new();
 
@@ -1155,11 +1155,11 @@ mod tests {
             bank.process_transaction(&tx),
             Err(TransactionError::InstructionError(
                 0,
-                InstructionError::new_result_with_negative_lamports(),
+                InstructionError::new_result_with_negative_difs(),
             ))
         );
 
-        // The lamports didn't move, but the from address paid the transaction fee.
+        // The difs didn't move, but the from address paid the transaction fee.
         assert_eq!(bank.get_balance(&dest.pubkey()), 0);
 
         // This should be the original balance minus the transaction fee.
@@ -1190,7 +1190,7 @@ mod tests {
             bank.transfer(10_001, &mint_keypair, &pubkey),
             Err(TransactionError::InstructionError(
                 0,
-                InstructionError::new_result_with_negative_lamports(),
+                InstructionError::new_result_with_negative_difs(),
             ))
         );
         assert_eq!(bank.transaction_count(), 1);
@@ -1259,7 +1259,7 @@ mod tests {
             ..
         } = create_genesis_block_with_leader(100, &leader, 3);
         let mut bank = Bank::new(&genesis_block);
-        bank.fee_calculator.lamports_per_signature = 3;
+        bank.fee_calculator.difs_per_signature = 3;
 
         let key1 = Keypair::new();
         let key2 = Keypair::new();
@@ -1272,7 +1272,7 @@ mod tests {
         assert_eq!(bank.get_balance(&key1.pubkey()), 2);
         assert_eq!(bank.get_balance(&mint_keypair.pubkey()), 100 - 5);
 
-        bank.fee_calculator.lamports_per_signature = 1;
+        bank.fee_calculator.difs_per_signature = 1;
         let tx = system_transaction::transfer(&key1, &key2.pubkey(), 1, genesis_block.hash());
 
         assert_eq!(bank.process_transaction(&tx), Ok(()));
@@ -1314,11 +1314,11 @@ mod tests {
             Ok(()),
             Err(TransactionError::InstructionError(
                 1,
-                InstructionError::new_result_with_negative_lamports(),
+                InstructionError::new_result_with_negative_difs(),
             )),
         ];
 
-        bank.fee_calculator.lamports_per_signature = 2;
+        bank.fee_calculator.difs_per_signature = 2;
         let initial_balance = bank.get_balance(&leader);
         let results = bank.filter_program_errors_and_collect_fee(&vec![tx1, tx2], &results);
         assert_eq!(bank.get_balance(&leader), initial_balance + 2 + 2);
@@ -1642,9 +1642,9 @@ mod tests {
     #[test]
     fn test_bank_epoch_vote_accounts() {
         let leader_pubkey = Pubkey::new_rand();
-        let leader_lamports = 3;
+        let leader_difs = 3;
         let mut genesis_block =
-            create_genesis_block_with_leader(5, &leader_pubkey, leader_lamports).genesis_block;
+            create_genesis_block_with_leader(5, &leader_pubkey, leader_difs).genesis_block;
 
         // set this up weird, forces future generation, odd mod(), etc.
         //  this says: "vote_accounts for epoch X should be generated at slot index 3 in epoch X-2...
@@ -1707,7 +1707,7 @@ mod tests {
         solana_logger::setup();
         let (genesis_block, mint_keypair) = create_genesis_block(500);
         let mut bank = Bank::new(&genesis_block);
-        bank.fee_calculator.lamports_per_signature = 2;
+        bank.fee_calculator.difs_per_signature = 2;
         let key = Keypair::new();
 
         let mut transfer_instruction =
@@ -1869,12 +1869,12 @@ mod tests {
     #[test]
     fn test_bank_inherit_fee_calculator() {
         let (mut genesis_block, _mint_keypair) = create_genesis_block(500);
-        genesis_block.fee_calculator.lamports_per_signature = 123;
+        genesis_block.fee_calculator.difs_per_signature = 123;
         let bank0 = Arc::new(Bank::new(&genesis_block));
         let bank1 = Arc::new(new_from_parent(&bank0));
         assert_eq!(
-            bank0.fee_calculator.lamports_per_signature,
-            bank1.fee_calculator.lamports_per_signature
+            bank0.fee_calculator.difs_per_signature,
+            bank1.fee_calculator.difs_per_signature
         );
     }
 
@@ -1963,7 +1963,7 @@ mod tests {
             bank.transfer(10_001, &mint_keypair, &Pubkey::new_rand()),
             Err(TransactionError::InstructionError(
                 0,
-                InstructionError::new_result_with_negative_lamports(),
+                InstructionError::new_result_with_negative_difs(),
             ))
         );
 

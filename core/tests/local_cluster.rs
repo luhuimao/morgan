@@ -81,7 +81,7 @@ fn test_fullnode_exit_2() {
     let mut validator_config = ValidatorConfig::default();
     validator_config.rpc_config.enable_fullnode_exit = true;
     let config = ClusterConfig {
-        cluster_lamports: 10_000,
+        cluster_difs: 10_000,
         node_stakes: vec![100; 2],
         validator_config,
         ..ClusterConfig::default()
@@ -98,7 +98,7 @@ fn test_leader_failure_4() {
     let mut validator_config = ValidatorConfig::default();
     validator_config.rpc_config.enable_fullnode_exit = true;
     let config = ClusterConfig {
-        cluster_lamports: 10_000,
+        cluster_difs: 10_000,
         node_stakes: vec![100; 4],
         validator_config: validator_config.clone(),
         ..ClusterConfig::default()
@@ -122,7 +122,7 @@ fn test_two_unbalanced_stakes() {
     validator_config.rpc_config.enable_fullnode_exit = true;
     let mut cluster = LocalCluster::new(&ClusterConfig {
         node_stakes: vec![999_990, 3],
-        cluster_lamports: 1_000_000,
+        cluster_difs: 1_000_000,
         validator_config: validator_config.clone(),
         ticks_per_slot: num_ticks_per_slot,
         slots_per_epoch: num_slots_per_epoch,
@@ -149,7 +149,7 @@ fn test_forwarding() {
     // will be have to be forwarded in order to be confirmed
     let config = ClusterConfig {
         node_stakes: vec![999_990, 3],
-        cluster_lamports: 2_000_000,
+        cluster_difs: 2_000_000,
         ..ClusterConfig::default()
     };
     let cluster = LocalCluster::new(&config);
@@ -175,7 +175,7 @@ fn test_restart_node() {
     let ticks_per_slot = 16;
     let mut cluster = LocalCluster::new(&ClusterConfig {
         node_stakes: vec![3],
-        cluster_lamports: 100,
+        cluster_difs: 100,
         validator_config: validator_config.clone(),
         ticks_per_slot,
         slots_per_epoch,
@@ -202,7 +202,7 @@ fn test_restart_node() {
 fn test_listener_startup() {
     let config = ClusterConfig {
         node_stakes: vec![100; 1],
-        cluster_lamports: 1_000,
+        cluster_difs: 1_000,
         num_listeners: 3,
         ..ClusterConfig::default()
     };
@@ -245,17 +245,17 @@ fn run_repairman_catchup(num_repairmen: u64) {
 
     validator_config.rpc_config.enable_fullnode_exit = true;
 
-    let lamports_per_repairman = 1000;
+    let difs_per_repairman = 1000;
 
     // Make the repairee_stake small relative to the repairmen stake so that the repairee doesn't
     // get included in the leader schedule, causing slots to get skipped while it's still trying
     // to catch up
     let repairee_stake = 3;
-    let cluster_lamports = 2 * lamports_per_repairman * num_repairmen + repairee_stake;
-    let node_stakes: Vec<_> = (0..num_repairmen).map(|_| lamports_per_repairman).collect();
+    let cluster_difs = 2 * difs_per_repairman * num_repairmen + repairee_stake;
+    let node_stakes: Vec<_> = (0..num_repairmen).map(|_| difs_per_repairman).collect();
     let mut cluster = LocalCluster::new(&ClusterConfig {
         node_stakes,
-        cluster_lamports,
+        cluster_difs,
         validator_config: validator_config.clone(),
         ticks_per_slot: num_ticks_per_slot,
         slots_per_epoch: num_slots_per_epoch,

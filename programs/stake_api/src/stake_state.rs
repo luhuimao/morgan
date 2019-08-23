@@ -71,7 +71,7 @@ impl StakeState {
             * (vote_state.credits() - credits_observed) as f64
             / CREDITS_PER_YEAR;
 
-        // don't bother trying to collect fractional lamports
+        // don't bother trying to collect fractional difs
         if total_rewards < 1f64 {
             return None;
         }
@@ -79,7 +79,7 @@ impl StakeState {
         let (voter_rewards, staker_rewards, is_split) = vote_state.commission_split(total_rewards);
 
         if (voter_rewards < 1f64 || staker_rewards < 1f64) && is_split {
-            // don't bother trying to collect fractional lamports
+            // don't bother trying to collect fractional difs
             return None;
         }
 
@@ -157,15 +157,15 @@ impl<'a> StakeAccount for KeyedAccount<'a> {
 
             if let Some((stakers_reward, voters_reward)) = StakeState::calculate_rewards(
                 credits_observed,
-                stake_account.account.lamports,
+                stake_account.account.difs,
                 &vote_state,
             ) {
-                if self.account.lamports < (stakers_reward + voters_reward) {
+                if self.account.difs < (stakers_reward + voters_reward) {
                     return Err(InstructionError::UnbalancedInstruction);
                 }
-                self.account.lamports -= stakers_reward + voters_reward;
-                stake_account.account.lamports += stakers_reward;
-                vote_account.account.lamports += voters_reward;
+                self.account.difs -= stakers_reward + voters_reward;
+                stake_account.account.difs += stakers_reward;
+                vote_account.account.difs += voters_reward;
 
                 stake_account.set_state(&StakeState::Delegate {
                     voter_pubkey,
@@ -185,9 +185,9 @@ impl<'a> StakeAccount for KeyedAccount<'a> {
 pub fn create_delegate_stake_account(
     voter_pubkey: &Pubkey,
     vote_state: &VoteState,
-    lamports: u64,
+    difs: u64,
 ) -> Account {
-    let mut stake_account = Account::new(lamports, std::mem::size_of::<StakeState>(), &id());
+    let mut stake_account = Account::new(difs, std::mem::size_of::<StakeState>(), &id());
 
     stake_account
         .set_state(&StakeState::Delegate {
@@ -367,23 +367,23 @@ mod tests {
         vote_state.process_slot_vote_unchecked(1000);
         vote_keyed_account.set_state(&vote_state).unwrap();
 
-        // now, no lamports in the pool!
+        // now, no difs in the pool!
         assert_eq!(
             mining_pool_keyed_account
                 .redeem_vote_credits(&mut stake_keyed_account, &mut vote_keyed_account),
             Err(InstructionError::UnbalancedInstruction)
         );
 
-        // add a lamport to pool
-        mining_pool_keyed_account.account.lamports = 2;
+        // add a dif to pool
+        mining_pool_keyed_account.account.difs = 2;
         assert!(mining_pool_keyed_account
             .redeem_vote_credits(&mut stake_keyed_account, &mut vote_keyed_account)
             .is_ok()); // yay
 
-        // lamports only shifted around, none made or lost
+        // difs only shifted around, none made or lost
         assert_eq!(
             2 + 100 + STAKE_GETS_PAID_EVERY_VOTE,
-            mining_pool_account.lamports + vote_account.lamports + stake_account.lamports
+            mining_pool_account.difs + vote_account.difs + stake_account.difs
         );
     }
 

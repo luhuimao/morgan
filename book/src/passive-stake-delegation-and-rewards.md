@@ -33,9 +33,9 @@ validator votes, count validator generated credits and to provide any
 additional validator specific state.  The VoteState program is not aware of any
 stakes delegated to it, and has no staking weight.
 
-The rewards generated are proportional to the amount of lamports staked.  In
+The rewards generated are proportional to the amount of difs staked.  In
 this proposal stake state is stored as part of the StakeState program. This
-program is owned by the staker only.  Lamports stored in this program are the
+program is owned by the staker only.  Difs stored in this program are the
 stake.  Unlike the current design, this program contains a new field to indicate
 which VoteState program the stake is delegated to.
 
@@ -55,7 +55,7 @@ rewards.
 * commission - The commission taken by this VoteState for any rewards claimed by
 staker's StakeState accounts.  This is the percentage ceiling of the reward.
 
-* Account::lamports - The accumulated lamports from the commission.  These do not
+* Account::difs - The accumulated difs from the commission.  These do not
 count as stakes.
 
 * `authorized_vote_signer` - Only this identity is authorized to submit votes, and
@@ -83,9 +83,9 @@ A StakeState takes one of two forms, StakeState::Delegate and StakeState::Mining
 StakeState is the current delegation preference of the **staker**. StakeState
 contains the following state information:
 
-* Account::lamports - The staked lamports.
+* Account::difs - The staked difs.
 
-* `voter_pubkey` - The pubkey of the VoteState instance the lamports are
+* `voter_pubkey` - The pubkey of the VoteState instance the difs are
 delegated to.
 
 * `credits_observed` - The total credits claimed over the lifetime of the
@@ -100,7 +100,7 @@ the pool can be split into several mining pools.  This design focuses on using a
 StakeState::MiningPool as the cluster wide mining pools.
 
 * 256 StakeState::MiningPool are initialized, each with 1/256 number of mining pool
-tokens stored as `Account::lamports`.
+tokens stored as `Account::difs`.
 
 The stakes and the MiningPool are accounts that are owned by the same `Stake`
 program.
@@ -117,7 +117,7 @@ program.
 
 The VoteState program and the StakeState programs maintain a lifetime counter
 of total rewards generated and claimed.  Therefore an explicit `Clear`
-instruction is not necessary.  When claiming rewards, the total lamports
+instruction is not necessary.  When claiming rewards, the total difs
 deposited into the StakeState and as validator commission is proportional to
 `VoteState::credits - StakeState::credits_observed`.
 
@@ -133,7 +133,7 @@ Reward is payed out for the difference between `VoteState::credits` to
 `StakeState::Delgate.credits_observed`, and `credits_observed` is updated to
 `VoteState::credits`.  The commission is deposited into the `VoteState` token
 balance, and the reward is deposited to the `StakeState::Delegate` token balance.  The
-reward and the commission is weighted by the `StakeState::lamports` divided by total lamports staked.
+reward and the commission is weighted by the `StakeState::difs` divided by total difs staked.
 
 The Staker or the owner of the Stake program sends a transaction with this
 instruction to claim the reward.

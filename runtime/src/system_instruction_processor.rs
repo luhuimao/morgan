@@ -10,7 +10,7 @@ const TO_ACCOUNT_INDEX: usize = 1;
 
 fn create_system_account(
     keyed_accounts: &mut [KeyedAccount],
-    lamports: u64,
+    difs: u64,
     space: u64,
     program_id: &Pubkey,
 ) -> Result<(), SystemError> {
@@ -28,15 +28,15 @@ fn create_system_account(
         );
         Err(SystemError::AccountAlreadyInUse)?;
     }
-    if lamports > keyed_accounts[FROM_ACCOUNT_INDEX].account.lamports {
+    if difs > keyed_accounts[FROM_ACCOUNT_INDEX].account.difs {
         debug!(
-            "CreateAccount: insufficient lamports ({}, need {})",
-            keyed_accounts[FROM_ACCOUNT_INDEX].account.lamports, lamports
+            "CreateAccount: insufficient difs ({}, need {})",
+            keyed_accounts[FROM_ACCOUNT_INDEX].account.difs, difs
         );
-        Err(SystemError::ResultWithNegativeLamports)?;
+        Err(SystemError::ResultWithNegativeDifs)?;
     }
-    keyed_accounts[FROM_ACCOUNT_INDEX].account.lamports -= lamports;
-    keyed_accounts[TO_ACCOUNT_INDEX].account.lamports += lamports;
+    keyed_accounts[FROM_ACCOUNT_INDEX].account.difs -= difs;
+    keyed_accounts[TO_ACCOUNT_INDEX].account.difs += difs;
     keyed_accounts[TO_ACCOUNT_INDEX].account.owner = *program_id;
     keyed_accounts[TO_ACCOUNT_INDEX].account.data = vec![0; space as usize];
     keyed_accounts[TO_ACCOUNT_INDEX].account.executable = false;
@@ -50,19 +50,19 @@ fn assign_account_to_program(
     keyed_accounts[FROM_ACCOUNT_INDEX].account.owner = *program_id;
     Ok(())
 }
-fn transfer_lamports(
+fn transfer_difs(
     keyed_accounts: &mut [KeyedAccount],
-    lamports: u64,
+    difs: u64,
 ) -> Result<(), SystemError> {
-    if lamports > keyed_accounts[FROM_ACCOUNT_INDEX].account.lamports {
+    if difs > keyed_accounts[FROM_ACCOUNT_INDEX].account.difs {
         debug!(
-            "Transfer: insufficient lamports ({}, need {})",
-            keyed_accounts[FROM_ACCOUNT_INDEX].account.lamports, lamports
+            "Transfer: insufficient difs ({}, need {})",
+            keyed_accounts[FROM_ACCOUNT_INDEX].account.difs, difs
         );
-        Err(SystemError::ResultWithNegativeLamports)?;
+        Err(SystemError::ResultWithNegativeDifs)?;
     }
-    keyed_accounts[FROM_ACCOUNT_INDEX].account.lamports -= lamports;
-    keyed_accounts[TO_ACCOUNT_INDEX].account.lamports += lamports;
+    keyed_accounts[FROM_ACCOUNT_INDEX].account.difs -= difs;
+    keyed_accounts[TO_ACCOUNT_INDEX].account.difs += difs;
     Ok(())
 }
 
@@ -84,17 +84,17 @@ pub fn process_instruction(
 
         match instruction {
             SystemInstruction::CreateAccount {
-                lamports,
+                difs,
                 space,
                 program_id,
-            } => create_system_account(keyed_accounts, lamports, space, &program_id),
+            } => create_system_account(keyed_accounts, difs, space, &program_id),
             SystemInstruction::Assign { program_id } => {
                 if !system_program::check_id(&keyed_accounts[FROM_ACCOUNT_INDEX].account.owner) {
                     Err(InstructionError::IncorrectProgramId)?;
                 }
                 assign_account_to_program(keyed_accounts, &program_id)
             }
-            SystemInstruction::Transfer { lamports } => transfer_lamports(keyed_accounts, lamports),
+            SystemInstruction::Transfer { difs } => transfer_difs(keyed_accounts, difs),
         }
         .map_err(|e| InstructionError::CustomError(e as u32))
     } else {
@@ -131,19 +131,19 @@ mod tests {
             KeyedAccount::new(&to, false, &mut to_account),
         ];
         create_system_account(&mut keyed_accounts, 50, 2, &new_program_owner).unwrap();
-        let from_lamports = from_account.lamports;
-        let to_lamports = to_account.lamports;
+        let from_difs = from_account.difs;
+        let to_difs = to_account.difs;
         let to_owner = to_account.owner;
         let to_data = to_account.data.clone();
-        assert_eq!(from_lamports, 50);
-        assert_eq!(to_lamports, 50);
+        assert_eq!(from_difs, 50);
+        assert_eq!(to_difs, 50);
         assert_eq!(to_owner, new_program_owner);
         assert_eq!(to_data, [0, 0]);
     }
 
     #[test]
-    fn test_create_negative_lamports() {
-        // Attempt to create account with more lamports than remaining in from_account
+    fn test_create_negative_difs() {
+        // Attempt to create account with more difs than remaining in from_account
         let new_program_owner = Pubkey::new(&[9; 32]);
         let from = Pubkey::new_rand();
         let mut from_account = Account::new(100, 0, &system_program::id());
@@ -157,9 +157,9 @@ mod tests {
             KeyedAccount::new(&to, false, &mut to_account),
         ];
         let result = create_system_account(&mut keyed_accounts, 150, 2, &new_program_owner);
-        assert_eq!(result, Err(SystemError::ResultWithNegativeLamports));
-        let from_lamports = from_account.lamports;
-        assert_eq!(from_lamports, 100);
+        assert_eq!(result, Err(SystemError::ResultWithNegativeDifs));
+        let from_difs = from_account.difs;
+        assert_eq!(from_difs, 100);
         assert_eq!(to_account, unchanged_account);
     }
 
@@ -181,8 +181,8 @@ mod tests {
         ];
         let result = create_system_account(&mut keyed_accounts, 50, 2, &new_program_owner);
         assert_eq!(result, Err(SystemError::AccountAlreadyInUse));
-        let from_lamports = from_account.lamports;
-        assert_eq!(from_lamports, 100);
+        let from_difs = from_account.difs;
+        assert_eq!(from_difs, 100);
         assert_eq!(owned_account, unchanged_account);
     }
 
@@ -195,7 +195,7 @@ mod tests {
 
         let populated_key = Pubkey::new_rand();
         let mut populated_account = Account {
-            lamports: 0,
+            difs: 0,
             data: vec![0, 1, 2, 3],
             owner: Pubkey::default(),
             executable: false,
@@ -208,7 +208,7 @@ mod tests {
         ];
         let result = create_system_account(&mut keyed_accounts, 50, 2, &new_program_owner);
         assert_eq!(result, Err(SystemError::AccountAlreadyInUse));
-        assert_eq!(from_account.lamports, 100);
+        assert_eq!(from_account.difs, 100);
         assert_eq!(populated_account, unchanged_account);
     }
 
@@ -252,7 +252,7 @@ mod tests {
     }
 
     #[test]
-    fn test_transfer_lamports() {
+    fn test_transfer_difs() {
         let from = Pubkey::new_rand();
         let mut from_account = Account::new(100, 0, &Pubkey::new(&[2; 32])); // account owner should not matter
         let to = Pubkey::new_rand();
@@ -261,21 +261,21 @@ mod tests {
             KeyedAccount::new(&from, true, &mut from_account),
             KeyedAccount::new(&to, false, &mut to_account),
         ];
-        transfer_lamports(&mut keyed_accounts, 50).unwrap();
-        let from_lamports = from_account.lamports;
-        let to_lamports = to_account.lamports;
-        assert_eq!(from_lamports, 50);
-        assert_eq!(to_lamports, 51);
+        transfer_difs(&mut keyed_accounts, 50).unwrap();
+        let from_difs = from_account.difs;
+        let to_difs = to_account.difs;
+        assert_eq!(from_difs, 50);
+        assert_eq!(to_difs, 51);
 
-        // Attempt to move more lamports than remaining in from_account
+        // Attempt to move more difs than remaining in from_account
         keyed_accounts = [
             KeyedAccount::new(&from, true, &mut from_account),
             KeyedAccount::new(&to, false, &mut to_account),
         ];
-        let result = transfer_lamports(&mut keyed_accounts, 100);
-        assert_eq!(result, Err(SystemError::ResultWithNegativeLamports));
-        assert_eq!(from_account.lamports, 50);
-        assert_eq!(to_account.lamports, 51);
+        let result = transfer_difs(&mut keyed_accounts, 100);
+        assert_eq!(result, Err(SystemError::ResultWithNegativeDifs));
+        assert_eq!(from_account.difs, 50);
+        assert_eq!(to_account.difs, 51);
     }
 
     #[test]
@@ -300,7 +300,7 @@ mod tests {
         ];
         let malicious_instruction = Instruction::new(
             system_program::id(),
-            &SystemInstruction::Transfer { lamports: 10 },
+            &SystemInstruction::Transfer { difs: 10 },
             account_metas,
         );
         assert_eq!(

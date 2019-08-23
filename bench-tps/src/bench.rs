@@ -26,7 +26,7 @@ use std::time::Duration;
 use std::time::Instant;
 
 pub const MAX_SPENDS_PER_TX: usize = 4;
-pub const NUM_LAMPORTS_PER_ACCOUNT: u64 = 20;
+pub const NUM_DIFS_PER_ACCOUNT: u64 = 20;
 
 pub type SharedTransactions = Arc<RwLock<VecDeque<Vec<(Transaction, u64)>>>>;
 
@@ -131,7 +131,7 @@ where
 
     // generate and send transactions for the specified duration
     let start = Instant::now();
-    let mut reclaim_lamports_back_to_source_account = false;
+    let mut reclaim_difs_back_to_source_account = false;
     let mut i = keypair0_balance;
     let mut blockhash = Hash::default();
     let mut blockhash_time = Instant::now();
@@ -158,7 +158,7 @@ where
             &keypairs[..len],
             &keypairs[len..],
             threads,
-            reclaim_lamports_back_to_source_account,
+            reclaim_difs_back_to_source_account,
         );
         // In sustained mode overlap the transfers with generation
         // this has higher average performance but lower peak performance
@@ -170,8 +170,8 @@ where
         }
 
         i += 1;
-        if should_switch_directions(NUM_LAMPORTS_PER_ACCOUNT, i) {
-            reclaim_lamports_back_to_source_account = !reclaim_lamports_back_to_source_account;
+        if should_switch_directions(NUM_DIFS_PER_ACCOUNT, i) {
+            reclaim_difs_back_to_source_account = !reclaim_difs_back_to_source_account;
         }
     }
 
@@ -335,8 +335,8 @@ fn verify_funding_transfer<T: Client>(client: &T, tx: &Transaction, amount: u64)
 /// fund the dests keys by spending all of the source keys into MAX_SPENDS_PER_TX
 /// on every iteration.  This allows us to replay the transfers because the source is either empty,
 /// or full
-pub fn fund_keys<T: Client>(client: &T, source: &Keypair, dests: &[Keypair], lamports: u64) {
-    let total = lamports * dests.len() as u64;
+pub fn fund_keys<T: Client>(client: &T, source: &Keypair, dests: &[Keypair], difs: u64) {
+    let total = difs * dests.len() as u64;
     let mut funded: Vec<(&Keypair, u64)> = vec![(source, total)];
     let mut notfunded: Vec<&Keypair> = dests.iter().collect();
 
@@ -437,7 +437,7 @@ pub fn fund_keys<T: Client>(client: &T, source: &Keypair, dests: &[Keypair], lam
     }
 }
 
-pub fn airdrop_lamports<T: Client>(
+pub fn airdrop_difs<T: Client>(
     client: &T,
     drone_addr: &SocketAddr,
     id: &Keypair,
@@ -450,7 +450,7 @@ pub fn airdrop_lamports<T: Client>(
     if starting_balance < tx_count {
         let airdrop_amount = tx_count - starting_balance;
         println!(
-            "Airdropping {:?} lamports from {} for {}",
+            "Airdropping {:?} difs from {} for {}",
             airdrop_amount,
             drone_addr,
             id.pubkey(),
@@ -563,11 +563,11 @@ fn compute_and_report_stats(
     );
 }
 
-// First transfer 3/4 of the lamports to the dest accounts
-// then ping-pong 1/4 of the lamports back to the other account
-// this leaves 1/4 lamport buffer in each account
-fn should_switch_directions(num_lamports_per_account: u64, i: u64) -> bool {
-    i % (num_lamports_per_account / 4) == 0 && (i >= (3 * num_lamports_per_account) / 4)
+// First transfer 3/4 of the difs to the dest accounts
+// then ping-pong 1/4 of the difs back to the other account
+// this leaves 1/4 dif buffer in each account
+fn should_switch_directions(num_difs_per_account: u64, i: u64) -> bool {
+    i % (num_difs_per_account / 4) == 0 && (i >= (3 * num_difs_per_account) / 4)
 }
 
 pub fn generate_keypairs(seed_keypair: &Keypair, count: usize) -> Vec<Keypair> {
@@ -590,26 +590,26 @@ pub fn generate_and_fund_keypairs<T: Client>(
     drone_addr: Option<SocketAddr>,
     funding_pubkey: &Keypair,
     tx_count: usize,
-    lamports_per_account: u64,
+    difs_per_account: u64,
 ) -> (Vec<Keypair>, u64) {
     info!("Creating {} keypairs...", tx_count * 2);
     let mut keypairs = generate_keypairs(funding_pubkey, tx_count * 2);
 
-    info!("Get lamports...");
+    info!("Get difs...");
 
-    // Sample the first keypair, see if it has lamports, if so then resume.
-    // This logic is to prevent lamport loss on repeated solana-bench-tps executions
+    // Sample the first keypair, see if it has difs, if so then resume.
+    // This logic is to prevent dif loss on repeated solana-bench-tps executions
     let last_keypair_balance = client
         .get_balance(&keypairs[tx_count * 2 - 1].pubkey())
         .unwrap_or(0);
 
-    if lamports_per_account > last_keypair_balance {
-        let extra = lamports_per_account - last_keypair_balance;
+    if difs_per_account > last_keypair_balance {
+        let extra = difs_per_account - last_keypair_balance;
         let total = extra * (keypairs.len() as u64);
         if client.get_balance(&funding_pubkey.pubkey()).unwrap_or(0) < total {
-            airdrop_lamports(client, &drone_addr.unwrap(), funding_pubkey, total);
+            airdrop_difs(client, &drone_addr.unwrap(), funding_pubkey, total);
         }
-        info!("adding more lamports {}", extra);
+        info!("adding more difs {}", extra);
         fund_keys(client, funding_pubkey, &keypairs, extra);
     }
 
@@ -655,7 +655,7 @@ mod tests {
         const NUM_NODES: usize = 1;
         let cluster = LocalCluster::new(&ClusterConfig {
             node_stakes: vec![999_990; NUM_NODES],
-            cluster_lamports: 2_000_000,
+            cluster_difs: 2_000_000,
             validator_config,
             ..ClusterConfig::default()
         });
@@ -676,13 +676,13 @@ mod tests {
             FULLNODE_PORT_RANGE,
         );
 
-        let lamports_per_account = 100;
+        let difs_per_account = 100;
         let (keypairs, _keypair_balance) = generate_and_fund_keypairs(
             &client,
             Some(drone_addr),
             &config.id,
             config.tx_count,
-            lamports_per_account,
+            difs_per_account,
         );
 
         let total = do_bench_tps(vec![client], config, keypairs, 0);
@@ -712,13 +712,13 @@ mod tests {
         let bank = Bank::new(&genesis_block);
         let client = BankClient::new(bank);
         let tx_count = 10;
-        let lamports = 20;
+        let difs = 20;
 
         let (keypairs, _keypair_balance) =
-            generate_and_fund_keypairs(&client, None, &id, tx_count, lamports);
+            generate_and_fund_keypairs(&client, None, &id, tx_count, difs);
 
         for kp in &keypairs {
-            // TODO: This should be >= lamports, but fails at the moment
+            // TODO: This should be >= difs, but fails at the moment
             assert_ne!(client.get_balance(&kp.pubkey()).unwrap(), 0);
         }
     }

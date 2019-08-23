@@ -37,14 +37,14 @@ pub enum InstructionError {
     /// An attempt to operate on an account that hasn't been initialized.
     UninitializedAccount,
 
-    /// Program's instruction lamport balance does not equal the balance after the instruction
+    /// Program's instruction dif balance does not equal the balance after the instruction
     UnbalancedInstruction,
 
     /// Program modified an account's program id
     ModifiedProgramId,
 
-    /// Program spent the lamports of an account that doesn't belong to it
-    ExternalAccountLamportSpend,
+    /// Program spent the difs of an account that doesn't belong to it
+    ExternalAccountDifSpend,
 
     /// Program modified the data of an account that doesn't belong to it
     ExternalAccountDataModified,
@@ -59,8 +59,8 @@ pub enum InstructionError {
 }
 
 impl InstructionError {
-    pub fn new_result_with_negative_lamports() -> Self {
-        InstructionError::CustomError(SystemError::ResultWithNegativeLamports as u32)
+    pub fn new_result_with_negative_difs() -> Self {
+        InstructionError::CustomError(SystemError::ResultWithNegativeDifs as u32)
     }
 }
 

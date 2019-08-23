@@ -435,7 +435,7 @@ mod tests {
         mint: &Keypair,
         validator_accounts_to_create: &[&Pubkey],
         replicator_accounts_to_create: &[&Pubkey],
-        lamports: u64,
+        difs: u64,
     ) {
         let mut ixs: Vec<_> = validator_accounts_to_create
             .into_iter()
@@ -443,7 +443,7 @@ mod tests {
                 storage_instruction::create_validator_storage_account(
                     &mint.pubkey(),
                     account,
-                    lamports,
+                    difs,
                 )
             })
             .collect();
@@ -453,7 +453,7 @@ mod tests {
                 ixs.append(&mut storage_instruction::create_replicator_storage_account(
                     &mint.pubkey(),
                     account,
-                    lamports,
+                    difs,
                 ))
             });
         let message = Message::new(ixs);

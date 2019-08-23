@@ -105,7 +105,7 @@ $ export PATH=$PWD/bin:$PATH
 
 ### Starting The Validator
 Sanity check that you are able to interact with the cluster by receiving a small
-airdrop of lamports from the testnet drone:
+airdrop of difs from the testnet drone:
 ```bash
 $ solana-wallet airdrop 123
 $ solana-wallet balance

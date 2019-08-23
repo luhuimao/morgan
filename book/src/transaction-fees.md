@@ -30,22 +30,22 @@ Before sending a transaction to the cluster, a client may submit the
 transaction and fee account data to an SDK module called the *fee calculator*.
 So long as the client's SDK version matches the slot leader's version, the
 client is assured that its account will be changed exactly the same number of
-lamports as returned by the fee calculator.
+difs as returned by the fee calculator.
 
 ### Fee Parameters
 
 In the first implementation of this design, the only fee parameter is
-`lamports_per_signature`. The more signatures the cluster needs to verify, the
-higher the fee. The exact number of lamports is determined by the ratio of SPS
-to the SPS target. The cluster lowers `lamports_per_signature` when SPS is
+`difs_per_signature`. The more signatures the cluster needs to verify, the
+higher the fee. The exact number of difs is determined by the ratio of SPS
+to the SPS target. The cluster lowers `difs_per_signature` when SPS is
 below the target and raises it when at or above the target.
 
 Future parameters might include:
 
-* `lamports_per_pubkey` - cost to load an account
-* `lamports_per_slot_distance` - higher cost to load very old accounts
-* `lamports_per_byte` - cost per size of account loaded
-* `lamports_per_bpf_instruction` - cost to run a program
+* `difs_per_pubkey` - cost to load an account
+* `difs_per_slot_distance` - higher cost to load very old accounts
+* `difs_per_byte` - cost per size of account loaded
+* `difs_per_bpf_instruction` - cost to run a program
 
 ### Attacks
 

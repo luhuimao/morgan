@@ -1,5 +1,5 @@
 //! The `drone` module provides an object for launching a Solana Drone,
-//! which is the custodian of any remaining lamports in a mint.
+//! which is the custodian of any remaining difs in a mint.
 //! The Solana Drone builds and send airdrop transactions,
 //! checking requests against a request cap for a given time time_slice
 //! and (to come) an IP rate limit.
@@ -47,7 +47,7 @@ pub const DRONE_PORT: u16 = 9900;
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub enum DroneRequest {
     GetAirdrop {
-        lamports: u64,
+        difs: u64,
         to: Pubkey,
         blockhash: Hash,
     },
@@ -107,23 +107,23 @@ impl Drone {
         trace!("build_airdrop_transaction: {:?}", req);
         match req {
             DroneRequest::GetAirdrop {
-                lamports,
+                difs,
                 to,
                 blockhash,
             } => {
-                if self.check_request_limit(lamports) {
-                    self.request_current += lamports;
+                if self.check_request_limit(difs) {
+                    self.request_current += difs;
                     datapoint_info!(
                         "drone-airdrop",
-                        ("request_amount", lamports, i64),
+                        ("request_amount", difs, i64),
                         ("request_current", self.request_current, i64)
                     );
-                    info!("Requesting airdrop of {} to {:?}", lamports, to);
+                    info!("Requesting airdrop of {} to {:?}", difs, to);
 
                     let create_instruction = system_instruction::create_user_account(
                         &self.mint_keypair.pubkey(),
                         &to,
-                        lamports,
+                        difs,
                     );
                     let message = Message::new(vec![create_instruction]);
                     Ok(Transaction::new(&[&self.mint_keypair], message, blockhash))
@@ -132,7 +132,7 @@ impl Drone {
                         ErrorKind::Other,
                         format!(
                             "token limit reached; req: {} current: {} cap: {}",
-                            lamports, self.request_current, self.request_cap
+                            difs, self.request_current, self.request_cap
                         ),
                     ))
                 }
@@ -183,18 +183,18 @@ impl Drop for Drone {
 pub fn request_airdrop_transaction(
     drone_addr: &SocketAddr,
     id: &Pubkey,
-    lamports: u64,
+    difs: u64,
     blockhash: Hash,
 ) -> Result<Transaction, Error> {
     info!(
-        "request_airdrop_transaction: drone_addr={} id={} lamports={} blockhash={}",
-        drone_addr, id, lamports, blockhash
+        "request_airdrop_transaction: drone_addr={} id={} difs={} blockhash={}",
+        drone_addr, id, difs, blockhash
     );
     // TODO: make this async tokio client
     let mut stream = TcpStream::connect_timeout(drone_addr, Duration::new(3, 0))?;
     stream.set_read_timeout(Some(Duration::new(10, 0)))?;
     let req = DroneRequest::GetAirdrop {
-        lamports,
+        difs,
         blockhash,
         to: *id,
     };
@@ -369,7 +369,7 @@ mod tests {
         let to = Pubkey::new_rand();
         let blockhash = Hash::default();
         let request = DroneRequest::GetAirdrop {
-            lamports: 2,
+            difs: 2,
             to,
             blockhash,
         };
@@ -393,7 +393,7 @@ mod tests {
         assert_eq!(
             instruction,
             SystemInstruction::CreateAccount {
-                lamports: 2,
+                difs: 2,
                 space: 0,
                 program_id: Pubkey::default()
             }
@@ -409,9 +409,9 @@ mod tests {
     fn test_process_drone_request() {
         let to = Pubkey::new_rand();
         let blockhash = Hash::new(&to.as_ref());
-        let lamports = 50;
+        let difs = 50;
         let req = DroneRequest::GetAirdrop {
-            lamports,
+            difs,
             blockhash,
             to,
         };
@@ -421,7 +421,7 @@ mod tests {
 
         let keypair = Keypair::new();
         let expected_instruction =
-            system_instruction::create_user_account(&keypair.pubkey(), &to, lamports);
+            system_instruction::create_user_account(&keypair.pubkey(), &to, difs);
         let message = Message::new(vec![expected_instruction]);
         let expected_tx = Transaction::new(&[&keypair], message, blockhash);
         let expected_bytes = serialize(&expected_tx).unwrap();

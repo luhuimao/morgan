@@ -3,7 +3,7 @@
 # Convenience script to easily deploy a software update to one of the testnets
 #
 # Prerequisites:
-# 1) The default keypair should have some lamports (eg, `solana-wallet airdrop 123`)
+# 1) The default keypair should have some difs (eg, `solana-wallet airdrop 123`)
 # 2) The file update_manifest_keypair.json should exist if this script is not
 #    run from the CI environment
 #

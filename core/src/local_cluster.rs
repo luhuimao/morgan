@@ -61,8 +61,8 @@ pub struct ClusterConfig {
     pub num_listeners: u64,
     /// The stakes of each node
     pub node_stakes: Vec<u64>,
-    /// The total lamports available to the cluster
-    pub cluster_lamports: u64,
+    /// The total difs available to the cluster
+    pub cluster_difs: u64,
     pub ticks_per_slot: u64,
     pub slots_per_epoch: u64,
     pub stakers_slot_offset: u64,
@@ -77,7 +77,7 @@ impl Default for ClusterConfig {
             num_replicators: 0,
             num_listeners: 0,
             node_stakes: vec![],
-            cluster_lamports: 0,
+            cluster_difs: 0,
             ticks_per_slot: DEFAULT_TICKS_PER_SLOT,
             slots_per_epoch: DEFAULT_SLOTS_PER_EPOCH,
             stakers_slot_offset: DEFAULT_SLOTS_PER_EPOCH,
@@ -105,13 +105,13 @@ pub struct LocalCluster {
 impl LocalCluster {
     pub fn new_with_equal_stakes(
         num_nodes: usize,
-        cluster_lamports: u64,
-        lamports_per_node: u64,
+        cluster_difs: u64,
+        difs_per_node: u64,
     ) -> Self {
-        let stakes: Vec<_> = (0..num_nodes).map(|_| lamports_per_node).collect();
+        let stakes: Vec<_> = (0..num_nodes).map(|_| difs_per_node).collect();
         let config = ClusterConfig {
             node_stakes: stakes,
-            cluster_lamports,
+            cluster_difs,
             ..ClusterConfig::default()
         };
         Self::new(&config)
@@ -126,7 +126,7 @@ impl LocalCluster {
             mint_keypair,
             voting_keypair,
         } = create_genesis_block_with_leader(
-            config.cluster_lamports,
+            config.cluster_difs,
             &leader_pubkey,
             config.node_stakes[0],
         );
@@ -246,7 +246,7 @@ impl LocalCluster {
             // setup as a listener
             info!("listener {} ", validator_pubkey,);
         } else {
-            // Give the validator some lamports to setup vote and storage accounts
+            // Give the validator some difs to setup vote and storage accounts
             let validator_balance = Self::transfer_with_client(
                 &client,
                 &self.funding_keypair,
@@ -317,7 +317,7 @@ impl LocalCluster {
             FULLNODE_PORT_RANGE,
         );
 
-        // Give the replicator some lamports to setup its storage accounts
+        // Give the replicator some difs to setup its storage accounts
         Self::transfer_with_client(
             &client,
             &self.funding_keypair,
@@ -358,31 +358,31 @@ impl LocalCluster {
         }
     }
 
-    pub fn transfer(&self, source_keypair: &Keypair, dest_pubkey: &Pubkey, lamports: u64) -> u64 {
+    pub fn transfer(&self, source_keypair: &Keypair, dest_pubkey: &Pubkey, difs: u64) -> u64 {
         let client = create_client(
             self.entry_point_info.client_facing_addr(),
             FULLNODE_PORT_RANGE,
         );
-        Self::transfer_with_client(&client, source_keypair, dest_pubkey, lamports)
+        Self::transfer_with_client(&client, source_keypair, dest_pubkey, difs)
     }
 
     fn transfer_with_client(
         client: &ThinClient,
         source_keypair: &Keypair,
         dest_pubkey: &Pubkey,
-        lamports: u64,
+        difs: u64,
     ) -> u64 {
         trace!("getting leader blockhash");
         let (blockhash, _fee_calculator) = client.get_recent_blockhash().unwrap();
         let mut tx = system_transaction::create_user_account(
             &source_keypair,
             dest_pubkey,
-            lamports,
+            difs,
             blockhash,
         );
         info!(
             "executing transfer of {} from {} to {}",
-            lamports,
+            difs,
             source_keypair.pubkey(),
             *dest_pubkey
         );
@@ -390,7 +390,7 @@ impl LocalCluster {
             .retry_transfer(&source_keypair, &mut tx, 5)
             .expect("client transfer");
         client
-            .wait_for_balance(dest_pubkey, Some(lamports))
+            .wait_for_balance(dest_pubkey, Some(difs))
             .expect("get balance")
     }
 
@@ -575,7 +575,7 @@ mod test {
             validator_config,
             num_replicators,
             node_stakes: vec![3; NUM_NODES],
-            cluster_lamports: 100,
+            cluster_difs: 100,
             ticks_per_slot: 8,
             slots_per_epoch: MINIMUM_SLOT_LENGTH as u64,
             ..ClusterConfig::default()

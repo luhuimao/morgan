@@ -197,7 +197,7 @@ impl VoteState {
     }
 
     /// Number of "credits" owed to this account from the mining pool. Submit this
-    /// VoteState to the Rewards program to trade credits for lamports.
+    /// VoteState to the Rewards program to trade credits for difs.
     pub fn credits(&self) -> u64 {
         self.credits
     }
@@ -305,9 +305,9 @@ pub fn create_account(
     vote_pubkey: &Pubkey,
     node_pubkey: &Pubkey,
     commission: u32,
-    lamports: u64,
+    difs: u64,
 ) -> Account {
-    let mut vote_account = Account::new(lamports, VoteState::size_of(), &id());
+    let mut vote_account = Account::new(difs, VoteState::size_of(), &id());
 
     initialize_account(
         &mut KeyedAccount::new(vote_pubkey, false, &mut vote_account),
@@ -323,11 +323,11 @@ pub fn create_bootstrap_leader_account(
     vote_pubkey: &Pubkey,
     node_pubkey: &Pubkey,
     commission: u32,
-    lamports: u64,
+    difs: u64,
 ) -> (Account, VoteState) {
     // Construct a vote account for the bootstrap_leader such that the leader_scheduler
     // will be forced to select it as the leader for height 0
-    let mut vote_account = create_account(&vote_pubkey, &node_pubkey, commission, lamports);
+    let mut vote_account = create_account(&vote_pubkey, &node_pubkey, commission, difs);
 
     let mut vote_state: VoteState = vote_account.state().unwrap();
     // TODO: get a hash for slot 0?

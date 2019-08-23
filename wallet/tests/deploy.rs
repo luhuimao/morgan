@@ -52,7 +52,7 @@ fn test_wallet_deploy_program() {
         .unwrap();
     let account_info_obj = account_info.as_object().unwrap();
     assert_eq!(
-        account_info_obj.get("lamports").unwrap().as_u64().unwrap(),
+        account_info_obj.get("difs").unwrap().as_u64().unwrap(),
         1
     );
     let owner_array = account_info.get("owner").unwrap();

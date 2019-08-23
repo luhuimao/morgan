@@ -109,7 +109,7 @@ fn run_replicator_startup_basic(num_nodes: usize, num_replicators: usize) {
         validator_config,
         num_replicators,
         node_stakes: vec![100; num_nodes],
-        cluster_lamports: 10_000,
+        cluster_difs: 10_000,
         ..ClusterConfig::default()
     };
     let cluster = LocalCluster::new(&config);
@@ -223,7 +223,7 @@ fn test_account_setup() {
         validator_config,
         num_replicators,
         node_stakes: vec![100; num_nodes],
-        cluster_lamports: 10_000,
+        cluster_difs: 10_000,
         ..ClusterConfig::default()
     };
     let cluster = LocalCluster::new(&config);

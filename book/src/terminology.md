@@ -5,7 +5,7 @@ The following terms are used throughout this book.
 #### account
 
 A persistent file addressed by [public key](#public-key) and with
-[lamports](#lamport) tracking its lifetime.
+[difs](#dif) tracking its lifetime.
 
 #### app
 
@@ -123,7 +123,7 @@ in a [transaction](#instruction).
 
 A [public key](#public-key) and corresponding [secret key](#secret-key).
 
-#### lamport
+#### dif
 
 A fractional [native token](#native-token) with the value of approximately
 0.0000000000582 [sol](#sol) (2^-34).

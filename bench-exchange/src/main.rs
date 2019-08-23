@@ -6,7 +6,7 @@ pub mod order_book;
 #[macro_use]
 extern crate solana_exchange_program;
 
-use crate::bench::{airdrop_lamports, do_bench_exchange, Config};
+use crate::bench::{airdrop_difs, do_bench_exchange, Config};
 use log::*;
 use solana::gossip_service::{discover_cluster, get_clients};
 use solana_sdk::signature::KeypairUtil;
@@ -50,7 +50,7 @@ fn main() {
 
     let accounts_in_groups = batch_size * account_groups;
     const NUM_SIGNERS: u64 = 2;
-    airdrop_lamports(
+    airdrop_difs(
         &clients[0],
         &drone_addr,
         &identity,

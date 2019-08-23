@@ -18,7 +18,7 @@ transaction fails to commit.
 
 ### Account Structure
 
-Accounts maintain a lamport balance and program-specific memory.
+Accounts maintain a dif balance and program-specific memory.
 
 # Transaction Engine
 
@@ -67,7 +67,7 @@ data array and assign it to a Program.
 
 * `Assign` - Allows the user to assign an existing account to a program.
 
-* `Transfer`  - Transfers lamports between accounts.
+* `Transfer`  - Transfers difs between accounts.
 
 ## Program State Security
 
@@ -101,7 +101,7 @@ program, the Account's data is zero initialized.
 * Runtime guarantees that a program's code is the only code that can modify
 Account data that the Account is assigned to.
 
-* Runtime guarantees that the program can only spend lamports that are in
+* Runtime guarantees that the program can only spend difs that are in
 accounts that are assigned to it.
 
 * Runtime guarantees the balances belonging to accounts are balanced before
