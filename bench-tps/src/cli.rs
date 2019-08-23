@@ -22,7 +22,7 @@ pub struct Config {
 impl Default for Config {
     fn default() -> Config {
         Config {
-            entrypoint_addr: SocketAddr::from(([127, 0, 0, 1], 8001)),
+            entrypoint_addr: SocketAddr::from(([127, 0, 0, 1], 10001)),
             drone_addr: SocketAddr::from(([127, 0, 0, 1], DRONE_PORT)),
             id: Keypair::new(),
             threads: 4,
@@ -45,7 +45,7 @@ pub fn build_args<'a, 'b>() -> App<'a, 'b> {
                 .long("entrypoint")
                 .value_name("HOST:PORT")
                 .takes_value(true)
-                .help("Rendezvous with the cluster at this entry point; defaults to 127.0.0.1:8001"),
+                .help("Rendezvous with the cluster at this entry point; defaults to 127.0.0.1:10001"),
         )
         .arg(
             Arg::with_name("drone")

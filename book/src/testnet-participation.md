@@ -50,7 +50,7 @@ itself before debugging further.
 
 Fetch the current transaction count over JSON RPC:
 ```bash
-$ curl -X POST -H 'Content-Type: application/json' -d '{"jsonrpc":"2.0","id":1, "method":"getTransactionCount"}' http://testnet.morgan.com:8899
+$ curl -X POST -H 'Content-Type: application/json' -d '{"jsonrpc":"2.0","id":1, "method":"getTransactionCount"}' http://testnet.morgan.com:10099
 ```
 
 Inspect the blockexplorer at [http://testnet.morgan.com/](http://testnet.morgan.com/) for activity.
@@ -113,7 +113,7 @@ $ morgan-wallet balance
 
 Also try running following command to join the gossip network and view all the other nodes in the cluster:
 ```bash
-$ morgan-gossip --entrypoint testnet.morgan.com:8001 spy
+$ morgan-gossip --entrypoint testnet.morgan.com:10001 spy
 # Press ^C to exit
 ```
 
@@ -171,7 +171,7 @@ $ morgan-keygen pubkey ~/validator-keypair.json
 From another console, confirm the IP address and **identity pubkey** of your validator is visible in the
 gossip network by running:
 ```bash
-$ morgan-gossip --entrypoint testnet.morgan.com:8001 spy
+$ morgan-gossip --entrypoint testnet.morgan.com:10001 spy
 ```
 
 Provide the **vote pubkey** to the `morgan-wallet show-vote-account` command to view

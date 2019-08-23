@@ -56,8 +56,8 @@ case $clientToRun in
 morgan-bench-tps)
   clientCommand="\
     morgan-bench-tps \
-      --entrypoint $entrypointIp:8001 \
-      --drone $entrypointIp:9900 \
+      --entrypoint $entrypointIp:10001 \
+      --drone $entrypointIp:11100 \
       --duration 7500 \
       --sustained \
       --threads $threadCount \
@@ -68,8 +68,8 @@ morgan-bench-exchange)
   morgan-keygen -o bench.keypair
   clientCommand="\
     morgan-bench-exchange \
-      --entrypoint $entrypointIp:8001 \
-      --drone $entrypointIp:9900 \
+      --entrypoint $entrypointIp:10001 \
+      --drone $entrypointIp:11100 \
       --threads $threadCount \
       --batch-size 1000 \
       --fund-amount 20000 \

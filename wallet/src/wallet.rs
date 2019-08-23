@@ -116,7 +116,7 @@ impl Default for WalletConfig {
             command: WalletCommand::Balance(Pubkey::default()),
             drone_host: None,
             drone_port: DRONE_PORT,
-            json_rpc_url: "http://testnet.morgan.com:8899".to_string(),
+            json_rpc_url: "http://testnet.morgan.com:10099".to_string(),
             keypair: Keypair::new(),
             rpc_client: None,
         }
@@ -1678,7 +1678,7 @@ mod tests {
     #[test]
     fn test_wallet_config_drone_addr() {
         let mut config = WalletConfig::default();
-        config.json_rpc_url = "http://127.0.0.1:8899".to_string();
+        config.json_rpc_url = "http://127.0.0.1:10099".to_string();
         let rpc_host = IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1));
         assert_eq!(
             config.drone_addr(),
