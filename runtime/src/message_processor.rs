@@ -1,12 +1,12 @@
 use crate::native_loader;
 use crate::system_instruction_processor;
-use solana_sdk::account::{create_keyed_accounts, Account, KeyedAccount};
-use solana_sdk::instruction::{CompiledInstruction, InstructionError};
-use solana_sdk::instruction_processor_utils;
-use solana_sdk::message::Message;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::system_program;
-use solana_sdk::transaction::TransactionError;
+use morgan_sdk::account::{create_keyed_accounts, Account, KeyedAccount};
+use morgan_sdk::instruction::{CompiledInstruction, InstructionError};
+use morgan_sdk::instruction_processor_utils;
+use morgan_sdk::message::Message;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::system_program;
+use morgan_sdk::transaction::TransactionError;
 use std::collections::HashMap;
 use std::sync::RwLock;
 

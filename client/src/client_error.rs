@@ -1,5 +1,5 @@
 use crate::rpc_request;
-use solana_sdk::transaction::TransactionError;
+use morgan_sdk::transaction::TransactionError;
 use std::{fmt, io};
 
 #[derive(Debug)]
@@ -13,7 +13,7 @@ pub enum ClientError {
 
 impl fmt::Display for ClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "solana client error")
+        write!(f, "morgan client error")
     }
 }
 

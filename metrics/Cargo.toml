@@ -1,11 +1,11 @@
 [package]
-name = "solana-metrics"
+name = "morgan-metrics"
 version = "0.15.3"
-description = "Solana Metrics"
-authors = ["Solana Maintainers <maintainers@solana.com>"]
-repository = "https://github.com/solana-labs/solana"
+description = "Morgan Metrics"
+authors = ["Morgan Maintainers <maintainers@morgan.com>"]
+repository = "https://github.com/morgan-labs/morgan"
 license = "Apache-2.0"
-homepage = "https://solana.com/"
+homepage = "https://morgan.com/"
 edition = "2018"
 
 [dependencies]
@@ -15,10 +15,10 @@ log = "0.4.2"
 reqwest = "0.9.17"
 lazy_static = "1.3.0"
 sys-info = "0.5.6"
-solana-sdk = { path = "../sdk", version = "0.15.3"     }
+morgan-sdk = { path = "../sdk", version = "0.15.3"     }
 
 [dev-dependencies]
 rand = "0.6.5"
 
 [lib]
-name = "solana_metrics"
+name = "morgan_metrics"

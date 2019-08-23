@@ -24,8 +24,8 @@ use hashbrown::{HashMap, HashSet};
 use log::*;
 use rand::{thread_rng, Rng};
 use rayon::prelude::*;
-use solana_sdk::account::Account;
-use solana_sdk::pubkey::Pubkey;
+use morgan_sdk::account::Account;
+use morgan_sdk::pubkey::Pubkey;
 use std::fs::{create_dir_all, remove_dir_all};
 use std::path::Path;
 use std::sync::atomic::{AtomicUsize, Ordering};
@@ -430,7 +430,7 @@ mod tests {
     // TODO: all the bank tests are bank specific, issue: 2194
     use super::*;
     use rand::{thread_rng, Rng};
-    use solana_sdk::account::Account;
+    use morgan_sdk::account::Account;
 
     fn cleanup_paths(paths: &str) {
         let paths = get_paths_vec(&paths);
@@ -477,7 +477,7 @@ mod tests {
 
     #[test]
     fn test_accountsdb_add_root() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let paths = get_tmp_accounts_path!();
         let db = AccountsDB::new(&paths.paths);
         let key = Pubkey::default();
@@ -491,7 +491,7 @@ mod tests {
 
     #[test]
     fn test_accountsdb_latest_ancestor() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let paths = get_tmp_accounts_path!();
         let db = AccountsDB::new(&paths.paths);
         let key = Pubkey::default();
@@ -511,7 +511,7 @@ mod tests {
 
     #[test]
     fn test_accountsdb_latest_ancestor_with_root() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let paths = get_tmp_accounts_path!();
         let db = AccountsDB::new(&paths.paths);
         let key = Pubkey::default();
@@ -532,7 +532,7 @@ mod tests {
 
     #[test]
     fn test_accountsdb_root_one_fork() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let paths = get_tmp_accounts_path!();
         let db = AccountsDB::new(&paths.paths);
         let key = Pubkey::default();
@@ -679,7 +679,7 @@ mod tests {
         }
         for t in 0..num_vote {
             let pubkey = Pubkey::new_rand();
-            let account = Account::new((num + t + 1) as u64, space, &solana_vote_api::id());
+            let account = Account::new((num + t + 1) as u64, space, &morgan_vote_api::id());
             pubkeys.push(pubkey.clone());
             let ancestors = vec![(fork, 0)].into_iter().collect();
             assert!(accounts.load_slow(&ancestors, &pubkey).is_none());

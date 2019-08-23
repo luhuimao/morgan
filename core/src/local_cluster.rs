@@ -7,23 +7,23 @@ use crate::gossip_service::discover_cluster;
 use crate::replicator::Replicator;
 use crate::service::Service;
 use crate::validator::{Validator, ValidatorConfig};
-use solana_client::thin_client::create_client;
-use solana_client::thin_client::ThinClient;
-use solana_sdk::client::SyncClient;
-use solana_sdk::genesis_block::GenesisBlock;
-use solana_sdk::message::Message;
-use solana_sdk::poh_config::PohConfig;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{Keypair, KeypairUtil};
-use solana_sdk::system_transaction;
-use solana_sdk::timing::DEFAULT_SLOTS_PER_EPOCH;
-use solana_sdk::timing::DEFAULT_TICKS_PER_SLOT;
-use solana_sdk::transaction::Transaction;
-use solana_stake_api::stake_instruction;
-use solana_storage_api::storage_instruction;
-use solana_storage_program::genesis_block_util::GenesisBlockUtil;
-use solana_vote_api::vote_instruction;
-use solana_vote_api::vote_state::VoteState;
+use morgan_client::thin_client::create_client;
+use morgan_client::thin_client::ThinClient;
+use morgan_sdk::client::SyncClient;
+use morgan_sdk::genesis_block::GenesisBlock;
+use morgan_sdk::message::Message;
+use morgan_sdk::poh_config::PohConfig;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
+use morgan_sdk::system_transaction;
+use morgan_sdk::timing::DEFAULT_SLOTS_PER_EPOCH;
+use morgan_sdk::timing::DEFAULT_TICKS_PER_SLOT;
+use morgan_sdk::transaction::Transaction;
+use morgan_stake_api::stake_instruction;
+use morgan_storage_api::storage_instruction;
+use morgan_storage_program::genesis_block_util::GenesisBlockUtil;
+use morgan_vote_api::vote_instruction;
+use morgan_vote_api::vote_state::VoteState;
 use std::collections::HashMap;
 use std::fs::remove_dir_all;
 use std::io::{Error, ErrorKind, Result};
@@ -552,11 +552,11 @@ impl Drop for LocalCluster {
 mod test {
     use super::*;
     use crate::storage_stage::STORAGE_ROTATE_TEST_COUNT;
-    use solana_runtime::epoch_schedule::MINIMUM_SLOT_LENGTH;
+    use morgan_runtime::epoch_schedule::MINIMUM_SLOT_LENGTH;
 
     #[test]
     fn test_local_cluster_start_and_exit() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let num_nodes = 1;
         let cluster = LocalCluster::new_with_equal_stakes(num_nodes, 100, 3);
         assert_eq!(cluster.fullnodes.len(), num_nodes);
@@ -565,7 +565,7 @@ mod test {
 
     #[test]
     fn test_local_cluster_start_and_exit_with_config() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let mut validator_config = ValidatorConfig::default();
         validator_config.rpc_config.enable_fullnode_exit = true;
         validator_config.storage_rotate_count = STORAGE_ROTATE_TEST_COUNT;

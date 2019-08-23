@@ -1,4 +1,4 @@
-Solana Coding Guidelines
+Morgan Coding Guidelines
 ===
 
 The goal of these guidelines is to improve developer productivity by allowing developers to
@@ -27,13 +27,13 @@ $ git pull --rebase upstream master
 
 If there are no functional changes, PRs can be very large and that's no problem. If,
 however, your changes are making meaningful changes or additions, then about 1,000 lines of
-changes is about the most you should ask a Solana maintainer to review.
+changes is about the most you should ask a Morgan maintainer to review.
 
 ### Should I send small PRs as I develop large, new components?
 
 Add only code to the codebase that is ready to be deployed. If you are building a large
 library, consider developing it in a separate git repository. When it is ready to be
-integrated, the Solana maintainers will work with you to decide on a path forward. Smaller
+integrated, the Morgan maintainers will work with you to decide on a path forward. Smaller
 libraries may be copied in whereas very large ones may be pulled in with a package manager.
 
 ### When will my PR be reviewed?
@@ -47,7 +47,7 @@ Draft Pull Requests
 ---
 
 If you want early feedback on your PR, use GitHub's "Draft Pull Request"
-mechanism. Draft PRs are a convenient way to collaborate with the Solana
+mechanism. Draft PRs are a convenient way to collaborate with the Morgan
 maintainers without triggering notifications as you make changes. When you feel
 your PR is ready for a broader audience, you can transition your draft PR to a
 standard PR with the click of a button.
@@ -99,11 +99,11 @@ understood. Avoid introducing new 3-letter terms, which can be confused with 3-l
 Design Proposals
 ---
 
-Solana's architecture is described by a book generated from markdown files in
+Morgan's architecture is described by a book generated from markdown files in
 the `book/src/` directory, maintained by an *editor* (currently @garious). To
 add a design proposal, you'll need to at least propose a change the content
 under the [Accepted Design
-Proposals](https://solana-labs.github.io/book-edge/proposals.html) chapter.
+Proposals](https://morgan-labs.github.io/book-edge/proposals.html) chapter.
 Here's the full process:
 
 1. Propose a design by creating a PR that adds a markdown document to the

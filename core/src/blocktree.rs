@@ -7,7 +7,7 @@ use crate::packet::{Blob, SharedBlob, BLOB_HEADER_SIZE};
 use crate::result::{Error, Result};
 
 #[cfg(feature = "kvstore")]
-use solana_kvstore as kvstore;
+use morgan_kvstore as kvstore;
 
 use bincode::deserialize;
 
@@ -16,11 +16,11 @@ use hashbrown::HashMap;
 #[cfg(not(feature = "kvstore"))]
 use rocksdb;
 
-use solana_metrics::{datapoint_error, datapoint_info};
+use morgan_metrics::{datapoint_error, datapoint_info};
 
-use solana_sdk::genesis_block::GenesisBlock;
-use solana_sdk::hash::Hash;
-use solana_sdk::signature::{Keypair, KeypairUtil};
+use morgan_sdk::genesis_block::GenesisBlock;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
 
 use std::borrow::{Borrow, Cow};
 use std::cell::RefCell;
@@ -1164,7 +1164,7 @@ fn get_slot_consecutive_blobs<'a>(
     Ok(blobs)
 }
 
-// Chaining based on latest discussion here: https://github.com/solana-labs/solana/pull/2253
+// Chaining based on latest discussion here: https://github.com/morgan-labs/morgan/pull/2253
 fn handle_chaining(
     db: &Database,
     write_batch: &mut WriteBatch,
@@ -1634,8 +1634,8 @@ pub mod tests {
     use rand::seq::SliceRandom;
     use rand::thread_rng;
     use rand::Rng;
-    use solana_sdk::hash::Hash;
-    use solana_sdk::pubkey::Pubkey;
+    use morgan_sdk::hash::Hash;
+    use morgan_sdk::pubkey::Pubkey;
     use std::cmp::min;
     use std::collections::HashSet;
     use std::iter::once;
@@ -1644,7 +1644,7 @@ pub mod tests {
 
     #[test]
     fn test_write_entries() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let ledger_path = get_tmp_ledger_path!();
         {
             let ticks_per_slot = 10;
@@ -3294,7 +3294,7 @@ pub mod tests {
 
         #[test]
         pub fn test_recovery_basic() {
-            solana_logger::setup();
+            morgan_logger::setup();
 
             let slot = 0;
 
@@ -3377,7 +3377,7 @@ pub mod tests {
             const SLOT: u64 = 0;
             const SET_INDEX: u64 = 0;
 
-            solana_logger::setup();
+            morgan_logger::setup();
             let ledger_path = get_tmp_ledger_path!();
             let blocktree = Blocktree::open(&ledger_path).unwrap();
             let data_blobs = make_slot_entries(SLOT, 0, NUM_DATA as u64)
@@ -3436,7 +3436,7 @@ pub mod tests {
 
             let slots = vec![0, 3, 5, 50, 100];
             let max_erasure_sets = 16;
-            solana_logger::setup();
+            morgan_logger::setup();
 
             let path = get_tmp_ledger_path!();
             let mut rng = thread_rng();

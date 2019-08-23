@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# Run a minimal Solana cluster.  Ctrl-C to exit.
+# Run a minimal Morgan cluster.  Ctrl-C to exit.
 #
-# Before running this script ensure standard Solana programs are available
+# Before running this script ensure standard Morgan programs are available
 # in the PATH, or that `cargo build --all` ran successfully
 #
 set -e
@@ -12,7 +12,7 @@ cd "$(dirname "$0")/"
 PATH=$PWD/target/debug:$PATH
 
 ok=true
-for program in solana-{drone,genesis,keygen,validator}; do
+for program in morgan-{drone,genesis,keygen,validator}; do
   $program -V || ok=false
 done
 $ok || {
@@ -24,7 +24,7 @@ $ok || {
   exit 1
 }
 
-blockstreamSocket=/tmp/solana-blockstream.sock # Default to location used by the block explorer
+blockstreamSocket=/tmp/morgan-blockstream.sock # Default to location used by the block explorer
 while [[ -n $1 ]]; do
   if [[ $1 = --blockstream ]]; then
     blockstreamSocket=$2
@@ -35,24 +35,24 @@ while [[ -n $1 ]]; do
   fi
 done
 
-export RUST_LOG=${RUST_LOG:-solana=info} # if RUST_LOG is unset, default to info
+export RUST_LOG=${RUST_LOG:-morgan=info} # if RUST_LOG is unset, default to info
 export RUST_BACKTRACE=1
 dataDir=$PWD/target/"$(basename "$0" .sh)"
 
 set -x
-solana-keygen -o "$dataDir"/config/leader-keypair.json
-solana-keygen -o "$dataDir"/config/leader-vote-account-keypair.json
-solana-keygen -o "$dataDir"/config/leader-stake-account-keypair.json
-solana-keygen -o "$dataDir"/config/drone-keypair.json
-solana-keygen -o "$dataDir"/config/leader-storage-account-keypair.json
+morgan-keygen -o "$dataDir"/config/leader-keypair.json
+morgan-keygen -o "$dataDir"/config/leader-vote-account-keypair.json
+morgan-keygen -o "$dataDir"/config/leader-stake-account-keypair.json
+morgan-keygen -o "$dataDir"/config/drone-keypair.json
+morgan-keygen -o "$dataDir"/config/leader-storage-account-keypair.json
 
 leaderVoteAccountPubkey=$(\
-  solana-wallet \
+  morgan-wallet \
     --keypair "$dataDir"/config/leader-vote-account-keypair.json  \
     address \
 )
 
-solana-genesis \
+morgan-genesis \
   --difs 1000000000 \
   --bootstrap-leader-difs 10000000 \
   --difs-per-signature 1 \
@@ -64,7 +64,7 @@ solana-genesis \
   --bootstrap-storage-keypair "$dataDir"/config/leader-storage-account-keypair.json \
   --ledger "$dataDir"/ledger
 
-solana-drone --keypair "$dataDir"/config/drone-keypair.json &
+morgan-drone --keypair "$dataDir"/config/drone-keypair.json &
 drone=$!
 
 args=(
@@ -80,7 +80,7 @@ args=(
 if [[ -n $blockstreamSocket ]]; then
   args+=(--blockstream "$blockstreamSocket")
 fi
-solana-validator "${args[@]}" &
+morgan-validator "${args[@]}" &
 validator=$!
 
 abort() {

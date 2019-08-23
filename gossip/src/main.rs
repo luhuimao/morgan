@@ -1,13 +1,13 @@
 //! A command-line executable for monitoring a cluster's gossip plane.
 
 #[macro_use]
-extern crate solana;
+extern crate morgan;
 
 use clap::{crate_description, crate_name, crate_version, App, AppSettings, Arg, SubCommand};
-use solana::contact_info::ContactInfo;
-use solana::gossip_service::discover;
-use solana_client::rpc_client::RpcClient;
-use solana_sdk::pubkey::Pubkey;
+use morgan::contact_info::ContactInfo;
+use morgan::gossip_service::discover;
+use morgan_client::rpc_client::RpcClient;
+use morgan_sdk::pubkey::Pubkey;
 use std::error;
 use std::net::SocketAddr;
 use std::process::exit;
@@ -20,7 +20,7 @@ fn pubkey_validator(pubkey: String) -> Result<(), String> {
 }
 
 fn main() -> Result<(), Box<dyn error::Error>> {
-    env_logger::Builder::from_env(env_logger::Env::new().default_filter_or("solana=info")).init();
+    env_logger::Builder::from_env(env_logger::Env::new().default_filter_or("morgan=info")).init();
 
     let mut entrypoint_addr = SocketAddr::from(([127, 0, 0, 1], 8001));
     let entrypoint_string = entrypoint_addr.to_string();
@@ -99,7 +99,7 @@ fn main() -> Result<(), Box<dyn error::Error>> {
         .get_matches();
 
     if let Some(addr) = matches.value_of("entrypoint") {
-        entrypoint_addr = solana_netutil::parse_host_port(addr).unwrap_or_else(|e| {
+        entrypoint_addr = morgan_netutil::parse_host_port(addr).unwrap_or_else(|e| {
             eprintln!("failed to parse entrypoint address: {}", e);
             exit(1)
         });
@@ -125,7 +125,7 @@ fn main() -> Result<(), Box<dyn error::Error>> {
             } else {
                 let mut addr = socketaddr_any!();
                 addr.set_ip(
-                    solana_netutil::get_public_ip_addr(&entrypoint_addr).unwrap_or_else(|err| {
+                    morgan_netutil::get_public_ip_addr(&entrypoint_addr).unwrap_or_else(|err| {
                         eprintln!("failed to contact {}: {}", entrypoint_addr, err);
                         exit(1)
                     }),

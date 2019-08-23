@@ -33,7 +33,7 @@ impl PubSubService {
         let rpc = RpcSolPubSubImpl::new(subscriptions.clone());
         let exit_ = exit.clone();
         let thread_hdl = Builder::new()
-            .name("solana-pubsub".to_string())
+            .name("morgan-pubsub".to_string())
             .spawn(move || {
                 let mut io = PubSubHandler::default();
                 io.extend_with(rpc.to_delegate());
@@ -78,6 +78,6 @@ mod tests {
         let exit = Arc::new(AtomicBool::new(false));
         let pubsub_service = PubSubService::new(&subscriptions, pubsub_addr, &exit);
         let thread = pubsub_service.thread_hdl.thread();
-        assert_eq!(thread.name().unwrap(), "solana-pubsub");
+        assert_eq!(thread.name().unwrap(), "morgan-pubsub");
     }
 }

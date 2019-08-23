@@ -1,8 +1,8 @@
 use crate::contact_info::ContactInfo;
 use bincode::serialize;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{Keypair, Signable, Signature};
-use solana_sdk::transaction::Transaction;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{Keypair, Signable, Signature};
+use morgan_sdk::transaction::Transaction;
 use std::collections::BTreeSet;
 use std::fmt;
 
@@ -238,8 +238,8 @@ mod test {
     use crate::contact_info::ContactInfo;
     use crate::test_tx::test_tx;
     use bincode::deserialize;
-    use solana_sdk::signature::{Keypair, KeypairUtil};
-    use solana_sdk::timing::timestamp;
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_sdk::timing::timestamp;
 
     #[test]
     fn test_labels() {

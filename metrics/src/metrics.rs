@@ -4,8 +4,8 @@ use influx_db_client as influxdb;
 use influx_db_client::Point;
 use lazy_static::lazy_static;
 use log::*;
-use solana_sdk::hash::hash;
-use solana_sdk::timing;
+use morgan_sdk::hash::hash;
+use morgan_sdk::timing;
 use std::collections::HashMap;
 use std::sync::mpsc::{channel, Receiver, RecvTimeoutError, Sender};
 use std::sync::{Arc, Barrier, Mutex, Once, ONCE_INIT};
@@ -372,7 +372,7 @@ pub fn submit(point: influxdb::Point, level: log::Level) {
 
 fn get_env_settings() -> Result<(String, String, String, String), env::VarError> {
     let host =
-        env::var("INFLUX_HOST").unwrap_or_else(|_| "https://metrics.solana.com:8086".to_string());
+        env::var("INFLUX_HOST").unwrap_or_else(|_| "https://metrics.morgan.com:8086".to_string());
     let db = env::var("INFLUX_DATABASE")?.to_string();
     let username = env::var("INFLUX_USERNAME")?.to_string();
     let password = env::var("INFLUX_PASSWORD")?.to_string();

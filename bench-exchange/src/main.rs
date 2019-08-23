@@ -4,16 +4,16 @@ pub mod order_book;
 
 #[cfg(test)]
 #[macro_use]
-extern crate solana_exchange_program;
+extern crate morgan_exchange_program;
 
 use crate::bench::{airdrop_difs, do_bench_exchange, Config};
 use log::*;
-use solana::gossip_service::{discover_cluster, get_clients};
-use solana_sdk::signature::KeypairUtil;
+use morgan::gossip_service::{discover_cluster, get_clients};
+use morgan_sdk::signature::KeypairUtil;
 
 fn main() {
-    solana_logger::setup();
-    solana_metrics::set_panic_hook("bench-exchange");
+    morgan_logger::setup();
+    morgan_metrics::set_panic_hook("bench-exchange");
 
     let matches = cli::build_args().get_matches();
     let cli_config = cli::extract_args(&matches);

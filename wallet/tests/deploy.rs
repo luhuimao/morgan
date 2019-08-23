@@ -1,10 +1,10 @@
 use serde_json::{json, Value};
-use solana::validator::new_validator_for_tests;
-use solana_client::rpc_client::RpcClient;
-use solana_client::rpc_request::RpcRequest;
-use solana_drone::drone::run_local_drone;
-use solana_sdk::bpf_loader;
-use solana_wallet::wallet::{process_command, WalletCommand, WalletConfig};
+use morgan::validator::new_validator_for_tests;
+use morgan_client::rpc_client::RpcClient;
+use morgan_client::rpc_request::RpcRequest;
+use morgan_drone::drone::run_local_drone;
+use morgan_sdk::bpf_loader;
+use morgan_wallet::wallet::{process_command, WalletCommand, WalletConfig};
 use std::fs::{remove_dir_all, File};
 use std::io::Read;
 use std::path::PathBuf;
@@ -12,7 +12,7 @@ use std::sync::mpsc::channel;
 
 #[test]
 fn test_wallet_deploy_program() {
-    solana_logger::setup();
+    morgan_logger::setup();
 
     let mut pathbuf = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     pathbuf.push("tests");

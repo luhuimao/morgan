@@ -7,7 +7,7 @@ genPipeline=false
 cd "$(dirname "$0")/.."
 
 # Clear cached json keypair files
-rm -rf "$HOME/.config/solana"
+rm -rf "$HOME/.config/morgan"
 
 source ci/_
 export RUST_BACKTRACE=1

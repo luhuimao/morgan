@@ -1,37 +1,37 @@
 [package]
-authors = ["Solana Maintainers <maintainers@solana.com>"]
+authors = ["Morgan Maintainers <maintainers@morgan.com>"]
 edition = "2018"
-name = "solana-genesis"
+name = "morgan-genesis"
 description = "Blockchain, Rebuilt for Scale"
 version = "0.15.3"
-repository = "https://github.com/solana-labs/solana"
+repository = "https://github.com/morgan-labs/morgan"
 license = "Apache-2.0"
-homepage = "https://solana.com/"
+homepage = "https://morgan.com/"
 
 [dependencies]
 clap = "2.33.0"
 serde_json = "1.0.39"
-solana = { path = "../core", version = "0.15.3"     }
-solana-sdk = { path = "../sdk", version = "0.15.3"     }
-solana-budget-api = { path = "../programs/budget_api", version = "0.15.3"     }
-solana-budget-program = { path = "../programs/budget_program", version = "0.15.3"     }
-solana-vote-api = { path = "../programs/vote_api", version = "0.15.3"     }
-solana-vote-program = { path = "../programs/vote_program", version = "0.15.3"     }
-solana-stake-api = { path = "../programs/stake_api", version = "0.15.3"     }
-solana-stake-program = { path = "../programs/stake_program", version = "0.15.3"     }
-solana-storage-api = { path = "../programs/storage_api", version = "0.15.3"     }
-solana-storage-program = { path = "../programs/storage_program", version = "0.15.3"     }
-solana-token-api = { path = "../programs/token_api", version = "0.15.3"     }
-solana-token-program = { path = "../programs/token_program", version = "0.15.3"     }
-solana-config-api = { path = "../programs/config_api", version = "0.15.3"     }
-solana-config-program = { path = "../programs/config_program", version = "0.15.3"     }
-solana-exchange-api = { path = "../programs/exchange_api", version = "0.15.3"     }
-solana-exchange-program = { path = "../programs/exchange_program", version = "0.15.3"     }
+morgan = { path = "../core", version = "0.15.3"     }
+morgan-sdk = { path = "../sdk", version = "0.15.3"     }
+morgan-budget-api = { path = "../programs/budget_api", version = "0.15.3"     }
+morgan-budget-program = { path = "../programs/budget_program", version = "0.15.3"     }
+morgan-vote-api = { path = "../programs/vote_api", version = "0.15.3"     }
+morgan-vote-program = { path = "../programs/vote_program", version = "0.15.3"     }
+morgan-stake-api = { path = "../programs/stake_api", version = "0.15.3"     }
+morgan-stake-program = { path = "../programs/stake_program", version = "0.15.3"     }
+morgan-storage-api = { path = "../programs/storage_api", version = "0.15.3"     }
+morgan-storage-program = { path = "../programs/storage_program", version = "0.15.3"     }
+morgan-token-api = { path = "../programs/token_api", version = "0.15.3"     }
+morgan-token-program = { path = "../programs/token_program", version = "0.15.3"     }
+morgan-config-api = { path = "../programs/config_api", version = "0.15.3"     }
+morgan-config-program = { path = "../programs/config_program", version = "0.15.3"     }
+morgan-exchange-api = { path = "../programs/exchange_api", version = "0.15.3"     }
+morgan-exchange-program = { path = "../programs/exchange_program", version = "0.15.3"     }
 
 [dev-dependencies]
 hashbrown = "0.3.0"
 
 
 [features]
-cuda = ["solana/cuda"]
+cuda = ["morgan/cuda"]
 erasure = []

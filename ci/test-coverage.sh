@@ -39,5 +39,5 @@ else
   bash <(curl -s https://codecov.io/bash) -X gcov -f target/cov/lcov.info
 
   annotate --style success --context codecov.io \
-    "CodeCov report: https://codecov.io/github/solana-labs/solana/commit/${BUILDKITE_COMMIT:0:9}"
+    "CodeCov report: https://codecov.io/github/morgan-labs/morgan/commit/${BUILDKITE_COMMIT:0:9}"
 fi

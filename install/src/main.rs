@@ -2,7 +2,7 @@
 extern crate lazy_static;
 
 use clap::{crate_description, crate_name, crate_version, App, AppSettings, Arg, SubCommand};
-use solana_sdk::pubkey::Pubkey;
+use morgan_sdk::pubkey::Pubkey;
 
 mod build_env;
 mod command;
@@ -33,7 +33,7 @@ fn is_pubkey(string: String) -> Result<(), String> {
 }
 
 fn main() -> Result<(), String> {
-    solana_logger::setup();
+    morgan_logger::setup();
 
     let matches = App::new(crate_name!())
         .about(crate_description!())
@@ -76,7 +76,7 @@ fn main() -> Result<(), String> {
                         .takes_value(true)
                         .default_value(defaults::JSON_RPC_URL)
                         .validator(is_url)
-                        .help("JSON RPC URL for the solana cluster"),
+                        .help("JSON RPC URL for the morgan cluster"),
                 )
                 .arg(
                     Arg::with_name("no_modify_path")
@@ -137,14 +137,14 @@ fn main() -> Result<(), String> {
                         .takes_value(true)
                         .default_value(defaults::JSON_RPC_URL)
                         .validator(is_url)
-                        .help("JSON RPC URL for the solana cluster"),
+                        .help("JSON RPC URL for the morgan cluster"),
                 )
                 .arg(
                     Arg::with_name("download_url")
                         .index(1)
                         .required(true)
                         .validator(is_url)
-                        .help("URL to the solana release archive"),
+                        .help("URL to the morgan release archive"),
                 )
                 .arg(
                     Arg::with_name("update_manifest_keypair_file")

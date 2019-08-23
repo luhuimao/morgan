@@ -2,14 +2,14 @@
 extern crate log;
 
 use rayon::iter::*;
-use solana::cluster_info::{ClusterInfo, Node};
-use solana::gossip_service::GossipService;
+use morgan::cluster_info::{ClusterInfo, Node};
+use morgan::gossip_service::GossipService;
 
-use solana::packet::{Blob, SharedBlob};
-use solana::result;
-use solana::service::Service;
-use solana_sdk::signature::{Keypair, KeypairUtil};
-use solana_sdk::timing::timestamp;
+use morgan::packet::{Blob, SharedBlob};
+use morgan::result;
+use morgan::service::Service;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
+use morgan_sdk::timing::timestamp;
 use std::net::UdpSocket;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, RwLock};
@@ -68,7 +68,7 @@ where
 /// ring a -> b -> c -> d -> e -> a
 #[test]
 fn gossip_ring() -> result::Result<()> {
-    solana_logger::setup();
+    morgan_logger::setup();
     run_gossip_topo(50, |listen| {
         let num = listen.len();
         for n in 0..num {
@@ -89,7 +89,7 @@ fn gossip_ring() -> result::Result<()> {
 #[test]
 #[ignore]
 fn gossip_ring_large() -> result::Result<()> {
-    solana_logger::setup();
+    morgan_logger::setup();
     run_gossip_topo(600, |listen| {
         let num = listen.len();
         for n in 0..num {
@@ -108,7 +108,7 @@ fn gossip_ring_large() -> result::Result<()> {
 /// star a -> (b,c,d,e)
 #[test]
 fn gossip_star() {
-    solana_logger::setup();
+    morgan_logger::setup();
     run_gossip_topo(10, |listen| {
         let num = listen.len();
         for n in 0..(num - 1) {
@@ -127,7 +127,7 @@ fn gossip_star() {
 /// rstar a <- (b,c,d,e)
 #[test]
 fn gossip_rstar() {
-    solana_logger::setup();
+    morgan_logger::setup();
     run_gossip_topo(10, |listen| {
         let num = listen.len();
         let xd = {
@@ -146,7 +146,7 @@ fn gossip_rstar() {
 
 #[test]
 pub fn cluster_info_retransmit() -> result::Result<()> {
-    solana_logger::setup();
+    morgan_logger::setup();
     let exit = Arc::new(AtomicBool::new(false));
     trace!("c1:");
     let (c1, dr1, tn1) = test_node(&exit);

@@ -1,4 +1,4 @@
-//! @brief Solana Rust-based BPF program entrypoint and its parameter types
+//! @brief Morgan Rust-based BPF program entrypoint and its parameter types
 
 use crate::log::*;
 use core::mem::size_of;

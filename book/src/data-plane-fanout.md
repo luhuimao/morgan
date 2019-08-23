@@ -1,6 +1,6 @@
 # Data Plane Fanout
 
-A Solana cluster uses a multi-layer mechanism called *data plane fanout* to
+A Morgan cluster uses a multi-layer mechanism called *data plane fanout* to
 broadcast transaction blobs to all nodes in a very quick and efficient manner.
 In order to establish the fanout, the cluster divides itself into small
 collections of nodes, called *neighborhoods*. Each node is responsible for

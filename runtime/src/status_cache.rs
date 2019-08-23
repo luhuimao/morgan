@@ -1,10 +1,10 @@
 use hashbrown::{HashMap, HashSet};
 use log::*;
 use rand::{thread_rng, Rng};
-use solana_sdk::hash::Hash;
-use solana_sdk::signature::Signature;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::signature::Signature;
 
-const MAX_CACHE_ENTRIES: usize = solana_sdk::timing::MAX_HASH_AGE_IN_SECONDS;
+const MAX_CACHE_ENTRIES: usize = morgan_sdk::timing::MAX_HASH_AGE_IN_SECONDS;
 const CACHED_SIGNATURE_SIZE: usize = 20;
 
 // Store forks in a single chunk of memory to avoid another lookup.
@@ -107,7 +107,7 @@ impl<T: Clone> StatusCache<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use solana_sdk::hash::hash;
+    use morgan_sdk::hash::hash;
 
     type BankStatusCache = StatusCache<()>;
 

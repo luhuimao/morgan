@@ -3,7 +3,7 @@
 # Convenience script to easily deploy a software update to one of the testnets
 #
 # Prerequisites:
-# 1) The default keypair should have some difs (eg, `solana-wallet airdrop 123`)
+# 1) The default keypair should have some difs (eg, `morgan-wallet airdrop 123`)
 # 2) The file update_manifest_keypair.json should exist if this script is not
 #    run from the CI environment
 #
@@ -27,10 +27,10 @@ fi
 
 case $CHANNEL in
 edge|beta)
-  URL=https://api.$CHANNEL.testnet.solana.com
+  URL=https://api.$CHANNEL.testnet.morgan.com
   ;;
 stable)
-  URL=https://api.testnet.solana.com
+  URL=https://api.testnet.morgan.com
   ;;
 localhost)
   URL=http://localhost:8899
@@ -41,6 +41,6 @@ localhost)
 esac
 
 set -x
-solana-install deploy --url "$URL" \
-  https://github.com/solana-labs/solana/releases/download/"$TAG"/solana-release-x86_64-unknown-linux-gnu.tar.bz2 \
+morgan-install deploy --url "$URL" \
+  https://github.com/morgan-labs/morgan/releases/download/"$TAG"/morgan-release-x86_64-unknown-linux-gnu.tar.bz2 \
   update_manifest_keypair.json

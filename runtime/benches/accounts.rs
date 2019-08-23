@@ -2,10 +2,10 @@
 
 extern crate test;
 
-use solana_runtime::bank::*;
-use solana_sdk::account::Account;
-use solana_sdk::genesis_block::create_genesis_block;
-use solana_sdk::pubkey::Pubkey;
+use morgan_runtime::bank::*;
+use morgan_sdk::account::Account;
+use morgan_sdk::genesis_block::create_genesis_block;
+use morgan_sdk::pubkey::Pubkey;
 use std::sync::Arc;
 use test::Bencher;
 

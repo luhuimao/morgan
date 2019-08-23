@@ -1,12 +1,12 @@
 #[macro_export]
-macro_rules! solana_exchange_program {
+macro_rules! morgan_exchange_program {
     () => {
         (
-            "solana_exchange_program".to_string(),
-            solana_exchange_api::id(),
+            "morgan_exchange_program".to_string(),
+            morgan_exchange_api::id(),
         )
     };
 }
-use solana_exchange_api::exchange_processor::process_instruction;
+use morgan_exchange_api::exchange_processor::process_instruction;
 
-solana_sdk::solana_entrypoint!(process_instruction);
+morgan_sdk::morgan_entrypoint!(process_instruction);

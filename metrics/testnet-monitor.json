@@ -27,21 +27,21 @@
       "title": "Stable",
       "tooltip": "",
       "type": "link",
-      "url": "https://metrics.solana.com:3000/d/testnet/testnet-monitor"
+      "url": "https://metrics.morgan.com:3000/d/testnet/testnet-monitor"
     },
     {
       "icon": "dashboard",
       "tags": [],
       "title": "Beta",
       "type": "link",
-      "url": "https://metrics.solana.com:3000/d/testnet-beta/testnet-monitor-beta"
+      "url": "https://metrics.morgan.com:3000/d/testnet-beta/testnet-monitor-beta"
     },
     {
       "icon": "dashboard",
       "tags": [],
       "title": "Edge",
       "type": "link",
-      "url": "https://metrics.solana.com:3000/d/testnet-edge/testnet-monitor-edge"
+      "url": "https://metrics.morgan.com:3000/d/testnet-edge/testnet-monitor-edge"
     }
   ],
   "panels": [
@@ -2217,7 +2217,7 @@
           "targetBlank": true,
           "title": "Version history",
           "type": "absolute",
-          "url": "https://github.com/solana-labs/solana/commits/master"
+          "url": "https://github.com/morgan-labs/morgan/commits/master"
         }
       ],
       "mappingType": 1,

@@ -6,8 +6,8 @@ use crate::chacha::{CHACHA_BLOCK_SIZE, CHACHA_KEY_SIZE};
 use crate::sigverify::{
     chacha_cbc_encrypt_many_sample, chacha_end_sha_state, chacha_init_sha_state,
 };
-use solana_sdk::hash::Hash;
-use solana_storage_api::SLOTS_PER_SEGMENT;
+use morgan_sdk::hash::Hash;
+use morgan_storage_api::SLOTS_PER_SEGMENT;
 use std::io;
 use std::mem::size_of;
 use std::sync::Arc;
@@ -112,14 +112,14 @@ mod tests {
     use crate::chacha_cuda::chacha_cbc_encrypt_file_many_keys;
     use crate::entry::make_tiny_test_entries;
     use crate::replicator::sample_file;
-    use solana_sdk::hash::Hash;
+    use morgan_sdk::hash::Hash;
     use std::fs::{remove_dir_all, remove_file};
     use std::path::Path;
     use std::sync::Arc;
 
     #[test]
     fn test_encrypt_file_many_keys_single() {
-        solana_logger::setup();
+        morgan_logger::setup();
 
         let entries = make_tiny_test_entries(32);
         let ledger_dir = "test_encrypt_file_many_keys_single";
@@ -155,7 +155,7 @@ mod tests {
 
     #[test]
     fn test_encrypt_file_many_keys_multiple_keys() {
-        solana_logger::setup();
+        morgan_logger::setup();
 
         let entries = make_tiny_test_entries(32);
         let ledger_dir = "test_encrypt_file_many_keys_multiple";

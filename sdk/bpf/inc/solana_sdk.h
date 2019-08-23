@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @brief Solana C-based BPF program utility functions and types
+ * @brief Morgan C-based BPF program utility functions and types
  */
 
 #ifdef __cplusplus

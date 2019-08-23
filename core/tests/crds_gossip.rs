@@ -2,15 +2,15 @@ use bincode::serialized_size;
 use hashbrown::HashMap;
 use log::*;
 use rayon::prelude::*;
-use solana::contact_info::ContactInfo;
-use solana::crds_gossip::*;
-use solana::crds_gossip_error::CrdsGossipError;
-use solana::crds_gossip_push::CRDS_GOSSIP_PUSH_MSG_TIMEOUT_MS;
-use solana::crds_value::CrdsValue;
-use solana::crds_value::CrdsValueLabel;
-use solana_sdk::hash::hash;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::timing::timestamp;
+use morgan::contact_info::ContactInfo;
+use morgan::crds_gossip::*;
+use morgan::crds_gossip_error::CrdsGossipError;
+use morgan::crds_gossip_push::CRDS_GOSSIP_PUSH_MSG_TIMEOUT_MS;
+use morgan::crds_value::CrdsValue;
+use morgan::crds_value::CrdsValueLabel;
+use morgan_sdk::hash::hash;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::timing::timestamp;
 use std::sync::{Arc, Mutex};
 
 type Node = Arc<Mutex<CrdsGossip>>;
@@ -340,28 +340,28 @@ fn test_star_network_push_ring_200() {
 #[test]
 #[ignore]
 fn test_star_network_large_pull() {
-    solana_logger::setup();
+    morgan_logger::setup();
     let mut network = star_network_create(2000);
     network_simulator_pull_only(&mut network);
 }
 #[test]
 #[ignore]
 fn test_rstar_network_large_push() {
-    solana_logger::setup();
+    morgan_logger::setup();
     let mut network = rstar_network_create(4000);
     network_simulator(&mut network);
 }
 #[test]
 #[ignore]
 fn test_ring_network_large_push() {
-    solana_logger::setup();
+    morgan_logger::setup();
     let mut network = ring_network_create(4001);
     network_simulator(&mut network);
 }
 #[test]
 #[ignore]
 fn test_star_network_large_push() {
-    solana_logger::setup();
+    morgan_logger::setup();
     let mut network = star_network_create(4002);
     network_simulator(&mut network);
 }

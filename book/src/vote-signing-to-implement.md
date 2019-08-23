@@ -3,7 +3,7 @@
 This design describes additional vote signing behavior that will make the
 process more secure.
 
-Currently, Solana implements a vote-signing service that evaluates each vote to
+Currently, Morgan implements a vote-signing service that evaluates each vote to
 ensure it does not violate a slashing condition. The service could potentially
 have different variations, depending on the hardware platform capabilities. In
 particular, it could be used in conjunction with a secure enclave (such as SGX).

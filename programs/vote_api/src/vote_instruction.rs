@@ -6,12 +6,12 @@ use crate::vote_state::{self, Vote, VoteState};
 use bincode::deserialize;
 use log::*;
 use serde_derive::{Deserialize, Serialize};
-use solana_metrics::datapoint_warn;
-use solana_sdk::account::KeyedAccount;
-use solana_sdk::instruction::{AccountMeta, Instruction, InstructionError};
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::syscall::slot_hashes;
-use solana_sdk::system_instruction;
+use morgan_metrics::datapoint_warn;
+use morgan_sdk::account::KeyedAccount;
+use morgan_sdk::instruction::{AccountMeta, Instruction, InstructionError};
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::syscall::slot_hashes;
+use morgan_sdk::system_instruction;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub enum VoteInstruction {
@@ -111,7 +111,7 @@ pub fn process_instruction(
     data: &[u8],
     _tick_height: u64,
 ) -> Result<(), InstructionError> {
-    solana_logger::setup();
+    morgan_logger::setup();
 
     trace!("process_instruction: {:?}", data);
     trace!("keyed_accounts: {:?}", keyed_accounts);
@@ -144,7 +144,7 @@ pub fn process_instruction(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use solana_sdk::account::Account;
+    use morgan_sdk::account::Account;
 
     // these are for 100% coverage in this file
     #[test]

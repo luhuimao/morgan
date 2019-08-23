@@ -282,8 +282,8 @@ pub mod test {
     use crate::blocktree::get_tmp_ledger_path;
     use crate::blocktree::Blocktree;
     use crate::packet::{index_blobs, SharedBlob, BLOB_DATA_SIZE, BLOB_HEADER_SIZE};
-    use solana_sdk::pubkey::Pubkey;
-    use solana_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_sdk::pubkey::Pubkey;
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
     use std::borrow::Borrow;
 
     /// Specifies the contents of a 16-data-blob and 4-coding-blob erasure set
@@ -429,7 +429,7 @@ pub mod test {
 
     #[test]
     fn test_erasure_generate_coding() {
-        solana_logger::setup();
+        morgan_logger::setup();
 
         // trivial case
         let mut coding_generator = CodingGenerator::default();
@@ -467,7 +467,7 @@ pub mod test {
 
     #[test]
     fn test_erasure_generate_coding_reset_on_new_slot() {
-        solana_logger::setup();
+        morgan_logger::setup();
 
         let mut coding_generator = CodingGenerator::default();
 
@@ -554,7 +554,7 @@ pub mod test {
         const N_THREADS: usize = 2;
         const N_SLOTS: u64 = 10;
 
-        solana_logger::setup();
+        morgan_logger::setup();
 
         let specs = (0..N_SLOTS).map(|slot| {
             let num_erasure_sets = slot % MAX_ERASURE_SETS;

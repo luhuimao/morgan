@@ -1,5 +1,5 @@
 # token-exchange
-Solana Token Exchange Bench
+Morgan Token Exchange Bench
 
 If you can't wait; jump to [Running the exchange](#Running-the-exchange) to
 learn how to start and interact with the exchange.
@@ -19,7 +19,7 @@ learn how to start and interact with the exchange.
 ## Overview
 
 An exchange is a marketplace where one asset can be traded for another.  This
-demo demonstrates one way to host an exchange on the Solana blockchain by
+demo demonstrates one way to host an exchange on the Morgan blockchain by
 emulating a currency exchange.
 
 The assets are virtual tokens held by investors who may post trade requests to
@@ -58,9 +58,9 @@ matching trade orders.  All the transactions can execute concurrently.
      2 and token B was worth 6, the price ratio would be 1:3 or just 3.  Price
      ratios are represented as fixed point numbers.  The fixed point scaler is
      defined in
-     [exchange_state.rs](https://github.com/solana-labs/solana/blob/c2fdd1362a029dcf89c8907c562d2079d977df11/programs/exchange_api/src/exchange_state.rs#L7)
+     [exchange_state.rs](https://github.com/morgan-labs/morgan/blob/c2fdd1362a029dcf89c8907c562d2079d977df11/programs/exchange_api/src/exchange_state.rs#L7)
 - Trade request
-  - A Solana transaction executed by the exchange requesting the trade of one
+  - A Morgan transaction executed by the exchange requesting the trade of one
     type of token for another.  Trade requests are made up of the token pair,
     the direction of the trade, quantity of the primary token, the price ratio,
     and the two token accounts to be credited/deducted.  An example trade
@@ -89,20 +89,20 @@ matching trade orders.  All the transactions can execute concurrently.
     account.  All trade swaps are recorded in a new account for posterity.
 - Investor
   - Individual investors who hold a number of tokens and wish to trade them on
-    the exchange.  Investors operate as Solana thin clients who own a set of
+    the exchange.  Investors operate as Morgan thin clients who own a set of
     accounts containing tokens and/or trade requests.  Investors post
     transactions to the exchange in order to request tokens and post or cancel
     trade requests.
 - Swapper
   - An agent who facilitates trading between investors.  Swappers operate as
-    Solana thin clients who monitor all the trade orders looking for a trade
+    Morgan thin clients who monitor all the trade orders looking for a trade
     match.  Once found, the Swapper issues a swap request to the exchange.
     Swappers are the engine of the exchange and are rewarded for their efforts by
     accumulating the price spreads of the swaps they initiate.  Swappers also
     provide current bid/ask price and OHLCV (Open, High, Low, Close, Volume)
     information on demand via a public network port.
 - Transaction fees
-  - Solana transaction fees are paid for by the transaction submitters who are
+  - Morgan transaction fees are paid for by the transaction submitters who are
     the Investors and Swappers.
 
 ## Exchange startup
@@ -111,10 +111,10 @@ The exchange is up and running when it reaches a state where it can take
 investor's trades and Swapper's swap requests.  To achieve this state the
 following must occur in order:
 
-- Start the Solana blockchain
+- Start the Morgan blockchain
 - Start the Swapper thin-client
 - The Swapper subscribes to change notifications for all the accounts owned by
-  the exchange program id.  The subscription is managed via Solana's JSON RPC
+  the exchange program id.  The subscription is managed via Morgan's JSON RPC
   interface.
 - The Swapper starts responding to queries for bid/ask price and OHLCV
 
@@ -184,7 +184,7 @@ pub enum ExchangeInstruction {
 ## Trade requests
 
 When an investor decides to exchange a token of one type for another, they
-submit a transaction to the Solana Blockchain containing a trade request, which,
+submit a transaction to the Morgan Blockchain containing a trade request, which,
 if successful, is turned into a trade order.  Trade orders do not expire but are
 cancellable. <!-- Trade orders should have a timestamp to enable trade
 expiration -->  When a trade order is created, tokens are deducted from a token
@@ -470,13 +470,13 @@ in client_demo/src/demo.rs::test_exchange_local_cluster.
 The following command runs the bench:
 
 ```bash
-$ RUST_LOG=solana_bench_exchange=info cargo test --release -- --nocapture test_exchange_local_cluster
+$ RUST_LOG=morgan_bench_exchange=info cargo test --release -- --nocapture test_exchange_local_cluster
 ```
 
 To also see the cluster messages:
 
 ```bash
-$ RUST_LOG=solana_bench_exchange=info,solana=info cargo test --release -- --nocapture test_exchange_local_cluster
+$ RUST_LOG=morgan_bench_exchange=info,morgan=info cargo test --release -- --nocapture test_exchange_local_cluster
 ```
 
 

@@ -1,14 +1,14 @@
 use clap::{crate_description, crate_name, crate_version, App, Arg};
-use solana::cluster_info::{Node, FULLNODE_PORT_RANGE};
-use solana::contact_info::ContactInfo;
-use solana::replicator::Replicator;
-use solana::socketaddr;
-use solana_sdk::signature::{read_keypair, Keypair, KeypairUtil};
+use morgan::cluster_info::{Node, FULLNODE_PORT_RANGE};
+use morgan::contact_info::ContactInfo;
+use morgan::replicator::Replicator;
+use morgan::socketaddr;
+use morgan_sdk::signature::{read_keypair, Keypair, KeypairUtil};
 use std::process::exit;
 use std::sync::Arc;
 
 fn main() {
-    solana_logger::setup();
+    morgan_logger::setup();
 
     let matches = App::new(crate_name!())
         .about(crate_description!())
@@ -72,13 +72,13 @@ fn main() {
     let entrypoint_addr = matches
         .value_of("entrypoint")
         .map(|entrypoint| {
-            solana_netutil::parse_host_port(entrypoint).expect("failed to parse entrypoint address")
+            morgan_netutil::parse_host_port(entrypoint).expect("failed to parse entrypoint address")
         })
         .unwrap();
 
     let gossip_addr = {
         let mut addr = socketaddr!([127, 0, 0, 1], 8700);
-        addr.set_ip(solana_netutil::get_public_ip_addr(&entrypoint_addr).unwrap());
+        addr.set_ip(morgan_netutil::get_public_ip_addr(&entrypoint_addr).unwrap());
         addr
     };
     let node =

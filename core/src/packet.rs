@@ -4,10 +4,10 @@ use crate::result::{Error, Result};
 use bincode;
 use byteorder::{ByteOrder, LittleEndian};
 use serde::Serialize;
-use solana_metrics::inc_new_counter_debug;
-use solana_sdk::hash::Hash;
-pub use solana_sdk::packet::PACKET_DATA_SIZE;
-use solana_sdk::pubkey::Pubkey;
+use morgan_metrics::inc_new_counter_debug;
+use morgan_sdk::hash::Hash;
+pub use morgan_sdk::packet::PACKET_DATA_SIZE;
+use morgan_sdk::pubkey::Pubkey;
 use std::borrow::Borrow;
 use std::cmp;
 use std::fmt;
@@ -617,9 +617,9 @@ mod tests {
     use super::*;
     use bincode;
     use rand::Rng;
-    use solana_sdk::hash::Hash;
-    use solana_sdk::signature::{Keypair, KeypairUtil};
-    use solana_sdk::system_transaction;
+    use morgan_sdk::hash::Hash;
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_sdk::system_transaction;
     use std::io;
     use std::io::Write;
     use std::net::{SocketAddr, UdpSocket};
@@ -636,7 +636,7 @@ mod tests {
 
     #[test]
     pub fn packet_send_recv() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let recv_socket = UdpSocket::bind("127.0.0.1:0").expect("bind");
         let addr = recv_socket.local_addr().unwrap();
         let send_socket = UdpSocket::bind("127.0.0.1:0").expect("bind");

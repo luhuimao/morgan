@@ -1,9 +1,9 @@
 use log::*;
 use num_derive::FromPrimitive;
 use serde_derive::{Deserialize, Serialize};
-use solana_sdk::account::KeyedAccount;
-use solana_sdk::instruction_processor_utils::DecodeError;
-use solana_sdk::pubkey::Pubkey;
+use morgan_sdk::account::KeyedAccount;
+use morgan_sdk::instruction_processor_utils::DecodeError;
+use morgan_sdk::pubkey::Pubkey;
 
 #[derive(Serialize, Debug, PartialEq, FromPrimitive)]
 pub enum TokenError {
@@ -495,5 +495,5 @@ mod test {
         assert!(TokenState::deserialize(&[3]).is_err());
     }
 
-    // Note: business logic tests are located in the @solana/web3.js test suite
+    // Note: business logic tests are located in the @morgan/web3.js test suite
 }

@@ -1,15 +1,15 @@
 use crate::bank::Bank;
-use solana_sdk::client::{AsyncClient, Client, SyncClient};
-use solana_sdk::fee_calculator::FeeCalculator;
-use solana_sdk::hash::Hash;
-use solana_sdk::instruction::Instruction;
-use solana_sdk::message::Message;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::Signature;
-use solana_sdk::signature::{Keypair, KeypairUtil};
-use solana_sdk::system_instruction;
-use solana_sdk::transaction::{self, Transaction};
-use solana_sdk::transport::{Result, TransportError};
+use morgan_sdk::client::{AsyncClient, Client, SyncClient};
+use morgan_sdk::fee_calculator::FeeCalculator;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::instruction::Instruction;
+use morgan_sdk::message::Message;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::Signature;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
+use morgan_sdk::system_instruction;
+use morgan_sdk::transaction::{self, Transaction};
+use morgan_sdk::transport::{Result, TransportError};
 use std::io;
 use std::sync::mpsc::{channel, Receiver, Sender};
 use std::sync::Arc;
@@ -199,7 +199,7 @@ impl BankClient {
         let thread_bank = bank.clone();
         let bank = bank.clone();
         Builder::new()
-            .name("solana-bank-client".to_string())
+            .name("morgan-bank-client".to_string())
             .spawn(move || Self::run(&thread_bank, transaction_receiver))
             .unwrap();
         Self {
@@ -216,8 +216,8 @@ impl BankClient {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use solana_sdk::genesis_block::create_genesis_block;
-    use solana_sdk::instruction::AccountMeta;
+    use morgan_sdk::genesis_block::create_genesis_block;
+    use morgan_sdk::instruction::AccountMeta;
 
     #[test]
     fn test_bank_client_new_with_keypairs() {

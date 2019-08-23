@@ -17,7 +17,7 @@ export RUSTFLAGS="-D warnings"
 source scripts/ulimit-n.sh
 
 # Clear cached json keypair files
-rm -rf "$HOME/.config/solana"
+rm -rf "$HOME/.config/morgan"
 
 # Run tbe appropriate test based on entrypoint
 testName=$(basename "$0" .sh)

@@ -1,5 +1,5 @@
 //! The `Poh` module provides an object for generating a Proof of History.
-use solana_sdk::hash::{hash, hashv, Hash};
+use morgan_sdk::hash::{hash, hashv, Hash};
 
 pub struct Poh {
     pub hash: Hash,
@@ -83,7 +83,7 @@ impl Poh {
 #[cfg(test)]
 mod tests {
     use crate::poh::{Poh, PohEntry};
-    use solana_sdk::hash::{hash, hashv, Hash};
+    use morgan_sdk::hash::{hash, hashv, Hash};
 
     fn verify(initial_hash: Hash, entries: &[(PohEntry, Option<Hash>)]) -> bool {
         let mut current_hash = initial_hash;

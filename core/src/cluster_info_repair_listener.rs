@@ -7,9 +7,9 @@ use byteorder::{ByteOrder, LittleEndian};
 use rand::seq::SliceRandom;
 use rand::SeedableRng;
 use rand_chacha::ChaChaRng;
-use solana_metrics::datapoint;
-use solana_runtime::epoch_schedule::EpochSchedule;
-use solana_sdk::pubkey::Pubkey;
+use morgan_metrics::datapoint;
+use morgan_runtime::epoch_schedule::EpochSchedule;
+use morgan_sdk::pubkey::Pubkey;
 use std::cmp;
 use std::collections::HashMap;
 use std::mem;
@@ -85,7 +85,7 @@ impl ClusterInfoRepairListener {
         let exit = exit.clone();
         let blocktree = blocktree.clone();
         let thread = Builder::new()
-            .name("solana-cluster_info_repair_listener".to_string())
+            .name("morgan-cluster_info_repair_listener".to_string())
             .spawn(move || {
                 // Maps a peer to
                 // 1) The latest timestamp of the EpochSlots gossip message at which a repair was

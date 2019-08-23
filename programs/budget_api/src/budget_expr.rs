@@ -5,7 +5,7 @@
 
 use chrono::prelude::*;
 use serde_derive::{Deserialize, Serialize};
-use solana_sdk::pubkey::Pubkey;
+use morgan_sdk::pubkey::Pubkey;
 use std::mem;
 
 /// The types of events a payment plan can process.

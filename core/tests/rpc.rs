@@ -3,18 +3,18 @@ use log::*;
 use reqwest;
 use reqwest::header::CONTENT_TYPE;
 use serde_json::{json, Value};
-use solana::validator::new_validator_for_tests;
-use solana_client::rpc_client::get_rpc_request_str;
-use solana_sdk::hash::Hash;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::system_transaction;
+use morgan::validator::new_validator_for_tests;
+use morgan_client::rpc_client::get_rpc_request_str;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::system_transaction;
 use std::fs::remove_dir_all;
 use std::thread::sleep;
 use std::time::Duration;
 
 #[test]
 fn test_rpc_send_tx() {
-    solana_logger::setup();
+    morgan_logger::setup();
 
     let (server, leader_data, alice, ledger_path) = new_validator_for_tests();
     let bob_pubkey = Pubkey::new_rand();
@@ -69,7 +69,7 @@ fn test_rpc_send_tx() {
        "params": [signature],
     });
 
-    for _ in 0..solana_sdk::timing::DEFAULT_TICKS_PER_SLOT {
+    for _ in 0..morgan_sdk::timing::DEFAULT_TICKS_PER_SLOT {
         let mut response = client
             .post(&rpc_string)
             .header(CONTENT_TYPE, "application/json")

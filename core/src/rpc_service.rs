@@ -1,4 +1,4 @@
-//! The `rpc_service` module implements the Solana JSON RPC service.
+//! The `rpc_service` module implements the Morgan JSON RPC service.
 
 use crate::bank_forks::BankForks;
 use crate::cluster_info::ClusterInfo;
@@ -43,7 +43,7 @@ impl JsonRpcService {
         let exit_ = exit.clone();
 
         let thread_hdl = Builder::new()
-            .name("solana-jsonrpc".to_string())
+            .name("morgan-jsonrpc".to_string())
             .spawn(move || {
                 let mut io = MetaIoHandler::default();
                 let rpc = RpcSolImpl;
@@ -89,8 +89,8 @@ mod tests {
     use super::*;
     use crate::contact_info::ContactInfo;
     use crate::genesis_utils::{create_genesis_block, GenesisBlockInfo};
-    use solana_runtime::bank::Bank;
-    use solana_sdk::signature::KeypairUtil;
+    use morgan_runtime::bank::Bank;
+    use morgan_sdk::signature::KeypairUtil;
     use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 
     #[test]
@@ -107,7 +107,7 @@ mod tests {
         )));
         let rpc_addr = SocketAddr::new(
             IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0)),
-            solana_netutil::find_available_port_in_range((10000, 65535)).unwrap(),
+            morgan_netutil::find_available_port_in_range((10000, 65535)).unwrap(),
         );
         let bank_forks = Arc::new(RwLock::new(BankForks::new(bank.slot(), bank)));
         let rpc_service = JsonRpcService::new(
@@ -119,7 +119,7 @@ mod tests {
             &exit,
         );
         let thread = rpc_service.thread_hdl.thread();
-        assert_eq!(thread.name().unwrap(), "solana-jsonrpc");
+        assert_eq!(thread.name().unwrap(), "morgan-jsonrpc");
 
         assert_eq!(
             10_000,

@@ -17,30 +17,30 @@ pub type Entrypoint = unsafe extern "C" fn(
 // Convenience macro to define the native program entrypoint.  Supply a fn to this macro that
 // conforms to the `Entrypoint` type signature.
 #[macro_export]
-macro_rules! solana_entrypoint(
+macro_rules! morgan_entrypoint(
     ($entrypoint:ident) => (
         #[no_mangle]
         pub extern "C" fn process(
-            program_id: &solana_sdk::pubkey::Pubkey,
-            keyed_accounts: &mut [solana_sdk::account::KeyedAccount],
+            program_id: &morgan_sdk::pubkey::Pubkey,
+            keyed_accounts: &mut [morgan_sdk::account::KeyedAccount],
             data: &[u8],
             tick_height: u64
-        ) -> Result<(), solana_sdk::instruction::InstructionError> {
+        ) -> Result<(), morgan_sdk::instruction::InstructionError> {
             $entrypoint(program_id, keyed_accounts, data, tick_height)
         }
     )
 );
 
 #[macro_export]
-macro_rules! solana_program_id(
+macro_rules! morgan_program_id(
     ($program_id:ident) => (
 
-        pub fn check_id(program_id: &solana_sdk::pubkey::Pubkey) -> bool {
+        pub fn check_id(program_id: &morgan_sdk::pubkey::Pubkey) -> bool {
             program_id.as_ref() == $program_id
         }
 
-        pub fn id() -> solana_sdk::pubkey::Pubkey {
-            solana_sdk::pubkey::Pubkey::new(&$program_id)
+        pub fn id() -> morgan_sdk::pubkey::Pubkey {
+            morgan_sdk::pubkey::Pubkey::new(&$program_id)
         }
 
         #[cfg(test)]

@@ -1,6 +1,6 @@
-# A Solana Cluster
+# A Morgan Cluster
 
-A Solana cluster is a set of fullnodes working together to serve client
+A Morgan cluster is a set of fullnodes working together to serve client
 transactions and maintain the integrity of the ledger. Many clusters may
 coexist. When two clusters share a common genesis block, they attempt to
 converge. Otherwise, they simply ignore the existence of the other.
@@ -50,7 +50,7 @@ them to the ledger.
 
 ## Confirming Transactions
 
-A Solana cluster is capable of subsecond *confirmation* for up to 150 nodes
+A Morgan cluster is capable of subsecond *confirmation* for up to 150 nodes
 with plans to scale up to hundreds of thousands of nodes. Once fully
 implemented, confirmation times are expected to increase only with the
 logarithm of the number of validators, where the logarithm's base is very high.
@@ -59,7 +59,7 @@ nodes, confirmation will be the duration of three network hops plus the time it
 takes the slowest validator of a supermajority to vote. For the next million
 nodes, confirmation increases by only one network hop.
 
-Solana defines confirmation as the duration of time from when the leader
+Morgan defines confirmation as the duration of time from when the leader
 timestamps a new entry to the moment when it recognizes a supermajority of
 ledger votes.
 
@@ -77,7 +77,7 @@ techniques:
    each node share its batch with its peers.
 3. Repeat the previous step recursively until all nodes have all batches.
 
-Solana rotates leaders at fixed intervals, called *slots*. Each leader may only
+Morgan rotates leaders at fixed intervals, called *slots*. Each leader may only
 produce entries during its allotted slot. The leader therefore timestamps
 transactions so that validators may lookup the public key of the designated
 leader. The leader then signs the timestamp so that a validator may verify the

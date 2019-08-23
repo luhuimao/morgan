@@ -20,10 +20,10 @@ use indexmap::map::IndexMap;
 use rand;
 use rand::distributions::{Distribution, WeightedIndex};
 use rand::seq::SliceRandom;
-use solana_runtime::bloom::Bloom;
-use solana_sdk::hash::Hash;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::timing::timestamp;
+use morgan_runtime::bloom::Bloom;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::timing::timestamp;
 use std::cmp;
 
 pub const CRDS_GOSSIP_NUM_ACTIVE: usize = 30;
@@ -362,7 +362,7 @@ mod test {
     }
     #[test]
     fn test_refresh_active_set() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let mut crds = Crds::default();
         let mut push = CrdsGossipPush::default();
         let value1 = CrdsValue::ContactInfo(ContactInfo::new_localhost(&Pubkey::new_rand(), 0));

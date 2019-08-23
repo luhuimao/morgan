@@ -1,25 +1,25 @@
 #[macro_use]
-extern crate solana;
+extern crate morgan;
 
 use log::*;
-use solana::banking_stage::create_test_recorder;
-use solana::blocktree::{create_new_tmp_ledger, Blocktree};
-use solana::cluster_info::{ClusterInfo, Node};
-use solana::entry::next_entry_mut;
-use solana::entry::EntrySlice;
-use solana::genesis_utils::{create_genesis_block_with_leader, GenesisBlockInfo};
-use solana::gossip_service::GossipService;
-use solana::packet::index_blobs;
-use solana::rpc_subscriptions::RpcSubscriptions;
-use solana::service::Service;
-use solana::storage_stage::StorageState;
-use solana::storage_stage::STORAGE_ROTATE_TEST_COUNT;
-use solana::streamer;
-use solana::tvu::{Sockets, Tvu};
-use solana::validator;
-use solana_runtime::epoch_schedule::MINIMUM_SLOT_LENGTH;
-use solana_sdk::signature::{Keypair, KeypairUtil};
-use solana_sdk::system_transaction;
+use morgan::banking_stage::create_test_recorder;
+use morgan::blocktree::{create_new_tmp_ledger, Blocktree};
+use morgan::cluster_info::{ClusterInfo, Node};
+use morgan::entry::next_entry_mut;
+use morgan::entry::EntrySlice;
+use morgan::genesis_utils::{create_genesis_block_with_leader, GenesisBlockInfo};
+use morgan::gossip_service::GossipService;
+use morgan::packet::index_blobs;
+use morgan::rpc_subscriptions::RpcSubscriptions;
+use morgan::service::Service;
+use morgan::storage_stage::StorageState;
+use morgan::storage_stage::STORAGE_ROTATE_TEST_COUNT;
+use morgan::streamer;
+use morgan::tvu::{Sockets, Tvu};
+use morgan::validator;
+use morgan_runtime::epoch_schedule::MINIMUM_SLOT_LENGTH;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
+use morgan_sdk::system_transaction;
 use std::fs::remove_dir_all;
 use std::net::UdpSocket;
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -38,7 +38,7 @@ fn new_gossip(
 /// Test that message sent from leader to target1 and replayed to target2
 #[test]
 fn test_replay() {
-    solana_logger::setup();
+    morgan_logger::setup();
     let leader = Node::new_localhost();
     let target1_keypair = Keypair::new();
     let target1 = Node::new_localhost_with_pubkey(&target1_keypair.pubkey());
@@ -137,7 +137,7 @@ fn test_replay() {
             &poh_recorder,
             &leader_schedule_cache,
             &exit,
-            &solana_sdk::hash::Hash::default(),
+            &morgan_sdk::hash::Hash::default(),
             completed_slots_receiver,
         );
 

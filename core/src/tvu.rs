@@ -24,9 +24,9 @@ use crate::retransmit_stage::RetransmitStage;
 use crate::rpc_subscriptions::RpcSubscriptions;
 use crate::service::Service;
 use crate::storage_stage::{StorageStage, StorageState};
-use solana_sdk::hash::Hash;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{Keypair, KeypairUtil};
+use morgan_sdk::hash::Hash;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
 use std::net::UdpSocket;
 use std::sync::atomic::AtomicBool;
 use std::sync::mpsc::{channel, Receiver};
@@ -185,12 +185,12 @@ pub mod tests {
     use crate::cluster_info::{ClusterInfo, Node};
     use crate::genesis_utils::{create_genesis_block, GenesisBlockInfo};
     use crate::storage_stage::STORAGE_ROTATE_TEST_COUNT;
-    use solana_runtime::bank::Bank;
+    use morgan_runtime::bank::Bank;
     use std::sync::atomic::Ordering;
 
     #[test]
     fn test_tvu_exit() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let leader = Node::new_localhost();
         let target1_keypair = Keypair::new();
         let target1 = Node::new_localhost_with_pubkey(&target1_keypair.pubkey());

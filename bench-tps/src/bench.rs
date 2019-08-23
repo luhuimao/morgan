@@ -1,19 +1,19 @@
-use solana_metrics;
+use morgan_metrics;
 
 use log::*;
 use rayon::prelude::*;
-use solana::gen_keys::GenKeys;
-use solana_client::perf_utils::{sample_txs, SampleStats};
-use solana_drone::drone::request_airdrop_transaction;
-use solana_metrics::datapoint_info;
-use solana_sdk::client::Client;
-use solana_sdk::hash::Hash;
-use solana_sdk::signature::{Keypair, KeypairUtil};
-use solana_sdk::system_instruction;
-use solana_sdk::system_transaction;
-use solana_sdk::timing::timestamp;
-use solana_sdk::timing::{duration_as_ms, duration_as_s};
-use solana_sdk::transaction::Transaction;
+use morgan::gen_keys::GenKeys;
+use morgan_client::perf_utils::{sample_txs, SampleStats};
+use morgan_drone::drone::request_airdrop_transaction;
+use morgan_metrics::datapoint_info;
+use morgan_sdk::client::Client;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
+use morgan_sdk::system_instruction;
+use morgan_sdk::system_transaction;
+use morgan_sdk::timing::timestamp;
+use morgan_sdk::timing::{duration_as_ms, duration_as_s};
+use morgan_sdk::transaction::Transaction;
 use std::cmp;
 use std::collections::VecDeque;
 use std::net::SocketAddr;
@@ -93,7 +93,7 @@ where
             let maxes = maxes.clone();
             let client = client.clone();
             Builder::new()
-                .name("solana-client-sample".to_string())
+                .name("morgan-client-sample".to_string())
                 .spawn(move || {
                     sample_txs(&exit_signal, &maxes, sample_period, &client);
                 })
@@ -114,7 +114,7 @@ where
             let total_tx_sent_count = total_tx_sent_count.clone();
             let client = client.clone();
             Builder::new()
-                .name("solana-client-sender".to_string())
+                .name("morgan-client-sender".to_string())
                 .spawn(move || {
                     do_tx_transfers(
                         &exit_signal,
@@ -598,7 +598,7 @@ pub fn generate_and_fund_keypairs<T: Client>(
     info!("Get difs...");
 
     // Sample the first keypair, see if it has difs, if so then resume.
-    // This logic is to prevent dif loss on repeated solana-bench-tps executions
+    // This logic is to prevent dif loss on repeated morgan-bench-tps executions
     let last_keypair_balance = client
         .get_balance(&keypairs[tx_count * 2 - 1].pubkey())
         .unwrap_or(0);
@@ -622,15 +622,15 @@ pub fn generate_and_fund_keypairs<T: Client>(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use solana::cluster_info::FULLNODE_PORT_RANGE;
-    use solana::local_cluster::{ClusterConfig, LocalCluster};
-    use solana::validator::ValidatorConfig;
-    use solana_client::thin_client::create_client;
-    use solana_drone::drone::run_local_drone;
-    use solana_runtime::bank::Bank;
-    use solana_runtime::bank_client::BankClient;
-    use solana_sdk::client::SyncClient;
-    use solana_sdk::genesis_block::create_genesis_block;
+    use morgan::cluster_info::FULLNODE_PORT_RANGE;
+    use morgan::local_cluster::{ClusterConfig, LocalCluster};
+    use morgan::validator::ValidatorConfig;
+    use morgan_client::thin_client::create_client;
+    use morgan_drone::drone::run_local_drone;
+    use morgan_runtime::bank::Bank;
+    use morgan_runtime::bank_client::BankClient;
+    use morgan_sdk::client::SyncClient;
+    use morgan_sdk::genesis_block::create_genesis_block;
     use std::sync::mpsc::channel;
 
     #[test]
@@ -650,7 +650,7 @@ mod tests {
 
     #[test]
     fn test_bench_tps_local_cluster() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let validator_config = ValidatorConfig::default();
         const NUM_NODES: usize = 1;
         let cluster = LocalCluster::new(&ClusterConfig {

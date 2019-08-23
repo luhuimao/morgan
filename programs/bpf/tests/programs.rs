@@ -1,10 +1,10 @@
 #[cfg(any(feature = "bpf_c", feature = "bpf_rust"))]
 mod bpf {
-    use solana_runtime::bank::Bank;
-    use solana_runtime::bank_client::BankClient;
-    use solana_runtime::loader_utils::load_program;
-    use solana_sdk::genesis_block::create_genesis_block;
-    use solana_sdk::native_loader;
+    use morgan_runtime::bank::Bank;
+    use morgan_runtime::bank_client::BankClient;
+    use morgan_runtime::loader_utils::load_program;
+    use morgan_sdk::genesis_block::create_genesis_block;
+    use morgan_sdk::native_loader;
     use std::env;
     use std::fs::File;
     use std::path::PathBuf;
@@ -27,15 +27,15 @@ mod bpf {
     #[cfg(feature = "bpf_c")]
     mod bpf_c {
         use super::*;
-        use solana_runtime::loader_utils::create_invoke_instruction;
-        use solana_sdk::bpf_loader;
-        use solana_sdk::client::SyncClient;
-        use solana_sdk::signature::KeypairUtil;
+        use morgan_runtime::loader_utils::create_invoke_instruction;
+        use morgan_sdk::bpf_loader;
+        use morgan_sdk::client::SyncClient;
+        use morgan_sdk::signature::KeypairUtil;
         use std::io::Read;
 
         #[test]
         fn test_program_bpf_c_noop() {
-            solana_logger::setup();
+            morgan_logger::setup();
 
             let mut file = File::open(create_bpf_path("noop")).expect("file open failed");
             let mut elf = Vec::new();
@@ -55,7 +55,7 @@ mod bpf {
 
         #[test]
         fn test_program_bpf_c() {
-            solana_logger::setup();
+            morgan_logger::setup();
 
             let programs = [
                 "bpf_to_bpf",
@@ -80,7 +80,7 @@ mod bpf {
                     &bank_client,
                     &alice_keypair,
                     &native_loader::id(),
-                    "solana_bpf_loader".as_bytes().to_vec(),
+                    "morgan_bpf_loader".as_bytes().to_vec(),
                 );
 
                 // Call user program
@@ -97,19 +97,19 @@ mod bpf {
     #[cfg(feature = "bpf_rust")]
     mod bpf_rust {
         use super::*;
-        use solana_sdk::client::SyncClient;
-        use solana_sdk::instruction::{AccountMeta, Instruction};
-        use solana_sdk::signature::{Keypair, KeypairUtil};
+        use morgan_sdk::client::SyncClient;
+        use morgan_sdk::instruction::{AccountMeta, Instruction};
+        use morgan_sdk::signature::{Keypair, KeypairUtil};
         use std::io::Read;
 
         #[test]
         fn test_program_bpf_rust() {
-            solana_logger::setup();
+            morgan_logger::setup();
 
             let programs = [
-                "solana_bpf_rust_alloc",
-                // Disable due to #4271 "solana_bpf_rust_iter",
-                "solana_bpf_rust_noop",
+                "morgan_bpf_rust_alloc",
+                // Disable due to #4271 "morgan_bpf_rust_iter",
+                "morgan_bpf_rust_noop",
             ];
             for program in programs.iter() {
                 let filename = create_bpf_path(program);
@@ -126,7 +126,7 @@ mod bpf {
                     &bank_client,
                     &alice_keypair,
                     &native_loader::id(),
-                    "solana_bpf_loader".as_bytes().to_vec(),
+                    "morgan_bpf_loader".as_bytes().to_vec(),
                 );
 
                 // Call user program

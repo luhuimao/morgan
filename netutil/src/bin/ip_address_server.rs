@@ -1,8 +1,8 @@
 use clap::{crate_version, App, Arg};
 
 fn main() {
-    solana_logger::setup();
-    let matches = App::new("solana-ip-address-server")
+    morgan_logger::setup();
+    let matches = App::new("morgan-ip-address-server")
         .version(crate_version!())
         .arg(
             Arg::with_name("port")
@@ -16,7 +16,7 @@ fn main() {
     let port = port
         .parse()
         .unwrap_or_else(|_| panic!("Unable to parse {}", port));
-    let _runtime = solana_netutil::ip_echo_server(port);
+    let _runtime = morgan_netutil::ip_echo_server(port);
     loop {
         std::thread::park();
     }

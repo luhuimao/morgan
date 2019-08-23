@@ -1,9 +1,9 @@
 JSON RPC API
 ===
 
-Solana nodes accept HTTP requests using the [JSON-RPC 2.0](https://www.jsonrpc.org/specification) specification.
+Morgan nodes accept HTTP requests using the [JSON-RPC 2.0](https://www.jsonrpc.org/specification) specification.
 
-To interact with a Solana node inside a JavaScript application, use the [solana-web3.js](https://github.com/solana-labs/solana-web3.js) library, which gives a convenient interface for the RPC methods.
+To interact with a Morgan node inside a JavaScript application, use the [morgan-web3.js](https://github.com/morgan-labs/morgan-web3.js) library, which gives a convenient interface for the RPC methods.
 
 RPC HTTP Endpoint
 ---
@@ -72,7 +72,7 @@ Definitions
 * Hash: A SHA-256 hash of a chunk of data.
 * Pubkey: The public key of a Ed25519 key-pair.
 * Signature: An Ed25519 signature of a chunk of data.
-* Transaction: A Solana instruction signed by a client key-pair.
+* Transaction: A Morgan instruction signed by a client key-pair.
 
 JSON RPC API Reference
 ---
@@ -202,7 +202,7 @@ events.
 * `null` - Unknown transaction
 * `object` - Transaction status:
     * `"Ok": null` - Transaction was successful
-    * `"Err": <ERR>` - Transaction failed with TransactionError <ERR> [TransactionError definitions](https://github.com/solana-labs/solana/blob/master/sdk/src/transaction.rs#L14)
+    * `"Err": <ERR>` - Transaction failed with TransactionError <ERR> [TransactionError definitions](https://github.com/morgan-labs/morgan/blob/master/sdk/src/transaction.rs#L14)
 
 ##### Example:
 ```bash

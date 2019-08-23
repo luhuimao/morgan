@@ -1,17 +1,17 @@
 use chrono::prelude::*;
 use serde_json::Value;
-use solana_client::rpc_client::RpcClient;
-use solana_drone::drone::run_local_drone;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::KeypairUtil;
-use solana_wallet::wallet::{
+use morgan_client::rpc_client::RpcClient;
+use morgan_drone::drone::run_local_drone;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::KeypairUtil;
+use morgan_wallet::wallet::{
     process_command, request_and_confirm_airdrop, WalletCommand, WalletConfig,
 };
 use std::fs::remove_dir_all;
 use std::sync::mpsc::channel;
 
 #[cfg(test)]
-use solana::validator::new_validator_for_tests;
+use morgan::validator::new_validator_for_tests;
 
 fn check_balance(expected_balance: u64, client: &RpcClient, pubkey: &Pubkey) {
     let balance = client.retry_get_balance(pubkey, 1).unwrap().unwrap();

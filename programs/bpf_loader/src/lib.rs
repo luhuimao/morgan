@@ -8,11 +8,11 @@ use byteorder::{ByteOrder, LittleEndian, WriteBytesExt};
 use libc::c_char;
 use log::*;
 use solana_rbpf::{EbpfVmRaw, MemoryRegion};
-use solana_sdk::account::KeyedAccount;
-use solana_sdk::instruction::InstructionError;
-use solana_sdk::loader_instruction::LoaderInstruction;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::solana_entrypoint;
+use morgan_sdk::account::KeyedAccount;
+use morgan_sdk::instruction::InstructionError;
+use morgan_sdk::loader_instruction::LoaderInstruction;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::morgan_entrypoint;
 use std::alloc::Layout;
 use std::any::Any;
 use std::ffi::CStr;
@@ -276,14 +276,14 @@ fn deserialize_parameters(keyed_accounts: &mut [KeyedAccount], buffer: &[u8]) {
     }
 }
 
-solana_entrypoint!(entrypoint);
+morgan_entrypoint!(entrypoint);
 fn entrypoint(
     program_id: &Pubkey,
     keyed_accounts: &mut [KeyedAccount],
     tx_data: &[u8],
     tick_height: u64,
 ) -> Result<(), InstructionError> {
-    solana_logger::setup();
+    morgan_logger::setup();
 
     if keyed_accounts[0].account.executable {
         let (progs, params) = keyed_accounts.split_at_mut(1);

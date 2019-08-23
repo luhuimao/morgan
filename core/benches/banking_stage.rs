@@ -2,26 +2,26 @@
 
 extern crate test;
 #[macro_use]
-extern crate solana;
+extern crate morgan;
 
 use log::*;
 use rand::{thread_rng, Rng};
 use rayon::prelude::*;
-use solana::banking_stage::{create_test_recorder, BankingStage};
-use solana::blocktree::{get_tmp_ledger_path, Blocktree};
-use solana::cluster_info::ClusterInfo;
-use solana::cluster_info::Node;
-use solana::genesis_utils::{create_genesis_block, GenesisBlockInfo};
-use solana::packet::to_packets_chunked;
-use solana::poh_recorder::WorkingBankEntries;
-use solana::service::Service;
-use solana::test_tx::test_tx;
-use solana_runtime::bank::Bank;
-use solana_sdk::hash::hash;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::Signature;
-use solana_sdk::system_transaction;
-use solana_sdk::timing::{
+use morgan::banking_stage::{create_test_recorder, BankingStage};
+use morgan::blocktree::{get_tmp_ledger_path, Blocktree};
+use morgan::cluster_info::ClusterInfo;
+use morgan::cluster_info::Node;
+use morgan::genesis_utils::{create_genesis_block, GenesisBlockInfo};
+use morgan::packet::to_packets_chunked;
+use morgan::poh_recorder::WorkingBankEntries;
+use morgan::service::Service;
+use morgan::test_tx::test_tx;
+use morgan_runtime::bank::Bank;
+use morgan_sdk::hash::hash;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::Signature;
+use morgan_sdk::system_transaction;
+use morgan_sdk::timing::{
     duration_as_ms, timestamp, DEFAULT_TICKS_PER_SLOT, MAX_RECENT_BLOCKHASHES,
 };
 use std::iter;
@@ -86,7 +86,7 @@ fn bench_consume_buffered(bencher: &mut Bencher) {
 
 #[bench]
 fn bench_banking_stage_multi_accounts(bencher: &mut Bencher) {
-    solana_logger::setup();
+    morgan_logger::setup();
     let num_threads = BankingStage::num_threads() as usize;
     //   a multiple of packet chunk  2X duplicates to avoid races
     let txes = 192 * num_threads * 2;

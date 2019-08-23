@@ -1,8 +1,8 @@
 ## Economic Sustainability
 
-Long term economic sustainability is one of the guiding principles of Solana’s economic design. While it is impossible to predict how decentralized economies will develop over time, especially economies with flexible decentralized governances, we can arrange economic components such that, under certain conditions, a sustainable economy may take shape in the long term. In the case of Solana’s network, these components take the form of the remittances and deposits into and out of the reserve ‘mining pool’.
+Long term economic sustainability is one of the guiding principles of Morgan’s economic design. While it is impossible to predict how decentralized economies will develop over time, especially economies with flexible decentralized governances, we can arrange economic components such that, under certain conditions, a sustainable economy may take shape in the long term. In the case of Morgan’s network, these components take the form of the remittances and deposits into and out of the reserve ‘mining pool’.
 
-The dominant remittances from the Solana mining pool are validator and replicator rewards. The deposit mechanism is a flat, protocol-specified and adjusted, % of each transaction fee.
+The dominant remittances from the Morgan mining pool are validator and replicator rewards. The deposit mechanism is a flat, protocol-specified and adjusted, % of each transaction fee.
 
 The Replicator rewards are to be delivered to replicators from the mining pool after successful PoRep validation. The per-PoRep reward amount is determined as a function of the total network storage redundancy at the time of the PoRep validation and the network goal redundancy. This function is likely to take the form of a discount from a base reward to be delivered when the network has achieved and maintained its goal redundancy. An example of such a reward function is shown in **Figure 3**
 

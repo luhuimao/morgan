@@ -1,3 +1,3 @@
 # JavaScript API
 
-See [solana-web3](https://solana-labs.github.io/solana-web3.js/).
+See [morgan-web3](https://morgan-labs.github.io/morgan-web3.js/).

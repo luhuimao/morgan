@@ -43,7 +43,7 @@ buildSshOptions() {
     -o "BatchMode=yes"
     -o "StrictHostKeyChecking=no"
     -o "UserKnownHostsFile=/dev/null"
-    -o "User=solana"
+    -o "User=morgan"
     -o "IdentityFile=$sshPrivateKey"
     -o "LogLevel=ERROR"
   )

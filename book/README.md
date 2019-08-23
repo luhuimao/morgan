@@ -1,4 +1,4 @@
-Building the Solana book
+Building the Morgan book
 ---
 
 Install the book's dependnecies, build, and test the book:

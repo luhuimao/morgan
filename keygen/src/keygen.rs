@@ -1,6 +1,6 @@
 use clap::{crate_description, crate_name, crate_version, App, Arg, SubCommand};
-use solana_sdk::pubkey::write_pubkey;
-use solana_sdk::signature::{gen_keypair_file, read_keypair, KeypairUtil};
+use morgan_sdk::pubkey::write_pubkey;
+use morgan_sdk::signature::{gen_keypair_file, read_keypair, KeypairUtil};
 use std::error;
 
 fn main() -> Result<(), Box<dyn error::Error>> {
@@ -54,7 +54,7 @@ fn main() -> Result<(), Box<dyn error::Error>> {
             let infile = if pubkey_matches.is_present("infile") {
                 pubkey_matches.value_of("infile").unwrap()
             } else {
-                path.extend(&[".config", "solana", "id.json"]);
+                path.extend(&[".config", "morgan", "id.json"]);
                 path.to_str().unwrap()
             };
             let keypair = read_keypair(infile)?;
@@ -77,7 +77,7 @@ fn main() -> Result<(), Box<dyn error::Error>> {
             let outfile = if working_matches.is_present("outfile") {
                 working_matches.value_of("outfile").unwrap()
             } else {
-                path.extend(&[".config", "solana", "id.json"]);
+                path.extend(&[".config", "morgan", "id.json"]);
                 path.to_str().unwrap()
             };
 

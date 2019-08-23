@@ -1,4 +1,4 @@
-//! The `rpc` module implements the Solana RPC interface.
+//! The `rpc` module implements the Morgan RPC interface.
 
 use crate::bank_forks::BankForks;
 use crate::cluster_info::ClusterInfo;
@@ -8,14 +8,14 @@ use crate::storage_stage::StorageState;
 use bincode::{deserialize, serialize};
 use jsonrpc_core::{Error, Metadata, Result};
 use jsonrpc_derive::rpc;
-use solana_drone::drone::request_airdrop_transaction;
-use solana_runtime::bank::Bank;
-use solana_sdk::account::Account;
-use solana_sdk::fee_calculator::FeeCalculator;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::Signature;
-use solana_sdk::transaction::{self, Transaction};
-use solana_vote_api::vote_state::VoteState;
+use morgan_drone::drone::request_airdrop_transaction;
+use morgan_runtime::bank::Bank;
+use morgan_sdk::account::Account;
+use morgan_sdk::fee_calculator::FeeCalculator;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::Signature;
+use morgan_sdk::transaction::{self, Transaction};
+use morgan_vote_api::vote_state::VoteState;
 use std::net::{SocketAddr, UdpSocket};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, RwLock};
@@ -479,11 +479,11 @@ mod tests {
     use crate::contact_info::ContactInfo;
     use crate::genesis_utils::{create_genesis_block, GenesisBlockInfo};
     use jsonrpc_core::{MetaIoHandler, Response};
-    use solana_sdk::hash::{hash, Hash};
-    use solana_sdk::instruction::InstructionError;
-    use solana_sdk::signature::{Keypair, KeypairUtil};
-    use solana_sdk::system_transaction;
-    use solana_sdk::transaction::TransactionError;
+    use morgan_sdk::hash::{hash, Hash};
+    use morgan_sdk::instruction::InstructionError;
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_sdk::system_transaction;
+    use morgan_sdk::transaction::TransactionError;
     use std::thread;
 
     fn start_rpc_handler_with_tx(

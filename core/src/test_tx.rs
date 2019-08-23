@@ -1,10 +1,10 @@
-use solana_sdk::hash::Hash;
-use solana_sdk::instruction::CompiledInstruction;
-use solana_sdk::signature::{Keypair, KeypairUtil};
-use solana_sdk::system_instruction::SystemInstruction;
-use solana_sdk::system_program;
-use solana_sdk::system_transaction;
-use solana_sdk::transaction::Transaction;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::instruction::CompiledInstruction;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
+use morgan_sdk::system_instruction::SystemInstruction;
+use morgan_sdk::system_program;
+use morgan_sdk::system_transaction;
+use morgan_sdk::transaction::Transaction;
 
 pub fn test_tx() -> Transaction {
     let keypair1 = Keypair::new();
@@ -22,7 +22,7 @@ pub fn test_multisig_tx() -> Transaction {
 
     let transfer_instruction = SystemInstruction::Transfer { difs };
 
-    let program_ids = vec![system_program::id(), solana_budget_api::id()];
+    let program_ids = vec![system_program::id(), morgan_budget_api::id()];
 
     let instructions = vec![CompiledInstruction::new(
         0,

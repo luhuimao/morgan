@@ -6,4 +6,4 @@ const STAKE_PROGRAM_ID: [u8; 32] = [
     120, 114, 43, 104, 164, 157, 192, 0, 0, 0, 0,
 ];
 
-solana_sdk::solana_program_id!(STAKE_PROGRAM_ID);
+morgan_sdk::morgan_program_id!(STAKE_PROGRAM_ID);

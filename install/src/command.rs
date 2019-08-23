@@ -4,12 +4,12 @@ use chrono::{Local, TimeZone};
 use console::{style, Emoji};
 use indicatif::{ProgressBar, ProgressStyle};
 use ring::digest::{Context, Digest, SHA256};
-use solana_client::rpc_client::RpcClient;
-use solana_config_api::config_instruction;
-use solana_sdk::message::Message;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{read_keypair, Keypair, KeypairUtil, Signable};
-use solana_sdk::transaction::Transaction;
+use morgan_client::rpc_client::RpcClient;
+use morgan_config_api::config_instruction;
+use morgan_sdk::message::Message;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{read_keypair, Keypair, KeypairUtil, Signable};
+use morgan_sdk::transaction::Transaction;
 use std::fs::{self, File};
 use std::io::{self, BufReader, Read};
 use std::path::{Path, PathBuf};
@@ -170,7 +170,7 @@ fn load_release_target(release_dir: &Path) -> Result<String, Box<dyn std::error:
     }
 
     let mut version_yml = PathBuf::from(release_dir);
-    version_yml.push("solana-release");
+    version_yml.push("morgan-release");
     version_yml.push("version.yml");
 
     let file = File::open(&version_yml)?;
@@ -270,7 +270,7 @@ fn check_env_path_for_bin_dir(config: &Config) {
 
     if !found {
         println!(
-            "\nPlease update your PATH environment variable to include the solana programs:\n    PATH=\"{}:$PATH\"\n",
+            "\nPlease update your PATH environment variable to include the morgan programs:\n    PATH=\"{}:$PATH\"\n",
             bin_dir.to_str().unwrap()
         );
     }
@@ -566,7 +566,7 @@ pub fn update(config_file: &str) -> Result<bool, String> {
 
     let _ = fs::remove_dir_all(config.active_release_dir());
     std::os::unix::fs::symlink(
-        release_dir.join("solana-release"),
+        release_dir.join("morgan-release"),
         config.active_release_dir(),
     )
     .map_err(|err| {

@@ -2,11 +2,11 @@
 
 #![no_std]
 
-extern crate solana_sdk_bpf_utils;
+extern crate morgan_sdk_bpf_utils;
 
-use solana_sdk_bpf_utils::entrypoint;
-use solana_sdk_bpf_utils::entrypoint::*;
-use solana_sdk_bpf_utils::log::*;
+use morgan_sdk_bpf_utils::entrypoint;
+use morgan_sdk_bpf_utils::entrypoint::*;
+use morgan_sdk_bpf_utils::log::*;
 
 struct SStruct {
     x: u64,

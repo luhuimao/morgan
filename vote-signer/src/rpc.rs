@@ -3,8 +3,8 @@
 use jsonrpc_core::{Error, MetaIoHandler, Metadata, Result};
 use jsonrpc_derive::rpc;
 use jsonrpc_http_server::{hyper, AccessControlAllowOrigin, DomainsValidation, ServerBuilder};
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{Keypair, KeypairUtil, Signature};
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{Keypair, KeypairUtil, Signature};
 use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -21,7 +21,7 @@ impl VoteSignerRpcService {
         let request_processor = LocalVoteSigner::default();
         let exit = exit.clone();
         let thread_hdl = Builder::new()
-            .name("solana-vote-signer-jsonrpc".to_string())
+            .name("morgan-vote-signer-jsonrpc".to_string())
             .spawn(move || {
                 let mut io = MetaIoHandler::default();
                 let rpc = VoteSignerRpcImpl;
@@ -169,7 +169,7 @@ impl Default for LocalVoteSigner {
 mod tests {
     use super::*;
     use jsonrpc_core::{types::*, Response};
-    use solana_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
     use std::mem;
 
     fn start_rpc_handler() -> (MetaIoHandler<Meta>, Meta) {

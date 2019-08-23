@@ -81,17 +81,17 @@ $ ./net.sh start -f "cuda,erasure"
 
 ### How to interact with a CD testnet deployed by ci/testnet-deploy.sh
 
-**AWS-Specific Extra Setup**: Follow the steps in `scripts/add-solana-user-authorized_keys.sh`,
+**AWS-Specific Extra Setup**: Follow the steps in `scripts/add-morgan-user-authorized_keys.sh`,
 then redeploy the testnet before continuing in this section.
 
-Taking **master-testnet-solana-com** as an example, configure your workspace for
+Taking **master-testnet-morgan-com** as an example, configure your workspace for
 the testnet using:
 ```bash
-$ ./gce.sh config -p master-testnet-solana-com
+$ ./gce.sh config -p master-testnet-morgan-com
 ```
 or
 ```bash
-$ ./ec2.sh config -p master-testnet-solana-com
+$ ./ec2.sh config -p master-testnet-morgan-com
 ```
 
 Then run the following for details on how to ssh into any testnet node to access logs or otherwise inspect the node

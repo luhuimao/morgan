@@ -1,9 +1,9 @@
 //! The `bank_forks` module implments BankForks a DAG of checkpointed Banks
 
 use hashbrown::{HashMap, HashSet};
-use solana_metrics::inc_new_counter_info;
-use solana_runtime::bank::Bank;
-use solana_sdk::timing;
+use morgan_metrics::inc_new_counter_info;
+use morgan_runtime::bank::Bank;
+use morgan_sdk::timing;
 use std::ops::Index;
 use std::sync::Arc;
 use std::time::Instant;
@@ -148,8 +148,8 @@ impl BankForks {
 mod tests {
     use super::*;
     use crate::genesis_utils::{create_genesis_block, GenesisBlockInfo};
-    use solana_sdk::hash::Hash;
-    use solana_sdk::pubkey::Pubkey;
+    use morgan_sdk::hash::Hash;
+    use morgan_sdk::pubkey::Pubkey;
 
     #[test]
     fn test_bank_forks() {

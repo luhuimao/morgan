@@ -1,13 +1,13 @@
 use clap::{crate_description, crate_name, crate_version, App, Arg};
 use log::*;
-use solana::cluster_info::{Node, FULLNODE_PORT_RANGE};
-use solana::contact_info::ContactInfo;
-use solana::local_vote_signer_service::LocalVoteSignerService;
-use solana::service::Service;
-use solana::socketaddr;
-use solana::validator::{Validator, ValidatorConfig};
-use solana_netutil::parse_port_range;
-use solana_sdk::signature::{read_keypair, Keypair, KeypairUtil};
+use morgan::cluster_info::{Node, FULLNODE_PORT_RANGE};
+use morgan::contact_info::ContactInfo;
+use morgan::local_vote_signer_service::LocalVoteSignerService;
+use morgan::service::Service;
+use morgan::socketaddr;
+use morgan::validator::{Validator, ValidatorConfig};
+use morgan_netutil::parse_port_range;
+use morgan_sdk::signature::{read_keypair, Keypair, KeypairUtil};
 use std::fs::File;
 use std::net::SocketAddr;
 use std::process::exit;
@@ -22,8 +22,8 @@ fn port_range_validator(port_range: String) -> Result<(), String> {
 }
 
 fn main() {
-    solana_logger::setup();
-    solana_metrics::set_panic_hook("validator");
+    morgan_logger::setup();
+    morgan_metrics::set_panic_hook("validator");
 
     let default_dynamic_port_range =
         &format!("{}-{}", FULLNODE_PORT_RANGE.0, FULLNODE_PORT_RANGE.1);
@@ -200,17 +200,17 @@ fn main() {
         validator_config.rpc_config.enable_fullnode_exit = true;
     }
     validator_config.rpc_config.drone_addr = matches.value_of("rpc_drone_address").map(|address| {
-        solana_netutil::parse_host_port(address).expect("failed to parse drone address")
+        morgan_netutil::parse_host_port(address).expect("failed to parse drone address")
     });
 
     let dynamic_port_range = parse_port_range(matches.value_of("dynamic_port_range").unwrap())
         .expect("invalid dynamic_port_range");
 
-    let mut gossip_addr = solana_netutil::parse_port_or_addr(
+    let mut gossip_addr = morgan_netutil::parse_port_or_addr(
         matches.value_of("gossip_port"),
         socketaddr!(
             [127, 0, 0, 1],
-            solana_netutil::find_available_port_in_range(dynamic_port_range)
+            morgan_netutil::find_available_port_in_range(dynamic_port_range)
                 .expect("unable to find an available gossip port")
         ),
     );
@@ -221,9 +221,9 @@ fn main() {
         validator_config.account_paths = None;
     }
     let cluster_entrypoint = matches.value_of("entrypoint").map(|entrypoint| {
-        let entrypoint_addr = solana_netutil::parse_host_port(entrypoint)
+        let entrypoint_addr = morgan_netutil::parse_host_port(entrypoint)
             .expect("failed to parse entrypoint address");
-        gossip_addr.set_ip(solana_netutil::get_public_ip_addr(&entrypoint_addr).unwrap());
+        gossip_addr.set_ip(morgan_netutil::get_public_ip_addr(&entrypoint_addr).unwrap());
 
         ContactInfo::new_gossip_entry_point(&entrypoint_addr)
     });

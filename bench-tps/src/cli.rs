@@ -3,8 +3,8 @@ use std::process::exit;
 use std::time::Duration;
 
 use clap::{crate_description, crate_name, crate_version, App, Arg, ArgMatches};
-use solana_drone::drone::DRONE_PORT;
-use solana_sdk::signature::{read_keypair, Keypair, KeypairUtil};
+use morgan_drone::drone::DRONE_PORT;
+use morgan_sdk::signature::{read_keypair, Keypair, KeypairUtil};
 
 /// Holds the configuration for a single run of the benchmark
 pub struct Config {
@@ -117,14 +117,14 @@ pub fn extract_args<'a>(matches: &ArgMatches<'a>) -> Config {
     let mut args = Config::default();
 
     if let Some(addr) = matches.value_of("entrypoint") {
-        args.entrypoint_addr = solana_netutil::parse_host_port(addr).unwrap_or_else(|e| {
+        args.entrypoint_addr = morgan_netutil::parse_host_port(addr).unwrap_or_else(|e| {
             eprintln!("failed to parse entrypoint address: {}", e);
             exit(1)
         });
     }
 
     if let Some(addr) = matches.value_of("drone") {
-        args.drone_addr = solana_netutil::parse_host_port(addr).unwrap_or_else(|e| {
+        args.drone_addr = morgan_netutil::parse_host_port(addr).unwrap_or_else(|e| {
             eprintln!("failed to parse drone address: {}", e);
             exit(1)
         });

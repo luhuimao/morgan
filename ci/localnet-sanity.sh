@@ -261,7 +261,7 @@ verifyLedger() {
     (
       source multinode-demo/common.sh
       set -x
-      $solana_ledger_tool --ledger "$SOLANA_CONFIG_DIR"/$ledger-ledger verify
+      $morgan_ledger_tool --ledger "$SOLANA_CONFIG_DIR"/$ledger-ledger verify
     ) || flag_error
   done
 }
@@ -307,8 +307,8 @@ while [[ $iteration -le $iterations ]]; do
     source multinode-demo/common.sh
     set -x
     client_keypair=/tmp/client-id.json-$$
-    $solana_keygen -o $client_keypair || exit $?
-    $solana_gossip spy --num-nodes-exactly $numNodes || exit $?
+    $morgan_keygen -o $client_keypair || exit $?
+    $morgan_gossip spy --num-nodes-exactly $numNodes || exit $?
     rm -rf $client_keypair
   ) || flag_error
 
@@ -353,7 +353,7 @@ while [[ $iteration -le $iterations ]]; do
   echo "--- Wallet sanity ($iteration)"
   flag_error_if_no_leader_rotation() {
     # TODO: Stop ignoring wallet sanity failures when leader rotation is enabled
-    #       once https://github.com/solana-labs/solana/issues/2474 is fixed
+    #       once https://github.com/morgan-labs/morgan/issues/2474 is fixed
     if [[ -n $maybeNoLeaderRotation ]]; then
       flag_error
     else

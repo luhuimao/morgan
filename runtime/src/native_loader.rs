@@ -6,11 +6,11 @@ use libloading::os::unix::*;
 #[cfg(windows)]
 use libloading::os::windows::*;
 use log::*;
-use solana_sdk::account::KeyedAccount;
-use solana_sdk::instruction::InstructionError;
-use solana_sdk::instruction_processor_utils;
-use solana_sdk::loader_instruction::LoaderInstruction;
-use solana_sdk::pubkey::Pubkey;
+use morgan_sdk::account::KeyedAccount;
+use morgan_sdk::instruction::InstructionError;
+use morgan_sdk::instruction_processor_utils;
+use morgan_sdk::loader_instruction::LoaderInstruction;
+use morgan_sdk::pubkey::Pubkey;
 use std::env;
 use std::path::PathBuf;
 use std::str;

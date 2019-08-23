@@ -4,31 +4,31 @@ use log::*;
 use num_traits::FromPrimitive;
 use serde_json;
 use serde_json::json;
-use solana_budget_api;
-use solana_budget_api::budget_instruction;
-use solana_budget_api::budget_state::BudgetError;
-use solana_client::client_error::ClientError;
-use solana_client::rpc_client::RpcClient;
+use morgan_budget_api;
+use morgan_budget_api::budget_instruction;
+use morgan_budget_api::budget_state::BudgetError;
+use morgan_client::client_error::ClientError;
+use morgan_client::rpc_client::RpcClient;
 #[cfg(not(test))]
-use solana_drone::drone::request_airdrop_transaction;
-use solana_drone::drone::DRONE_PORT;
+use morgan_drone::drone::request_airdrop_transaction;
+use morgan_drone::drone::DRONE_PORT;
 #[cfg(test)]
-use solana_drone::drone_mock::request_airdrop_transaction;
-use solana_sdk::account_utils::State;
-use solana_sdk::bpf_loader;
-use solana_sdk::hash::Hash;
-use solana_sdk::instruction::InstructionError;
-use solana_sdk::instruction_processor_utils::DecodeError;
-use solana_sdk::loader_instruction;
-use solana_sdk::message::Message;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{read_keypair, Keypair, KeypairUtil, Signature};
-use solana_sdk::system_instruction::SystemError;
-use solana_sdk::system_transaction;
-use solana_sdk::transaction::{Transaction, TransactionError};
-use solana_stake_api::stake_instruction;
-use solana_storage_api::storage_instruction;
-use solana_vote_api::vote_instruction;
+use morgan_drone::drone_mock::request_airdrop_transaction;
+use morgan_sdk::account_utils::State;
+use morgan_sdk::bpf_loader;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::instruction::InstructionError;
+use morgan_sdk::instruction_processor_utils::DecodeError;
+use morgan_sdk::loader_instruction;
+use morgan_sdk::message::Message;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{read_keypair, Keypair, KeypairUtil, Signature};
+use morgan_sdk::system_instruction::SystemError;
+use morgan_sdk::system_transaction;
+use morgan_sdk::transaction::{Transaction, TransactionError};
+use morgan_stake_api::stake_instruction;
+use morgan_storage_api::storage_instruction;
+use morgan_vote_api::vote_instruction;
 use std::fs::File;
 use std::io::Read;
 use std::net::{IpAddr, SocketAddr};
@@ -116,7 +116,7 @@ impl Default for WalletConfig {
             command: WalletCommand::Balance(Pubkey::default()),
             drone_host: None,
             drone_port: DRONE_PORT,
-            json_rpc_url: "http://testnet.solana.com:8899".to_string(),
+            json_rpc_url: "http://testnet.morgan.com:8899".to_string(),
             keypair: Keypair::new(),
             rpc_client: None,
         }
@@ -132,7 +132,7 @@ impl WalletConfig {
                     .host()
                     .unwrap()
                     .to_string();
-                solana_netutil::parse_host(&drone_host).unwrap_or_else(|err| {
+                morgan_netutil::parse_host(&drone_host).unwrap_or_else(|err| {
                     panic!("Unable to resolve {}: {}", drone_host, err);
                 })
             }),
@@ -492,7 +492,7 @@ fn process_show_vote_account(
     _config: &WalletConfig,
     voting_account_pubkey: &Pubkey,
 ) -> ProcessResult {
-    use solana_vote_api::vote_state::VoteState;
+    use morgan_vote_api::vote_state::VoteState;
     let vote_account_difs = rpc_client.retry_get_balance(voting_account_pubkey, 5)?;
     let vote_account_data = rpc_client.get_account_data(voting_account_pubkey)?;
     let vote_state = VoteState::deserialize(&vote_account_data).map_err(|_| {
@@ -611,7 +611,7 @@ fn process_show_stake_account(
     _config: &WalletConfig,
     staking_account_pubkey: &Pubkey,
 ) -> ProcessResult {
-    use solana_stake_api::stake_state::StakeState;
+    use morgan_stake_api::stake_state::StakeState;
     let stake_account = rpc_client.get_account(staking_account_pubkey)?;
     match stake_account.state() {
         Ok(StakeState::Delegate {
@@ -709,7 +709,7 @@ fn process_show_storage_account(
     _config: &WalletConfig,
     storage_account_pubkey: &Pubkey,
 ) -> ProcessResult {
-    use solana_storage_api::storage_contract::StorageContract;
+    use morgan_storage_api::storage_contract::StorageContract;
     let account = rpc_client.get_account(storage_account_pubkey)?;
     let storage_contract: StorageContract = account.state().map_err(|err| {
         WalletError::RpcRequestError(
@@ -963,7 +963,7 @@ pub fn process_command(config: &WalletConfig) -> ProcessResult {
         // Get address of this client
         WalletCommand::Address => unreachable!(),
 
-        // Request an airdrop from Solana Drone;
+        // Request an airdrop from Morgan Drone;
         WalletCommand::Airdrop(difs) => {
             process_airdrop(&rpc_client, config, drone_addr, *difs)
         }
@@ -1669,9 +1669,9 @@ pub fn app<'ab, 'v>(name: &str, about: &'ab str, version: &'v str) -> App<'ab, '
 mod tests {
     use super::*;
     use serde_json::Value;
-    use solana_client::mock_rpc_client_request::SIGNATURE;
-    use solana_sdk::signature::gen_keypair_file;
-    use solana_sdk::transaction::TransactionError;
+    use morgan_client::mock_rpc_client_request::SIGNATURE;
+    use morgan_sdk::signature::gen_keypair_file;
+    use morgan_sdk::transaction::TransactionError;
     use std::net::{Ipv4Addr, SocketAddr};
     use std::path::PathBuf;
 
@@ -2140,7 +2140,7 @@ mod tests {
 
     #[test]
     fn test_wallet_deploy() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let mut pathbuf = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
         pathbuf.push("tests");
         pathbuf.push("fixtures");

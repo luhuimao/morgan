@@ -9,11 +9,11 @@ use crate::repair_service::{RepairService, RepairStrategy};
 use crate::result::{Error, Result};
 use crate::service::Service;
 use crate::streamer::{BlobReceiver, BlobSender};
-use solana_metrics::{inc_new_counter_debug, inc_new_counter_error};
-use solana_runtime::bank::Bank;
-use solana_sdk::hash::Hash;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::timing::duration_as_ms;
+use morgan_metrics::{inc_new_counter_debug, inc_new_counter_error};
+use morgan_runtime::bank::Bank;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::timing::duration_as_ms;
 use std::net::UdpSocket;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::RecvTimeoutError;
@@ -202,7 +202,7 @@ impl WindowService {
         let blob_filter = Arc::new(blob_filter);
         let bank_forks = bank_forks.clone();
         let t_window = Builder::new()
-            .name("solana-window".to_string())
+            .name("morgan-window".to_string())
             .spawn(move || {
                 let _exit = Finalizer::new(exit.clone());
                 let id = cluster_info.read().unwrap().id();
@@ -261,8 +261,8 @@ mod test {
     use crate::packet::{index_blobs, Blob};
     use crate::service::Service;
     use crate::streamer::{blob_receiver, responder};
-    use solana_runtime::epoch_schedule::MINIMUM_SLOT_LENGTH;
-    use solana_sdk::hash::Hash;
+    use morgan_runtime::epoch_schedule::MINIMUM_SLOT_LENGTH;
+    use morgan_sdk::hash::Hash;
     use std::fs::remove_dir_all;
     use std::net::UdpSocket;
     use std::sync::atomic::{AtomicBool, Ordering};
@@ -341,7 +341,7 @@ mod test {
 
     #[test]
     pub fn window_send_test() {
-        solana_logger::setup();
+        morgan_logger::setup();
         // setup a leader whose id is used to generates blobs and a validator
         // node whose window service will retransmit leader blobs.
         let leader_node = Node::new_localhost();
@@ -428,7 +428,7 @@ mod test {
 
     #[test]
     pub fn window_send_leader_test2() {
-        solana_logger::setup();
+        morgan_logger::setup();
         // setup a leader whose id is used to generates blobs and a validator
         // node whose window service will retransmit leader blobs.
         let leader_node = Node::new_localhost();

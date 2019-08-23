@@ -20,7 +20,7 @@ export RUST_LOG
 # low-staked ephemeral validator a random user may attach to testnet will cause
 # trouble
 #
-# Ref: https://github.com/solana-labs/solana/issues/3798
+# Ref: https://github.com/morgan-labs/morgan/issues/3798
 stake=424243
 
 missing() {
@@ -52,11 +52,11 @@ local|tar)
   export USE_INSTALL=1
   export SOLANA_METRICS_DISPLAY_HOSTNAME=1
 
-  # Setup `/var/snap/solana/current` symlink so rsyncing the genesis
+  # Setup `/var/snap/morgan/current` symlink so rsyncing the genesis
   # ledger works (reference: `net/scripts/install-rsync.sh`)
-  sudo rm -rf /var/snap/solana/current
-  sudo mkdir -p /var/snap/solana
-  sudo ln -sT /home/solana/solana /var/snap/solana/current
+  sudo rm -rf /var/snap/morgan/current
+  sudo mkdir -p /var/snap/morgan
+  sudo ln -sT /home/morgan/morgan /var/snap/morgan/current
 
   ./fetch-perf-libs.sh
   # shellcheck source=/dev/null
@@ -72,8 +72,8 @@ local|tar)
 
   case $nodeType in
   bootstrap-leader)
-    if [[ -e /dev/nvidia0 && -x ~/.cargo/bin/solana-validator-cuda ]]; then
-      echo Selecting solana-validator-cuda
+    if [[ -e /dev/nvidia0 && -x ~/.cargo/bin/morgan-validator-cuda ]]; then
+      echo Selecting morgan-validator-cuda
       export SOLANA_CUDA=1
     fi
     set -x
@@ -96,19 +96,19 @@ local|tar)
   validator|blockstreamer)
     net/scripts/rsync-retry.sh -vPrc "$entrypointIp":~/.cargo/bin/ ~/.cargo/bin/
 
-    if [[ -e /dev/nvidia0 && -x ~/.cargo/bin/solana-validator-cuda ]]; then
-      echo Selecting solana-validator-cuda
+    if [[ -e /dev/nvidia0 && -x ~/.cargo/bin/morgan-validator-cuda ]]; then
+      echo Selecting morgan-validator-cuda
       export SOLANA_CUDA=1
     fi
 
     args=(
-      "$entrypointIp":~/solana "$entrypointIp:8001"
+      "$entrypointIp":~/morgan "$entrypointIp:8001"
       --gossip-port 8001
       --rpc-port 8899
     )
     if [[ $nodeType = blockstreamer ]]; then
       args+=(
-        --blockstream /tmp/solana-blockstream.sock
+        --blockstream /tmp/morgan-blockstream.sock
         --no-voting
         --stake 0
       )
@@ -127,12 +127,12 @@ local|tar)
       # with it on the blockstreamer node.  Typically the blockstreamer node has
       # a static IP/DNS name for hosting the blockexplorer web app, and is
       # a location that somebody would expect to be able to airdrop from
-      scp "$entrypointIp":~/solana/config-local/mint-keypair.json config-local/
+      scp "$entrypointIp":~/morgan/config-local/mint-keypair.json config-local/
       ./multinode-demo/drone.sh > drone.log 2>&1 &
 
       export BLOCKEXPLORER_GEOIP_WHITELIST=$PWD/net/config/geoip.yml
-      npm install @solana/blockexplorer@1.8.12
-      npx solana-blockexplorer > blockexplorer.log 2>&1 &
+      npm install @morgan/blockexplorer@1.8.12
+      npx morgan-blockexplorer > blockexplorer.log 2>&1 &
 
       # Confirm the blockexplorer is accessible
       curl --head --retry 3 --retry-connrefused http://localhost:5000/

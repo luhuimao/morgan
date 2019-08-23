@@ -8,7 +8,7 @@
 #
 set -e
 
-REPO_SLUG=solana-labs/solana
+REPO_SLUG=morgan-labs/morgan
 
 if [[ -z $1 ]]; then
   echo No files specified

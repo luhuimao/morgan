@@ -82,48 +82,48 @@ setup_validator_accounts() {
   declare stake=$6
 
   declare node_pubkey
-  node_pubkey=$($solana_keygen pubkey "$node_keypair_path")
+  node_pubkey=$($morgan_keygen pubkey "$node_keypair_path")
 
   declare vote_pubkey
-  vote_pubkey=$($solana_keygen pubkey "$vote_keypair_path")
+  vote_pubkey=$($morgan_keygen pubkey "$vote_keypair_path")
 
   declare stake_pubkey
-  stake_pubkey=$($solana_keygen pubkey "$stake_keypair_path")
+  stake_pubkey=$($morgan_keygen pubkey "$stake_keypair_path")
 
   declare storage_pubkey
-  storage_pubkey=$($solana_keygen pubkey "$storage_keypair_path")
+  storage_pubkey=$($morgan_keygen pubkey "$storage_keypair_path")
 
   if [[ -f $configured_flag ]]; then
     echo "Vote and stake accounts have already been configured"
   else
     # Fund the node with enough tokens to fund its Vote, Staking, and Storage accounts
-    $solana_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" airdrop $((stake*2+2)) || return $?
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" airdrop $((stake*2+2)) || return $?
 
     # Fund the vote account from the node, with the node as the node_pubkey
-    $solana_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
       create-vote-account "$vote_pubkey" "$node_pubkey" "$stake" || return $?
 
     # Fund the stake account from the node, with the node as the node_pubkey
-    $solana_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
       create-stake-account "$stake_pubkey" "$stake" || return $?
 
     # Delegate the stake.  The transaction fee is paid by the node but the
     #  transaction must be signed by the stake_keypair
-    $solana_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
       delegate-stake "$stake_keypair_path" "$vote_pubkey" || return $?
 
     # Setup validator storage account
-    $solana_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
       create-validator-storage-account "$storage_pubkey" || return $?
 
     touch "$configured_flag"
   fi
 
-  $solana_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
+  $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
     show-vote-account "$vote_pubkey"
-  $solana_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
+  $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
     show-stake-account "$stake_pubkey"
-  $solana_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
+  $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
     show-storage-account "$storage_pubkey"
 
   return 0
@@ -136,21 +136,21 @@ setup_replicator_account() {
   declare stake=$4
 
   declare storage_pubkey
-  storage_pubkey=$($solana_keygen pubkey "$storage_keypair_path")
+  storage_pubkey=$($morgan_keygen pubkey "$storage_keypair_path")
 
   if [[ -f $configured_flag ]]; then
     echo "Replicator account has already been configured"
   else
-    $solana_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" airdrop "$stake" || return $?
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" airdrop "$stake" || return $?
 
     # Setup replicator storage account
-    $solana_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
       create-replicator-storage-account "$storage_pubkey" || return $?
 
     touch "$configured_flag"
   fi
 
-  $solana_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
+  $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
     show-storage-account "$storage_pubkey"
 
   return 0
@@ -251,11 +251,11 @@ if [[ $node_type = replicator ]]; then
   configured_flag=$SOLANA_CONFIG_DIR/replicator$label.configured
 
   mkdir -p "$SOLANA_CONFIG_DIR"
-  [[ -r "$identity_keypair_path" ]] || $solana_keygen -o "$identity_keypair_path"
-  [[ -r "$storage_keypair_path" ]] || $solana_keygen -o "$storage_keypair_path"
+  [[ -r "$identity_keypair_path" ]] || $morgan_keygen -o "$identity_keypair_path"
+  [[ -r "$storage_keypair_path" ]] || $morgan_keygen -o "$storage_keypair_path"
 
-  identity_pubkey=$($solana_keygen pubkey "$identity_keypair_path")
-  storage_pubkey=$($solana_keygen pubkey "$storage_keypair_path")
+  identity_pubkey=$($morgan_keygen pubkey "$identity_keypair_path")
+  storage_pubkey=$($morgan_keygen pubkey "$storage_keypair_path")
 
   cat <<EOF
 ======================[ $node_type configuration ]======================
@@ -264,7 +264,7 @@ storage pubkey: $storage_pubkey
 ledger: $ledger_config_dir
 ======================================================================
 EOF
-  program=$solana_replicator
+  program=$morgan_replicator
   default_arg --entrypoint "$entrypoint_address"
   default_arg --identity "$identity_keypair_path"
   default_arg --storage-keypair "$storage_keypair_path"
@@ -278,7 +278,7 @@ elif [[ $node_type = bootstrap_leader ]]; then
   [[ -f "$SOLANA_CONFIG_DIR"/bootstrap-leader-keypair.json ]] ||
     ledger_not_setup "$SOLANA_CONFIG_DIR/bootstrap-leader-keypair.json not found"
 
-  #$solana_ledger_tool --ledger "$SOLANA_CONFIG_DIR"/bootstrap-leader-ledger verify
+  #$morgan_ledger_tool --ledger "$SOLANA_CONFIG_DIR"/bootstrap-leader-ledger verify
 
   : "${identity_keypair_path:=$SOLANA_CONFIG_DIR/bootstrap-leader-keypair.json}"
   vote_keypair_path="$SOLANA_CONFIG_DIR"/bootstrap-leader-vote-keypair.json
@@ -308,10 +308,10 @@ elif [[ $node_type = validator ]]; then
   configured_flag=$SOLANA_CONFIG_DIR/validator$label.configured
 
   mkdir -p "$SOLANA_CONFIG_DIR"
-  [[ -r "$identity_keypair_path" ]] || $solana_keygen -o "$identity_keypair_path"
-  [[ -r "$vote_keypair_path" ]] || $solana_keygen -o "$vote_keypair_path"
-  [[ -r "$stake_keypair_path" ]] || $solana_keygen -o "$stake_keypair_path"
-  [[ -r "$storage_keypair_path" ]] || $solana_keygen -o "$storage_keypair_path"
+  [[ -r "$identity_keypair_path" ]] || $morgan_keygen -o "$identity_keypair_path"
+  [[ -r "$vote_keypair_path" ]] || $morgan_keygen -o "$vote_keypair_path"
+  [[ -r "$stake_keypair_path" ]] || $morgan_keygen -o "$stake_keypair_path"
+  [[ -r "$storage_keypair_path" ]] || $morgan_keygen -o "$storage_keypair_path"
 
   default_arg --entrypoint "$entrypoint_address"
   default_arg --rpc-drone-address "${entrypoint_address%:*}:9900"
@@ -324,9 +324,9 @@ fi
 
 
 if [[ $node_type != replicator ]]; then
-  identity_pubkey=$($solana_keygen pubkey "$identity_keypair_path")
-  vote_pubkey=$($solana_keygen pubkey "$vote_keypair_path")
-  storage_pubkey=$($solana_keygen pubkey "$storage_keypair_path")
+  identity_pubkey=$($morgan_keygen pubkey "$identity_keypair_path")
+  vote_pubkey=$($morgan_keygen pubkey "$vote_keypair_path")
+  storage_pubkey=$($morgan_keygen pubkey "$storage_keypair_path")
 
   cat <<EOF
 ======================[ $node_type configuration ]======================
@@ -346,9 +346,9 @@ EOF
   default_arg --accounts "$accounts_config_dir"
 
   if [[ -n $SOLANA_CUDA ]]; then
-    program=$solana_validator_cuda
+    program=$morgan_validator_cuda
   else
-    program=$solana_validator
+    program=$morgan_validator
   fi
 fi
 
@@ -382,7 +382,7 @@ while true; do
 
   if [[ ! -d "$ledger_config_dir" ]]; then
     cp -a "$SOLANA_RSYNC_CONFIG_DIR"/ledger/ "$ledger_config_dir"
-    #$solana_ledger_tool --ledger "$ledger_config_dir" verify
+    #$morgan_ledger_tool --ledger "$ledger_config_dir" verify
   fi
 
   trap '[[ -n $pid ]] && kill "$pid" >/dev/null 2>&1 && wait "$pid"' INT TERM ERR

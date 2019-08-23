@@ -14,7 +14,7 @@ on the network, in any order, as long as the blob is signed by the expected
 leader for a given slot.
 
 Blobs are moved to a fork-able key space the tuple of `leader slot` + `blob
-index` (within the slot).  This permits the skip-list structure of the Solana
+index` (within the slot).  This permits the skip-list structure of the Morgan
 protocol to be stored in its entirety, without a-priori choosing which fork to
 follow, which Entries to persist or when to persist them.
 

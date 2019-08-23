@@ -42,8 +42,8 @@ esac
 echo --- Creating tarball
 (
   set -x
-  rm -rf solana-release/
-  mkdir solana-release/
+  rm -rf morgan-release/
+  mkdir morgan-release/
 
   COMMIT="$(git rev-parse HEAD)"
 
@@ -51,61 +51,61 @@ echo --- Creating tarball
     echo "channel: $CHANNEL_OR_TAG"
     echo "commit: $COMMIT"
     echo "target: $TARGET"
-  ) > solana-release/version.yml
+  ) > morgan-release/version.yml
 
   source ci/rust-version.sh stable
-  scripts/cargo-install-all.sh +"$rust_stable" solana-release
+  scripts/cargo-install-all.sh +"$rust_stable" morgan-release
 
   rm -rf target/perf-libs
   ./fetch-perf-libs.sh
-  mkdir solana-release/target
-  cp -a target/perf-libs solana-release/target/
+  mkdir morgan-release/target
+  cp -a target/perf-libs morgan-release/target/
 
   # shellcheck source=/dev/null
   source ./target/perf-libs/env.sh
   (
     cd validator
-    cargo +"$rust_stable" install --path . --features=cuda --root ../solana-release-cuda
+    cargo +"$rust_stable" install --path . --features=cuda --root ../morgan-release-cuda
   )
-  cp solana-release-cuda/bin/solana-validator solana-release/bin/solana-validator-cuda
-  cp -a scripts multinode-demo solana-release/
+  cp morgan-release-cuda/bin/morgan-validator morgan-release/bin/morgan-validator-cuda
+  cp -a scripts multinode-demo morgan-release/
 
   # Add a wrapper script for validator.sh
   # TODO: Remove multinode/... from tarball
-  cat > solana-release/bin/validator.sh <<'EOF'
+  cat > morgan-release/bin/validator.sh <<'EOF'
 #!/usr/bin/env bash
 set -e
 cd "$(dirname "$0")"/..
 export USE_INSTALL=1
 exec multinode-demo/validator.sh "$@"
 EOF
-  chmod +x solana-release/bin/validator.sh
+  chmod +x morgan-release/bin/validator.sh
 
   # Add a wrapper script for clear-config.sh
   # TODO: Remove multinode/... from tarball
-  cat > solana-release/bin/clear-config.sh <<'EOF'
+  cat > morgan-release/bin/clear-config.sh <<'EOF'
 #!/usr/bin/env bash
 set -e
 cd "$(dirname "$0")"/..
 export USE_INSTALL=1
 exec multinode-demo/clear-config.sh "$@"
 EOF
-  chmod +x solana-release/bin/clear-config.sh
+  chmod +x morgan-release/bin/clear-config.sh
 
-  tar jvcf solana-release-$TARGET.tar.bz2 solana-release/
-  cp solana-release/bin/solana-install solana-install-$TARGET
+  tar jvcf morgan-release-$TARGET.tar.bz2 morgan-release/
+  cp morgan-release/bin/morgan-install morgan-install-$TARGET
 )
 
 echo --- Saving build artifacts
 source ci/upload-ci-artifact.sh
-upload-ci-artifact solana-release-$TARGET.tar.bz2
+upload-ci-artifact morgan-release-$TARGET.tar.bz2
 
 if [[ -n $DO_NOT_PUBLISH_TAR ]]; then
   echo Skipped due to DO_NOT_PUBLISH_TAR
   exit 0
 fi
 
-for file in solana-release-$TARGET.tar.bz2 solana-install-$TARGET; do
+for file in morgan-release-$TARGET.tar.bz2 morgan-install-$TARGET; do
   echo --- AWS S3 Store: $file
   (
     set -x
@@ -113,12 +113,12 @@ for file in solana-release-$TARGET.tar.bz2 solana-install-$TARGET; do
       --rm \
       --env AWS_ACCESS_KEY_ID \
       --env AWS_SECRET_ACCESS_KEY \
-      --volume "$PWD:/solana" \
+      --volume "$PWD:/morgan" \
       eremite/aws-cli:2018.12.18 \
-      /usr/bin/s3cmd --acl-public put /solana/"$file" s3://release.solana.com/"$CHANNEL_OR_TAG"/"$file"
+      /usr/bin/s3cmd --acl-public put /morgan/"$file" s3://release.morgan.com/"$CHANNEL_OR_TAG"/"$file"
 
     echo Published to:
-    $DRYRUN ci/format-url.sh http://release.solana.com/"$CHANNEL_OR_TAG"/"$file"
+    $DRYRUN ci/format-url.sh http://release.morgan.com/"$CHANNEL_OR_TAG"/"$file"
   )
 
   if [[ -n $TAG ]]; then

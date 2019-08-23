@@ -14,7 +14,7 @@ fi
 
 (
   set -x
-  git clone git@github.com:solana-labs/solana-perf-libs.git target/perf-libs
+  git clone git@github.com:morgan-labs/morgan-perf-libs.git target/perf-libs
   cd target/perf-libs
   make -j"$(nproc)"
   make DESTDIR=. install

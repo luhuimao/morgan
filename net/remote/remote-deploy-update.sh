@@ -23,7 +23,7 @@ missing() {
 [[ -n $updateDownloadUrl ]] || missing updateDownloadUrl
 
 RUST_LOG="$2"
-export RUST_LOG=${RUST_LOG:-solana=info} # if RUST_LOG is unset, default to info
+export RUST_LOG=${RUST_LOG:-morgan=info} # if RUST_LOG is unset, default to info
 
 source net/common.sh
 loadConfigFile
@@ -31,6 +31,6 @@ loadConfigFile
 PATH="$HOME"/.cargo/bin:"$PATH"
 
 set -x
-solana-wallet --url http://127.0.0.1:8899 airdrop 42
-solana-install deploy "$updateDownloadUrl" update_manifest_keypair.json \
+morgan-wallet --url http://127.0.0.1:8899 airdrop 42
+morgan-install deploy "$updateDownloadUrl" update_manifest_keypair.json \
   --url http://127.0.0.1:8899

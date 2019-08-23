@@ -1,6 +1,6 @@
 ## Testing Programs
 
-Applications send transactions to a Solana cluster and query validators to
+Applications send transactions to a Morgan cluster and query validators to
 confirm the transactions were processed and to check each transaction's result.
 When the cluster doesn't behave as anticipated, it could be for a number of
 reasons:
@@ -37,7 +37,7 @@ Users send transactions and asynchrounously and synchrounously await results.
 
 #### ThinClient for Clusters
 
-The highest level implementation, ThinClient, targets a Solana cluster, which
+The highest level implementation, ThinClient, targets a Morgan cluster, which
 may be a deployed testnet or a local cluster running on a development machine.
 
 #### TpuClient for the TPU

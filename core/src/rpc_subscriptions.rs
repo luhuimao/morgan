@@ -6,12 +6,12 @@ use jsonrpc_core::futures::Future;
 use jsonrpc_pubsub::typed::Sink;
 use jsonrpc_pubsub::SubscriptionId;
 use serde::Serialize;
-use solana_runtime::bank::Bank;
-use solana_sdk::account::Account;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::Signature;
-use solana_sdk::transaction;
-use solana_vote_api::vote_state::MAX_LOCKOUT_HISTORY;
+use morgan_runtime::bank::Bank;
+use morgan_sdk::account::Account;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::Signature;
+use morgan_sdk::transaction;
+use morgan_vote_api::vote_state::MAX_LOCKOUT_HISTORY;
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 
@@ -300,9 +300,9 @@ pub mod tests {
     use super::*;
     use crate::genesis_utils::{create_genesis_block, GenesisBlockInfo};
     use jsonrpc_pubsub::typed::Subscriber;
-    use solana_budget_api;
-    use solana_sdk::signature::{Keypair, KeypairUtil};
-    use solana_sdk::system_transaction;
+    use morgan_budget_api;
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_sdk::system_transaction;
     use tokio::prelude::{Async, Stream};
 
     #[test]
@@ -322,7 +322,7 @@ pub mod tests {
             blockhash,
             1,
             16,
-            &solana_budget_api::id(),
+            &morgan_budget_api::id(),
         );
         bank_forks
             .write()
@@ -378,7 +378,7 @@ pub mod tests {
             blockhash,
             1,
             16,
-            &solana_budget_api::id(),
+            &morgan_budget_api::id(),
         );
         bank_forks
             .write()
@@ -393,15 +393,15 @@ pub mod tests {
         let sub_id = SubscriptionId::Number(0 as u64);
         let sink = subscriber.assign_id(sub_id.clone()).unwrap();
         let subscriptions = RpcSubscriptions::default();
-        subscriptions.add_program_subscription(&solana_budget_api::id(), None, &sub_id, &sink);
+        subscriptions.add_program_subscription(&morgan_budget_api::id(), None, &sub_id, &sink);
 
         assert!(subscriptions
             .program_subscriptions
             .read()
             .unwrap()
-            .contains_key(&solana_budget_api::id()));
+            .contains_key(&morgan_budget_api::id()));
 
-        subscriptions.check_program(&solana_budget_api::id(), 0, &bank_forks);
+        subscriptions.check_program(&morgan_budget_api::id(), 0, &bank_forks);
         let string = transport_receiver.poll();
         if let Async::Ready(Some(response)) = string.unwrap() {
             let expected = format!(r#"{{"jsonrpc":"2.0","method":"programNotification","params":{{"result":["{:?}",{{"data":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"difs":1,"executable":false,"owner":[2,203,81,223,225,24,34,35,203,214,138,130,144,208,35,77,63,16,87,51,47,198,115,123,98,188,19,160,0,0,0,0]}}],"subscription":0}}}}"#, alice.pubkey());
@@ -413,7 +413,7 @@ pub mod tests {
             .program_subscriptions
             .read()
             .unwrap()
-            .contains_key(&solana_budget_api::id()));
+            .contains_key(&morgan_budget_api::id()));
     }
     #[test]
     fn test_check_signature_subscribe() {

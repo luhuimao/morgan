@@ -1,10 +1,10 @@
-use solana_sdk::account::Account;
-use solana_sdk::genesis_block::GenesisBlock;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{Keypair, KeypairUtil};
-use solana_sdk::system_program;
-use solana_stake_api::stake_state;
-use solana_vote_api::vote_state;
+use morgan_sdk::account::Account;
+use morgan_sdk::genesis_block::GenesisBlock;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
+use morgan_sdk::system_program;
+use morgan_stake_api::stake_state;
+use morgan_vote_api::vote_state;
 
 // The default stake placed with the bootstrap leader
 pub const BOOTSTRAP_LEADER_DIFS: u64 = 42;
@@ -59,7 +59,7 @@ pub fn create_genesis_block_with_leader(
                 ),
             ),
         ],
-        &[solana_vote_program!(), solana_stake_program!()],
+        &[morgan_vote_program!(), morgan_stake_program!()],
     );
 
     GenesisBlockInfo {

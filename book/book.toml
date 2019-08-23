@@ -1,6 +1,6 @@
 [book]
-title = "Solana: Blockchain Rebuilt for Scale"
-authors = ["The Solana Team"]
+title = "Morgan: Blockchain Rebuilt for Scale"
+authors = ["The Morgan Team"]
 
 [build]
 build-dir = "html"

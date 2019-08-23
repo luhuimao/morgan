@@ -3,7 +3,7 @@
 use crate::poh_recorder::PohRecorder;
 use crate::service::Service;
 use core_affinity;
-use solana_sdk::poh_config::PohConfig;
+use morgan_sdk::poh_config::PohConfig;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use std::thread::{self, sleep, Builder, JoinHandle};
@@ -29,7 +29,7 @@ impl PohService {
         let poh_exit_ = poh_exit.clone();
         let poh_config = poh_config.clone();
         let tick_producer = Builder::new()
-            .name("solana-poh-service-tick_producer".to_string())
+            .name("morgan-poh-service-tick_producer".to_string())
             .spawn(move || {
                 if poh_config.hashes_per_tick.is_none() {
                     Self::sleepy_tick_producer(poh_recorder, &poh_config, &poh_exit_);
@@ -91,9 +91,9 @@ mod tests {
     use crate::poh_recorder::WorkingBank;
     use crate::result::Result;
     use crate::test_tx::test_tx;
-    use solana_runtime::bank::Bank;
-    use solana_sdk::hash::hash;
-    use solana_sdk::pubkey::Pubkey;
+    use morgan_runtime::bank::Bank;
+    use morgan_sdk::hash::hash;
+    use morgan_sdk::pubkey::Pubkey;
     use std::time::Duration;
 
     #[test]
@@ -133,7 +133,7 @@ mod tests {
                 let exit = exit.clone();
 
                 Builder::new()
-                    .name("solana-poh-service-entry_producer".to_string())
+                    .name("morgan-poh-service-entry_producer".to_string())
                     .spawn(move || {
                         loop {
                             // send some data

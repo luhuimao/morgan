@@ -1,4 +1,4 @@
-//! @brief Solana Rust-based BPF program panic handling
+//! @brief Morgan Rust-based BPF program panic handling
 
 use crate::log::*;
 use core::panic::PanicInfo;

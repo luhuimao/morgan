@@ -51,14 +51,14 @@ fi
 version=v0.0.9
 if [[ ! -f llvm-native-$machine-$version.md ]]; then
   (
-    filename=solana-llvm-$machine.tar.bz2
+    filename=morgan-llvm-$machine.tar.bz2
 
     set -ex
     rm -rf llvm-native*
     mkdir -p llvm-native
     cd llvm-native
 
-    base=https://github.com/solana-labs/llvm-builder/releases
+    base=https://github.com/morgan-labs/llvm-builder/releases
     download $base/download/$version/$filename $filename giga
     tar -jxf $filename
     rm -rf $filename
@@ -76,7 +76,7 @@ fi
 version=v0.1.0
 if [[ ! -f rust-bpf-$machine-$version.md ]]; then
   (
-    filename=solana-rust-bpf-$machine.tar.bz2
+    filename=morgan-rust-bpf-$machine.tar.bz2
 
     set -ex
     rm -rf rust-bpf
@@ -84,7 +84,7 @@ if [[ ! -f rust-bpf-$machine-$version.md ]]; then
     mkdir -p rust-bpf
     pushd rust-bpf
 
-    base=https://github.com/solana-labs/rust-bpf-builder/releases
+    base=https://github.com/morgan-labs/rust-bpf-builder/releases
     download $base/download/$version/$filename $filename giga
     tar -jxf $filename
     rm -rf $filename
@@ -113,7 +113,7 @@ if [[ ! -f rust-bpf-sysroot-$version.md ]]; then
   (
     set -ex
     rm -rf rust-bpf-sysroot*
-    cmd="git clone --recursive --single-branch --branch $version https://github.com/solana-labs/rust-bpf-sysroot.git"
+    cmd="git clone --recursive --single-branch --branch $version https://github.com/morgan-labs/rust-bpf-sysroot.git"
     $cmd
 
     echo "$cmd" > rust-bpf-sysroot-$version.md

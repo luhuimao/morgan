@@ -1,6 +1,6 @@
 # Blockstreamer
 
-Solana supports a node type called an *blockstreamer*. This fullnode variation
+Morgan supports a node type called an *blockstreamer*. This fullnode variation
 is intended for applications that need to observe the data plane without
 participating in transaction validation or ledger replication.
 

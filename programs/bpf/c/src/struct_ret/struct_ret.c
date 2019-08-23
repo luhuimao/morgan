@@ -1,4 +1,4 @@
-#include <solana_sdk.h>
+#include <morgan_sdk.h>
 
 struct test_struct { uint64_t x; uint64_t y; uint64_t z;};
 

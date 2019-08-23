@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Starts an instance of solana-drone
+# Starts an instance of morgan-drone
 #
 here=$(dirname "$0")
 
@@ -15,5 +15,5 @@ source "$here"/common.sh
 }
 
 set -x
-# shellcheck disable=SC2086 # Don't want to double quote $solana_drone
-exec $solana_drone --keypair "$SOLANA_CONFIG_DIR"/mint-keypair.json "$@"
+# shellcheck disable=SC2086 # Don't want to double quote $morgan_drone
+exec $morgan_drone --keypair "$SOLANA_CONFIG_DIR"/mint-keypair.json "$@"
