@@ -574,7 +574,7 @@ mod tests {
             .expect("actual response deserialization");
 
         let expected = format!(
-            r#"{{"jsonrpc":"2.0","result":[{{"id": "{}", "gossip": "127.0.0.1:1235", "tpu": "127.0.0.1:1234", "rpc": "127.0.0.1:10099"}}],"id":1}}"#,
+            r#"{{"jsonrpc":"2.0","result":[{{"id": "{}", "gossip": "127.0.0.1:1235", "tpu": "127.0.0.1:1234", "rpc": "127.0.0.1:8899"}}],"id":1}}"#,
             leader_pubkey,
         );
 

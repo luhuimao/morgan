@@ -73,9 +73,9 @@ args=(
   --voting-keypair "$dataDir"/config/leader-vote-account-keypair.json
   --vote-account "$leaderVoteAccountPubkey"
   --ledger "$dataDir"/ledger/
-  --gossip-port 10001
-  --rpc-port 10099
-  --rpc-drone-address 127.0.0.1:11100
+  --gossip-port 8001
+  --rpc-port 8899
+  --rpc-drone-address 127.0.0.1:9900
 )
 if [[ -n $blockstreamSocket ]]; then
   args+=(--blockstream "$blockstreamSocket")

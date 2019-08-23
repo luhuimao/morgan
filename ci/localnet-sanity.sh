@@ -7,7 +7,7 @@ restartInterval=never
 rollingRestart=false
 maybeNoLeaderRotation=
 extraNodes=0
-walletRpcPort=:10099
+walletRpcPort=:8899
 
 usage() {
   exitcode=0
@@ -61,7 +61,7 @@ while getopts "ch?i:k:brxR" opt; do
     extraNodes=$((extraNodes + 1))
     ;;
   r)
-    walletRpcPort=":110099"
+    walletRpcPort=":18899"
     ;;
   R)
     rollingRestart=true
@@ -86,7 +86,7 @@ nodes=(
     --enable-rpc-exit \
     --no-restart \
     --init-complete-file init-complete-node2.log \
-    --rpc-port 110099"
+    --rpc-port 18899"
 )
 
 for i in $(seq 1 $extraNodes); do
@@ -184,7 +184,7 @@ killNodes() {
   # Try to use the RPC exit API to cleanly exit the first two nodes
   # (dynamic nodes, -x, are just killed since their RPC port is not known)
   echo "--- RPC exit"
-  for port in 10099 110099; do
+  for port in 8899 18899; do
     (
       set -x
       curl --retry 5 --retry-delay 2 --retry-connrefused \
@@ -319,7 +319,7 @@ while [[ $iteration -le $iterations ]]; do
       -X POST -H 'Content-Type: application/json' \
       -d '{"jsonrpc":"2.0","id":1, "method":"getTransactionCount"}' \
       -o log-transactionCount.txt \
-      http://localhost:10099
+      http://localhost:8899
     cat log-transactionCount.txt
   ) || flag_error
 
@@ -329,7 +329,7 @@ while [[ $iteration -le $iterations ]]; do
     curl --retry 5 --retry-delay 2 --retry-connrefused \
       -X POST -H 'Content-Type: application/json' \
       -d '{"jsonrpc":"2.0","id":1, "method":"getTransactionCount"}' \
-      http://localhost:110099
+      http://localhost:18899
   ) || flag_error
 
   # Verify transaction count as reported by the bootstrap-leader node is advancing

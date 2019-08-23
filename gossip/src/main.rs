@@ -22,7 +22,7 @@ fn pubkey_validator(pubkey: String) -> Result<(), String> {
 fn main() -> Result<(), Box<dyn error::Error>> {
     env_logger::Builder::from_env(env_logger::Env::new().default_filter_or("morgan=info")).init();
 
-    let mut entrypoint_addr = SocketAddr::from(([127, 0, 0, 1], 10001));
+    let mut entrypoint_addr = SocketAddr::from(([127, 0, 0, 1], 8001));
     let entrypoint_string = entrypoint_addr.to_string();
     let matches = App::new(crate_name!())
         .about(crate_description!())

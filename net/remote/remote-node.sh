@@ -87,7 +87,7 @@ local|tar)
 
     args=(
       --enable-rpc-exit
-      --gossip-port "$entrypointIp":10001
+      --gossip-port "$entrypointIp":8001
     )
 
     nohup ./multinode-demo/validator.sh --bootstrap-leader "${args[@]}" > fullnode.log 2>&1 &
@@ -102,9 +102,9 @@ local|tar)
     fi
 
     args=(
-      "$entrypointIp":~/morgan "$entrypointIp:10001"
-      --gossip-port 10001
-      --rpc-port 10099
+      "$entrypointIp":~/morgan "$entrypointIp:8001"
+      --gossip-port 8001
+      --rpc-port 8899
     )
     if [[ $nodeType = blockstreamer ]]; then
       args+=(

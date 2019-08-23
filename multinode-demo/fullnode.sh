@@ -40,10 +40,10 @@ find_entrypoint() {
 
   if [[ -z $1 ]]; then
     entrypoint="$SOLANA_ROOT"         # Default to local tree for rsync
-    entrypoint_address=127.0.0.1:10001 # Default to local entrypoint
+    entrypoint_address=127.0.0.1:8001 # Default to local entrypoint
   elif [[ -z $2 ]]; then
     entrypoint=$1
-    entrypoint_address=$entrypoint:10001
+    entrypoint_address=$entrypoint:8001
     shift=1
   else
     entrypoint=$1
@@ -97,33 +97,33 @@ setup_validator_accounts() {
     echo "Vote and stake accounts have already been configured"
   else
     # Fund the node with enough tokens to fund its Vote, Staking, and Storage accounts
-    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" airdrop $((stake*2+2)) || return $?
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" airdrop $((stake*2+2)) || return $?
 
     # Fund the vote account from the node, with the node as the node_pubkey
-    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
       create-vote-account "$vote_pubkey" "$node_pubkey" "$stake" || return $?
 
     # Fund the stake account from the node, with the node as the node_pubkey
-    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
       create-stake-account "$stake_pubkey" "$stake" || return $?
 
     # Delegate the stake.  The transaction fee is paid by the node but the
     #  transaction must be signed by the stake_keypair
-    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
       delegate-stake "$stake_keypair_path" "$vote_pubkey" || return $?
 
     # Setup validator storage account
-    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
       create-validator-storage-account "$storage_pubkey" || return $?
 
     touch "$configured_flag"
   fi
 
-  $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+  $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
     show-vote-account "$vote_pubkey"
-  $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+  $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
     show-stake-account "$stake_pubkey"
-  $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+  $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
     show-storage-account "$storage_pubkey"
 
   return 0
@@ -141,16 +141,16 @@ setup_replicator_account() {
   if [[ -f $configured_flag ]]; then
     echo "Replicator account has already been configured"
   else
-    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" airdrop "$stake" || return $?
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" airdrop "$stake" || return $?
 
     # Setup replicator storage account
-    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
       create-replicator-storage-account "$storage_pubkey" || return $?
 
     touch "$configured_flag"
   fi
 
-  $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+  $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:8899" \
     show-storage-account "$storage_pubkey"
 
   return 0
@@ -287,9 +287,9 @@ elif [[ $node_type = bootstrap_leader ]]; then
   storage_keypair_path=$SOLANA_CONFIG_DIR/bootstrap-leader-storage-keypair.json
   configured_flag=$SOLANA_CONFIG_DIR/bootstrap-leader.configured
 
-  default_arg --rpc-port 10099
-  default_arg --rpc-drone-address 127.0.0.1:11100
-  default_arg --gossip-port 10001
+  default_arg --rpc-port 8899
+  default_arg --rpc-drone-address 127.0.0.1:9900
+  default_arg --gossip-port 8001
 
 elif [[ $node_type = validator ]]; then
   if [[ ${#positional_args[@]} -gt 2 ]]; then
@@ -314,7 +314,7 @@ elif [[ $node_type = validator ]]; then
   [[ -r "$storage_keypair_path" ]] || $morgan_keygen -o "$storage_keypair_path"
 
   default_arg --entrypoint "$entrypoint_address"
-  default_arg --rpc-drone-address "${entrypoint_address%:*}:11100"
+  default_arg --rpc-drone-address "${entrypoint_address%:*}:9900"
 
   rsync_entrypoint_url=$(rsync_url "$entrypoint")
 else

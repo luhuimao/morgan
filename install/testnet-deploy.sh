@@ -33,7 +33,7 @@ stable)
   URL=https://api.testnet.morgan.com
   ;;
 localhost)
-  URL=http://localhost:10099
+  URL=http://localhost:8899
   ;;
 *)
   echo "Error: unknown channel: $CHANNEL"
