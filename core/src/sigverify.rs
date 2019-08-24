@@ -7,13 +7,13 @@
 use crate::packet::{Packet, Packets};
 use crate::result::Result;
 use bincode::serialized_size;
-use solana_metrics::inc_new_counter_debug;
-use solana_sdk::message::MessageHeader;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::short_vec::decode_len;
-use solana_sdk::signature::Signature;
+use morgan_metrics::inc_new_counter_debug;
+use morgan_sdk::message::MessageHeader;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::short_vec::decode_len;
+use morgan_sdk::signature::Signature;
 #[cfg(test)]
-use solana_sdk::transaction::Transaction;
+use morgan_sdk::transaction::Transaction;
 use std::mem::size_of;
 
 type TxOffsets = (Vec<u32>, Vec<u32>, Vec<u32>, Vec<u32>, Vec<Vec<u32>>);
@@ -300,7 +300,7 @@ mod tests {
     use crate::sigverify;
     use crate::test_tx::{test_multisig_tx, test_tx};
     use bincode::{deserialize, serialize};
-    use solana_sdk::transaction::Transaction;
+    use morgan_sdk::transaction::Transaction;
 
     const SIG_OFFSET: usize = 1;
 
@@ -463,7 +463,7 @@ mod tests {
 
     #[test]
     fn test_verify_multisig() {
-        solana_logger::setup();
+        morgan_logger::setup();
 
         let tx = test_multisig_tx();
         let mut packet = sigverify::make_packet_from_transaction(tx);

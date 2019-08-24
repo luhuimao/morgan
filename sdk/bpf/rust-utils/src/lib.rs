@@ -1,4 +1,4 @@
-//! @brief Solana Rust-based BPF program utility functions and types
+//! @brief Morgan Rust-based BPF program utility functions and types
 
 #![no_std]
 #![feature(allocator_api)]

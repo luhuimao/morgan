@@ -1,8 +1,8 @@
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use solana_kvstore::test::gen;
-use solana_kvstore::{Config, Key, KvStore};
+use morgan_kvstore::test::gen;
+use morgan_kvstore::{Config, Key, KvStore};
 
 const KB: usize = 1024;
 const HALF_KB: usize = 512;

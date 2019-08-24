@@ -1,6 +1,6 @@
 use hashbrown::HashMap;
-use solana_sdk::hash::Hash;
-use solana_sdk::timing::timestamp;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::timing::timestamp;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 struct HashAge {
@@ -109,7 +109,7 @@ impl BlockhashQueue {
 mod tests {
     use super::*;
     use bincode::serialize;
-    use solana_sdk::hash::hash;
+    use morgan_sdk::hash::hash;
 
     #[test]
     fn test_register_hash() {

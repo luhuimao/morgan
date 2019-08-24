@@ -1,6 +1,6 @@
 # Getting Started
 
-The Solana git repository contains all the scripts you might need to spin up your
+The Morgan git repository contains all the scripts you might need to spin up your
 own local testnet. Depending on what you're looking to achieve, you may want to
 run a different variation, as the full-fledged, performance-enhanced
 multinode testnet is considerably more complex to set up than a Rust-only,
@@ -11,7 +11,7 @@ of the transaction pipeline, consider the enhanced singlenode demo. If you're
 doing consensus work, you'll need at least a Rust-only multinode demo. If you want
 to reproduce our TPS metrics, run the enhanced multinode demo.
 
-For all four variations, you'd need the latest Rust toolchain and the Solana
+For all four variations, you'd need the latest Rust toolchain and the Morgan
 source code:
 
 First, install Rust's package manager Cargo.
@@ -24,14 +24,14 @@ $ source $HOME/.cargo/env
 Now checkout the code from github:
 
 ```bash
-$ git clone https://github.com/solana-labs/solana.git
-$ cd solana
+$ git clone https://github.com/morgan-labs/morgan.git
+$ cd morgan
 ```
 
 The demo code is sometimes broken between releases as we add new low-level
 features, so if this is your first time running the demo, you'll improve
 your odds of success if you check out the
-[latest release](https://github.com/solana-labs/solana/releases)
+[latest release](https://github.com/morgan-labs/morgan/releases)
 before proceeding:
 
 ```bash
@@ -129,23 +129,23 @@ basis.  Before running a leader or validator set the normal RUST\_LOG environmen
 
 For example
 
-* To enable `info` everywhere and `debug` only in the solana::banking_stage module:
+* To enable `info` everywhere and `debug` only in the morgan::banking_stage module:
 
   ```bash
-  $ export RUST_LOG=solana=info,solana::banking_stage=debug
+  $ export RUST_LOG=morgan=info,morgan::banking_stage=debug
   ```
 
 * To enable BPF program logging:
 
   ```bash
-  $ export RUST_LOG=solana_bpf_loader=trace
+  $ export RUST_LOG=morgan_bpf_loader=trace
   ```
 
 Generally we are using `debug` for infrequent debug messages, `trace` for potentially frequent
 messages and `info` for performance-related logging.
 
 You can also attach to a running process with GDB.  The leader's process is named
-_solana-validator_:
+_morgan-validator_:
 
 ```bash
 $ sudo gdb
@@ -161,8 +161,8 @@ This will dump all the threads stack traces into gdb.txt
 In this example the client connects to our public testnet. To run validators on the testnet you would need to open udp ports `8000-10000`.
 
 ```bash
-$ ./multinode-demo/client.sh --entrypoint testnet.solana.com:8001 --duration 60
+$ ./multinode-demo/client.sh --entrypoint testnet.morgan.com:10001 --duration 60
 ```
 
-You can observe the effects of your client's transactions on our [dashboard](https://metrics.solana.com:3000/d/testnet/testnet-hud?orgId=2&from=now-30m&to=now&refresh=5s&var-testnet=testnet)
+You can observe the effects of your client's transactions on our [dashboard](https://metrics.morgan.com:3000/d/testnet/testnet-hud?orgId=2&from=now-30m&to=now&refresh=5s&var-testnet=testnet)
 

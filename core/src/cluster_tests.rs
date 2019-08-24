@@ -8,18 +8,18 @@ use crate::contact_info::ContactInfo;
 use crate::entry::{Entry, EntrySlice};
 use crate::gossip_service::discover_cluster;
 use crate::locktower::VOTE_THRESHOLD_DEPTH;
-use solana_client::thin_client::create_client;
-use solana_runtime::epoch_schedule::MINIMUM_SLOT_LENGTH;
-use solana_sdk::client::SyncClient;
-use solana_sdk::hash::Hash;
-use solana_sdk::poh_config::PohConfig;
-use solana_sdk::signature::{Keypair, KeypairUtil, Signature};
-use solana_sdk::system_transaction;
-use solana_sdk::timing::{
+use morgan_client::thin_client::create_client;
+use morgan_runtime::epoch_schedule::MINIMUM_SLOT_LENGTH;
+use morgan_sdk::client::SyncClient;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::poh_config::PohConfig;
+use morgan_sdk::signature::{Keypair, KeypairUtil, Signature};
+use morgan_sdk::system_transaction;
+use morgan_sdk::timing::{
     duration_as_ms, DEFAULT_NUM_TICKS_PER_SECOND, DEFAULT_TICKS_PER_SLOT,
     NUM_CONSECUTIVE_LEADER_SLOTS,
 };
-use solana_sdk::transport::TransportError;
+use morgan_sdk::transport::TransportError;
 use std::thread::sleep;
 use std::time::Duration;
 
@@ -137,7 +137,7 @@ pub fn kill_entry_and_spend_and_verify_rest(
     nodes: usize,
     slot_millis: u64,
 ) {
-    solana_logger::setup();
+    morgan_logger::setup();
     let (cluster_nodes, _) = discover_cluster(&entry_point_info.gossip, nodes).unwrap();
     assert!(cluster_nodes.len() >= nodes);
     let client = create_client(entry_point_info.client_facing_addr(), FULLNODE_PORT_RANGE);

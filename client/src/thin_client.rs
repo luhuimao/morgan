@@ -6,17 +6,17 @@
 use crate::rpc_client::RpcClient;
 use bincode::{serialize_into, serialized_size};
 use log::*;
-use solana_sdk::client::{AsyncClient, Client, SyncClient};
-use solana_sdk::fee_calculator::FeeCalculator;
-use solana_sdk::hash::Hash;
-use solana_sdk::instruction::Instruction;
-use solana_sdk::message::Message;
-use solana_sdk::packet::PACKET_DATA_SIZE;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{Keypair, KeypairUtil, Signature};
-use solana_sdk::system_instruction;
-use solana_sdk::transaction::{self, Transaction};
-use solana_sdk::transport::Result as TransportResult;
+use morgan_sdk::client::{AsyncClient, Client, SyncClient};
+use morgan_sdk::fee_calculator::FeeCalculator;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::instruction::Instruction;
+use morgan_sdk::message::Message;
+use morgan_sdk::packet::PACKET_DATA_SIZE;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{Keypair, KeypairUtil, Signature};
+use morgan_sdk::system_instruction;
+use morgan_sdk::transaction::{self, Transaction};
+use morgan_sdk::transport::Result as TransportResult;
 use std::io;
 use std::net::{SocketAddr, UdpSocket};
 use std::time::Duration;
@@ -284,7 +284,7 @@ impl AsyncClient for ThinClient {
 }
 
 pub fn create_client((rpc, tpu): (SocketAddr, SocketAddr), range: (u16, u16)) -> ThinClient {
-    let (_, transactions_socket) = solana_netutil::bind_in_range(range).unwrap();
+    let (_, transactions_socket) = morgan_netutil::bind_in_range(range).unwrap();
     ThinClient::new(rpc, tpu, transactions_socket)
 }
 
@@ -293,6 +293,6 @@ pub fn create_client_with_timeout(
     range: (u16, u16),
     timeout: Duration,
 ) -> ThinClient {
-    let (_, transactions_socket) = solana_netutil::bind_in_range(range).unwrap();
+    let (_, transactions_socket) = morgan_netutil::bind_in_range(range).unwrap();
     ThinClient::new_socket_with_timeout(rpc, tpu, transactions_socket, timeout)
 }

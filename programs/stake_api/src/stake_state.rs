@@ -5,11 +5,11 @@
 
 use crate::id;
 use serde_derive::{Deserialize, Serialize};
-use solana_sdk::account::{Account, KeyedAccount};
-use solana_sdk::account_utils::State;
-use solana_sdk::instruction::InstructionError;
-use solana_sdk::pubkey::Pubkey;
-use solana_vote_api::vote_state::VoteState;
+use morgan_sdk::account::{Account, KeyedAccount};
+use morgan_sdk::account_utils::State;
+use morgan_sdk::instruction::InstructionError;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_vote_api::vote_state::VoteState;
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
 pub enum StakeState {
@@ -203,10 +203,10 @@ pub fn create_delegate_stake_account(
 mod tests {
     use super::*;
     use crate::id;
-    use solana_sdk::account::Account;
-    use solana_sdk::pubkey::Pubkey;
-    use solana_sdk::signature::{Keypair, KeypairUtil};
-    use solana_vote_api::vote_state;
+    use morgan_sdk::account::Account;
+    use morgan_sdk::pubkey::Pubkey;
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_vote_api::vote_state;
 
     #[test]
     fn test_stake_delegate_stake() {

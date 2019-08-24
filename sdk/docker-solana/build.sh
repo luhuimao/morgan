@@ -14,11 +14,11 @@ fi
 cd "$(dirname "$0")"
 rm -rf usr/
 ../../ci/docker-run.sh "$rust_stable_docker_image" \
-  scripts/cargo-install-all.sh sdk/docker-solana/usr
+  scripts/cargo-install-all.sh sdk/docker-morgan/usr
 
-cp -f ../../run.sh usr/bin/solana-run.sh
+cp -f ../../run.sh usr/bin/morgan-run.sh
 
-docker build -t solanalabs/solana:"$CHANNEL" .
+docker build -t morganlabs/morgan:"$CHANNEL" .
 
 maybeEcho=
 if [[ -z $CI ]]; then
@@ -32,4 +32,4 @@ else
     fi
   )
 fi
-$maybeEcho docker push solanalabs/solana:"$CHANNEL"
+$maybeEcho docker push morganlabs/morgan:"$CHANNEL"

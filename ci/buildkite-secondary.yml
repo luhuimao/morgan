@@ -1,5 +1,5 @@
 steps:
-  - command: "sdk/docker-solana/build.sh"
+  - command: "sdk/docker-morgan/build.sh"
     timeout_in_minutes: 20
     name: "publish docker"
   - command: "ci/publish-crate.sh"

@@ -1,4 +1,4 @@
-# Solana Architecture
+# Morgan Architecture
 
 - [Introduction](introduction.md)
 
@@ -11,7 +11,7 @@
   - [Example: Tic-Tac-Toe](tictactoe.md)
   - [Drones](drones.md)
 
-- [A Solana Cluster](cluster.md)
+- [A Morgan Cluster](cluster.md)
   - [Synchronization](synchronization.md)
   - [Leader Rotation](leader-rotation.md)
   - [Fork Generation](fork-generation.md)
@@ -33,7 +33,7 @@
   - [Blockstreamer](blockstreamer.md)
   - [JSON RPC API](jsonrpc-api.md)
   - [JavaScript API](javascript-api.md)
-  - [solana-wallet CLI](wallet.md)
+  - [morgan-wallet CLI](wallet.md)
 
 - [Accepted Design Proposals](proposals.md)
   - [Ledger Replication](ledger-replication-to-implement.md)

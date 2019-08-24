@@ -21,10 +21,10 @@ else
       --rm \
       --env AWS_ACCESS_KEY_ID \
       --env AWS_SECRET_ACCESS_KEY \
-      --volume "$PWD:/solana" \
+      --volume "$PWD:/morgan" \
       eremite/aws-cli:2018.12.18 \
-      /usr/bin/s3cmd --acl-public put /solana/bpf-sdk.tar.bz2 \
-      s3://solana-sdk/"$CHANNEL"/bpf-sdk.tar.bz2
+      /usr/bin/s3cmd --acl-public put /morgan/bpf-sdk.tar.bz2 \
+      s3://morgan-sdk/"$CHANNEL"/bpf-sdk.tar.bz2
   )
 fi
 

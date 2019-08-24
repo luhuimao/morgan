@@ -2,7 +2,7 @@
  * @brief test program that generates BPF PC relative call instructions
  */
 
-#include <solana_sdk.h>
+#include <morgan_sdk.h>
 
 void __attribute__ ((noinline)) helper() {
   sol_log(__func__);

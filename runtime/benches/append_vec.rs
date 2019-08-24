@@ -2,8 +2,8 @@
 extern crate test;
 
 use rand::{thread_rng, Rng};
-use solana_runtime::append_vec::test_utils::{create_test_account, get_append_vec_path};
-use solana_runtime::append_vec::AppendVec;
+use morgan_runtime::append_vec::test_utils::{create_test_account, get_append_vec_path};
+use morgan_runtime::append_vec::AppendVec;
 use std::sync::{Arc, Mutex};
 use std::thread::sleep;
 use std::thread::spawn;

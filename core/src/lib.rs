@@ -1,4 +1,4 @@
-//! The `solana` library implements the Solana high-performance blockchain architecture.
+//! The `morgan` library implements the Morgan high-performance blockchain architecture.
 //! It includes a full Rust implementation of the architecture (see
 //! [Validator](server/struct.Validator.html)) as well as hooks to GPU implementations of its most
 //! paralellizable components (i.e. [SigVerify](sigverify/index.html)).  It also includes
@@ -71,7 +71,7 @@ pub mod validator;
 pub mod window_service;
 
 #[macro_use]
-extern crate solana_budget_program;
+extern crate morgan_budget_program;
 
 #[cfg(test)]
 #[cfg(any(feature = "chacha", feature = "cuda"))]
@@ -89,7 +89,7 @@ extern crate serde_derive;
 extern crate serde_json;
 
 #[macro_use]
-extern crate solana_metrics;
+extern crate morgan_metrics;
 
 #[cfg(test)]
 #[macro_use]

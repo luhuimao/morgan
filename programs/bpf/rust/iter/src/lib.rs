@@ -2,9 +2,9 @@
 
 #![no_std]
 
-extern crate solana_sdk_bpf_utils;
+extern crate morgan_sdk_bpf_utils;
 
-use solana_sdk_bpf_utils::log::*;
+use morgan_sdk_bpf_utils::log::*;
 
 #[no_mangle]
 pub extern "C" fn entrypoint(_input: *mut u8) -> bool {

@@ -60,7 +60,7 @@ while [[ $1 = -o ]]; do
 done
 
 RUST_LOG="$1"
-export RUST_LOG=${RUST_LOG:-solana=info} # if RUST_LOG is unset, default to info
+export RUST_LOG=${RUST_LOG:-morgan=info} # if RUST_LOG is unset, default to info
 
 source net/common.sh
 loadConfigFile
@@ -74,12 +74,12 @@ local|tar)
     source target/perf-libs/env.sh
   fi
 
-  entrypointRsyncUrl="$sanityTargetIp:~/solana"
+  entrypointRsyncUrl="$sanityTargetIp:~/morgan"
 
-  solana_gossip=solana-gossip
-  solana_install=solana-install
-  solana_keygen=solana-keygen
-  solana_ledger_tool=solana-ledger-tool
+  morgan_gossip=morgan-gossip
+  morgan_install=morgan-install
+  morgan_keygen=morgan-keygen
+  morgan_ledger_tool=morgan-ledger-tool
 
   ledger=config-local/bootstrap-leader-ledger
   client_id=config-local/client-id.json
@@ -102,14 +102,14 @@ fi
 echo "+++ $sanityTargetIp: node count ($numSanityNodes expected)"
 (
   set -x
-  $solana_keygen -o "$client_id"
+  $morgan_keygen -o "$client_id"
 
   nodeArg="num-nodes"
   if $rejectExtraNodes; then
     nodeArg="num-nodes-exactly"
   fi
 
-  timeout 2m $solana_gossip --entrypoint "$sanityTargetIp:8001" \
+  timeout 2m $morgan_gossip --entrypoint "$sanityTargetIp:10001" \
     spy --$nodeArg "$numSanityNodes" \
 )
 
@@ -119,13 +119,13 @@ echo "--- $sanityTargetIp: RPC API: getTransactionCount"
   curl --retry 5 --retry-delay 2 --retry-connrefused \
     -X POST -H 'Content-Type: application/json' \
     -d '{"jsonrpc":"2.0","id":1, "method":"getTransactionCount"}' \
-    http://"$sanityTargetIp":8899
+    http://"$sanityTargetIp":10099
 )
 
 echo "--- $sanityTargetIp: wallet sanity"
 (
   set -x
-  scripts/wallet-sanity.sh --url http://"$sanityTargetIp":8899
+  scripts/wallet-sanity.sh --url http://"$sanityTargetIp":10099
 )
 
 echo "--- $sanityTargetIp: verify ledger"
@@ -136,7 +136,7 @@ if $ledgerVerify; then
       rm -rf /var/tmp/ledger-verify
       du -hs "$ledger"
       time cp -r "$ledger" /var/tmp/ledger-verify
-      time $solana_ledger_tool --ledger /var/tmp/ledger-verify verify
+      time $morgan_ledger_tool --ledger /var/tmp/ledger-verify verify
     )
   else
     echo "^^^ +++"
@@ -154,7 +154,7 @@ if $validatorSanity; then
     set -x -o pipefail
     timeout 10s ./multinode-demo/validator-x.sh --stake 0 \
       "$entrypointRsyncUrl" \
-      "$sanityTargetIp:8001" 2>&1 | tee validator-sanity.log
+      "$sanityTargetIp:10001" 2>&1 | tee validator-sanity.log
   ) || {
     exitcode=$?
     [[ $exitcode -eq 124 ]] || exit $exitcode
@@ -173,19 +173,19 @@ else
 fi
 
 if $installCheck && [[ -r update_manifest_keypair.json ]]; then
-  echo "--- $sanityTargetIp: solana-install test"
+  echo "--- $sanityTargetIp: morgan-install test"
 
   (
     set -x
-    update_manifest_pubkey=$($solana_keygen pubkey update_manifest_keypair.json)
+    update_manifest_pubkey=$($morgan_keygen pubkey update_manifest_keypair.json)
     rm -rf install-data-dir
-    $solana_install init \
+    $morgan_install init \
       --no-modify-path \
       --data-dir install-data-dir \
-      --url http://"$sanityTargetIp":8899 \
+      --url http://"$sanityTargetIp":10099 \
       --pubkey "$update_manifest_pubkey"
 
-    $solana_install info
+    $morgan_install info
   )
 fi
 

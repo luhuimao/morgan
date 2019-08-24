@@ -1,4 +1,4 @@
-//! @brief Solana Rust-based BPF program memory allocator shim
+//! @brief Morgan Rust-based BPF program memory allocator shim
 
 use crate::log::*;
 use core::alloc::{GlobalAlloc, Layout};

@@ -19,9 +19,9 @@ use bincode::serialized_size;
 use hashbrown::HashMap;
 use rand;
 use rand::distributions::{Distribution, WeightedIndex};
-use solana_runtime::bloom::Bloom;
-use solana_sdk::hash::Hash;
-use solana_sdk::pubkey::Pubkey;
+use morgan_runtime::bloom::Bloom;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::pubkey::Pubkey;
 use std::cmp;
 use std::collections::VecDeque;
 

@@ -28,7 +28,7 @@ an individual validator in the cluster.
 
 ## Time
 
-The Solana cluster generates a source of time via a Verifiable Delay Function we
+The Morgan cluster generates a source of time via a Verifiable Delay Function we
 are calling [Proof of History](book/src/synchronization.md).
 
 Proof of History is used to create a deterministic round robin schedule for all

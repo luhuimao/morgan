@@ -1,15 +1,15 @@
-# What is Solana?
+# What is Morgan?
 
-Solana is the name of an open source project that is implementing a new,
-high-performance, permissionless blockchain. Solana is also the name of a
+Morgan is the name of an open source project that is implementing a new,
+high-performance, permissionless blockchain. Morgan is also the name of a
 company headquartered in San Francisco that maintains the open source project.
 
 # About this Book
 
-This book describes the Solana open source project, a blockchain built from the
+This book describes the Morgan open source project, a blockchain built from the
 ground up for scale. The book covers why it's useful, how to use it, how it
-works, and why it will continue to work long after the company Solana closes
-its doors. The goal of the Solana architecture is to demonstrate there exists a
+works, and why it will continue to work long after the company Morgan closes
+its doors. The goal of the Morgan architecture is to demonstrate there exists a
 set of software algorithms that when used in combination to implement a
 blockchain, removes software as a performance bottleneck, allowing transaction
 throughput to scale proportionally with network bandwidth. The architecture
@@ -30,7 +30,7 @@ author's best effort. It is up to the reader to check and validate their
 accuracy and truthfulness. Furthermore, nothing in this project constitutes a
 solicitation for investment.
 
-# History of the Solana Codebase
+# History of the Morgan Codebase
 
 In November of 2017, Anatoly Yakovenko published a whitepaper describing Proof
 of History, a technique for keeping time between computers that do not trust
@@ -73,11 +73,11 @@ called Loom.
 
 Around the same time, Ethereum-based project Loom Network sprung up and many
 people were confused about whether they were the same project. The Loom team decided it
-would rebrand. They chose the name Solana, a nod to a small beach town North of
-San Diego called Solana Beach, where Anatoly, Greg and Stephen lived and surfed
+would rebrand. They chose the name Morgan, a nod to a small beach town North of
+San Diego called Morgan Beach, where Anatoly, Greg and Stephen lived and surfed
 for three years when they worked for Qualcomm. On March 28th, the team created
-the Solana Labs GitHub organization and renamed Greg's prototype Silk to
-Solana.
+the Morgan Labs GitHub organization and renamed Greg's prototype Silk to
+Morgan.
 
 In June of 2018, the team scaled up the technology to run on cloud-based
 networks and on July 19th, published a 50-node, permissioned, public testnet
@@ -89,12 +89,12 @@ thousand. The project was also extended to support on-chain programs written in
 the C programming language and run concurrently in a safe execution environment
 called BPF. 
 
-# What is a Solana Cluster?
+# What is a Morgan Cluster?
 
 A cluster is a set of computers that work together and can be viewed from the
-outside as a single system. A Solana cluster is a set of independently owned
+outside as a single system. A Morgan cluster is a set of independently owned
 computers working together (and sometimes against each other) to verify the
-output of untrusted, user-submitted programs. A Solana cluster can be utilized
+output of untrusted, user-submitted programs. A Morgan cluster can be utilized
 any time a user wants to preserve an immutable record of events in time or
 programmatic interpretations of those events. One use is to track which of the
 computers did meaningful work to keep the cluster running. Another use might be

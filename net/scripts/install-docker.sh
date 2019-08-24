@@ -20,7 +20,7 @@ apt-get update
 apt-get install -y docker-ce
 docker run hello-world
 
-# Grant the solana user access to docker
-if id solana; then
-  addgroup solana docker
+# Grant the morgan user access to docker
+if id morgan; then
+  addgroup morgan docker
 fi

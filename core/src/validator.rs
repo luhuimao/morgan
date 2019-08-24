@@ -17,14 +17,14 @@ use crate::service::Service;
 use crate::storage_stage::StorageState;
 use crate::tpu::Tpu;
 use crate::tvu::{Sockets, Tvu};
-use solana_metrics::inc_new_counter_info;
-use solana_runtime::bank::Bank;
-use solana_sdk::genesis_block::GenesisBlock;
-use solana_sdk::poh_config::PohConfig;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{Keypair, KeypairUtil};
-use solana_sdk::timing::timestamp;
-use solana_storage_api::SLOTS_PER_SEGMENT;
+use morgan_metrics::inc_new_counter_info;
+use morgan_runtime::bank::Bank;
+use morgan_sdk::genesis_block::GenesisBlock;
+use morgan_sdk::poh_config::PohConfig;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
+use morgan_sdk::timing::timestamp;
+use morgan_storage_api::SLOTS_PER_SEGMENT;
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::Receiver;
@@ -67,7 +67,7 @@ pub struct Validator {
     poh_service: PohService,
     tpu: Tpu,
     tvu: Tvu,
-    ip_echo_server: solana_netutil::IpEchoServer,
+    ip_echo_server: morgan_netutil::IpEchoServer,
 }
 
 impl Validator {
@@ -164,7 +164,7 @@ impl Validator {
         };
 
         let ip_echo_server =
-            solana_netutil::ip_echo_server(node.sockets.gossip.local_addr().unwrap().port());
+            morgan_netutil::ip_echo_server(node.sockets.gossip.local_addr().unwrap().port());
 
         let subscriptions = Arc::new(RpcSubscriptions::default());
         let rpc_pubsub_service = if node.info.rpc_pubsub.port() == 0 {
@@ -358,7 +358,7 @@ pub fn new_validator_for_tests() -> (Validator, ContactInfo, Keypair, String) {
     } = create_genesis_block_with_leader(10_000, &contact_info.id, 42);
     genesis_block
         .native_instruction_processors
-        .push(solana_budget_program!());
+        .push(morgan_budget_program!());
 
     let (ledger_path, _blockhash) = create_new_tmp_ledger!(&genesis_block);
 
@@ -387,7 +387,7 @@ mod tests {
 
     #[test]
     fn validator_exit() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let leader_keypair = Keypair::new();
         let leader_node = Node::new_localhost_with_pubkey(&leader_keypair.pubkey());
 

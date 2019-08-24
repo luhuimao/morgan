@@ -6,7 +6,7 @@ use crate::packet::{
 };
 use crate::result::{Error, Result};
 use bincode;
-use solana_sdk::timing::duration_as_ms;
+use morgan_sdk::timing::duration_as_ms;
 use std::net::UdpSocket;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{Receiver, RecvTimeoutError, Sender};
@@ -47,7 +47,7 @@ pub fn receiver(
     }
     let exit = exit.clone();
     Builder::new()
-        .name("solana-receiver".to_string())
+        .name("morgan-receiver".to_string())
         .spawn(move || {
             let _ = recv_loop(&sock, exit, &packet_sender);
         })
@@ -83,7 +83,7 @@ pub fn recv_batch(recvr: &PacketReceiver, max_batch: usize) -> Result<(Vec<Packe
 
 pub fn responder(name: &'static str, sock: Arc<UdpSocket>, r: BlobReceiver) -> JoinHandle<()> {
     Builder::new()
-        .name(format!("solana-responder-{}", name))
+        .name(format!("morgan-responder-{}", name))
         .spawn(move || loop {
             if let Err(e) = recv_send(&sock, &r) {
                 match e {
@@ -119,7 +119,7 @@ pub fn blob_receiver(
         .expect("set socket timeout");
     let exit = exit.clone();
     Builder::new()
-        .name("solana-blob_receiver".to_string())
+        .name("morgan-blob_receiver".to_string())
         .spawn(move || loop {
             if exit.load(Ordering::Relaxed) {
                 break;
@@ -172,7 +172,7 @@ pub fn blob_packet_receiver(
         .expect("set socket timeout");
     let exit = exit.clone();
     Builder::new()
-        .name("solana-blob_packet_receiver".to_string())
+        .name("morgan-blob_packet_receiver".to_string())
         .spawn(move || loop {
             if exit.load(Ordering::Relaxed) {
                 break;

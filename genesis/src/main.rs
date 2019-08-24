@@ -1,30 +1,30 @@
 //! A command-line executable for generating the chain's genesis block.
 #[macro_use]
-extern crate solana_vote_program;
+extern crate morgan_vote_program;
 #[macro_use]
-extern crate solana_stake_program;
+extern crate morgan_stake_program;
 #[macro_use]
-extern crate solana_budget_program;
+extern crate morgan_budget_program;
 #[macro_use]
-extern crate solana_token_program;
+extern crate morgan_token_program;
 #[macro_use]
-extern crate solana_config_program;
+extern crate morgan_config_program;
 #[macro_use]
-extern crate solana_exchange_program;
+extern crate morgan_exchange_program;
 
 use clap::{crate_description, crate_name, crate_version, value_t_or_exit, App, Arg};
-use solana::blocktree::create_new_ledger;
-use solana_sdk::account::Account;
-use solana_sdk::fee_calculator::FeeCalculator;
-use solana_sdk::genesis_block::GenesisBlock;
-use solana_sdk::hash::{hash, Hash};
-use solana_sdk::poh_config::PohConfig;
-use solana_sdk::signature::{read_keypair, KeypairUtil};
-use solana_sdk::system_program;
-use solana_sdk::timing;
-use solana_stake_api::stake_state;
-use solana_storage_program::genesis_block_util::GenesisBlockUtil;
-use solana_vote_api::vote_state;
+use morgan::blocktree::create_new_ledger;
+use morgan_sdk::account::Account;
+use morgan_sdk::fee_calculator::FeeCalculator;
+use morgan_sdk::genesis_block::GenesisBlock;
+use morgan_sdk::hash::{hash, Hash};
+use morgan_sdk::poh_config::PohConfig;
+use morgan_sdk::signature::{read_keypair, KeypairUtil};
+use morgan_sdk::system_program;
+use morgan_sdk::timing;
+use morgan_stake_api::stake_state;
+use morgan_storage_program::genesis_block_util::GenesisBlockUtil;
+use morgan_vote_api::vote_state;
 use std::error;
 use std::time::{Duration, Instant};
 
@@ -179,7 +179,7 @@ fn main() -> Result<(), Box<dyn error::Error>> {
 
     // TODO: de-duplicate the stake once passive staking
     //  is fully implemented
-    //  https://github.com/solana-labs/solana/issues/4213
+    //  https://github.com/morgan-labs/morgan/issues/4213
     let (vote_account, vote_state) = vote_state::create_bootstrap_leader_account(
         &bootstrap_vote_keypair.pubkey(),
         &bootstrap_leader_keypair.pubkey(),
@@ -213,12 +213,12 @@ fn main() -> Result<(), Box<dyn error::Error>> {
             ),
         ],
         &[
-            solana_vote_program!(),
-            solana_stake_program!(),
-            solana_budget_program!(),
-            solana_token_program!(),
-            solana_config_program!(),
-            solana_exchange_program!(),
+            morgan_vote_program!(),
+            morgan_stake_program!(),
+            morgan_budget_program!(),
+            morgan_token_program!(),
+            morgan_config_program!(),
+            morgan_exchange_program!(),
         ],
     );
     genesis_block.add_storage_program(&bootstrap_storage_keypair.pubkey());
@@ -269,47 +269,47 @@ mod tests {
         let ids = [
             (
                 "11111111111111111111111111111111",
-                solana_sdk::system_program::id(),
+                morgan_sdk::system_program::id(),
             ),
             (
                 "NativeLoader1111111111111111111111111111111",
-                solana_sdk::native_loader::id(),
+                morgan_sdk::native_loader::id(),
             ),
             (
                 "BPFLoader1111111111111111111111111111111111",
-                solana_sdk::bpf_loader::id(),
+                morgan_sdk::bpf_loader::id(),
             ),
             (
                 "Budget1111111111111111111111111111111111111",
-                solana_budget_api::id(),
+                morgan_budget_api::id(),
             ),
             (
                 "Stake11111111111111111111111111111111111111",
-                solana_stake_api::id(),
+                morgan_stake_api::id(),
             ),
             (
                 "Storage111111111111111111111111111111111111",
-                solana_storage_api::id(),
+                morgan_storage_api::id(),
             ),
             (
                 "Token11111111111111111111111111111111111111",
-                solana_token_api::id(),
+                morgan_token_api::id(),
             ),
             (
                 "Vote111111111111111111111111111111111111111",
-                solana_vote_api::id(),
+                morgan_vote_api::id(),
             ),
             (
                 "Stake11111111111111111111111111111111111111",
-                solana_stake_api::id(),
+                morgan_stake_api::id(),
             ),
             (
                 "Config1111111111111111111111111111111111111",
-                solana_config_api::id(),
+                morgan_config_api::id(),
             ),
             (
                 "Exchange11111111111111111111111111111111111",
-                solana_exchange_api::id(),
+                morgan_exchange_api::id(),
             ),
         ];
         assert!(ids.iter().all(|(name, id)| *name == id.to_string()));
@@ -319,16 +319,16 @@ mod tests {
     fn test_program_id_uniqueness() {
         let mut unique = HashSet::new();
         let ids = vec![
-            solana_sdk::system_program::id(),
-            solana_sdk::native_loader::id(),
-            solana_sdk::bpf_loader::id(),
-            solana_budget_api::id(),
-            solana_storage_api::id(),
-            solana_token_api::id(),
-            solana_vote_api::id(),
-            solana_stake_api::id(),
-            solana_config_api::id(),
-            solana_exchange_api::id(),
+            morgan_sdk::system_program::id(),
+            morgan_sdk::native_loader::id(),
+            morgan_sdk::bpf_loader::id(),
+            morgan_budget_api::id(),
+            morgan_storage_api::id(),
+            morgan_token_api::id(),
+            morgan_vote_api::id(),
+            morgan_stake_api::id(),
+            morgan_config_api::id(),
+            morgan_exchange_api::id(),
         ];
         assert!(ids.into_iter().all(move |id| unique.insert(id)));
     }

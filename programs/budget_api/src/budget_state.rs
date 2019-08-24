@@ -3,8 +3,8 @@ use crate::budget_expr::BudgetExpr;
 use bincode::{self, deserialize, serialize_into};
 use num_derive::FromPrimitive;
 use serde_derive::{Deserialize, Serialize};
-use solana_sdk::instruction::InstructionError;
-use solana_sdk::instruction_processor_utils::DecodeError;
+use morgan_sdk::instruction::InstructionError;
+use morgan_sdk::instruction_processor_utils::DecodeError;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, FromPrimitive)]
 pub enum BudgetError {
@@ -55,7 +55,7 @@ impl BudgetState {
 mod test {
     use super::*;
     use crate::id;
-    use solana_sdk::account::Account;
+    use morgan_sdk::account::Account;
 
     #[test]
     fn test_serializer() {

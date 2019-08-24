@@ -1,11 +1,11 @@
 [package]
-name = "solana-token-api"
+name = "morgan-token-api"
 version = "0.15.3"
-description = "Solana Token API"
-authors = ["Solana Maintainers <maintainers@solana.com>"]
-repository = "https://github.com/solana-labs/solana"
+description = "Morgan Token API"
+authors = ["Morgan Maintainers <maintainers@morgan.com>"]
+repository = "https://github.com/morgan-labs/morgan"
 license = "Apache-2.0"
-homepage = "https://solana.com/"
+homepage = "https://morgan.com/"
 edition = "2018"
 
 [dependencies]
@@ -15,9 +15,9 @@ num-derive = "0.2"
 num-traits = "0.2"
 serde = "1.0.91"
 serde_derive = "1.0.91"
-solana-logger = { path = "../../logger", version = "0.15.3"     }
-solana-sdk = { path = "../../sdk", version = "0.15.3"     }
+morgan-logger = { path = "../../logger", version = "0.15.3"     }
+morgan-sdk = { path = "../../sdk", version = "0.15.3"     }
 
 [lib]
-name = "solana_token_api"
+name = "morgan_token_api"
 crate-type = ["lib"]

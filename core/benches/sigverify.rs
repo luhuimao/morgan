@@ -2,9 +2,9 @@
 
 extern crate test;
 
-use solana::packet::to_packets;
-use solana::sigverify;
-use solana::test_tx::test_tx;
+use morgan::packet::to_packets;
+use morgan::sigverify;
+use morgan::test_tx::test_tx;
 use test::Bencher;
 
 #[bench]

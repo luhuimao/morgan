@@ -1,13 +1,13 @@
 use crate::get_segment_from_slot;
 use log::*;
 use serde_derive::{Deserialize, Serialize};
-use solana_sdk::account::Account;
-use solana_sdk::account::KeyedAccount;
-use solana_sdk::account_utils::State;
-use solana_sdk::hash::Hash;
-use solana_sdk::instruction::InstructionError;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::Signature;
+use morgan_sdk::account::Account;
+use morgan_sdk::account::KeyedAccount;
+use morgan_sdk::account_utils::State;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::instruction::InstructionError;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::Signature;
 use std::collections::HashMap;
 
 pub const TOTAL_VALIDATOR_REWARDS: u64 = 1;
@@ -435,7 +435,7 @@ mod tests {
 
     #[test]
     fn test_account_data() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let mut account = Account::default();
         account.data.resize(STORAGE_ACCOUNT_SPACE as usize, 0);
         let storage_account = StorageAccount::new(&mut account);

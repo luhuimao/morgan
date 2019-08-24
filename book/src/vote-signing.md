@@ -11,7 +11,7 @@ verify this signature using the validator's public key. If the validator's key
 is used to sign incorrect data (e.g. votes on multiple forks of the ledger), the
 node's stake or its resources could be compromised.
 
-Solana addresses this risk by splitting off a separate *vote signer* service
+Morgan addresses this risk by splitting off a separate *vote signer* service
 that evaluates each vote to ensure it does not violate a slashing condition.
 
 ## Validators, Vote Signers, and Stakeholders

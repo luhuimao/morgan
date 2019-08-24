@@ -6,13 +6,13 @@ use crate::rpc_request::RpcRequest;
 use bincode::serialize;
 use log::*;
 use serde_json::{json, Value};
-use solana_sdk::account::Account;
-use solana_sdk::fee_calculator::FeeCalculator;
-use solana_sdk::hash::Hash;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{KeypairUtil, Signature};
-use solana_sdk::timing::{DEFAULT_NUM_TICKS_PER_SECOND, DEFAULT_TICKS_PER_SLOT};
-use solana_sdk::transaction::{self, Transaction, TransactionError};
+use morgan_sdk::account::Account;
+use morgan_sdk::fee_calculator::FeeCalculator;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{KeypairUtil, Signature};
+use morgan_sdk::timing::{DEFAULT_NUM_TICKS_PER_SECOND, DEFAULT_TICKS_PER_SLOT};
+use morgan_sdk::transaction::{self, Transaction, TransactionError};
 use std::error;
 use std::io;
 use std::net::SocketAddr;
@@ -532,10 +532,10 @@ mod tests {
     use jsonrpc_core::{Error, IoHandler, Params};
     use jsonrpc_http_server::{AccessControlAllowOrigin, DomainsValidation, ServerBuilder};
     use serde_json::Number;
-    use solana_logger;
-    use solana_sdk::signature::{Keypair, KeypairUtil};
-    use solana_sdk::system_transaction;
-    use solana_sdk::transaction::TransactionError;
+    use morgan_logger;
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_sdk::system_transaction;
+    use morgan_sdk::transaction::TransactionError;
     use std::sync::mpsc::channel;
     use std::thread;
 
@@ -598,7 +598,7 @@ mod tests {
 
     #[test]
     fn test_retry_make_rpc_request() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let (sender, receiver) = channel();
         thread::spawn(move || {
             // 1. Pick a random port

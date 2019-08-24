@@ -8,7 +8,7 @@ use rand::{self, Rng};
 
 use test::Bencher;
 
-use solana_kvstore::{test::gen, Config, Key, KvStore};
+use morgan_kvstore::{test::gen, Config, Key, KvStore};
 
 const SMALL_SIZE: usize = 512;
 const LARGE_SIZE: usize = 32 * 1024;

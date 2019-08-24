@@ -26,7 +26,7 @@ requests containing an `InitGame` instruction. The drone signs the transaction
 data in the request and returns it, thereby authorizing its account to pay the
 transaction fee and as well as seeding the game's account with enough tokens to
 play it. The user then creates a transaction for its transaction data and the
-drones signature and submits it to the Solana cluster. Each time the user
+drones signature and submits it to the Morgan cluster. Each time the user
 interacts with the game, the game pays the user enough tokens to pay the next
 transaction fee to advance the game. At that point, the user may choose to keep
 the tokens instead of advancing the game. If the creator wants to defend
@@ -37,9 +37,9 @@ each instruction.
 
 Creator of a new on-chain token (ERC-20 interface), may wish to do a worldwide
 airdrop to distribute its tokens to millions of users over just a few seconds.
-That drone cannot spend resources interacting with the Solana cluster. Instead,
+That drone cannot spend resources interacting with the Morgan cluster. Instead,
 the drone should only verify the client is unique and human, and then return
-the signature. It may also want to listen to the Solana cluster for recent
+the signature. It may also want to listen to the Morgan cluster for recent
 entry IDs to support client retries and to ensure the airdrop is targeting the
 desired cluster.
 
@@ -48,7 +48,7 @@ desired cluster.
 
 ### Invalid recent_blockhash
 
-The drone may prefer its airdrops only target a particular Solana cluster.  To
+The drone may prefer its airdrops only target a particular Morgan cluster.  To
 do that, it listens to the cluster for new entry IDs and ensure any requests
 reference a recent one.
 
@@ -69,7 +69,7 @@ the ledger. The client may do this maliciously or simply because it thinks the
 first request was dropped. The drone should not simply query the cluster to
 ensure the client has not already received an airdrop. Instead, it should use
 `recent_blockhash` to ensure the previous request is expired before signing another.
-Note that the Solana cluster will reject any transaction with a `recent_blockhash`
+Note that the Morgan cluster will reject any transaction with a `recent_blockhash`
 beyond a certain *age*.
 
 ### Denial of Service
@@ -83,4 +83,4 @@ indicate `Ok`), consideration for this attack may not be required.
 In the current design, the drone accepts TCP connections. This allows clients
 to DoS the service by simply opening lots of idle connections. Switching to UDP
 may be preferred. The transaction data will be smaller than a UDP packet since
-the transaction sent to the Solana cluster is already pinned to using UDP.
+the transaction sent to the Morgan cluster is already pinned to using UDP.

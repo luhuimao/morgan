@@ -1,4 +1,4 @@
-//! @brief Solana Rust-based BPF program logging
+//! @brief Morgan Rust-based BPF program logging
 
 use crate::entrypoint::{SolKeyedAccount, SolPubkey};
 

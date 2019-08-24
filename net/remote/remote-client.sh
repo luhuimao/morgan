@@ -11,7 +11,7 @@ clientToRun="$3"
 RUST_LOG="$4"
 benchTpsExtraArgs="$5"
 benchExchangeExtraArgs="$6"
-export RUST_LOG=${RUST_LOG:-solana=info} # if RUST_LOG is unset, default to info
+export RUST_LOG=${RUST_LOG:-morgan=info} # if RUST_LOG is unset, default to info
 
 missing() {
   echo "Error: $1 not specified"
@@ -38,7 +38,7 @@ local|tar)
   # shellcheck source=/dev/null
   source ./target/perf-libs/env.sh
 
-  net/scripts/rsync-retry.sh -vPrc "$entrypointIp:~/.cargo/bin/solana*" ~/.cargo/bin/
+  net/scripts/rsync-retry.sh -vPrc "$entrypointIp:~/.cargo/bin/morgan*" ~/.cargo/bin/
   ;;
 *)
   echo "Unknown deployment method: $deployMethod"
@@ -53,23 +53,23 @@ scripts/net-stats.sh  > net-stats.log 2>&1 &
 ! tmux list-sessions || tmux kill-session
 
 case $clientToRun in
-solana-bench-tps)
+morgan-bench-tps)
   clientCommand="\
-    solana-bench-tps \
-      --entrypoint $entrypointIp:8001 \
-      --drone $entrypointIp:9900 \
+    morgan-bench-tps \
+      --entrypoint $entrypointIp:10001 \
+      --drone $entrypointIp:11100 \
       --duration 7500 \
       --sustained \
       --threads $threadCount \
       $benchTpsExtraArgs \
   "
   ;;
-solana-bench-exchange)
-  solana-keygen -o bench.keypair
+morgan-bench-exchange)
+  morgan-keygen -o bench.keypair
   clientCommand="\
-    solana-bench-exchange \
-      --entrypoint $entrypointIp:8001 \
-      --drone $entrypointIp:9900 \
+    morgan-bench-exchange \
+      --entrypoint $entrypointIp:10001 \
+      --drone $entrypointIp:11100 \
       --threads $threadCount \
       --batch-size 1000 \
       --fund-amount 20000 \

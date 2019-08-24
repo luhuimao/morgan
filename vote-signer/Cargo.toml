@@ -1,12 +1,12 @@
 [package]
-authors = ["Solana Maintainers <maintainers@solana.com>"]
+authors = ["Morgan Maintainers <maintainers@morgan.com>"]
 edition = "2018"
-name = "solana-vote-signer"
-description = "Solana Vote Signing Service"
+name = "morgan-vote-signer"
+description = "Morgan Vote Signing Service"
 version = "0.15.3"
-repository = "https://github.com/solana-labs/solana"
+repository = "https://github.com/morgan-labs/morgan"
 license = "Apache-2.0"
-homepage = "https://solana.com/"
+homepage = "https://morgan.com/"
 
 [dependencies]
 bs58 = "0.2.0"
@@ -17,13 +17,13 @@ jsonrpc-derive = "11.0.0"
 jsonrpc-http-server = "11.0.0"
 serde = "1.0.91"
 serde_json = "1.0.39"
-solana-sdk = { path = "../sdk", version = "0.15.3"     }
-solana-metrics = { path = "../metrics", version = "0.15.3"     }
+morgan-sdk = { path = "../sdk", version = "0.15.3"     }
+morgan-metrics = { path = "../metrics", version = "0.15.3"     }
 
 [lib]
-name = "solana_vote_signer"
+name = "morgan_vote_signer"
 crate-type = ["lib"]
 
 [[bin]]
-name = "solana-vote-signer"
+name = "morgan-vote-signer"
 path = "src/bin/main.rs"

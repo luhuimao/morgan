@@ -199,7 +199,7 @@ if [[ $cloudProvider = ec2 ]]; then
   # EC2 keys can't be retrieved from running instances like GCE keys can so save
   # EC2 keys in the user's home directory so |./ec2.sh config| can at least be
   # used on the same host that ran |./ec2.sh create| .
-  sshPrivateKey="$HOME/.ssh/solana-net-id_$prefix"
+  sshPrivateKey="$HOME/.ssh/morgan-net-id_$prefix"
 else
   sshPrivateKey="$netConfigDir/id_$prefix"
 fi
@@ -344,8 +344,8 @@ EOF
         set -o pipefail
         for i in $(seq 1 60); do
           set -x
-          cloud_FetchFile "$nodeName" "$nodeIp" /solana-id_ecdsa "$sshPrivateKey" "$nodeZone" &&
-            cloud_FetchFile "$nodeName" "$nodeIp" /solana-id_ecdsa.pub "$sshPrivateKey.pub" "$nodeZone" &&
+          cloud_FetchFile "$nodeName" "$nodeIp" /morgan-id_ecdsa "$sshPrivateKey" "$nodeZone" &&
+            cloud_FetchFile "$nodeName" "$nodeIp" /morgan-id_ecdsa.pub "$sshPrivateKey.pub" "$nodeZone" &&
               break
           set +x
 
@@ -564,15 +564,15 @@ cat > /etc/motd <<EOM
 $(creationInfo)
 EOM
 
-# Place the generated private key at /solana-id_ecdsa so it's retrievable by anybody
+# Place the generated private key at /morgan-id_ecdsa so it's retrievable by anybody
 # who is able to log into this machine
-cat > /solana-id_ecdsa <<EOK
+cat > /morgan-id_ecdsa <<EOK
 $(cat "$sshPrivateKey")
 EOK
-cat > /solana-id_ecdsa.pub <<EOK
+cat > /morgan-id_ecdsa.pub <<EOK
 $(cat "$sshPrivateKey.pub")
 EOK
-chmod 444 /solana-id_ecdsa
+chmod 444 /morgan-id_ecdsa
 
 USER=\$(id -un)
 
@@ -580,8 +580,8 @@ $(
   cd "$here"/scripts/
   cat \
     disable-background-upgrades.sh \
-    create-solana-user.sh \
-    add-solana-user-authorized_keys.sh \
+    create-morgan-user.sh \
+    add-morgan-user-authorized_keys.sh \
     install-earlyoom.sh \
     install-libssl-compatability.sh \
     install-nodejs.sh \

@@ -4,9 +4,9 @@
 
 #[macro_use]
 extern crate alloc;
-extern crate solana_sdk_bpf_utils;
+extern crate morgan_sdk_bpf_utils;
 
-use solana_sdk_bpf_utils::log::*;
+use morgan_sdk_bpf_utils::log::*;
 
 use core::alloc::Layout;
 use core::mem;

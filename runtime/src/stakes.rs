@@ -1,9 +1,9 @@
 //! Stakes serve as a cache of stake and vote accounts to derive
 //! node stakes
 use hashbrown::HashMap;
-use solana_sdk::account::Account;
-use solana_sdk::pubkey::Pubkey;
-use solana_stake_api::stake_state::StakeState;
+use morgan_sdk::account::Account;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_stake_api::stake_state::StakeState;
 
 #[derive(Default, Clone)]
 pub struct Stakes {
@@ -27,11 +27,11 @@ impl Stakes {
     }
 
     pub fn is_stake(account: &Account) -> bool {
-        solana_vote_api::check_id(&account.owner) || solana_stake_api::check_id(&account.owner)
+        morgan_vote_api::check_id(&account.owner) || morgan_stake_api::check_id(&account.owner)
     }
 
     pub fn store(&mut self, pubkey: &Pubkey, account: &Account) {
-        if solana_vote_api::check_id(&account.owner) {
+        if morgan_vote_api::check_id(&account.owner) {
             if account.difs == 0 {
                 self.vote_accounts.remove(pubkey);
             } else {
@@ -43,7 +43,7 @@ impl Stakes {
 
                 self.vote_accounts.insert(*pubkey, (stake, account.clone()));
             }
-        } else if solana_stake_api::check_id(&account.owner) {
+        } else if morgan_stake_api::check_id(&account.owner) {
             //  old_stake is stake difs and voter_pubkey from the pre-store() version
             let old_stake = self.stake_accounts.get(pubkey).and_then(|old_account| {
                 StakeState::voter_pubkey_from(old_account)
@@ -82,9 +82,9 @@ impl Stakes {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use solana_sdk::pubkey::Pubkey;
-    use solana_stake_api::stake_state;
-    use solana_vote_api::vote_state::{self, VoteState};
+    use morgan_sdk::pubkey::Pubkey;
+    use morgan_stake_api::stake_state;
+    use morgan_vote_api::vote_state::{self, VoteState};
 
     //  set up some dummies  for a staked node    ((     vote      )  (     stake     ))
     fn create_staked_node_accounts(stake: u64) -> ((Pubkey, Account), (Pubkey, Account)) {
@@ -244,7 +244,7 @@ mod tests {
         }
 
         // not a stake account, and whacks above entry
-        stakes.store(&stake_pubkey, &Account::new(1, 0, &solana_stake_api::id()));
+        stakes.store(&stake_pubkey, &Account::new(1, 0, &morgan_stake_api::id()));
         {
             let vote_accounts = stakes.vote_accounts();
             assert!(vote_accounts.get(&vote_pubkey).is_some());

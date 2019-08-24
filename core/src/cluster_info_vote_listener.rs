@@ -4,7 +4,7 @@ use crate::result::Result;
 use crate::service::Service;
 use crate::sigverify_stage::VerifiedPackets;
 use crate::{packet, sigverify};
-use solana_metrics::inc_new_counter_debug;
+use morgan_metrics::inc_new_counter_debug;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::Sender;
 use std::sync::{Arc, Mutex, RwLock};
@@ -26,7 +26,7 @@ impl ClusterInfoVoteListener {
         let exit = exit.clone();
         let poh_recorder = poh_recorder.clone();
         let thread = Builder::new()
-            .name("solana-cluster_info_vote_listener".to_string())
+            .name("morgan-cluster_info_vote_listener".to_string())
             .spawn(move || {
                 let _ = Self::recv_loop(
                     exit,
@@ -87,15 +87,15 @@ impl Service for ClusterInfoVoteListener {
 mod tests {
     use crate::locktower::MAX_RECENT_VOTES;
     use crate::packet;
-    use solana_sdk::hash::Hash;
-    use solana_sdk::signature::{Keypair, KeypairUtil};
-    use solana_sdk::transaction::Transaction;
-    use solana_vote_api::vote_instruction;
-    use solana_vote_api::vote_state::Vote;
+    use morgan_sdk::hash::Hash;
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_sdk::transaction::Transaction;
+    use morgan_vote_api::vote_instruction;
+    use morgan_vote_api::vote_state::Vote;
 
     #[test]
     fn test_max_vote_tx_fits() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let node_keypair = Keypair::new();
         let vote_keypair = Keypair::new();
         let votes = (0..MAX_RECENT_VOTES)

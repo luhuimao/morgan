@@ -1,25 +1,25 @@
 #![feature(test)]
 
-extern crate solana;
+extern crate morgan;
 extern crate test;
 
 use log::*;
 use rand::{thread_rng, Rng};
-use solana::packet::to_packets_chunked;
-use solana::service::Service;
-use solana::sigverify_stage::SigVerifyStage;
-use solana::test_tx::test_tx;
-use solana_sdk::hash::Hash;
-use solana_sdk::signature::{Keypair, KeypairUtil};
-use solana_sdk::system_transaction;
-use solana_sdk::timing::duration_as_ms;
+use morgan::packet::to_packets_chunked;
+use morgan::service::Service;
+use morgan::sigverify_stage::SigVerifyStage;
+use morgan::test_tx::test_tx;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
+use morgan_sdk::system_transaction;
+use morgan_sdk::timing::duration_as_ms;
 use std::sync::mpsc::channel;
 use std::time::{Duration, Instant};
 use test::Bencher;
 
 #[bench]
 fn bench_sigverify_stage(bencher: &mut Bencher) {
-    solana_logger::setup();
+    morgan_logger::setup();
     let (packet_s, packet_r) = channel();
     let (verified_s, verified_r) = channel();
     let sigverify_disabled = false;

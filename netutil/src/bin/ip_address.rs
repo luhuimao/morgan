@@ -1,8 +1,8 @@
 use clap::{crate_version, App, Arg};
 
 fn main() {
-    solana_logger::setup();
-    let matches = App::new("solana-ip-address")
+    morgan_logger::setup();
+    let matches = App::new("morgan-ip-address")
         .version(crate_version!())
         .arg(
             Arg::with_name("host_port")
@@ -13,10 +13,10 @@ fn main() {
         .get_matches();
 
     let host_port = matches.value_of("host_port").unwrap();
-    let addr = solana_netutil::parse_host_port(host_port)
+    let addr = morgan_netutil::parse_host_port(host_port)
         .unwrap_or_else(|_| panic!("failed to parse {}", host_port));
 
-    match solana_netutil::get_public_ip_addr(&addr) {
+    match morgan_netutil::get_public_ip_addr(&addr) {
         Ok(ip) => println!("{}", ip),
         Err(err) => {
             eprintln!("{}: {}", addr, err);

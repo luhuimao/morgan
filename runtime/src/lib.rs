@@ -17,13 +17,13 @@ mod status_cache;
 mod system_instruction_processor;
 
 #[macro_use]
-extern crate solana_metrics;
+extern crate morgan_metrics;
 
 #[macro_use]
-extern crate solana_vote_program;
+extern crate morgan_vote_program;
 
 #[macro_use]
-extern crate solana_stake_program;
+extern crate morgan_stake_program;
 
 #[macro_use]
 extern crate serde_derive;

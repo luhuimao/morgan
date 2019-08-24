@@ -29,16 +29,16 @@ use core::cmp;
 use hashbrown::HashMap;
 use rand::{thread_rng, Rng};
 use rayon::prelude::*;
-use solana_metrics::{datapoint_debug, inc_new_counter_debug, inc_new_counter_error};
-use solana_netutil::{
+use morgan_metrics::{datapoint_debug, inc_new_counter_debug, inc_new_counter_error};
+use morgan_netutil::{
     bind_in_range, bind_to, find_available_port_in_range, multi_bind_in_range, PortRange,
 };
-use solana_runtime::bloom::Bloom;
-use solana_sdk::hash::Hash;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{Keypair, KeypairUtil, Signable, Signature};
-use solana_sdk::timing::{duration_as_ms, timestamp};
-use solana_sdk::transaction::Transaction;
+use morgan_runtime::bloom::Bloom;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{Keypair, KeypairUtil, Signable, Signature};
+use morgan_sdk::timing::{duration_as_ms, timestamp};
+use morgan_sdk::transaction::Transaction;
 use std::cmp::min;
 use std::collections::BTreeSet;
 use std::fmt;
@@ -49,7 +49,7 @@ use std::sync::{Arc, RwLock};
 use std::thread::{sleep, Builder, JoinHandle};
 use std::time::{Duration, Instant};
 
-pub const FULLNODE_PORT_RANGE: PortRange = (8000, 10_000);
+pub const FULLNODE_PORT_RANGE: PortRange = (10_000, 12_000);
 
 /// The Data plane fanout size, also used as the neighborhood size
 pub const DATA_PLANE_FANOUT: usize = 200;
@@ -1012,7 +1012,7 @@ impl ClusterInfo {
     ) -> JoinHandle<()> {
         let exit = exit.clone();
         Builder::new()
-            .name("solana-gossip".to_string())
+            .name("morgan-gossip".to_string())
             .spawn(move || {
                 let mut last_push = timestamp();
                 loop {
@@ -1425,7 +1425,7 @@ impl ClusterInfo {
     ) -> JoinHandle<()> {
         let exit = exit.clone();
         Builder::new()
-            .name("solana-listen".to_string())
+            .name("morgan-listen".to_string())
             .spawn(move || loop {
                 let e = Self::run_listen(
                     &me,
@@ -1721,7 +1721,7 @@ mod tests {
     use crate::repair_service::RepairType;
     use crate::result::Error;
     use crate::test_tx::test_tx;
-    use solana_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
     use std::collections::HashSet;
     use std::net::{IpAddr, Ipv4Addr};
     use std::sync::{Arc, RwLock};
@@ -1850,7 +1850,7 @@ mod tests {
     /// test window requests respond with the right blob, and do not overrun
     #[test]
     fn run_window_request() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let ledger_path = get_tmp_ledger_path!();
         {
             let blocktree = Arc::new(Blocktree::open(&ledger_path).unwrap());
@@ -1909,7 +1909,7 @@ mod tests {
     /// test run_window_requestwindow requests respond with the right blob, and do not overrun
     #[test]
     fn run_highest_window_request() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let ledger_path = get_tmp_ledger_path!();
         {
             let blocktree = Arc::new(Blocktree::open(&ledger_path).unwrap());
@@ -1956,7 +1956,7 @@ mod tests {
 
     #[test]
     fn run_orphan() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let ledger_path = get_tmp_ledger_path!();
         {
             let blocktree = Arc::new(Blocktree::open(&ledger_path).unwrap());
@@ -1992,7 +1992,7 @@ mod tests {
 
     #[test]
     fn test_default_leader() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let contact_info = ContactInfo::new_localhost(&Pubkey::new_rand(), 0);
         let mut cluster_info = ClusterInfo::new_with_invalid_keypair(contact_info);
         let network_entry_point =

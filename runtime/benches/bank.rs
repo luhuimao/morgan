@@ -3,18 +3,18 @@
 extern crate test;
 
 use log::*;
-use solana_runtime::bank::*;
-use solana_runtime::bank_client::BankClient;
-use solana_runtime::loader_utils::{create_invoke_instruction, load_program};
-use solana_sdk::account::KeyedAccount;
-use solana_sdk::client::AsyncClient;
-use solana_sdk::client::SyncClient;
-use solana_sdk::genesis_block::create_genesis_block;
-use solana_sdk::instruction::InstructionError;
-use solana_sdk::native_loader;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{Keypair, KeypairUtil};
-use solana_sdk::transaction::Transaction;
+use morgan_runtime::bank::*;
+use morgan_runtime::bank_client::BankClient;
+use morgan_runtime::loader_utils::{create_invoke_instruction, load_program};
+use morgan_sdk::account::KeyedAccount;
+use morgan_sdk::client::AsyncClient;
+use morgan_sdk::client::SyncClient;
+use morgan_sdk::genesis_block::create_genesis_block;
+use morgan_sdk::instruction::InstructionError;
+use morgan_sdk::native_loader;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
+use morgan_sdk::transaction::Transaction;
 use std::sync::Arc;
 use std::thread::sleep;
 use std::time::Duration;
@@ -60,7 +60,7 @@ pub fn create_native_loader_transactions(
     bank_client: &BankClient,
     mint_keypair: &Keypair,
 ) -> Vec<Transaction> {
-    let program = "solana_noop_program".as_bytes().to_vec();
+    let program = "morgan_noop_program".as_bytes().to_vec();
     let program_id = load_program(&bank_client, &mint_keypair, &native_loader::id(), program);
 
     (0..4096)
@@ -116,7 +116,7 @@ fn do_bench_transactions(
     bench_work: &Fn(&Arc<Bank>, &BankClient, &Vec<Transaction>),
     create_transactions: &Fn(&BankClient, &Keypair) -> Vec<Transaction>,
 ) {
-    solana_logger::setup();
+    morgan_logger::setup();
     let ns_per_s = 1_000_000_000;
     let (genesis_block, mint_keypair) = create_genesis_block(100_000_000);
     let mut bank = Bank::new(&genesis_block);

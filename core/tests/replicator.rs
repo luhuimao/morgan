@@ -2,23 +2,23 @@
 extern crate log;
 
 #[macro_use]
-extern crate solana;
+extern crate morgan;
 
 use bincode::{deserialize, serialize};
-use solana::blocktree::{create_new_tmp_ledger, Blocktree};
-use solana::cluster_info::{ClusterInfo, Node, FULLNODE_PORT_RANGE};
-use solana::contact_info::ContactInfo;
-use solana::gossip_service::discover_cluster;
-use solana::local_cluster::{ClusterConfig, LocalCluster};
-use solana::replicator::Replicator;
-use solana::replicator::ReplicatorRequest;
-use solana::storage_stage::STORAGE_ROTATE_TEST_COUNT;
-use solana::streamer::blob_receiver;
-use solana::validator::ValidatorConfig;
-use solana_client::thin_client::create_client;
-use solana_sdk::genesis_block::create_genesis_block;
-use solana_sdk::hash::Hash;
-use solana_sdk::signature::{Keypair, KeypairUtil};
+use morgan::blocktree::{create_new_tmp_ledger, Blocktree};
+use morgan::cluster_info::{ClusterInfo, Node, FULLNODE_PORT_RANGE};
+use morgan::contact_info::ContactInfo;
+use morgan::gossip_service::discover_cluster;
+use morgan::local_cluster::{ClusterConfig, LocalCluster};
+use morgan::replicator::Replicator;
+use morgan::replicator::ReplicatorRequest;
+use morgan::storage_stage::STORAGE_ROTATE_TEST_COUNT;
+use morgan::streamer::blob_receiver;
+use morgan::validator::ValidatorConfig;
+use morgan_client::thin_client::create_client;
+use morgan_sdk::genesis_block::create_genesis_block;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
 use std::fs::remove_dir_all;
 use std::net::SocketAddr;
 use std::net::UdpSocket;
@@ -100,7 +100,7 @@ fn download_from_replicator(replicator_info: &ContactInfo) {
 /// Start the cluster with the given configuration and wait till the replicators are discovered
 /// Then download blobs from one of them.
 fn run_replicator_startup_basic(num_nodes: usize, num_replicators: usize) {
-    solana_logger::setup();
+    morgan_logger::setup();
     info!("starting replicator test");
 
     let mut validator_config = ValidatorConfig::default();
@@ -151,7 +151,7 @@ fn test_replicator_startup_2_nodes() {
 fn test_replicator_startup_leader_hang() {
     use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 
-    solana_logger::setup();
+    morgan_logger::setup();
     info!("starting replicator test");
 
     let leader_ledger_path = "replicator_test_leader_ledger";
@@ -187,7 +187,7 @@ fn test_replicator_startup_leader_hang() {
 
 #[test]
 fn test_replicator_startup_ledger_hang() {
-    solana_logger::setup();
+    morgan_logger::setup();
     info!("starting replicator test");
     let mut validator_config = ValidatorConfig::default();
     validator_config.storage_rotate_count = STORAGE_ROTATE_TEST_COUNT;

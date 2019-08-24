@@ -70,7 +70,7 @@ fn main() {
         let rust_programs = ["alloc", "iter", "noop"];
         for program in rust_programs.iter() {
             println!(
-                "cargo:warning=(not a warning) Building Rust-based BPF programs: solana_bpf_rust_{}",
+                "cargo:warning=(not a warning) Building Rust-based BPF programs: morgan_bpf_rust_{}",
                 program
             );
             assert!(Command::new("./build.sh")
@@ -78,12 +78,12 @@ fn main() {
                 .arg(program)
                 .status()
                 .expect(&format!(
-                    "Failed to call solana-bpf-rust-{}'s build.sh",
+                    "Failed to call morgan-bpf-rust-{}'s build.sh",
                     program
                 ))
                 .success());
             let src = format!(
-                "rust/{}/target/bpfel-unknown-unknown/release/solana_bpf_rust_{}.so",
+                "rust/{}/target/bpfel-unknown-unknown/release/morgan_bpf_rust_{}.so",
                 program, program,
             );
             assert!(Command::new("cp")

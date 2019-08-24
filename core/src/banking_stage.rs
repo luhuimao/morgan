@@ -15,17 +15,17 @@ use crate::service::Service;
 use crate::sigverify_stage::VerifiedPackets;
 use bincode::deserialize;
 use itertools::Itertools;
-use solana_metrics::{inc_new_counter_debug, inc_new_counter_info, inc_new_counter_warn};
-use solana_runtime::accounts_db::ErrorCounters;
-use solana_runtime::bank::Bank;
-use solana_runtime::locked_accounts_results::LockedAccountsResults;
-use solana_sdk::poh_config::PohConfig;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::timing::{
+use morgan_metrics::{inc_new_counter_debug, inc_new_counter_info, inc_new_counter_warn};
+use morgan_runtime::accounts_db::ErrorCounters;
+use morgan_runtime::bank::Bank;
+use morgan_runtime::locked_accounts_results::LockedAccountsResults;
+use morgan_sdk::poh_config::PohConfig;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::timing::{
     self, duration_as_us, DEFAULT_TICKS_PER_SLOT, MAX_RECENT_BLOCKHASHES,
     MAX_TRANSACTION_FORWARDING_DELAY,
 };
-use solana_sdk::transaction::{self, Transaction, TransactionError};
+use morgan_sdk::transaction::{self, Transaction, TransactionError};
 use std::net::UdpSocket;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{Receiver, RecvTimeoutError};
@@ -102,7 +102,7 @@ impl BankingStage {
                 let exit = exit.clone();
                 let mut recv_start = Instant::now();
                 Builder::new()
-                    .name("solana-banking-stage-tx".to_string())
+                    .name("morgan-banking-stage-tx".to_string())
                     .spawn(move || {
                         Self::process_loop(
                             &verified_receiver,
@@ -351,7 +351,7 @@ impl BankingStage {
                     buffered_packets.append(&mut unprocessed_packets);
                 }
                 Err(err) => {
-                    debug!("solana-banking-stage-tx: exit due to {:?}", err);
+                    debug!("morgan-banking-stage-tx: exit due to {:?}", err);
                     break;
                 }
             }
@@ -850,10 +850,10 @@ mod tests {
     use crate::poh_recorder::WorkingBank;
     use crate::{get_tmp_ledger_path, tmp_ledger_name};
     use itertools::Itertools;
-    use solana_sdk::instruction::InstructionError;
-    use solana_sdk::signature::{Keypair, KeypairUtil};
-    use solana_sdk::system_transaction;
-    use solana_sdk::transaction::TransactionError;
+    use morgan_sdk::instruction::InstructionError;
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_sdk::system_transaction;
+    use morgan_sdk::transaction::TransactionError;
     use std::sync::mpsc::channel;
     use std::thread::sleep;
 
@@ -889,7 +889,7 @@ mod tests {
 
     #[test]
     fn test_banking_stage_tick() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let GenesisBlockInfo {
             mut genesis_block, ..
         } = create_genesis_block(2);
@@ -937,7 +937,7 @@ mod tests {
 
     #[test]
     fn test_banking_stage_entries_only() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let GenesisBlockInfo {
             genesis_block,
             mint_keypair,
@@ -1045,7 +1045,7 @@ mod tests {
 
     #[test]
     fn test_banking_stage_entryfication() {
-        solana_logger::setup();
+        morgan_logger::setup();
         // In this attack we'll demonstrate that a verifier can interpret the ledger
         // differently if either the server doesn't signal the ledger to add an
         // Entry OR if the verifier tries to parallelize across multiple Entries.
@@ -1450,7 +1450,7 @@ mod tests {
 
     #[test]
     fn test_bank_process_and_record_transactions() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let GenesisBlockInfo {
             genesis_block,
             mint_keypair,
@@ -1539,7 +1539,7 @@ mod tests {
 
     #[test]
     fn test_bank_process_and_record_transactions_account_in_use() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let GenesisBlockInfo {
             genesis_block,
             mint_keypair,
@@ -1593,7 +1593,7 @@ mod tests {
 
     #[test]
     fn test_filter_valid_packets() {
-        solana_logger::setup();
+        morgan_logger::setup();
 
         let all_packets = (0..16)
             .map(|packets_id| {

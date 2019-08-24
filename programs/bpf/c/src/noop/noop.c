@@ -2,7 +2,7 @@
  * @brief Example C-based BPF program that prints out the parameters
  * passed to it
  */
-#include <solana_sdk.h>
+#include <morgan_sdk.h>
 
 extern bool entrypoint(const uint8_t *input) {
   SolKeyedAccount ka[1];

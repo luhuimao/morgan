@@ -1,6 +1,6 @@
-## solana-wallet CLI
+## morgan-wallet CLI
 
-The [solana crate](https://crates.io/crates/solana) is distributed with a command-line interface tool
+The [morgan crate](https://crates.io/crates/morgan) is distributed with a command-line interface tool
 
 ### Examples
 
@@ -8,7 +8,7 @@ The [solana crate](https://crates.io/crates/solana) is distributed with a comman
 
 ```sh
 // Command
-$ solana-wallet address
+$ morgan-wallet address
 
 // Return
 <PUBKEY>
@@ -18,7 +18,7 @@ $ solana-wallet address
 
 ```sh
 // Command
-$ solana-wallet airdrop 123
+$ morgan-wallet airdrop 123
 
 // Return
 "Your balance is: 123"
@@ -28,7 +28,7 @@ $ solana-wallet airdrop 123
 
 ```sh
 // Command
-$ solana-wallet balance
+$ morgan-wallet balance
 
 // Return
 "Your balance is: 123"
@@ -38,7 +38,7 @@ $ solana-wallet balance
 
 ```sh
 // Command
-$ solana-wallet confirm <TX_SIGNATURE>
+$ morgan-wallet confirm <TX_SIGNATURE>
 
 // Return
 "Confirmed" / "Not found" / "Transaction failed with error <ERR>"
@@ -48,7 +48,7 @@ $ solana-wallet confirm <TX_SIGNATURE>
 
 ```sh
 // Command
-$ solana-wallet deploy <PATH>
+$ morgan-wallet deploy <PATH>
 
 // Return
 <PROGRAM_ID>
@@ -58,7 +58,7 @@ $ solana-wallet deploy <PATH>
 
 ```sh
 // Command
-$ solana-wallet pay <PUBKEY> 123
+$ morgan-wallet pay <PUBKEY> 123
 
 // Return
 <TX_SIGNATURE>
@@ -68,7 +68,7 @@ $ solana-wallet pay <PUBKEY> 123
 
 ```sh
 // Command
-$ solana-wallet pay <PUBKEY> 123 \
+$ morgan-wallet pay <PUBKEY> 123 \
     --after 2018-12-24T23:59:00 --require-timestamp-from <PUBKEY>
 
 // Return
@@ -81,7 +81,7 @@ $ solana-wallet pay <PUBKEY> 123 \
 A third party must send a signature to unlock the difs.
 ```sh
 // Command
-$ solana-wallet pay <PUBKEY> 123 \
+$ morgan-wallet pay <PUBKEY> 123 \
     --require-signature-from <PUBKEY>
 
 // Return
@@ -92,7 +92,7 @@ $ solana-wallet pay <PUBKEY> 123 \
 
 ```sh
 // Command
-$ solana-wallet pay <PUBKEY> 123 \
+$ morgan-wallet pay <PUBKEY> 123 \
     --after 2018-12-24T23:59 --require-timestamp-from <PUBKEY> \
     --require-signature-from <PUBKEY>
 
@@ -104,7 +104,7 @@ $ solana-wallet pay <PUBKEY> 123 \
 
 ```sh
 // Command
-$ solana-wallet pay <PUBKEY> 123 \
+$ morgan-wallet pay <PUBKEY> 123 \
     --require-signature-from <PUBKEY> \
     --require-signature-from <PUBKEY>
 
@@ -116,7 +116,7 @@ $ solana-wallet pay <PUBKEY> 123 \
 
 ```sh
 // Command
-$ solana-wallet pay <PUBKEY> 123 \
+$ morgan-wallet pay <PUBKEY> 123 \
     --require-signature-from <PUBKEY> \
     --cancelable
 
@@ -128,7 +128,7 @@ $ solana-wallet pay <PUBKEY> 123 \
 
 ```sh
 // Command
-$ solana-wallet cancel <PROCESS_ID>
+$ morgan-wallet cancel <PROCESS_ID>
 
 // Return
 <TX_SIGNATURE>
@@ -138,7 +138,7 @@ $ solana-wallet cancel <PROCESS_ID>
 
 ```sh
 // Command
-$ solana-wallet send-signature <PUBKEY> <PROCESS_ID>
+$ morgan-wallet send-signature <PUBKEY> <PROCESS_ID>
 
 // Return
 <TX_SIGNATURE>
@@ -149,7 +149,7 @@ $ solana-wallet send-signature <PUBKEY> <PROCESS_ID>
 Use the current system time:
 ```sh
 // Command
-$ solana-wallet send-timestamp <PUBKEY> <PROCESS_ID>
+$ morgan-wallet send-timestamp <PUBKEY> <PROCESS_ID>
 
 // Return
 <TX_SIGNATURE>
@@ -159,7 +159,7 @@ Or specify some other arbitrary timestamp:
 
 ```sh
 // Command
-$ solana-wallet send-timestamp <PUBKEY> <PROCESS_ID> --date 2018-12-24T23:59:00
+$ morgan-wallet send-timestamp <PUBKEY> <PROCESS_ID> --date 2018-12-24T23:59:00
 
 // Return
 <TX_SIGNATURE>
@@ -168,10 +168,10 @@ $ solana-wallet send-timestamp <PUBKEY> <PROCESS_ID> --date 2018-12-24T23:59:00
 ### Usage
 
 ```manpage
-solana-wallet 0.12.0
+morgan-wallet 0.12.0
 
 USAGE:
-    solana-wallet [FLAGS] [OPTIONS] [SUBCOMMAND]
+    morgan-wallet [FLAGS] [OPTIONS] [SUBCOMMAND]
 
 FLAGS:
     -h, --help       Prints help information
@@ -180,11 +180,11 @@ FLAGS:
 
 OPTIONS:
         --drone-host <IP ADDRESS>    Drone host to use [default: same as --host]
-        --drone-port <PORT>          Drone port to use [default: 9900]
+        --drone-port <PORT>          Drone port to use [default: 11100]
     -n, --host <IP ADDRESS>          Host to use for both RPC and drone [default: 127.0.0.1]
     -k, --keypair <PATH>             /path/to/id.json
         --rpc-host <IP ADDRESS>      RPC host to use [default: same as --host]
-        --rpc-port <PORT>            RPC port to use [default: 8899]
+        --rpc-port <PORT>            RPC port to use [default: 10099]
 
 SUBCOMMANDS:
     address                  Get your public key
@@ -201,11 +201,11 @@ SUBCOMMANDS:
 ```
 
 ```manpage
-solana-wallet-address
+morgan-wallet-address
 Get your public key
 
 USAGE:
-    solana-wallet address
+    morgan-wallet address
 
 FLAGS:
     -h, --help       Prints help information
@@ -213,11 +213,11 @@ FLAGS:
 ```
 
 ```manpage
-solana-wallet-airdrop
+morgan-wallet-airdrop
 Request a batch of difs
 
 USAGE:
-    solana-wallet airdrop <NUM>
+    morgan-wallet airdrop <NUM>
 
 FLAGS:
     -h, --help       Prints help information
@@ -228,11 +228,11 @@ ARGS:
 ```
 
 ```manpage
-solana-wallet-balance
+morgan-wallet-balance
 Get your balance
 
 USAGE:
-    solana-wallet balance
+    morgan-wallet balance
 
 FLAGS:
     -h, --help       Prints help information
@@ -240,11 +240,11 @@ FLAGS:
 ```
 
 ```manpage
-solana-wallet-cancel
+morgan-wallet-cancel
 Cancel a transfer
 
 USAGE:
-    solana-wallet cancel <PROCESS_ID>
+    morgan-wallet cancel <PROCESS_ID>
 
 FLAGS:
     -h, --help       Prints help information
@@ -255,11 +255,11 @@ ARGS:
 ```
 
 ```manpage
-solana-wallet-confirm
+morgan-wallet-confirm
 Confirm transaction by signature
 
 USAGE:
-    solana-wallet confirm <SIGNATURE>
+    morgan-wallet confirm <SIGNATURE>
 
 FLAGS:
     -h, --help       Prints help information
@@ -270,11 +270,11 @@ ARGS:
 ```
 
 ```manpage
-solana-wallet-deploy
+morgan-wallet-deploy
 Deploy a program
 
 USAGE:
-    solana-wallet deploy <PATH>
+    morgan-wallet deploy <PATH>
 
 FLAGS:
     -h, --help       Prints help information
@@ -285,11 +285,11 @@ ARGS:
 ```
 
 ```manpage
-solana-wallet-get-transaction-count
+morgan-wallet-get-transaction-count
 Get current transaction count
 
 USAGE:
-    solana-wallet get-transaction-count
+    morgan-wallet get-transaction-count
 
 FLAGS:
     -h, --help       Prints help information
@@ -297,11 +297,11 @@ FLAGS:
 ```
 
 ```manpage
-solana-wallet-pay
+morgan-wallet-pay
 Send a payment
 
 USAGE:
-    solana-wallet pay [FLAGS] [OPTIONS] <PUBKEY> <NUM>
+    morgan-wallet pay [FLAGS] [OPTIONS] <PUBKEY> <NUM>
 
 FLAGS:
         --cancelable
@@ -319,11 +319,11 @@ ARGS:
 ```
 
 ```manpage
-solana-wallet-send-signature
+morgan-wallet-send-signature
 Send a signature to authorize a transfer
 
 USAGE:
-    solana-wallet send-signature <PUBKEY> <PROCESS_ID>
+    morgan-wallet send-signature <PUBKEY> <PROCESS_ID>
 
 FLAGS:
     -h, --help       Prints help information
@@ -335,11 +335,11 @@ ARGS:
 ```
 
 ```manpage
-solana-wallet-send-timestamp
+morgan-wallet-send-timestamp
 Send a timestamp to unlock a transfer
 
 USAGE:
-    solana-wallet send-timestamp [OPTIONS] <PUBKEY> <PROCESS_ID>
+    morgan-wallet send-timestamp [OPTIONS] <PUBKEY> <PROCESS_ID>
 
 FLAGS:
     -h, --help       Prints help information

@@ -14,14 +14,14 @@ use crate::result::{Error, Result};
 use crate::rpc_subscriptions::RpcSubscriptions;
 use crate::service::Service;
 use hashbrown::HashMap;
-use solana_metrics::{datapoint_warn, inc_new_counter_error, inc_new_counter_info};
-use solana_runtime::bank::Bank;
-use solana_sdk::hash::Hash;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::KeypairUtil;
-use solana_sdk::timing::{self, duration_as_ms};
-use solana_sdk::transaction::Transaction;
-use solana_vote_api::vote_instruction;
+use morgan_metrics::{datapoint_warn, inc_new_counter_error, inc_new_counter_info};
+use morgan_runtime::bank::Bank;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::KeypairUtil;
+use morgan_sdk::timing::{self, duration_as_ms};
+use morgan_sdk::transaction::Transaction;
+use morgan_vote_api::vote_instruction;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{channel, Receiver, RecvTimeoutError, Sender};
 use std::sync::{Arc, Mutex, RwLock};
@@ -102,7 +102,7 @@ impl ReplayStage {
         let vote_account = *vote_account;
         let voting_keypair = voting_keypair.cloned();
         let t_replay = Builder::new()
-            .name("solana-replay-stage".to_string())
+            .name("morgan-replay-stage".to_string())
             .spawn(move || {
                 let _exit = Finalizer::new(exit_.clone());
                 let mut progress = HashMap::new();
@@ -627,7 +627,7 @@ mod test {
     use crate::genesis_utils::create_genesis_block;
     use crate::packet::Blob;
     use crate::replay_stage::ReplayStage;
-    use solana_sdk::hash::Hash;
+    use morgan_sdk::hash::Hash;
     use std::fs::remove_dir_all;
     use std::sync::{Arc, RwLock};
 

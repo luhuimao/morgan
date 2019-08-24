@@ -5,10 +5,10 @@ use jsonrpc_core::{Error, ErrorCode, Result};
 use jsonrpc_derive::rpc;
 use jsonrpc_pubsub::typed::Subscriber;
 use jsonrpc_pubsub::{Session, SubscriptionId};
-use solana_sdk::account::Account;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::Signature;
-use solana_sdk::transaction;
+use morgan_sdk::account::Account;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::Signature;
+use morgan_sdk::transaction;
 use std::sync::{atomic, Arc};
 
 #[rpc(server)]
@@ -242,14 +242,14 @@ mod tests {
     use jsonrpc_core::futures::sync::mpsc;
     use jsonrpc_core::Response;
     use jsonrpc_pubsub::{PubSubHandler, Session};
-    use solana_budget_api;
-    use solana_budget_api::budget_instruction;
-    use solana_runtime::bank::Bank;
-    use solana_sdk::pubkey::Pubkey;
-    use solana_sdk::signature::{Keypair, KeypairUtil};
-    use solana_sdk::system_program;
-    use solana_sdk::system_transaction;
-    use solana_sdk::transaction::{self, Transaction};
+    use morgan_budget_api;
+    use morgan_budget_api::budget_instruction;
+    use morgan_runtime::bank::Bank;
+    use morgan_sdk::pubkey::Pubkey;
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_sdk::system_program;
+    use morgan_sdk::system_transaction;
+    use morgan_sdk::transaction::{self, Transaction};
     use std::sync::RwLock;
     use std::thread::sleep;
     use std::time::Duration;
@@ -368,13 +368,13 @@ mod tests {
         // This test depends on the budget program
         genesis_block
             .native_instruction_processors
-            .push(solana_budget_program!());
+            .push(morgan_budget_program!());
 
         let bob_pubkey = Pubkey::new_rand();
         let witness = Keypair::new();
         let contract_funds = Keypair::new();
         let contract_state = Keypair::new();
-        let budget_program_id = solana_budget_api::id();
+        let budget_program_id = morgan_budget_api::id();
         let executable = false; // TODO
         let bank = Bank::new(&genesis_block);
         let blockhash = bank.last_blockhash();

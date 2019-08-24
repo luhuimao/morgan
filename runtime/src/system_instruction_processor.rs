@@ -1,9 +1,9 @@
 use log::*;
-use solana_sdk::account::KeyedAccount;
-use solana_sdk::instruction::InstructionError;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::system_instruction::{SystemError, SystemInstruction};
-use solana_sdk::system_program;
+use morgan_sdk::account::KeyedAccount;
+use morgan_sdk::instruction::InstructionError;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::system_instruction::{SystemError, SystemInstruction};
+use morgan_sdk::system_program;
 
 const FROM_ACCOUNT_INDEX: usize = 0;
 const TO_ACCOUNT_INDEX: usize = 1;
@@ -109,13 +109,13 @@ mod tests {
     use crate::bank::Bank;
     use crate::bank_client::BankClient;
     use bincode::serialize;
-    use solana_sdk::account::Account;
-    use solana_sdk::client::SyncClient;
-    use solana_sdk::genesis_block::create_genesis_block;
-    use solana_sdk::instruction::{AccountMeta, Instruction, InstructionError};
-    use solana_sdk::signature::{Keypair, KeypairUtil};
-    use solana_sdk::system_program;
-    use solana_sdk::transaction::TransactionError;
+    use morgan_sdk::account::Account;
+    use morgan_sdk::client::SyncClient;
+    use morgan_sdk::genesis_block::create_genesis_block;
+    use morgan_sdk::instruction::{AccountMeta, Instruction, InstructionError};
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_sdk::system_program;
+    use morgan_sdk::transaction::TransactionError;
 
     #[test]
     fn test_create_system_account() {

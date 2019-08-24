@@ -1,7 +1,7 @@
 use clap::{crate_description, crate_name, crate_version, value_t, App, Arg, ArgMatches};
-use solana::gen_keys::GenKeys;
-use solana_drone::drone::DRONE_PORT;
-use solana_sdk::signature::{read_keypair, Keypair, KeypairUtil};
+use morgan::gen_keys::GenKeys;
+use morgan_drone::drone::DRONE_PORT;
+use morgan_sdk::signature::{read_keypair, Keypair, KeypairUtil};
 use std::net::SocketAddr;
 use std::process::exit;
 use std::time::Duration;
@@ -23,7 +23,7 @@ pub struct Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            entrypoint_addr: SocketAddr::from(([127, 0, 0, 1], 8001)),
+            entrypoint_addr: SocketAddr::from(([127, 0, 0, 1], 10001)),
             drone_addr: SocketAddr::from(([127, 0, 0, 1], DRONE_PORT)),
             identity: Keypair::new(),
             num_nodes: 1,
@@ -49,8 +49,8 @@ pub fn build_args<'a, 'b>() -> App<'a, 'b> {
                 .value_name("HOST:PORT")
                 .takes_value(true)
                 .required(false)
-                .default_value("127.0.0.1:8001")
-                .help("Cluster entry point; defaults to 127.0.0.1:8001"),
+                .default_value("127.0.0.1:10001")
+                .help("Cluster entry point; defaults to 127.0.0.1:10001"),
         )
         .arg(
             Arg::with_name("drone")
@@ -59,8 +59,8 @@ pub fn build_args<'a, 'b>() -> App<'a, 'b> {
                 .value_name("HOST:PORT")
                 .takes_value(true)
                 .required(false)
-                .default_value("127.0.0.1:9900")
-                .help("Location of the drone; defaults to 127.0.0.1:9900"),
+                .default_value("127.0.0.1:11100")
+                .help("Location of the drone; defaults to 127.0.0.1:11100"),
         )
         .arg(
             Arg::with_name("identity")
@@ -146,13 +146,13 @@ pub fn build_args<'a, 'b>() -> App<'a, 'b> {
 pub fn extract_args<'a>(matches: &ArgMatches<'a>) -> Config {
     let mut args = Config::default();
 
-    args.entrypoint_addr = solana_netutil::parse_host_port(matches.value_of("entrypoint").unwrap())
+    args.entrypoint_addr = morgan_netutil::parse_host_port(matches.value_of("entrypoint").unwrap())
         .unwrap_or_else(|e| {
             eprintln!("failed to parse entrypoint address: {}", e);
             exit(1)
         });
 
-    args.drone_addr = solana_netutil::parse_host_port(matches.value_of("drone").unwrap())
+    args.drone_addr = morgan_netutil::parse_host_port(matches.value_of("drone").unwrap())
         .unwrap_or_else(|e| {
             eprintln!("failed to parse drone address: {}", e);
             exit(1)

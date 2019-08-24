@@ -1,8 +1,8 @@
 use crate::leader_schedule::LeaderSchedule;
 use crate::staking_utils;
-use solana_runtime::bank::Bank;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::timing::NUM_CONSECUTIVE_LEADER_SLOTS;
+use morgan_runtime::bank::Bank;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::timing::NUM_CONSECUTIVE_LEADER_SLOTS;
 
 /// Return the leader schedule for the given epoch.
 pub fn leader_schedule(epoch_height: u64, bank: &Bank) -> Option<LeaderSchedule> {
@@ -57,7 +57,7 @@ fn sort_stakes(stakes: &mut Vec<(Pubkey, u64)>) {
 mod tests {
     use super::*;
     use crate::staking_utils;
-    use solana_runtime::genesis_utils::{
+    use morgan_runtime::genesis_utils::{
         create_genesis_block_with_leader, BOOTSTRAP_LEADER_DIFS,
     };
 

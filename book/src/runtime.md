@@ -113,4 +113,4 @@ transaction is committed.
 # Future Work
 
 * [Continuations and Signals for long running
-  Transactions](https://github.com/solana-labs/solana/issues/1485)
+  Transactions](https://github.com/morgan-labs/morgan/issues/1485)

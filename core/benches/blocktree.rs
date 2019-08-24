@@ -4,13 +4,13 @@ use rand;
 extern crate test;
 
 #[macro_use]
-extern crate solana;
+extern crate morgan;
 
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
-use solana::blocktree::{get_tmp_ledger_path, Blocktree};
-use solana::entry::{make_large_test_entries, make_tiny_test_entries, EntrySlice};
-use solana::packet::{Blob, BLOB_HEADER_SIZE};
+use morgan::blocktree::{get_tmp_ledger_path, Blocktree};
+use morgan::entry::{make_large_test_entries, make_tiny_test_entries, EntrySlice};
+use morgan::packet::{Blob, BLOB_HEADER_SIZE};
 use test::Bencher;
 
 // Given some blobs and a ledger at ledger_path, benchmark writing the blobs to the ledger

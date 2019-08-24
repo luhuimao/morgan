@@ -10,7 +10,7 @@ use crate::blockstream::SocketBlockstream as Blockstream;
 use crate::blocktree::Blocktree;
 use crate::result::{Error, Result};
 use crate::service::Service;
-use solana_sdk::pubkey::Pubkey;
+use morgan_sdk::pubkey::Pubkey;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{Receiver, RecvTimeoutError};
 use std::sync::Arc;
@@ -32,7 +32,7 @@ impl BlockstreamService {
         let mut blockstream = Blockstream::new(blockstream_socket);
         let exit = exit.clone();
         let t_blockstream = Builder::new()
-            .name("solana-blockstream".to_string())
+            .name("morgan-blockstream".to_string())
             .spawn(move || loop {
                 if exit.load(Ordering::Relaxed) {
                     break;
@@ -113,9 +113,9 @@ mod test {
     use bincode::{deserialize, serialize};
     use chrono::{DateTime, FixedOffset};
     use serde_json::Value;
-    use solana_sdk::hash::Hash;
-    use solana_sdk::signature::{Keypair, KeypairUtil};
-    use solana_sdk::system_transaction;
+    use morgan_sdk::hash::Hash;
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_sdk::system_transaction;
     use std::sync::mpsc::channel;
 
     #[test]

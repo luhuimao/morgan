@@ -10,7 +10,7 @@ set -ex
 apt-get --assume-yes install rsync
 cat > /etc/rsyncd.conf <<-EOF
 [config]
-path = /var/snap/solana/current/config
+path = /var/snap/morgan/current/config
 hosts allow = *
 read only = true
 EOF

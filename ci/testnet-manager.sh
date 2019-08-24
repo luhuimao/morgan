@@ -214,7 +214,7 @@ sanity() {
       set -x
       NO_INSTALL_CHECK=1 \
       NO_LEDGER_VERIFY=1 \
-        ci/testnet-sanity.sh edge-testnet-solana-com ec2 us-west-1a
+        ci/testnet-sanity.sh edge-testnet-morgan-com ec2 us-west-1a
     )
     ;;
   testnet-edge-perf)
@@ -223,7 +223,7 @@ sanity() {
       REJECT_EXTRA_NODES=1 \
       NO_LEDGER_VERIFY=1 \
       NO_VALIDATOR_SANITY=1 \
-        ci/testnet-sanity.sh edge-perf-testnet-solana-com ec2 us-west-2b
+        ci/testnet-sanity.sh edge-perf-testnet-morgan-com ec2 us-west-2b
     )
     ;;
   testnet-beta)
@@ -231,7 +231,7 @@ sanity() {
       set -x
       NO_INSTALL_CHECK=1 \
       NO_LEDGER_VERIFY=1 \
-        ci/testnet-sanity.sh beta-testnet-solana-com ec2 us-west-1a
+        ci/testnet-sanity.sh beta-testnet-morgan-com ec2 us-west-1a
     )
     ;;
   testnet-beta-perf)
@@ -240,7 +240,7 @@ sanity() {
       REJECT_EXTRA_NODES=1 \
       NO_LEDGER_VERIFY=1 \
       NO_VALIDATOR_SANITY=1 \
-        ci/testnet-sanity.sh beta-perf-testnet-solana-com ec2 us-west-2b
+        ci/testnet-sanity.sh beta-perf-testnet-morgan-com ec2 us-west-2b
     )
     ;;
   testnet)
@@ -250,10 +250,10 @@ sanity() {
       ok=true
       if [[ -n $EC2_NODE_COUNT ]]; then
         NO_LEDGER_VERIFY=1 \
-          ci/testnet-sanity.sh testnet-solana-com ec2 "${EC2_ZONES[0]}" || ok=false
+          ci/testnet-sanity.sh testnet-morgan-com ec2 "${EC2_ZONES[0]}" || ok=false
       elif [[ -n $GCE_NODE_COUNT ]]; then
         NO_LEDGER_VERIFY=1 \
-          ci/testnet-sanity.sh testnet-solana-com gce "${GCE_ZONES[0]}" || ok=false
+          ci/testnet-sanity.sh testnet-morgan-com gce "${GCE_ZONES[0]}" || ok=false
       else
         echo "Error: no EC2 or GCE nodes"
         ok=false
@@ -267,8 +267,8 @@ sanity() {
       REJECT_EXTRA_NODES=1 \
       NO_LEDGER_VERIFY=1 \
       NO_VALIDATOR_SANITY=1 \
-        ci/testnet-sanity.sh perf-testnet-solana-com gce us-west1-b
-      #ci/testnet-sanity.sh perf-testnet-solana-com ec2 us-east-1a
+        ci/testnet-sanity.sh perf-testnet-morgan-com gce us-west1-b
+      #ci/testnet-sanity.sh perf-testnet-morgan-com ec2 us-east-1a
     )
     ;;
   testnet-demo)
@@ -279,7 +279,7 @@ sanity() {
       if [[ -n $GCE_NODE_COUNT ]]; then
         NO_LEDGER_VERIFY=1 \
         NO_VALIDATOR_SANITY=1 \
-          ci/testnet-sanity.sh demo-testnet-solana-com gce "${GCE_ZONES[0]}" -f || ok=false
+          ci/testnet-sanity.sh demo-testnet-morgan-com gce "${GCE_ZONES[0]}" -f || ok=false
       else
         echo "Error: no GCE nodes"
         ok=false
@@ -320,7 +320,7 @@ deploy() {
   testnet-edge)
     (
       set -x
-      ci/testnet-deploy.sh -p edge-testnet-solana-com -C ec2 -z us-west-1a \
+      ci/testnet-deploy.sh -p edge-testnet-morgan-com -C ec2 -z us-west-1a \
         -t "$CHANNEL_OR_TAG" -n 3 -c 0 -u -P -a eipalloc-0ccd4f2239886fa94 \
         ${skipCreate:+-e} \
         ${skipStart:+-s} \
@@ -334,8 +334,8 @@ deploy() {
       set -x
       NO_LEDGER_VERIFY=1 \
       NO_VALIDATOR_SANITY=1 \
-      RUST_LOG=solana=warn \
-        ci/testnet-deploy.sh -p edge-perf-testnet-solana-com -C ec2 -z us-west-2b \
+      RUST_LOG=morgan=warn \
+        ci/testnet-deploy.sh -p edge-perf-testnet-morgan-com -C ec2 -z us-west-2b \
           -g -t "$CHANNEL_OR_TAG" -c 2 \
           ${skipCreate:+-e} \
           ${skipStart:+-s} \
@@ -348,7 +348,7 @@ deploy() {
     (
       set -x
       NO_VALIDATOR_SANITY=1 \
-        ci/testnet-deploy.sh -p beta-testnet-solana-com -C ec2 -z us-west-1a \
+        ci/testnet-deploy.sh -p beta-testnet-morgan-com -C ec2 -z us-west-1a \
           -t "$CHANNEL_OR_TAG" -n 3 -c 0 -u -P -a eipalloc-0f286cf8a0771ce35 \
           ${skipCreate:+-e} \
           ${skipStart:+-s} \
@@ -362,8 +362,8 @@ deploy() {
       set -x
       NO_LEDGER_VERIFY=1 \
       NO_VALIDATOR_SANITY=1 \
-      RUST_LOG=solana=warn \
-        ci/testnet-deploy.sh -p beta-perf-testnet-solana-com -C ec2 -z us-west-2b \
+      RUST_LOG=morgan=warn \
+        ci/testnet-deploy.sh -p beta-perf-testnet-morgan-com -C ec2 -z us-west-2b \
           -g -t "$CHANNEL_OR_TAG" -c 2 \
           ${skipCreate:+-e} \
           ${skipStart:+-s} \
@@ -381,7 +381,7 @@ deploy() {
       fi
 
       # shellcheck disable=SC2068
-      ci/testnet-deploy.sh -p testnet-solana-com -C ec2 ${EC2_ZONE_ARGS[@]} \
+      ci/testnet-deploy.sh -p testnet-morgan-com -C ec2 ${EC2_ZONE_ARGS[@]} \
         -t "$CHANNEL_OR_TAG" -n "$EC2_NODE_COUNT" -c 0 -u -P -f -a eipalloc-0fa502bf95f6f18b2 \
         ${skipCreate:+-e} \
         ${maybeSkipStart:+-s} \
@@ -390,7 +390,7 @@ deploy() {
 
       if [[ -n $GCE_NODE_COUNT ]]; then
         # shellcheck disable=SC2068
-        ci/testnet-deploy.sh -p testnet-solana-com -C gce ${GCE_ZONE_ARGS[@]} \
+        ci/testnet-deploy.sh -p testnet-morgan-com -C gce ${GCE_ZONE_ARGS[@]} \
           -t "$CHANNEL_OR_TAG" -n "$GCE_NODE_COUNT" -c 0 -P -f \
           ${skipCreate:+-e} \
           ${skipStart:+-s} \
@@ -405,8 +405,8 @@ deploy() {
       set -x
       NO_LEDGER_VERIFY=1 \
       NO_VALIDATOR_SANITY=1 \
-      RUST_LOG=solana=warn \
-        ci/testnet-deploy.sh -p perf-testnet-solana-com -C gce -z us-west1-b \
+      RUST_LOG=morgan=warn \
+        ci/testnet-deploy.sh -p perf-testnet-morgan-com -C gce -z us-west1-b \
           -G "--machine-type n1-standard-16 --accelerator count=2,type=nvidia-tesla-v100" \
           -t "$CHANNEL_OR_TAG" -c 2 \
           -d pd-ssd \
@@ -428,9 +428,9 @@ deploy() {
       # shellcheck disable=SC2068
       NO_LEDGER_VERIFY=1 \
       NO_VALIDATOR_SANITY=1 \
-        ci/testnet-deploy.sh -p demo-testnet-solana-com -C gce ${GCE_ZONE_ARGS[@]} \
+        ci/testnet-deploy.sh -p demo-testnet-morgan-com -C gce ${GCE_ZONE_ARGS[@]} \
           -t "$CHANNEL_OR_TAG" -n "$GCE_NODE_COUNT" -c 0 -P -u -f -w \
-          -a demo-testnet-solana-com \
+          -a demo-testnet-morgan-com \
           ${skipCreate:+-e} \
           ${maybeSkipStart:+-s} \
           ${maybeStop:+-S} \
@@ -441,7 +441,7 @@ deploy() {
         # shellcheck disable=SC2068
         NO_LEDGER_VERIFY=1 \
         NO_VALIDATOR_SANITY=1 \
-          ci/testnet-deploy.sh -p demo-testnet-solana-com2 -C gce ${GCE_LOW_QUOTA_ZONE_ARGS[@]} \
+          ci/testnet-deploy.sh -p demo-testnet-morgan-com2 -C gce ${GCE_LOW_QUOTA_ZONE_ARGS[@]} \
             -t "$CHANNEL_OR_TAG" -n "$GCE_LOW_QUOTA_NODE_COUNT" -c 0 -P -f -x -w \
             ${skipCreate:+-e} \
             ${skipStart:+-s} \
@@ -541,7 +541,7 @@ sanity-or-restart)
     $metricsWriteDatapoint "testnet-manager sanity-failure=1"
 
     # TODO: Restore attempt to restart the cluster before recreating it
-    #       See https://github.com/solana-labs/solana/issues/3774
+    #       See https://github.com/morgan-labs/morgan/issues/3774
     if false; then
       if start; then
         echo Update successful

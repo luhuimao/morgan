@@ -1,11 +1,11 @@
 use bincode::serialize;
-use solana_sdk::pubkey::Pubkey;
+use morgan_sdk::pubkey::Pubkey;
 #[cfg(test)]
-use solana_sdk::rpc_port;
+use morgan_sdk::rpc_port;
 #[cfg(test)]
-use solana_sdk::signature::{Keypair, KeypairUtil};
-use solana_sdk::signature::{Signable, Signature};
-use solana_sdk::timing::timestamp;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
+use morgan_sdk::signature::{Signable, Signature};
+use morgan_sdk::timing::timestamp;
 use std::cmp::{Ord, Ordering, PartialEq, PartialOrd};
 use std::net::{IpAddr, SocketAddr};
 
@@ -323,8 +323,8 @@ mod tests {
         assert_eq!(ci.gossip.port(), 11);
         assert_eq!(ci.tvu.port(), 12);
         assert_eq!(ci.tpu_via_blobs.port(), 13);
-        assert_eq!(ci.rpc.port(), 8899);
-        assert_eq!(ci.rpc_pubsub.port(), 8900);
+        assert_eq!(ci.rpc.port(), 10099);
+        assert_eq!(ci.rpc_pubsub.port(), 10100);
         assert!(ci.storage_addr.ip().is_unspecified());
     }
     #[test]
@@ -339,8 +339,8 @@ mod tests {
         assert_eq!(d1.tvu, socketaddr!("127.0.0.1:1236"));
         assert_eq!(d1.tpu_via_blobs, socketaddr!("127.0.0.1:1237"));
         assert_eq!(d1.tpu, socketaddr!("127.0.0.1:1234"));
-        assert_eq!(d1.rpc, socketaddr!("127.0.0.1:8899"));
-        assert_eq!(d1.rpc_pubsub, socketaddr!("127.0.0.1:8900"));
+        assert_eq!(d1.rpc, socketaddr!("127.0.0.1:10099"));
+        assert_eq!(d1.rpc_pubsub, socketaddr!("127.0.0.1:10100"));
     }
 
     #[test]

@@ -7,9 +7,9 @@ use crate::cluster_info::ClusterInfo;
 use crate::cluster_info_repair_listener::ClusterInfoRepairListener;
 use crate::result::Result;
 use crate::service::Service;
-use solana_metrics::datapoint_info;
-use solana_runtime::epoch_schedule::EpochSchedule;
-use solana_sdk::pubkey::Pubkey;
+use morgan_metrics::datapoint_info;
+use morgan_runtime::epoch_schedule::EpochSchedule;
+use morgan_sdk::pubkey::Pubkey;
 use std::collections::BTreeSet;
 use std::net::UdpSocket;
 use std::ops::Bound::{Excluded, Unbounded};
@@ -82,7 +82,7 @@ impl RepairService {
         };
 
         let t_repair = Builder::new()
-            .name("solana-repair-service".to_string())
+            .name("morgan-repair-service".to_string())
             .spawn(move || {
                 Self::run(
                     &blocktree,

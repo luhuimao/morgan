@@ -10,7 +10,7 @@ cd "$(dirname "$0")"/..
 source multinode-demo/common.sh
 
 if [[ -z $1 ]]; then # no network argument, use localhost by default
-  entrypoint=(--url http://127.0.0.1:8899)
+  entrypoint=(--url http://127.0.0.1:10099)
 else
   entrypoint=("$@")
 fi
@@ -23,7 +23,7 @@ check_balance_output() {
   exec 42>&1
   attempts=3
   while [[ $attempts -gt 0 ]]; do
-    output=$($solana_wallet "${entrypoint[@]}" balance | tee >(cat - >&42))
+    output=$($morgan_wallet "${entrypoint[@]}" balance | tee >(cat - >&42))
     if [[ "$output" =~ $expected_output ]]; then
       break
     else
@@ -39,16 +39,16 @@ check_balance_output() {
 
 pay_and_confirm() {
   exec 42>&1
-  signature=$($solana_wallet "${entrypoint[@]}" pay "$@" | tee >(cat - >&42))
-  $solana_wallet "${entrypoint[@]}" confirm "$signature"
+  signature=$($morgan_wallet "${entrypoint[@]}" pay "$@" | tee >(cat - >&42))
+  $morgan_wallet "${entrypoint[@]}" confirm "$signature"
 }
 
-$solana_keygen
+$morgan_keygen
 
 node_readiness=false
 timeout=60
 while [[ $timeout -gt 0 ]]; do
-  output=$($solana_wallet "${entrypoint[@]}" get-transaction-count)
+  output=$($morgan_wallet "${entrypoint[@]}" get-transaction-count)
   if [[ -n $output ]]; then
     node_readiness=true
     break
@@ -61,11 +61,11 @@ if ! "$node_readiness"; then
   exit 1
 fi
 
-$solana_wallet "${entrypoint[@]}" address
+$morgan_wallet "${entrypoint[@]}" address
 check_balance_output "0 difs"
-$solana_wallet "${entrypoint[@]}" airdrop 60
+$morgan_wallet "${entrypoint[@]}" airdrop 60
 check_balance_output "60 difs"
-$solana_wallet "${entrypoint[@]}" airdrop 40
+$morgan_wallet "${entrypoint[@]}" airdrop 40
 check_balance_output "100 difs"
 pay_and_confirm $garbage_address 99
 check_balance_output "1 dif"

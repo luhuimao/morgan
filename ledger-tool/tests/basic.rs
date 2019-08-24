@@ -1,9 +1,9 @@
 #[macro_use]
-extern crate solana;
+extern crate morgan;
 
 use assert_cmd::prelude::*;
-use solana::blocktree::create_new_tmp_ledger;
-use solana::genesis_utils::create_genesis_block;
+use morgan::blocktree::create_new_tmp_ledger;
+use morgan::genesis_utils::create_genesis_block;
 use std::process::Command;
 use std::process::Output;
 

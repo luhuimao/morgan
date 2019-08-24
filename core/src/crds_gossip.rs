@@ -9,9 +9,9 @@ use crate::crds_gossip_pull::CrdsGossipPull;
 use crate::crds_gossip_push::{CrdsGossipPush, CRDS_GOSSIP_NUM_ACTIVE};
 use crate::crds_value::CrdsValue;
 use hashbrown::HashMap;
-use solana_runtime::bloom::Bloom;
-use solana_sdk::hash::Hash;
-use solana_sdk::pubkey::Pubkey;
+use morgan_runtime::bloom::Bloom;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::pubkey::Pubkey;
 
 ///The min size for bloom filters
 pub const CRDS_GOSSIP_BLOOM_SIZE: usize = 1000;
@@ -181,8 +181,8 @@ pub fn get_weight(max_weight: f32, time_since_last_selected: u32, stake: f32) ->
 mod test {
     use super::*;
     use crate::contact_info::ContactInfo;
-    use solana_sdk::hash::hash;
-    use solana_sdk::timing::timestamp;
+    use morgan_sdk::hash::hash;
+    use morgan_sdk::timing::timestamp;
 
     #[test]
     fn test_prune_errors() {

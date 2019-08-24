@@ -29,7 +29,7 @@ steps:
   #   agents:
   #     - "queue=large"
   - wait
-  - trigger: "solana-secondary"
+  - trigger: "morgan-secondary"
     branches: "!pull/*"
     async: true
     build:

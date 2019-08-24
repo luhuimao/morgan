@@ -1,9 +1,9 @@
-use solana_sdk::account::KeyedAccount;
-use solana_sdk::instruction::InstructionError;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::solana_entrypoint;
+use morgan_sdk::account::KeyedAccount;
+use morgan_sdk::instruction::InstructionError;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::morgan_entrypoint;
 
-solana_entrypoint!(entrypoint);
+morgan_entrypoint!(entrypoint);
 fn entrypoint(
     _program_id: &Pubkey,
     _keyed_accounts: &mut [KeyedAccount],

@@ -22,7 +22,7 @@ schedule is recomputed locally and periodically. It assigns slot leaders for a
 duration of time called an _epoch_. The schedule must be computed far in advance
 of the slots it assigns, such that the ledger state it uses to compute the
 schedule is finalized. That duration is called the *leader schedule offset*.
-Solana sets the offset to the duration of slots until the next epoch. That is,
+Morgan sets the offset to the duration of slots until the next epoch. That is,
 the leader schedule for an epoch is calculated from the ledger state at the
 start of the previous epoch. The offset of one epoch is fairly arbitrary and
 assumed to be sufficiently long such that all validators will have finalized

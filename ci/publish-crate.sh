@@ -40,7 +40,7 @@ for Cargo_toml in $Cargo_tomls; do
     set -x
     crate=$(dirname "$Cargo_toml")
     # TODO: the rocksdb package does not build with the stock rust docker image,
-    # so use the solana rust docker image until this is resolved upstream
+    # so use the morgan rust docker image until this is resolved upstream
     source ci/rust-version.sh
     ci/docker-run.sh "$rust_stable_docker_image" bash -exc "cd $crate; $cargoCommand"
   ) || true # <-- Don't fail.  We want to be able to retry the job in cases when a publish fails halfway due to network/cloud issues

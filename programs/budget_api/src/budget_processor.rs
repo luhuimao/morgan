@@ -5,9 +5,9 @@ use crate::budget_state::{BudgetError, BudgetState};
 use bincode::deserialize;
 use chrono::prelude::{DateTime, Utc};
 use log::*;
-use solana_sdk::account::KeyedAccount;
-use solana_sdk::instruction::InstructionError;
-use solana_sdk::pubkey::Pubkey;
+use morgan_sdk::account::KeyedAccount;
+use morgan_sdk::instruction::InstructionError;
+use morgan_sdk::pubkey::Pubkey;
 
 /// Process a Witness Signature. Any payment plans waiting on this signature
 /// will progress one step.
@@ -145,14 +145,14 @@ mod tests {
     use super::*;
     use crate::budget_instruction;
     use crate::id;
-    use solana_runtime::bank::Bank;
-    use solana_runtime::bank_client::BankClient;
-    use solana_sdk::client::SyncClient;
-    use solana_sdk::genesis_block::create_genesis_block;
-    use solana_sdk::instruction::InstructionError;
-    use solana_sdk::message::Message;
-    use solana_sdk::signature::{Keypair, KeypairUtil};
-    use solana_sdk::transaction::TransactionError;
+    use morgan_runtime::bank::Bank;
+    use morgan_runtime::bank_client::BankClient;
+    use morgan_sdk::client::SyncClient;
+    use morgan_sdk::genesis_block::create_genesis_block;
+    use morgan_sdk::instruction::InstructionError;
+    use morgan_sdk::message::Message;
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_sdk::transaction::TransactionError;
 
     fn create_bank(difs: u64) -> (Bank, Keypair) {
         let (genesis_block, mint_keypair) = create_genesis_block(difs);

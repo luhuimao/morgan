@@ -1,7 +1,7 @@
 use clap::{crate_description, crate_name, crate_version, App, Arg};
-use solana::packet::{Packet, Packets, BLOB_SIZE, PACKET_DATA_SIZE};
-use solana::result::Result;
-use solana::streamer::{receiver, PacketReceiver};
+use morgan::packet::{Packet, Packets, BLOB_SIZE, PACKET_DATA_SIZE};
+use morgan::result::Result;
+use morgan::streamer::{receiver, PacketReceiver};
 use std::cmp::max;
 use std::net::{IpAddr, Ipv4Addr, SocketAddr, UdpSocket};
 use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
@@ -75,7 +75,7 @@ fn main() -> Result<()> {
     let mut read_channels = Vec::new();
     let mut read_threads = Vec::new();
     for _ in 0..num_sockets {
-        let read = solana_netutil::bind_to(port, false).unwrap();
+        let read = morgan_netutil::bind_to(port, false).unwrap();
         read.set_read_timeout(Some(Duration::new(1, 0))).unwrap();
 
         addr = read.local_addr().unwrap();

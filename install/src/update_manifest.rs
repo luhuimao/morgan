@@ -1,7 +1,7 @@
 use serde_derive::{Deserialize, Serialize};
-use solana_config_api::ConfigState;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{Signable, Signature};
+use morgan_config_api::ConfigState;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{Signable, Signature};
 use std::error;
 use std::io;
 

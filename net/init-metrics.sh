@@ -29,7 +29,7 @@ loadConfigFile
 
 useEnv=false
 delete=false
-host="https://metrics.solana.com:8086"
+host="https://metrics.morgan.com:8086"
 while getopts "hde" opt; do
   case $opt in
   h|\?)

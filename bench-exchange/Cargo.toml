@@ -1,11 +1,11 @@
 [package]
-authors = ["Solana Maintainers <maintainers@solana.com>"]
+authors = ["Morgan Maintainers <maintainers@morgan.com>"]
 edition = "2018"
-name = "solana-bench-exchange"
+name = "morgan-bench-exchange"
 version = "0.15.3"
-repository = "https://github.com/solana-labs/solana"
+repository = "https://github.com/morgan-labs/morgan"
 license = "Apache-2.0"
-homepage = "https://solana.com/"
+homepage = "https://morgan.com/"
 publish = false
 
 [dependencies]
@@ -22,20 +22,20 @@ rayon = "1.0.3"
 serde = "1.0.91"
 serde_derive = "1.0.91"
 serde_json = "1.0.38"
-# solana-runtime = { path = "../solana/runtime"}
-solana = { path = "../core", version = "0.15.3"     }
-solana-client = { path = "../client", version = "0.15.3"     }
-solana-drone = { path = "../drone", version = "0.15.3"     }
-solana-exchange-api = { path = "../programs/exchange_api", version = "0.15.3"     }
-solana-exchange-program = { path = "../programs/exchange_program", version = "0.15.3"     }
-solana-logger = { path = "../logger", version = "0.15.3"     }
-solana-metrics = { path = "../metrics", version = "0.15.3"     }
-solana-netutil = { path = "../netutil", version = "0.15.3"     }
-solana-runtime = { path = "../runtime", version = "0.15.3"     }
-solana-sdk = { path = "../sdk", version = "0.15.3"     }
+# morgan-runtime = { path = "../morgan/runtime"}
+morgan = { path = "../core", version = "0.15.3"     }
+morgan-client = { path = "../client", version = "0.15.3"     }
+morgan-drone = { path = "../drone", version = "0.15.3"     }
+morgan-exchange-api = { path = "../programs/exchange_api", version = "0.15.3"     }
+morgan-exchange-program = { path = "../programs/exchange_program", version = "0.15.3"     }
+morgan-logger = { path = "../logger", version = "0.15.3"     }
+morgan-metrics = { path = "../metrics", version = "0.15.3"     }
+morgan-netutil = { path = "../netutil", version = "0.15.3"     }
+morgan-runtime = { path = "../runtime", version = "0.15.3"     }
+morgan-sdk = { path = "../sdk", version = "0.15.3"     }
 ws = "0.8.1"
 untrusted = "0.6.2"
 
 [features]
-cuda = ["solana/cuda"]
+cuda = ["morgan/cuda"]
 erasure = []

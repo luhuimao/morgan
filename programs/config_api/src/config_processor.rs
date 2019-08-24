@@ -1,9 +1,9 @@
 //! Config program
 
 use log::*;
-use solana_sdk::account::KeyedAccount;
-use solana_sdk::instruction::InstructionError;
-use solana_sdk::pubkey::Pubkey;
+use morgan_sdk::account::KeyedAccount;
+use morgan_sdk::instruction::InstructionError;
+use morgan_sdk::pubkey::Pubkey;
 
 pub fn process_instruction(
     _program_id: &Pubkey,
@@ -31,13 +31,13 @@ mod tests {
     use crate::{config_instruction, id, ConfigState};
     use bincode::{deserialize, serialized_size};
     use serde_derive::{Deserialize, Serialize};
-    use solana_runtime::bank::Bank;
-    use solana_runtime::bank_client::BankClient;
-    use solana_sdk::client::SyncClient;
-    use solana_sdk::genesis_block::create_genesis_block;
-    use solana_sdk::message::Message;
-    use solana_sdk::signature::{Keypair, KeypairUtil};
-    use solana_sdk::system_instruction;
+    use morgan_runtime::bank::Bank;
+    use morgan_runtime::bank_client::BankClient;
+    use morgan_sdk::client::SyncClient;
+    use morgan_sdk::genesis_block::create_genesis_block;
+    use morgan_sdk::message::Message;
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_sdk::system_instruction;
 
     #[derive(Serialize, Deserialize, Default, Debug, PartialEq)]
     struct MyConfig {
@@ -86,7 +86,7 @@ mod tests {
 
     #[test]
     fn test_process_create_ok() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let (bank, mint_keypair) = create_bank(10_000);
         let (bank_client, config_keypair) = create_config_account(bank, &mint_keypair);
         let config_account_data = bank_client
@@ -101,7 +101,7 @@ mod tests {
 
     #[test]
     fn test_process_store_ok() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let (bank, mint_keypair) = create_bank(10_000);
         let (bank_client, config_keypair) = create_config_account(bank, &mint_keypair);
         let config_pubkey = config_keypair.pubkey();
@@ -126,7 +126,7 @@ mod tests {
 
     #[test]
     fn test_process_store_fail_instruction_data_too_large() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let (bank, mint_keypair) = create_bank(10_000);
         let (bank_client, config_keypair) = create_config_account(bank, &mint_keypair);
         let config_pubkey = config_keypair.pubkey();
@@ -143,7 +143,7 @@ mod tests {
 
     #[test]
     fn test_process_store_fail_account0_not_signer() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let (bank, mint_keypair) = create_bank(10_000);
         let system_keypair = Keypair::new();
         let system_pubkey = system_keypair.pubkey();

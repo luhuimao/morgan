@@ -3,10 +3,10 @@
 //!  and give reward for good proofs.
 use crate::storage_contract::StorageAccount;
 use crate::storage_instruction::StorageInstruction;
-use solana_sdk::account::KeyedAccount;
-use solana_sdk::instruction::InstructionError;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::timing::DEFAULT_TICKS_PER_SLOT;
+use morgan_sdk::account::KeyedAccount;
+use morgan_sdk::instruction::InstructionError;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::timing::DEFAULT_TICKS_PER_SLOT;
 
 pub fn process_instruction(
     _program_id: &Pubkey,
@@ -14,7 +14,7 @@ pub fn process_instruction(
     data: &[u8],
     tick_height: u64,
 ) -> Result<(), InstructionError> {
-    solana_logger::setup();
+    morgan_logger::setup();
 
     let (me, rest) = keyed_accounts.split_at_mut(1);
     let me_unsigned = me[0].signer_key().is_none();
@@ -103,16 +103,16 @@ mod tests {
     use assert_matches::assert_matches;
     use bincode::deserialize;
     use log::*;
-    use solana_runtime::bank::Bank;
-    use solana_runtime::bank_client::BankClient;
-    use solana_sdk::account::{create_keyed_accounts, Account};
-    use solana_sdk::client::SyncClient;
-    use solana_sdk::genesis_block::create_genesis_block;
-    use solana_sdk::hash::{hash, Hash};
-    use solana_sdk::instruction::Instruction;
-    use solana_sdk::message::Message;
-    use solana_sdk::pubkey::Pubkey;
-    use solana_sdk::signature::{Keypair, KeypairUtil, Signature};
+    use morgan_runtime::bank::Bank;
+    use morgan_runtime::bank_client::BankClient;
+    use morgan_sdk::account::{create_keyed_accounts, Account};
+    use morgan_sdk::client::SyncClient;
+    use morgan_sdk::genesis_block::create_genesis_block;
+    use morgan_sdk::hash::{hash, Hash};
+    use morgan_sdk::instruction::Instruction;
+    use morgan_sdk::message::Message;
+    use morgan_sdk::pubkey::Pubkey;
+    use morgan_sdk::signature::{Keypair, KeypairUtil, Signature};
     use std::collections::HashMap;
     use std::sync::Arc;
 
@@ -210,7 +210,7 @@ mod tests {
 
     #[test]
     fn test_submit_mining_invalid_slot() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let pubkey = Pubkey::new_rand();
         let mut accounts = [Account::default(), Account::default()];
         accounts[0].data.resize(STORAGE_ACCOUNT_SPACE as usize, 0);
@@ -225,7 +225,7 @@ mod tests {
 
     #[test]
     fn test_submit_mining_ok() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let pubkey = Pubkey::new_rand();
         let mut accounts = [Account::default(), Account::default()];
         accounts[0].data.resize(STORAGE_ACCOUNT_SPACE as usize, 0);
@@ -247,7 +247,7 @@ mod tests {
 
     #[test]
     fn test_validate_mining() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let (genesis_block, mint_keypair) = create_genesis_block(1000);
         let mint_pubkey = mint_keypair.pubkey();
 

@@ -1,4 +1,4 @@
-use solana_vote_api::vote_state::MAX_LOCKOUT_HISTORY;
+use morgan_vote_api::vote_state::MAX_LOCKOUT_HISTORY;
 
 pub const MINIMUM_SLOT_LENGTH: usize = MAX_LOCKOUT_HISTORY + 1;
 

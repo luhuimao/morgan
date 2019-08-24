@@ -30,7 +30,7 @@ Operate a configured testnet
    -t edge|beta|stable|vX.Y.Z         - Deploy the latest tarball release for the
                                         specified release channel (edge|beta|stable) or release tag
                                         (vX.Y.Z)
-   -i update_manifest_keypair         - Deploy the tarball using 'solana-install deploy ...'
+   -i update_manifest_keypair         - Deploy the tarball using 'morgan-install deploy ...'
                                         (-t option must be supplied as well)
    -f [cargoFeatures]                 - List of |cargo --feaures=| to activate
                                         (ignored if -s or -S is specified)
@@ -58,7 +58,7 @@ Operate a configured testnet
    -F                   - Discard validator nodes that didn't bootup successfully
    -o noLedgerVerify    - Skip ledger verification
    -o noValidatorSanity - Skip fullnode sanity
-   -o noInstallCheck    - Skip solana-install sanity
+   -o noInstallCheck    - Skip morgan-install sanity
    -o rejectExtraNodes  - Require the exact number of nodes
 
  stop-specific options:
@@ -272,24 +272,24 @@ startCommon() {
   if $skipSetup; then
     ssh "${sshOptions[@]}" "$ipAddress" "
       set -x;
-      mkdir -p ~/solana/config{,-local}
+      mkdir -p ~/morgan/config{,-local}
       rm -rf ~/config{,-local};
-      mv ~/solana/config{,-local} ~;
-      rm -rf ~/solana;
-      mkdir -p ~/solana ~/.cargo/bin;
-      mv ~/config{,-local} ~/solana/
+      mv ~/morgan/config{,-local} ~;
+      rm -rf ~/morgan;
+      mkdir -p ~/morgan ~/.cargo/bin;
+      mv ~/config{,-local} ~/morgan/
     "
   else
     ssh "${sshOptions[@]}" "$ipAddress" "
       set -x;
-      rm -rf ~/solana;
+      rm -rf ~/morgan;
       mkdir -p ~/.cargo/bin
     "
   fi
-  [[ -z "$externalNodeSshKey" ]] || ssh-copy-id -f -i "$externalNodeSshKey" "${sshOptions[@]}" "solana@$ipAddress"
+  [[ -z "$externalNodeSshKey" ]] || ssh-copy-id -f -i "$externalNodeSshKey" "${sshOptions[@]}" "morgan@$ipAddress"
   rsync -vPrc -e "ssh ${sshOptions[*]}" \
     "$SOLANA_ROOT"/{fetch-perf-libs.sh,scripts,net,multinode-demo} \
-    "$ipAddress":~/solana/
+    "$ipAddress":~/morgan/
 }
 
 startBootstrapLeader() {
@@ -305,7 +305,7 @@ startBootstrapLeader() {
     startCommon "$ipAddress" || exit 1
     case $deployMethod in
     tar)
-      rsync -vPrc -e "ssh ${sshOptions[*]}" "$SOLANA_ROOT"/solana-release/bin/* "$ipAddress:~/.cargo/bin/"
+      rsync -vPrc -e "ssh ${sshOptions[*]}" "$SOLANA_ROOT"/morgan-release/bin/* "$ipAddress:~/.cargo/bin/"
       ;;
     local)
       rsync -vPrc -e "ssh ${sshOptions[*]}" "$SOLANA_ROOT"/farf/bin/* "$ipAddress:~/.cargo/bin/"
@@ -316,7 +316,7 @@ startBootstrapLeader() {
     esac
 
     ssh "${sshOptions[@]}" -n "$ipAddress" \
-      "./solana/net/remote/remote-node.sh \
+      "./morgan/net/remote/remote-node.sh \
          $deployMethod \
          bootstrap-leader \
          $entrypointIp \
@@ -344,7 +344,7 @@ startNode() {
     set -x
     startCommon "$ipAddress"
     ssh "${sshOptions[@]}" -n "$ipAddress" \
-      "./solana/net/remote/remote-node.sh \
+      "./morgan/net/remote/remote-node.sh \
          $deployMethod \
          $nodeType \
          $entrypointIp \
@@ -370,7 +370,7 @@ startClient() {
     set -x
     startCommon "$ipAddress"
     ssh "${sshOptions[@]}" -f "$ipAddress" \
-      "./solana/net/remote/remote-client.sh $deployMethod $entrypointIp \
+      "./morgan/net/remote/remote-client.sh $deployMethod $entrypointIp \
       $clientToRun \"$RUST_LOG\" \"$benchTpsExtraArgs\" \"$benchExchangeExtraArgs\""
   ) >> "$logFile" 2>&1 || {
     cat "$logFile"
@@ -393,7 +393,7 @@ sanity() {
     set -x
     # shellcheck disable=SC2029 # remote-client.sh args are expanded on client side intentionally
     ssh "${sshOptions[@]}" "$bootstrapLeader" \
-      "./solana/net/remote/remote-sanity.sh $bootstrapLeader $sanityExtraArgs \"$RUST_LOG\""
+      "./morgan/net/remote/remote-sanity.sh $bootstrapLeader $sanityExtraArgs \"$RUST_LOG\""
   ) || ok=false
   $ok || exit 1
 
@@ -404,7 +404,7 @@ sanity() {
       set -x
       # shellcheck disable=SC2029 # remote-client.sh args are expanded on client side intentionally
       ssh "${sshOptions[@]}" "$blockstreamer" \
-        "./solana/net/remote/remote-sanity.sh $blockstreamer $sanityExtraArgs -o noLedgerVerify -o noValidatorSanity \"$RUST_LOG\""
+        "./morgan/net/remote/remote-sanity.sh $blockstreamer $sanityExtraArgs -o noLedgerVerify -o noValidatorSanity \"$RUST_LOG\""
     ) || ok=false
     $ok || exit 1
   fi
@@ -422,15 +422,15 @@ deployUpdate() {
   declare ok=true
   declare bootstrapLeader=${fullnodeIpList[0]}
 
-  echo "--- Deploying solana-install update: $updateDownloadUrl"
+  echo "--- Deploying morgan-install update: $updateDownloadUrl"
   (
     set -x
     timeout 30s scp "${sshOptions[@]}" \
-      "$updateManifestKeypairFile" "$bootstrapLeader:solana/update_manifest_keypair.json"
+      "$updateManifestKeypairFile" "$bootstrapLeader:morgan/update_manifest_keypair.json"
 
     # shellcheck disable=SC2029 # remote-deploy-update.sh args are expanded on client side intentionally
     ssh "${sshOptions[@]}" "$bootstrapLeader" \
-      "./solana/net/remote/remote-deploy-update.sh $updateDownloadUrl \"$RUST_LOG\""
+      "./morgan/net/remote/remote-deploy-update.sh $updateDownloadUrl \"$RUST_LOG\""
   ) || ok=false
   $ok || exit 1
 }
@@ -439,13 +439,13 @@ start() {
   case $deployMethod in
   tar)
     if [[ -n $releaseChannel ]]; then
-      rm -f "$SOLANA_ROOT"/solana-release.tar.bz2
-      updateDownloadUrl=http://release.solana.com/"$releaseChannel"/solana-release-x86_64-unknown-linux-gnu.tar.bz2
+      rm -f "$SOLANA_ROOT"/morgan-release.tar.bz2
+      updateDownloadUrl=http://release.morgan.com/"$releaseChannel"/morgan-release-x86_64-unknown-linux-gnu.tar.bz2
       (
         set -x
-        curl -o "$SOLANA_ROOT"/solana-release.tar.bz2 "$updateDownloadUrl"
+        curl -o "$SOLANA_ROOT"/morgan-release.tar.bz2 "$updateDownloadUrl"
       )
-      tarballFilename="$SOLANA_ROOT"/solana-release.tar.bz2
+      tarballFilename="$SOLANA_ROOT"/morgan-release.tar.bz2
     else
       if [[ -n $updateManifestKeypairFile ]]; then
         echo "Error: -i argument was provided but -t was not"
@@ -454,9 +454,9 @@ start() {
     fi
     (
       set -x
-      rm -rf "$SOLANA_ROOT"/solana-release
+      rm -rf "$SOLANA_ROOT"/morgan-release
       (cd "$SOLANA_ROOT"; tar jxv) < "$tarballFilename"
-      cat "$SOLANA_ROOT"/solana-release/version.yml
+      cat "$SOLANA_ROOT"/morgan-release/version.yml
     )
     ;;
   local)
@@ -534,9 +534,9 @@ start() {
   SECONDS=0
   for ((i=0; i < "$numClients" && i < "$numClientsRequested"; i++)) do
     if [[ $i -lt "$numBenchTpsClients" ]]; then
-      startClient "${clientIpList[$i]}" "solana-bench-tps"
+      startClient "${clientIpList[$i]}" "morgan-bench-tps"
     else
-      startClient "${clientIpList[$i]}" "solana-bench-exchange"
+      startClient "${clientIpList[$i]}" "morgan-bench-exchange"
     fi
   done
   clientDeployTime=$SECONDS
@@ -553,7 +553,7 @@ start() {
     networkVersion="$(
       (
         set -o pipefail
-        grep "^commit: " "$SOLANA_ROOT"/solana-release/version.yml | head -n1 | cut -d\  -f2
+        grep "^commit: " "$SOLANA_ROOT"/morgan-release/version.yml | head -n1 | cut -d\  -f2
       ) || echo "tar-unknown"
     )"
     ;;
@@ -590,11 +590,11 @@ stopNode() {
       PS4=\"$PS4\"
       set -x
       ! tmux list-sessions || tmux kill-session
-      for pid in solana/{net-stats,oom-monitor}.pid; do
+      for pid in morgan/{net-stats,oom-monitor}.pid; do
         pgid=\$(ps opgid= \$(cat \$pid) | tr -d '[:space:]')
         sudo kill -- -\$pgid
       done
-      for pattern in node solana- remote-; do
+      for pattern in node morgan- remote-; do
         pkill -9 \$pattern
       done
     "
@@ -661,7 +661,7 @@ logs)
     (
       set -x
       timeout 30s scp "${sshOptions[@]}" \
-        "$ipAddress":solana/"$log".log "$netLogDir"/remote-"$log"-"$ipAddress".log
+        "$ipAddress":morgan/"$log".log "$netLogDir"/remote-"$log"-"$ipAddress".log
     ) || echo "failed to fetch log"
   }
   fetchRemoteLog "${fullnodeIpList[0]}" drone

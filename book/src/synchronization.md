@@ -1,6 +1,6 @@
 # Synchronization
 
-Fast, reliable synchronization is the biggest reason Solana is able to achieve
+Fast, reliable synchronization is the biggest reason Morgan is able to achieve
 such high throughput. Traditional blockchains synchronize on large chunks of
 transactions called blocks. By synchronizing on blocks, a transaction cannot be
 processed until a duration called "block time" has passed. In Proof of Work
@@ -15,20 +15,20 @@ hour or two. To workaround the workaround, these systems lengthen block times
 to provide reasonable certainty that the median timestamp on each block is
 always increasing.
 
-Solana takes a very different approach, which it calls *Proof of History* or
+Morgan takes a very different approach, which it calls *Proof of History* or
 *PoH*. Leader nodes "timestamp" blocks with cryptographic proofs that some
 duration of time has passed since the last proof. All data hashed into the
 proof most certainly have occurred before the proof was generated. The node
 then shares the new block with validator nodes, which are able to verify those
 proofs. The blocks can arrive at validators in any order or even could be
-replayed years later. With such reliable synchronization guarantees, Solana is
+replayed years later. With such reliable synchronization guarantees, Morgan is
 able to break blocks into smaller batches of transactions called *entries*.
 Entries are streamed to validators in realtime, before any notion of block
 consensus.
 
-Solana technically never sends a *block*, but uses the term to describe the
+Morgan technically never sends a *block*, but uses the term to describe the
 sequence of entries that fullnodes vote on to achieve *confirmation*. In that
-way, Solana's confirmation times can be compared apples to apples to
+way, Morgan's confirmation times can be compared apples to apples to
 block-based systems. The current implementation sets block time to 800ms.
 
 What's happening under the hood is that entries are streamed to validators as
@@ -41,25 +41,25 @@ its state. This optimisic processing technique was introduced in 1981 and
 called [Optimistic Concurrency
 Control](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.65.4735).  It
 can be applied to blockchain architecture where a cluster votes on a hash that
-represents the full ledger up to some *block height*. In Solana, it is
+represents the full ledger up to some *block height*. In Morgan, it is
 implemented trivially using the last entry's PoH hash.
 
 ### Relationship to VDFs
 
 The Proof of History technique was first described for use in blockchain by
-Solana in November of 2017. In June of the following year, a similar technique
+Morgan in November of 2017. In June of the following year, a similar technique
 was described at Stanford and called a [verifiable delay
 function](https://eprint.iacr.org/2018/601.pdf) or *VDF*.
 
-A desirable property of a VDF is that verification time is very fast. Solana's
+A desirable property of a VDF is that verification time is very fast. Morgan's
 approach to verifying its delay function is proportional to the time it took to
-create it. Split over a 4000 core GPU, it is sufficiently fast for Solana's
+create it. Split over a 4000 core GPU, it is sufficiently fast for Morgan's
 needs, but if you asked the authors of the paper cited above, they might tell you
-([and have](https://github.com/solana-labs/solana/issues/388)) that Solana's
+([and have](https://github.com/morgan-labs/morgan/issues/388)) that Morgan's
 approach is algorithmically slow and it shouldn't be called a VDF. We argue the
 term VDF should represent the category of verifiable delay functions and not
 just the subset with certain performance characteristics. Until that's
-resolved, Solana will likely continue using the term PoH for its
+resolved, Morgan will likely continue using the term PoH for its
 application-specific VDF.
 
 Another difference between PoH and VDFs is that a VDF is used only for tracking
@@ -68,20 +68,20 @@ application observed.  That data is a double-edged sword. On one side, the data
 "proves history" - that the data most certainly existed before hashes after it.
 On the side, it means the application can manipulate the hash chain by changing
 *when* the data is hashed. The PoH chain therefore does not serve as a good
-source of randomness whereas a VDF without that data could. Solana's [leader
+source of randomness whereas a VDF without that data could. Morgan's [leader
 rotation algorithm](#leader-rotation), for example, is derived only from the
 VDF *height* and not its hash at that height.
 
 ### Relationship to Consensus Mechanisms
 
 Proof of History is not a consensus mechanism, but it is used to improve the
-performance of Solana's Proof of Stake consensus. It is also used to improve
+performance of Morgan's Proof of Stake consensus. It is also used to improve
 the performance of the data plane and replication protocols.
 
 ### More on Proof of History
 
 * [water clock
-  analogy](https://medium.com/solana-labs/proof-of-history-explained-by-a-water-clock-e682183417b8)
+  analogy](https://medium.com/morgan-labs/proof-of-history-explained-by-a-water-clock-e682183417b8)
 
 * [Proof of History
-  overview](https://medium.com/solana-labs/proof-of-history-a-clock-for-blockchain-cf47a61a9274)
+  overview](https://medium.com/morgan-labs/proof-of-history-a-clock-for-blockchain-cf47a61a9274)

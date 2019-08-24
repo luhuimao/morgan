@@ -12,15 +12,15 @@ use crate::service::Service;
 use bincode::deserialize;
 use rand::{Rng, SeedableRng};
 use rand_chacha::ChaChaRng;
-use solana_sdk::hash::Hash;
-use solana_sdk::instruction::Instruction;
-use solana_sdk::message::Message;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{Keypair, KeypairUtil, Signature};
-use solana_sdk::transaction::Transaction;
-use solana_storage_api::storage_contract::{CheckedProof, Proof, ProofStatus};
-use solana_storage_api::storage_instruction::{proof_validation, StorageInstruction};
-use solana_storage_api::{get_segment_from_slot, storage_instruction};
+use morgan_sdk::hash::Hash;
+use morgan_sdk::instruction::Instruction;
+use morgan_sdk::message::Message;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{Keypair, KeypairUtil, Signature};
+use morgan_sdk::transaction::Transaction;
+use morgan_storage_api::storage_contract::{CheckedProof, Proof, ProofStatus};
+use morgan_storage_api::storage_instruction::{proof_validation, StorageInstruction};
+use morgan_storage_api::{get_segment_from_slot, storage_instruction};
 use std::collections::HashMap;
 use std::io;
 use std::mem::size_of;
@@ -148,7 +148,7 @@ impl StorageStage {
             let exit = exit.clone();
             let storage_keypair = storage_keypair.clone();
             Builder::new()
-                .name("solana-storage-mining-verify-stage".to_string())
+                .name("morgan-storage-mining-verify-stage".to_string())
                 .spawn(move || {
                     let mut current_key = 0;
                     let mut slot_count = 0;
@@ -190,7 +190,7 @@ impl StorageStage {
             let storage_keypair = storage_keypair.clone();
             let bank_forks = bank_forks.clone();
             Builder::new()
-                .name("solana-storage-create-accounts".to_string())
+                .name("morgan-storage-create-accounts".to_string())
                 .spawn(move || {
                     let transactions_socket = UdpSocket::bind("0.0.0.0:0").unwrap();
 
@@ -435,7 +435,7 @@ impl StorageStage {
                             for instruction in tx.message.instructions.iter() {
                                 let program_id =
                                     tx.message.account_keys[instruction.program_ids_index as usize];
-                                if solana_storage_api::check_id(&program_id) {
+                                if morgan_storage_api::check_id(&program_id) {
                                     let storage_account_key =
                                         tx.message.account_keys[instruction.accounts[0] as usize];
                                     Self::process_storage_transaction(
@@ -532,11 +532,11 @@ mod tests {
     use crate::genesis_utils::{create_genesis_block, GenesisBlockInfo};
     use crate::service::Service;
     use rayon::prelude::*;
-    use solana_runtime::bank::Bank;
-    use solana_sdk::hash::{Hash, Hasher};
-    use solana_sdk::pubkey::Pubkey;
-    use solana_sdk::signature::{Keypair, KeypairUtil};
-    use solana_storage_api::SLOTS_PER_SEGMENT;
+    use morgan_runtime::bank::Bank;
+    use morgan_sdk::hash::{Hash, Hasher};
+    use morgan_sdk::pubkey::Pubkey;
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_storage_api::SLOTS_PER_SEGMENT;
     use std::cmp::{max, min};
     use std::fs::remove_dir_all;
     use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
@@ -580,7 +580,7 @@ mod tests {
 
     #[test]
     fn test_storage_stage_process_entries() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let keypair = Arc::new(Keypair::new());
         let storage_keypair = Arc::new(Keypair::new());
         let exit = Arc::new(AtomicBool::new(false));
@@ -655,7 +655,7 @@ mod tests {
 
     #[test]
     fn test_storage_stage_process_proof_entries() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let keypair = Arc::new(Keypair::new());
         let storage_keypair = Arc::new(Keypair::new());
         let exit = Arc::new(AtomicBool::new(false));

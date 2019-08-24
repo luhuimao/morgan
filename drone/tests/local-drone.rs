@@ -1,10 +1,10 @@
-use solana_drone::drone::{request_airdrop_transaction, run_local_drone};
-use solana_sdk::hash::Hash;
-use solana_sdk::message::Message;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{Keypair, KeypairUtil};
-use solana_sdk::system_instruction;
-use solana_sdk::transaction::Transaction;
+use morgan_drone::drone::{request_airdrop_transaction, run_local_drone};
+use morgan_sdk::hash::Hash;
+use morgan_sdk::message::Message;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
+use morgan_sdk::system_instruction;
+use morgan_sdk::transaction::Transaction;
 use std::sync::mpsc::channel;
 
 #[test]

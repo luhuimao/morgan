@@ -27,8 +27,8 @@
 use crate::crds_value::{CrdsValue, CrdsValueLabel};
 use bincode::serialize;
 use indexmap::map::IndexMap;
-use solana_sdk::hash::{hash, Hash};
-use solana_sdk::pubkey::Pubkey;
+use morgan_sdk::hash::{hash, Hash};
+use morgan_sdk::pubkey::Pubkey;
 use std::cmp;
 
 #[derive(Clone)]

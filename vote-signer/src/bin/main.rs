@@ -1,5 +1,5 @@
 use clap::{crate_description, crate_name, crate_version, App, Arg};
-use solana_vote_signer::rpc::VoteSignerRpcService;
+use morgan_vote_signer::rpc::VoteSignerRpcService;
 use std::error;
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use std::sync::atomic::AtomicBool;
@@ -7,7 +7,7 @@ use std::sync::Arc;
 pub const RPC_PORT: u16 = 8989;
 
 fn main() -> Result<(), Box<error::Error>> {
-    solana_metrics::set_panic_hook("vote-signer");
+    morgan_metrics::set_panic_hook("vote-signer");
 
     let matches = App::new(crate_name!())
         .about(crate_description!())

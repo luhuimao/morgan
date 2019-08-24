@@ -9,7 +9,7 @@ A persistent file addressed by [public key](#public-key) and with
 
 #### app
 
-A front-end application that interacts with a Solana cluster.
+A front-end application that interacts with a Morgan cluster.
 
 #### blob
 
@@ -230,7 +230,7 @@ produces a [block](#block).
 #### sol
 
 The [native token](#native-token) tracked by a [cluster](#cluster) recognized
-by the company Solana.
+by the company Morgan.
 
 #### stake
 

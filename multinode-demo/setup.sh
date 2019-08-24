@@ -8,11 +8,11 @@ set -e
 "$here"/clear-config.sh
 
 # Create genesis ledger
-$solana_keygen -o "$SOLANA_CONFIG_DIR"/mint-keypair.json
-$solana_keygen -o "$SOLANA_CONFIG_DIR"/bootstrap-leader-keypair.json
-$solana_keygen -o "$SOLANA_CONFIG_DIR"/bootstrap-leader-vote-keypair.json
-$solana_keygen -o "$SOLANA_CONFIG_DIR"/bootstrap-leader-stake-keypair.json
-$solana_keygen -o "$SOLANA_CONFIG_DIR"/bootstrap-leader-storage-keypair.json
+$morgan_keygen -o "$SOLANA_CONFIG_DIR"/mint-keypair.json
+$morgan_keygen -o "$SOLANA_CONFIG_DIR"/bootstrap-leader-keypair.json
+$morgan_keygen -o "$SOLANA_CONFIG_DIR"/bootstrap-leader-vote-keypair.json
+$morgan_keygen -o "$SOLANA_CONFIG_DIR"/bootstrap-leader-stake-keypair.json
+$morgan_keygen -o "$SOLANA_CONFIG_DIR"/bootstrap-leader-storage-keypair.json
 
 args=("$@")
 default_arg --bootstrap-leader-keypair "$SOLANA_CONFIG_DIR"/bootstrap-leader-keypair.json
@@ -24,7 +24,7 @@ default_arg --mint "$SOLANA_CONFIG_DIR"/mint-keypair.json
 default_arg --difs 100000000000000
 default_arg --hashes-per-tick sleep
 
-$solana_genesis "${args[@]}"
+$morgan_genesis "${args[@]}"
 
 test -d "$SOLANA_RSYNC_CONFIG_DIR"/ledger
 cp -a "$SOLANA_RSYNC_CONFIG_DIR"/ledger "$SOLANA_CONFIG_DIR"/bootstrap-leader-ledger

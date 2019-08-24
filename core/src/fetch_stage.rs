@@ -4,8 +4,8 @@ use crate::poh_recorder::PohRecorder;
 use crate::result::{Error, Result};
 use crate::service::Service;
 use crate::streamer::{self, PacketReceiver, PacketSender};
-use solana_metrics::{inc_new_counter_debug, inc_new_counter_info};
-use solana_sdk::timing::DEFAULT_TICKS_PER_SLOT;
+use morgan_metrics::{inc_new_counter_debug, inc_new_counter_info};
+use morgan_sdk::timing::DEFAULT_TICKS_PER_SLOT;
 use std::net::UdpSocket;
 use std::sync::atomic::AtomicBool;
 use std::sync::mpsc::{channel, RecvTimeoutError};
@@ -99,7 +99,7 @@ impl FetchStage {
         let poh_recorder = poh_recorder.clone();
 
         let fwd_thread_hdl = Builder::new()
-            .name("solana-fetch-stage-fwd-rcvr".to_string())
+            .name("morgan-fetch-stage-fwd-rcvr".to_string())
             .spawn(move || loop {
                 if let Err(e) =
                     Self::handle_forwarded_packets(&forward_receiver, &sender, &poh_recorder)

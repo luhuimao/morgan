@@ -26,12 +26,12 @@ if [[ -f "$SOLANA_ROOT"/target/perf-libs/env.sh ]]; then
 fi
 
 if [[ -n $USE_INSTALL || ! -f "$SOLANA_ROOT"/Cargo.toml ]]; then
-  solana_program() {
+  morgan_program() {
     declare program="$1"
-    printf "solana-%s" "$program"
+    printf "morgan-%s" "$program"
   }
 else
-  solana_program() {
+  morgan_program() {
     declare program="$1"
     declare features="--features="
     if [[ "$program" =~ ^(.*)-cuda$ ]]; then
@@ -43,28 +43,28 @@ else
     fi
 
     if [[ -r "$SOLANA_ROOT/$program"/Cargo.toml ]]; then
-      maybe_package="--package solana-$program"
+      maybe_package="--package morgan-$program"
     fi
     if [[ -n $NDEBUG ]]; then
       maybe_release=--release
     fi
     declare manifest_path="--manifest-path=$SOLANA_ROOT/$program/Cargo.toml"
-    printf "cargo run $manifest_path $maybe_release $maybe_package --bin solana-%s %s -- " "$program" "$features"
+    printf "cargo run $manifest_path $maybe_release $maybe_package --bin morgan-%s %s -- " "$program" "$features"
   }
 fi
 
-solana_bench_tps=$(solana_program bench-tps)
-solana_drone=$(solana_program drone)
-solana_validator=$(solana_program validator)
-solana_validator_cuda=$(solana_program validator-cuda)
-solana_genesis=$(solana_program genesis)
-solana_gossip=$(solana_program gossip)
-solana_keygen=$(solana_program keygen)
-solana_ledger_tool=$(solana_program ledger-tool)
-solana_wallet=$(solana_program wallet)
-solana_replicator=$(solana_program replicator)
+morgan_bench_tps=$(morgan_program bench-tps)
+morgan_drone=$(morgan_program drone)
+morgan_validator=$(morgan_program validator)
+morgan_validator_cuda=$(morgan_program validator-cuda)
+morgan_genesis=$(morgan_program genesis)
+morgan_gossip=$(morgan_program gossip)
+morgan_keygen=$(morgan_program keygen)
+morgan_ledger_tool=$(morgan_program ledger-tool)
+morgan_wallet=$(morgan_program wallet)
+morgan_replicator=$(morgan_program replicator)
 
-export RUST_LOG=${RUST_LOG:-solana=info} # if RUST_LOG is unset, default to info
+export RUST_LOG=${RUST_LOG:-morgan=info} # if RUST_LOG is unset, default to info
 export RUST_BACKTRACE=1
 
 # shellcheck source=scripts/configure-metrics.sh

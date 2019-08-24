@@ -14,20 +14,20 @@ use crate::window_service::WindowService;
 use bincode::deserialize;
 use rand::thread_rng;
 use rand::Rng;
-use solana_client::rpc_client::RpcClient;
-use solana_client::rpc_request::RpcRequest;
-use solana_client::thin_client::ThinClient;
+use morgan_client::rpc_client::RpcClient;
+use morgan_client::rpc_request::RpcRequest;
+use morgan_client::thin_client::ThinClient;
 use solana_ed25519_dalek as ed25519_dalek;
-use solana_runtime::bank::Bank;
-use solana_sdk::client::{AsyncClient, SyncClient};
-use solana_sdk::genesis_block::GenesisBlock;
-use solana_sdk::hash::{Hash, Hasher};
-use solana_sdk::message::Message;
-use solana_sdk::signature::{Keypair, KeypairUtil, Signature};
-use solana_sdk::timing::timestamp;
-use solana_sdk::transaction::Transaction;
-use solana_sdk::transport::TransportError;
-use solana_storage_api::{get_segment_from_slot, storage_instruction, SLOTS_PER_SEGMENT};
+use morgan_runtime::bank::Bank;
+use morgan_sdk::client::{AsyncClient, SyncClient};
+use morgan_sdk::genesis_block::GenesisBlock;
+use morgan_sdk::hash::{Hash, Hasher};
+use morgan_sdk::message::Message;
+use morgan_sdk::signature::{Keypair, KeypairUtil, Signature};
+use morgan_sdk::timing::timestamp;
+use morgan_sdk::transaction::Transaction;
+use morgan_sdk::transport::TransportError;
+use morgan_storage_api::{get_segment_from_slot, storage_instruction, SLOTS_PER_SEGMENT};
 use std::fs::File;
 use std::io::{self, BufReader, Error, ErrorKind, Read, Seek, SeekFrom};
 use std::mem::size_of;
@@ -544,7 +544,7 @@ mod tests {
 
     #[test]
     fn test_sample_file() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let in_path = tmp_file_path("test_sample_file_input.txt");
         let num_strings = 4096;
         let string = "12foobar";

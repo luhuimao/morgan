@@ -1,6 +1,6 @@
 use crate::{influxdb, submit};
 use log::*;
-use solana_sdk::timing;
+use morgan_sdk::timing;
 use std::env;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
@@ -212,7 +212,7 @@ mod tests {
 
     #[test]
     fn test_counter() {
-        env_logger::Builder::from_env(env_logger::Env::new().default_filter_or("solana=info"))
+        env_logger::Builder::from_env(env_logger::Env::new().default_filter_or("morgan=info"))
             .init();
         let _readlock = get_env_lock().read();
         static mut COUNTER: Counter = create_counter!("test", 1000, 1);

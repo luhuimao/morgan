@@ -1,12 +1,12 @@
-[![Solana crate](https://img.shields.io/crates/v/solana.svg)](https://crates.io/crates/solana)
-[![Solana documentation](https://docs.rs/solana/badge.svg)](https://docs.rs/solana)
-[![Build status](https://badge.buildkite.com/8cc350de251d61483db98bdfc895b9ea0ac8ffa4a32ee850ed.svg?branch=master)](https://buildkite.com/solana-labs/solana/builds?branch=master)
-[![codecov](https://codecov.io/gh/solana-labs/solana/branch/master/graph/badge.svg)](https://codecov.io/gh/solana-labs/solana)
+[![Morgan crate](https://img.shields.io/crates/v/morgan.svg)](https://crates.io/crates/morgan)
+[![Morgan documentation](https://docs.rs/morgan/badge.svg)](https://docs.rs/morgan)
+[![Build status](https://badge.buildkite.com/8cc350de251d61483db98bdfc895b9ea0ac8ffa4a32ee850ed.svg?branch=master)](https://buildkite.com/morgan-labs/morgan/builds?branch=master)
+[![codecov](https://codecov.io/gh/morgan-labs/morgan/branch/master/graph/badge.svg)](https://codecov.io/gh/morgan-labs/morgan)
 
 Blockchain Rebuilt for Scale
 ===
 
-Solana&trade; is a new blockchain architecture built from the ground up for scale. The architecture supports
+Morgan&trade; is a new blockchain architecture built from the ground up for scale. The architecture supports
 up to 710 thousand transactions per second on a gigabit network.
 
 Disclaimer
@@ -17,18 +17,18 @@ All claims, content, designs, algorithms, estimates, roadmaps, specifications, a
 Introduction
 ===
 
-It's possible for a centralized database to process 710,000 transactions per second on a standard gigabit network if the transactions are, on average, no more than 176 bytes. A centralized database can also replicate itself and maintain high availability without significantly compromising that transaction rate using the distributed system technique known as Optimistic Concurrency Control [\[H.T.Kung, J.T.Robinson (1981)\]](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.65.4735). At Solana, we're demonstrating that these same theoretical limits apply just as well to blockchain on an adversarial network. The key ingredient? Finding a way to share time when nodes can't trust one-another. Once nodes can trust time, suddenly ~40 years of distributed systems research becomes applicable to blockchain!
+It's possible for a centralized database to process 710,000 transactions per second on a standard gigabit network if the transactions are, on average, no more than 176 bytes. A centralized database can also replicate itself and maintain high availability without significantly compromising that transaction rate using the distributed system technique known as Optimistic Concurrency Control [\[H.T.Kung, J.T.Robinson (1981)\]](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.65.4735). At Morgan, we're demonstrating that these same theoretical limits apply just as well to blockchain on an adversarial network. The key ingredient? Finding a way to share time when nodes can't trust one-another. Once nodes can trust time, suddenly ~40 years of distributed systems research becomes applicable to blockchain!
 
 > Perhaps the most striking difference between algorithms obtained by our method and ones based upon timeout is that using timeout produces a traditional distributed algorithm in which the processes operate asynchronously, while our method produces a globally synchronous one in which every process does the same thing at (approximately) the same time. Our method seems to contradict the whole purpose of distributed processing, which is to permit different processes to operate independently and perform different functions. However, if a distributed system is really a single system, then the processes must be synchronized in some way. Conceptually, the easiest way to synchronize processes is to get them all to do the same thing at the same time. Therefore, our method is used to implement a kernel that performs the necessary synchronization--for example, making sure that two different processes do not try to modify a file at the same time. Processes might spend only a small fraction of their time executing the synchronizing kernel; the rest of the time, they can operate independently--e.g., accessing different files. This is an approach we have advocated even when fault-tolerance is not required. The method's basic simplicity makes it easier to understand the precise properties of a system, which is crucial if one is to know just how fault-tolerant the system is. [\[L.Dif (1984)\]](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.71.1078)
 
-Furthermore, and much to our surprise, it can be implemented using a mechanism that has existed in Bitcoin since day one. The Bitcoin feature is called nLocktime and it can be used to postdate transactions using block height instead of a timestamp. As a Bitcoin client, you'd use block height instead of a timestamp if you don't trust the network. Block height turns out to be an instance of what's being called a Verifiable Delay Function in cryptography circles. It's a cryptographically secure way to say time has passed. In Solana, we use a far more granular verifiable delay function, a SHA 256 hash chain, to checkpoint the ledger and coordinate consensus. With it, we implement Optimistic Concurrency Control and are now well en route towards that theoretical limit of 710,000 transactions per second.
+Furthermore, and much to our surprise, it can be implemented using a mechanism that has existed in Bitcoin since day one. The Bitcoin feature is called nLocktime and it can be used to postdate transactions using block height instead of a timestamp. As a Bitcoin client, you'd use block height instead of a timestamp if you don't trust the network. Block height turns out to be an instance of what's being called a Verifiable Delay Function in cryptography circles. It's a cryptographically secure way to say time has passed. In Morgan, we use a far more granular verifiable delay function, a SHA 256 hash chain, to checkpoint the ledger and coordinate consensus. With it, we implement Optimistic Concurrency Control and are now well en route towards that theoretical limit of 710,000 transactions per second.
 
 Architecture
 ===
 
-Before you jump into the code, review the online book [Solana: Blockchain Rebuilt for Scale](https://solana-labs.github.io/book/).
+Before you jump into the code, review the online book [Morgan: Blockchain Rebuilt for Scale](https://morgan-labs.github.io/book/).
 
-(The _latest_ development version of the online book is also [available here](https://solana-labs.github.io/book-edge/).)
+(The _latest_ development version of the online book is also [available here](https://morgan-labs.github.io/book-edge/).)
 
 Developing
 ===
@@ -59,8 +59,8 @@ $ sudo apt-get install libssl-dev pkg-config zlib1g-dev llvm clang
 Download the source code:
 
 ```bash
-$ git clone https://github.com/solana-labs/solana.git
-$ cd solana
+$ git clone https://github.com/morgan-labs/morgan.git
+$ cd morgan
 ```
 
 Build
@@ -86,16 +86,16 @@ $ cargo test
 Local Testnet
 ---
 
-Start your own testnet locally, instructions are in the book [Solana: Blockchain Rebuild for Scale: Getting Started](https://solana-labs.github.io/book/getting-started.html).
+Start your own testnet locally, instructions are in the book [Morgan: Blockchain Rebuild for Scale: Getting Started](https://morgan-labs.github.io/book/getting-started.html).
 
 Remote Testnets
 ---
 
 We maintain several testnets:
 
-* `testnet` - public stable testnet accessible via testnet.solana.com, with an https proxy for web apps at api.testnet.solana.com. Runs 24/7
-* `testnet-beta` - public beta channel testnet accessible via beta.testnet.solana.com. Runs 24/7
-* `testnet-edge` - public edge channel testnet accessible via edge.testnet.solana.com. Runs 24/7
+* `testnet` - public stable testnet accessible via testnet.morgan.com, with an https proxy for web apps at api.testnet.morgan.com. Runs 24/7
+* `testnet-beta` - public beta channel testnet accessible via beta.testnet.morgan.com. Runs 24/7
+* `testnet-edge` - public edge channel testnet accessible via edge.testnet.morgan.com. Runs 24/7
 * `testnet-perf` - permissioned stable testnet running a 24/7 soak test
 * `testnet-beta-perf` - permissioned beta channel testnet running a multi-hour soak test weekday mornings
 * `testnet-edge-perf` - permissioned edge channel testnet running a multi-hour soak test weekday mornings
@@ -103,11 +103,11 @@ We maintain several testnets:
 ## Deploy process
 
 They are deployed with the `ci/testnet-manager.sh` script through a list of [scheduled
-buildkite jobs](https://buildkite.com/solana-labs/testnet-management/settings/schedules).
+buildkite jobs](https://buildkite.com/morgan-labs/testnet-management/settings/schedules).
 Each testnet can be manually manipulated from buildkite as well.
 
 ## How do I reset the testnet?
-Manually trigger the [testnet-management](https://buildkite.com/solana-labs/testnet-management) pipeline
+Manually trigger the [testnet-management](https://buildkite.com/morgan-labs/testnet-management) pipeline
 and when prompted select the desired testnet
 
 ## How can I scale the tx generation rate?
@@ -130,10 +130,10 @@ Sometimes the dashboard becomes unresponsive. This happens due to glitch in the 
 The current solution is to reset the metrics server. Use the following steps.
 
 1. The server is hosted in a GCP VM instance. Check if the VM instance is down by trying to SSH
- into it from the GCP console. The name of the VM is ```metrics-solana-com```.
+ into it from the GCP console. The name of the VM is ```metrics-morgan-com```.
 2. If the VM is inaccessible, reset it from the GCP console.
 3. Once VM is up (or, was already up), the metrics services can be restarted from build automation.
-    1. Navigate to https://buildkite.com/solana-labs/metrics-dot-solana-dot-com in your web browser
+    1. Navigate to https://buildkite.com/morgan-labs/metrics-dot-morgan-dot-com in your web browser
     2. Click on ```New Build```
     3. This will show a pop up dialog. Click on ```options``` drop down.
     4. Type in ```FORCE_START=true``` in ```Environment Variables``` text box.
@@ -148,13 +148,13 @@ Testnet may exhibit different symptoms of failures. Primary statistics to check 
 
 Check the following if there are any signs of failure.
 1. Did testnet deployment fail?
-    1. View buildkite logs for the last deployment: https://buildkite.com/solana-labs/testnet-management
+    1. View buildkite logs for the last deployment: https://buildkite.com/morgan-labs/testnet-management
     2. Use the relevant branch
     3. If the deployment failed, look at the build logs. The build artifacts for each remote node is uploaded.
        It's a good first step to triage from these logs.
 2. You may have to log into remote node if the deployment succeeded, but something failed during runtime.
-    1. Get the private key for the testnet deployment from ```metrics-solana-com``` GCP instance.
-    2. SSH into ```metrics-solana-com``` using GCP console and do the following.
+    1. Get the private key for the testnet deployment from ```metrics-morgan-com``` GCP instance.
+    2. SSH into ```metrics-morgan-com``` using GCP console and do the following.
     ```bash
     sudo bash
     cd ~buildkite-agent/.ssh
@@ -163,7 +163,7 @@ Check the following if there are any signs of failure.
     3. Copy the relevant private key to your local machine
     4. Find the public IP address of the AWS instance for the remote node using AWS console
     5. ```ssh -i <private key file> ubuntu@<ip address of remote node>```
-    6. The logs are in ```~solana\solana``` folder
+    6. The logs are in ```~morgan\morgan``` folder
 
 
 Benchmarking

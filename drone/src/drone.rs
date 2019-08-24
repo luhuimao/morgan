@@ -1,6 +1,6 @@
-//! The `drone` module provides an object for launching a Solana Drone,
+//! The `drone` module provides an object for launching a Morgan Drone,
 //! which is the custodian of any remaining difs in a mint.
-//! The Solana Drone builds and send airdrop transactions,
+//! The Morgan Drone builds and send airdrop transactions,
 //! checking requests against a request cap for a given time time_slice
 //! and (to come) an IP rate limit.
 
@@ -9,14 +9,14 @@ use byteorder::{ByteOrder, LittleEndian};
 use bytes::{Bytes, BytesMut};
 use log::*;
 use serde_derive::{Deserialize, Serialize};
-use solana_metrics::datapoint_info;
-use solana_sdk::hash::Hash;
-use solana_sdk::message::Message;
-use solana_sdk::packet::PACKET_DATA_SIZE;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{Keypair, KeypairUtil};
-use solana_sdk::system_instruction;
-use solana_sdk::transaction::Transaction;
+use morgan_metrics::datapoint_info;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::message::Message;
+use morgan_sdk::packet::PACKET_DATA_SIZE;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
+use morgan_sdk::system_instruction;
+use morgan_sdk::transaction::Transaction;
 use std::io;
 use std::io::{Error, ErrorKind};
 use std::net::{IpAddr, Ipv4Addr, SocketAddr, TcpStream};
@@ -42,7 +42,7 @@ macro_rules! socketaddr {
 
 pub const TIME_SLICE: u64 = 60;
 pub const REQUEST_CAP: u64 = 100_000_000_000_000;
-pub const DRONE_PORT: u16 = 9900;
+pub const DRONE_PORT: u16 = 11100;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub enum DroneRequest {
@@ -176,7 +176,7 @@ impl Drone {
 
 impl Drop for Drone {
     fn drop(&mut self) {
-        solana_metrics::flush();
+        morgan_metrics::flush();
     }
 }
 
@@ -308,7 +308,7 @@ pub fn run_drone(
 mod tests {
     use super::*;
     use bytes::BufMut;
-    use solana_sdk::system_instruction::SystemInstruction;
+    use morgan_sdk::system_instruction::SystemInstruction;
     use std::time::Duration;
 
     #[test]

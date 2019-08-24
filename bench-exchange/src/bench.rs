@@ -5,20 +5,20 @@ use itertools::izip;
 use log::*;
 use rand::{thread_rng, Rng};
 use rayon::prelude::*;
-use solana::gen_keys::GenKeys;
-use solana_client::perf_utils::{sample_txs, SampleStats};
-use solana_drone::drone::request_airdrop_transaction;
-use solana_exchange_api::exchange_instruction;
-use solana_exchange_api::exchange_state::*;
-use solana_exchange_api::id;
-use solana_metrics::datapoint_info;
-use solana_sdk::client::Client;
-use solana_sdk::client::SyncClient;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{Keypair, KeypairUtil};
-use solana_sdk::system_instruction;
-use solana_sdk::timing::{duration_as_ms, duration_as_s};
-use solana_sdk::transaction::Transaction;
+use morgan::gen_keys::GenKeys;
+use morgan_client::perf_utils::{sample_txs, SampleStats};
+use morgan_drone::drone::request_airdrop_transaction;
+use morgan_exchange_api::exchange_instruction;
+use morgan_exchange_api::exchange_state::*;
+use morgan_exchange_api::id;
+use morgan_metrics::datapoint_info;
+use morgan_sdk::client::Client;
+use morgan_sdk::client::SyncClient;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{Keypair, KeypairUtil};
+use morgan_sdk::system_instruction;
+use morgan_sdk::timing::{duration_as_ms, duration_as_s};
+use morgan_sdk::transaction::Transaction;
 use std::cmp;
 use std::collections::VecDeque;
 use std::mem;
@@ -145,7 +145,7 @@ where
             let total_txs_sent_count = total_txs_sent_count.clone();
             let client = clients[0].clone();
             Builder::new()
-                .name("solana-exchange-transfer".to_string())
+                .name("morgan-exchange-transfer".to_string())
                 .spawn(move || {
                     do_tx_transfers(&exit_signal, &shared_txs, &total_txs_sent_count, &client)
                 })
@@ -160,7 +160,7 @@ where
         let shared_txs = shared_txs.clone();
         let client = clients[0].clone();
         Builder::new()
-            .name("solana-exchange-swapper".to_string())
+            .name("morgan-exchange-swapper".to_string())
             .spawn(move || {
                 swapper(
                     &exit_signal,
@@ -184,7 +184,7 @@ where
         let shared_txs = shared_txs.clone();
         let client = clients[0].clone();
         Builder::new()
-            .name("solana-exchange-trader".to_string())
+            .name("morgan-exchange-trader".to_string())
             .spawn(move || {
                 trader(
                     &exit_signal,
@@ -209,7 +209,7 @@ where
             let sample_stats = sample_stats.clone();
             let client = client.clone();
             Builder::new()
-                .name("solana-exchange-sample".to_string())
+                .name("morgan-exchange-sample".to_string())
                 .spawn(move || sample_txs(&exit_signal, &sample_stats, sample_period, &client))
                 .unwrap()
         })
@@ -892,19 +892,19 @@ pub fn airdrop_difs(client: &Client, drone_addr: &SocketAddr, id: &Keypair, amou
 #[cfg(test)]
 mod tests {
     use super::*;
-    use solana::gossip_service::{discover_cluster, get_clients};
-    use solana::local_cluster::{ClusterConfig, LocalCluster};
-    use solana::validator::ValidatorConfig;
-    use solana_drone::drone::run_local_drone;
-    use solana_exchange_api::exchange_processor::process_instruction;
-    use solana_runtime::bank::Bank;
-    use solana_runtime::bank_client::BankClient;
-    use solana_sdk::genesis_block::create_genesis_block;
+    use morgan::gossip_service::{discover_cluster, get_clients};
+    use morgan::local_cluster::{ClusterConfig, LocalCluster};
+    use morgan::validator::ValidatorConfig;
+    use morgan_drone::drone::run_local_drone;
+    use morgan_exchange_api::exchange_processor::process_instruction;
+    use morgan_runtime::bank::Bank;
+    use morgan_runtime::bank_client::BankClient;
+    use morgan_sdk::genesis_block::create_genesis_block;
     use std::sync::mpsc::channel;
 
     #[test]
     fn test_exchange_local_cluster() {
-        solana_logger::setup();
+        morgan_logger::setup();
 
         const NUM_NODES: usize = 1;
         let validator_config = ValidatorConfig::default();
@@ -930,7 +930,7 @@ mod tests {
             node_stakes: vec![100_000; NUM_NODES],
             cluster_difs: 100_000_000_000_000,
             validator_config,
-            native_instruction_processors: [solana_exchange_program!()].to_vec(),
+            native_instruction_processors: [morgan_exchange_program!()].to_vec(),
             ..ClusterConfig::default()
         });
 
@@ -975,7 +975,7 @@ mod tests {
 
     #[test]
     fn test_exchange_bank_client() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let (genesis_block, identity) = create_genesis_block(100_000_000_000_000);
         let mut bank = Bank::new(&genesis_block);
         bank.add_instruction_processor(id(), process_instruction);

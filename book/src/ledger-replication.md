@@ -1,6 +1,6 @@
 # Ledger Replication
 
-At full capacity on a 1gbps network solana will generate 4 petabytes of data
+At full capacity on a 1gbps network morgan will generate 4 petabytes of data
 per year.  To prevent the network from centralizing around full nodes that have
 to store the full data set this protocol proposes a way for mining nodes to
 provide storage capacity for pieces of the network.

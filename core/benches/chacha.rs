@@ -1,9 +1,9 @@
 //#![feature(test)]
 //
-//extern crate solana;
+//extern crate morgan;
 //extern crate test;
 //
-//use solana::chacha::chacha_cbc_encrypt_files;
+//use morgan::chacha::chacha_cbc_encrypt_files;
 //use std::fs::remove_file;
 //use std::fs::File;
 //use std::io::Write;

@@ -1,5 +1,5 @@
 use crate::erasure::{NUM_CODING, NUM_DATA};
-use solana_metrics::datapoint;
+use morgan_metrics::datapoint;
 use std::borrow::Borrow;
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize, Eq, PartialEq)]

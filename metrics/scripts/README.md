@@ -7,7 +7,7 @@ Start the local metric services:
 
 `$ ./start.sh`
 
-Metrics are enabled on a per-shell basis which means you must `source` the following scripts in each shell in which you start an application you wish to collect metrics from.  For example, if running a Solana fullnode you must call `source ./enable.sh` before starting the node:
+Metrics are enabled on a per-shell basis which means you must `source` the following scripts in each shell in which you start an application you wish to collect metrics from.  For example, if running a Morgan fullnode you must call `source ./enable.sh` before starting the node:
 
 `$ source ./enable.sh`
 

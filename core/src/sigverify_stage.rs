@@ -10,8 +10,8 @@ use crate::result::{Error, Result};
 use crate::service::Service;
 use crate::sigverify;
 use crate::streamer::{self, PacketReceiver};
-use solana_metrics::{datapoint_info, inc_new_counter_info};
-use solana_sdk::timing;
+use morgan_metrics::{datapoint_info, inc_new_counter_info};
+use morgan_sdk::timing;
 use std::sync::mpsc::{Receiver, RecvTimeoutError, Sender};
 use std::sync::{Arc, Mutex};
 use std::thread::{self, Builder, JoinHandle};
@@ -112,7 +112,7 @@ impl SigVerifyStage {
         id: usize,
     ) -> JoinHandle<()> {
         Builder::new()
-            .name(format!("solana-verifier-{}", id))
+            .name(format!("morgan-verifier-{}", id))
             .spawn(move || loop {
                 if let Err(e) =
                     Self::verifier(&packet_receiver, &verified_sender, sigverify_disabled, id)

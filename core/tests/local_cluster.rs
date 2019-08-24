@@ -1,21 +1,21 @@
-extern crate solana;
+extern crate morgan;
 
-use crate::solana::blocktree::Blocktree;
+use crate::morgan::blocktree::Blocktree;
 use hashbrown::HashSet;
 use log::*;
-use solana::cluster::Cluster;
-use solana::cluster_tests;
-use solana::gossip_service::discover_cluster;
-use solana::local_cluster::{ClusterConfig, LocalCluster};
-use solana::validator::ValidatorConfig;
-use solana_runtime::epoch_schedule::{EpochSchedule, MINIMUM_SLOT_LENGTH};
-use solana_sdk::poh_config::PohConfig;
-use solana_sdk::timing;
+use morgan::cluster::Cluster;
+use morgan::cluster_tests;
+use morgan::gossip_service::discover_cluster;
+use morgan::local_cluster::{ClusterConfig, LocalCluster};
+use morgan::validator::ValidatorConfig;
+use morgan_runtime::epoch_schedule::{EpochSchedule, MINIMUM_SLOT_LENGTH};
+use morgan_sdk::poh_config::PohConfig;
+use morgan_sdk::timing;
 use std::time::Duration;
 
 #[test]
 fn test_spend_and_verify_all_nodes_1() {
-    solana_logger::setup();
+    morgan_logger::setup();
     let num_nodes = 1;
     let local = LocalCluster::new_with_equal_stakes(num_nodes, 10_000, 100);
     cluster_tests::spend_and_verify_all_nodes(
@@ -27,7 +27,7 @@ fn test_spend_and_verify_all_nodes_1() {
 
 #[test]
 fn test_spend_and_verify_all_nodes_2() {
-    solana_logger::setup();
+    morgan_logger::setup();
     let num_nodes = 2;
     let local = LocalCluster::new_with_equal_stakes(num_nodes, 10_000, 100);
     cluster_tests::spend_and_verify_all_nodes(
@@ -39,7 +39,7 @@ fn test_spend_and_verify_all_nodes_2() {
 
 #[test]
 fn test_spend_and_verify_all_nodes_3() {
-    solana_logger::setup();
+    morgan_logger::setup();
     let num_nodes = 3;
     let local = LocalCluster::new_with_equal_stakes(num_nodes, 10_000, 100);
     cluster_tests::spend_and_verify_all_nodes(
@@ -52,7 +52,7 @@ fn test_spend_and_verify_all_nodes_3() {
 #[test]
 #[ignore]
 fn test_spend_and_verify_all_nodes_env_num_nodes() {
-    solana_logger::setup();
+    morgan_logger::setup();
     let num_nodes: usize = std::env::var("NUM_NODES")
         .expect("please set environment variable NUM_NODES")
         .parse()
@@ -68,7 +68,7 @@ fn test_spend_and_verify_all_nodes_env_num_nodes() {
 #[test]
 #[should_panic]
 fn test_fullnode_exit_default_config_should_panic() {
-    solana_logger::setup();
+    morgan_logger::setup();
     let num_nodes = 2;
     let local = LocalCluster::new_with_equal_stakes(num_nodes, 10_000, 100);
     cluster_tests::fullnode_exit(&local.entry_point_info, num_nodes);
@@ -76,7 +76,7 @@ fn test_fullnode_exit_default_config_should_panic() {
 
 #[test]
 fn test_fullnode_exit_2() {
-    solana_logger::setup();
+    morgan_logger::setup();
     let num_nodes = 2;
     let mut validator_config = ValidatorConfig::default();
     validator_config.rpc_config.enable_fullnode_exit = true;
@@ -93,7 +93,7 @@ fn test_fullnode_exit_2() {
 // Cluster needs a supermajority to remain, so the minimum size for this test is 4
 #[test]
 fn test_leader_failure_4() {
-    solana_logger::setup();
+    morgan_logger::setup();
     let num_nodes = 4;
     let mut validator_config = ValidatorConfig::default();
     validator_config.rpc_config.enable_fullnode_exit = true;
@@ -113,7 +113,7 @@ fn test_leader_failure_4() {
 }
 #[test]
 fn test_two_unbalanced_stakes() {
-    solana_logger::setup();
+    morgan_logger::setup();
     let mut validator_config = ValidatorConfig::default();
     let num_ticks_per_second = 100;
     let num_ticks_per_slot = 10;

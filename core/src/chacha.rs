@@ -1,5 +1,5 @@
 use crate::blocktree::Blocktree;
-use solana_storage_api::SLOTS_PER_SEGMENT;
+use morgan_storage_api::SLOTS_PER_SEGMENT;
 use std::fs::File;
 use std::io;
 use std::io::{BufWriter, Write};
@@ -93,9 +93,9 @@ mod tests {
     use crate::chacha::chacha_cbc_encrypt_ledger;
     use crate::entry::Entry;
     use crate::gen_keys::GenKeys;
-    use solana_sdk::hash::{hash, Hash, Hasher};
-    use solana_sdk::signature::KeypairUtil;
-    use solana_sdk::system_transaction;
+    use morgan_sdk::hash::{hash, Hash, Hasher};
+    use morgan_sdk::signature::KeypairUtil;
+    use morgan_sdk::system_transaction;
     use std::fs::remove_file;
     use std::fs::File;
     use std::io::Read;
@@ -130,7 +130,7 @@ mod tests {
 
     #[test]
     fn test_encrypt_ledger() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let ledger_dir = "chacha_test_encrypt_file";
         let ledger_path = get_tmp_ledger_path(ledger_dir);
         let ticks_per_slot = 16;

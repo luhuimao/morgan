@@ -14,20 +14,20 @@ use crate::status_cache::StatusCache;
 use bincode::serialize;
 use hashbrown::HashMap;
 use log::*;
-use solana_metrics::{
+use morgan_metrics::{
     datapoint_info, inc_new_counter_debug, inc_new_counter_error, inc_new_counter_info,
 };
-use solana_sdk::account::Account;
-use solana_sdk::fee_calculator::FeeCalculator;
-use solana_sdk::genesis_block::GenesisBlock;
-use solana_sdk::hash::{extend_and_hash, Hash};
-use solana_sdk::native_loader;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::signature::{Keypair, Signature};
-use solana_sdk::syscall::slot_hashes::{self, SlotHashes};
-use solana_sdk::system_transaction;
-use solana_sdk::timing::{duration_as_ms, duration_as_us, MAX_RECENT_BLOCKHASHES};
-use solana_sdk::transaction::{Result, Transaction, TransactionError};
+use morgan_sdk::account::Account;
+use morgan_sdk::fee_calculator::FeeCalculator;
+use morgan_sdk::genesis_block::GenesisBlock;
+use morgan_sdk::hash::{extend_and_hash, Hash};
+use morgan_sdk::native_loader;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::signature::{Keypair, Signature};
+use morgan_sdk::syscall::slot_hashes::{self, SlotHashes};
+use morgan_sdk::system_transaction;
+use morgan_sdk::timing::{duration_as_ms, duration_as_us, MAX_RECENT_BLOCKHASHES};
+use morgan_sdk::transaction::{Result, Transaction, TransactionError};
 use std::borrow::Borrow;
 use std::cmp;
 use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
@@ -298,16 +298,16 @@ impl Bank {
 
         // Add native programs mandatory for the MessageProcessor to function
         self.register_native_instruction_processor(
-            "solana_system_program",
-            &solana_sdk::system_program::id(),
+            "morgan_system_program",
+            &morgan_sdk::system_program::id(),
         );
         self.register_native_instruction_processor(
-            "solana_bpf_loader",
-            &solana_sdk::bpf_loader::id(),
+            "morgan_bpf_loader",
+            &morgan_sdk::bpf_loader::id(),
         );
         self.register_native_instruction_processor(
-            &solana_vote_program!().0,
-            &solana_vote_program!().1,
+            &morgan_vote_program!().0,
+            &morgan_vote_program!().1,
         );
 
         // Add additional native programs specified in the genesis block
@@ -1018,14 +1018,14 @@ mod tests {
     use crate::genesis_utils::{
         create_genesis_block_with_leader, GenesisBlockInfo, BOOTSTRAP_LEADER_DIFS,
     };
-    use solana_sdk::genesis_block::create_genesis_block;
-    use solana_sdk::hash;
-    use solana_sdk::instruction::InstructionError;
-    use solana_sdk::signature::{Keypair, KeypairUtil};
-    use solana_sdk::system_instruction;
-    use solana_sdk::system_transaction;
-    use solana_vote_api::vote_instruction;
-    use solana_vote_api::vote_state::VoteState;
+    use morgan_sdk::genesis_block::create_genesis_block;
+    use morgan_sdk::hash;
+    use morgan_sdk::instruction::InstructionError;
+    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_sdk::system_instruction;
+    use morgan_sdk::system_transaction;
+    use morgan_vote_api::vote_instruction;
+    use morgan_vote_api::vote_state::VoteState;
 
     #[test]
     fn test_bank_new() {
@@ -1565,7 +1565,7 @@ mod tests {
     /// Verifies that last ids and accounts are correctly referenced from parent
     #[test]
     fn test_bank_squash() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let (genesis_block, mint_keypair) = create_genesis_block(2);
         let key1 = Keypair::new();
         let key2 = Keypair::new();
@@ -1704,7 +1704,7 @@ mod tests {
 
     #[test]
     fn test_zero_signatures() {
-        solana_logger::setup();
+        morgan_logger::setup();
         let (genesis_block, mint_keypair) = create_genesis_block(500);
         let mut bank = Bank::new(&genesis_block);
         bank.fee_calculator.difs_per_signature = 2;

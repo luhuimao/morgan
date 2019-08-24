@@ -4,12 +4,12 @@ use crate::id;
 use bincode::{deserialize, serialize_into, serialized_size, ErrorKind};
 use log::*;
 use serde_derive::{Deserialize, Serialize};
-use solana_sdk::account::{Account, KeyedAccount};
-use solana_sdk::account_utils::State;
-use solana_sdk::hash::Hash;
-use solana_sdk::instruction::InstructionError;
-use solana_sdk::pubkey::Pubkey;
-use solana_sdk::syscall::slot_hashes;
+use morgan_sdk::account::{Account, KeyedAccount};
+use morgan_sdk::account_utils::State;
+use morgan_sdk::hash::Hash;
+use morgan_sdk::instruction::InstructionError;
+use morgan_sdk::pubkey::Pubkey;
+use morgan_sdk::syscall::slot_hashes;
 use std::collections::VecDeque;
 
 // Maximum number of votes to keep around
@@ -318,7 +318,7 @@ pub fn create_account(
     vote_account
 }
 
-// utility function, used by solana-genesis, tests
+// utility function, used by morgan-genesis, tests
 pub fn create_bootstrap_leader_account(
     vote_pubkey: &Pubkey,
     node_pubkey: &Pubkey,
@@ -342,11 +342,11 @@ mod tests {
     use super::*;
     use crate::vote_state;
     use bincode::serialized_size;
-    use solana_sdk::account::Account;
-    use solana_sdk::account_utils::State;
-    use solana_sdk::hash::hash;
-    use solana_sdk::syscall;
-    use solana_sdk::syscall::slot_hashes;
+    use morgan_sdk::account::Account;
+    use morgan_sdk::account_utils::State;
+    use morgan_sdk::hash::hash;
+    use morgan_sdk::syscall;
+    use morgan_sdk::syscall::slot_hashes;
 
     const MAX_RECENT_VOTES: usize = 16;
 
