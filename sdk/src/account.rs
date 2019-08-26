@@ -45,7 +45,7 @@ impl Account {
             data: vec![0u8; space],
             owner: *owner,
             executable: false,
-            difs,
+            difs1: difs,
         }
     }
 
