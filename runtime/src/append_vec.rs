@@ -52,6 +52,7 @@ impl<'a> StoredAccount<'a> {
             owner: self.balance.owner,
             executable: self.balance.executable,
             data: self.data.to_vec(),
+            difs1: self.balance.difs,
         }
     }
 }
