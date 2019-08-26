@@ -121,6 +121,7 @@ mod tests {
         }
 
         stake_account.difs = 42;
+        stake_account.difs1 = 42;
         stakes.store(&stake_pubkey, &stake_account);
         {
             let vote_accounts = stakes.vote_accounts();
@@ -129,6 +130,7 @@ mod tests {
         }
 
         stake_account.difs = 0;
+        stake_account.difs1 = 0;
         stakes.store(&stake_pubkey, &stake_account);
         {
             let vote_accounts = stakes.vote_accounts();
@@ -154,6 +156,7 @@ mod tests {
         }
 
         vote_account.difs = 0;
+        vote_account.difs1 = 0;
         stakes.store(&vote_pubkey, &vote_account);
 
         {
@@ -161,6 +164,7 @@ mod tests {
             assert!(vote_accounts.get(&vote_pubkey).is_none());
         }
         vote_account.difs = 1;
+        vote_account.difs1 = 1;
         stakes.store(&vote_pubkey, &vote_account);
 
         {

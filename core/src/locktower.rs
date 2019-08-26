@@ -414,6 +414,7 @@ mod test {
             let mut account = Account::default();
             account.data = vec![0; 1024];
             account.difs = *difs;
+            account.difs1 = *difs;
             let mut vote_state = VoteState::default();
             for slot in *votes {
                 vote_state.process_slot_vote_unchecked(*slot);
@@ -759,6 +760,7 @@ mod test {
         let mut stake_lockouts = HashMap::new();
         let mut account = Account::default();
         account.difs = 1;
+        account.difs1 = 1;
         let set: HashSet<u64> = vec![0u64, 1u64].into_iter().collect();
         let ancestors: HashMap<u64, HashSet<u64>> = [(2u64, set)].into_iter().cloned().collect();
         Locktower::update_ancestor_stakes(&mut stake_lockouts, 2, account.difs, &ancestors);

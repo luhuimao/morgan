@@ -839,6 +839,7 @@ impl Bank {
                 }
 
                 account.difs -= difs;
+                account.difs1 -= difs;
                 self.store(pubkey, &account);
 
                 Ok(())
@@ -850,6 +851,7 @@ impl Bank {
     pub fn deposit(&self, pubkey: &Pubkey, difs: u64) {
         let mut account = self.get_account(pubkey).unwrap_or_default();
         account.difs += difs;
+        account.difs1 += difs;
         self.store(pubkey, &account);
     }
 

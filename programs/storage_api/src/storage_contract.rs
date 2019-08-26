@@ -309,8 +309,12 @@ impl<'a> StorageAccount<'a> {
                     .unwrap_or_default(),
             );
             let reward = TOTAL_VALIDATOR_REWARDS * num_validations;
+            
             mining_pool.account.difs -= reward;
             self.account.difs += reward;
+            mining_pool.account.difs1 -= reward;
+            self.account.difs1 += reward;
+
             self.account.set_state(storage_contract)
         } else if let StorageContract::ReplicatorStorage {
             proofs,
@@ -357,8 +361,12 @@ impl<'a> StorageAccount<'a> {
             let num_validations = count_valid_proofs(&checked_proofs);
             let reward =
                 num_validations * TOTAL_REPLICATOR_REWARDS * (num_validations / total_proofs);
+            
             mining_pool.account.difs -= reward;
             self.account.difs += reward;
+            mining_pool.account.difs1 -= reward;
+            self.account.difs1 += reward;
+
             self.account.set_state(storage_contract)
         } else {
             Err(InstructionError::InvalidArgument)?

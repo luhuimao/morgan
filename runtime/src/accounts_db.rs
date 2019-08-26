@@ -585,6 +585,7 @@ mod tests {
             let account = db.load_slow(&ancestors, &pubkeys[idx]).unwrap();
             let mut default_account = Account::default();
             default_account.difs = (idx + 1) as u64;
+            default_account.difs1 = (idx + 1) as u64;
             assert_eq!((default_account, 0), account);
         }
 
@@ -599,6 +600,7 @@ mod tests {
             let account1 = db.load_slow(&ancestors, &pubkeys[idx]).unwrap();
             let mut default_account = Account::default();
             default_account.difs = (idx + 1) as u64;
+            default_account.difs1 = (idx + 1) as u64;
             assert_eq!(&default_account, &account0.0);
             assert_eq!(&default_account, &account1.0);
         }
@@ -692,7 +694,8 @@ mod tests {
             let idx = thread_rng().gen_range(0, range);
             let ancestors = vec![(fork, 0)].into_iter().collect();
             if let Some((mut account, _)) = accounts.load_slow(&ancestors, &pubkeys[idx]) {
-                account.difs = account.difs + 1;
+                account.difs += 1;
+                account.difs1 += 1;
                 accounts.store(fork, &[(&pubkeys[idx], &account)]);
                 if account.difs == 0 {
                     let ancestors = vec![(fork, 0)].into_iter().collect();
@@ -700,6 +703,7 @@ mod tests {
                 } else {
                     let mut default_account = Account::default();
                     default_account.difs = account.difs;
+                    default_account.difs1 = account.difs;
                     assert_eq!(default_account, account);
                 }
             }
@@ -720,6 +724,7 @@ mod tests {
             let account = accounts.load_slow(&ancestors, &pubkeys[idx]).unwrap();
             let mut default_account = Account::default();
             default_account.difs = (idx + 1) as u64;
+            default_account.difs1 = (idx + 1) as u64;
             assert_eq!((default_account, 0), account);
         }
     }
@@ -734,6 +739,7 @@ mod tests {
         let account = accounts.load_slow(&ancestors, &pubkeys[0]).unwrap();
         let mut default_account = Account::default();
         default_account.difs = 1;
+        default_account.difs1 = 1;
         assert_eq!((default_account, 0), account);
     }
 

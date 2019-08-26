@@ -167,6 +167,10 @@ impl<'a> StakeAccount for KeyedAccount<'a> {
                 stake_account.account.difs += stakers_reward;
                 vote_account.account.difs += voters_reward;
 
+                self.account.difs1 = self.account.difs;
+                stake_account.account.difs1 += stakers_reward;
+                vote_account.account.difs1 += voters_reward;
+
                 stake_account.set_state(&StakeState::Delegate {
                     voter_pubkey,
                     credits_observed: vote_state.credits(),
@@ -376,6 +380,8 @@ mod tests {
 
         // add a dif to pool
         mining_pool_keyed_account.account.difs = 2;
+        mining_pool_keyed_account.account.difs1 = 2;
+        
         assert!(mining_pool_keyed_account
             .redeem_vote_credits(&mut stake_keyed_account, &mut vote_keyed_account)
             .is_ok()); // yay

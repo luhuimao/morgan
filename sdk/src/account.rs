@@ -13,6 +13,8 @@ pub struct Account {
     pub owner: Pubkey,
     /// this account's data contains a loaded program (and is now read-only)
     pub executable: bool,
+    /// test field for future reputation value
+    pub difs1: u64,
 }
 
 impl fmt::Debug for Account {

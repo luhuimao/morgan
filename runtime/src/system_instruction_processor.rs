@@ -35,8 +35,12 @@ fn create_system_account(
         );
         Err(SystemError::ResultWithNegativeDifs)?;
     }
+    
     keyed_accounts[FROM_ACCOUNT_INDEX].account.difs -= difs;
     keyed_accounts[TO_ACCOUNT_INDEX].account.difs += difs;
+    keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 -= difs;
+    keyed_accounts[TO_ACCOUNT_INDEX].account.difs1 += difs;
+    
     keyed_accounts[TO_ACCOUNT_INDEX].account.owner = *program_id;
     keyed_accounts[TO_ACCOUNT_INDEX].account.data = vec![0; space as usize];
     keyed_accounts[TO_ACCOUNT_INDEX].account.executable = false;
@@ -61,8 +65,12 @@ fn transfer_difs(
         );
         Err(SystemError::ResultWithNegativeDifs)?;
     }
+    
     keyed_accounts[FROM_ACCOUNT_INDEX].account.difs -= difs;
     keyed_accounts[TO_ACCOUNT_INDEX].account.difs += difs;
+    keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 -= difs;
+    keyed_accounts[TO_ACCOUNT_INDEX].account.difs1 += difs;
+
     Ok(())
 }
 

@@ -265,6 +265,7 @@ fn deserialize_parameters(keyed_accounts: &mut [KeyedAccount], buffer: &[u8]) {
         start += mem::size_of::<u64>(); // skip signer_key boolean
         start += mem::size_of::<Pubkey>(); // skip pubkey
         info.account.difs = LittleEndian::read_u64(&buffer[start..]);
+        info.account.difs1 = info.account.difs;
 
         start += mem::size_of::<u64>() // skip difs
                   + mem::size_of::<u64>(); // skip length tag

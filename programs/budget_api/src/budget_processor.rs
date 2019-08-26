@@ -28,6 +28,8 @@ fn apply_signature(
                 budget_state.pending_budget = None;
                 keyed_accounts[1].account.difs -= payment.difs;
                 keyed_accounts[0].account.difs += payment.difs;
+                keyed_accounts[1].account.difs1 -= payment.difs;
+                keyed_accounts[0].account.difs1 += payment.difs;
                 return Ok(());
             }
         }
@@ -38,6 +40,8 @@ fn apply_signature(
         budget_state.pending_budget = None;
         keyed_accounts[1].account.difs -= payment.difs;
         keyed_accounts[2].account.difs += payment.difs;
+        keyed_accounts[1].account.difs1 -= payment.difs;
+        keyed_accounts[2].account.difs1 += payment.difs;
     }
     Ok(())
 }
@@ -66,6 +70,8 @@ fn apply_timestamp(
         budget_state.pending_budget = None;
         keyed_accounts[1].account.difs -= payment.difs;
         keyed_accounts[2].account.difs += payment.difs;
+        keyed_accounts[1].account.difs1 -= payment.difs;
+        keyed_accounts[2].account.difs1 += payment.difs;
     }
     Ok(())
 }
@@ -89,6 +95,8 @@ pub fn process_instruction(
             if let Some(payment) = expr.final_payment() {
                 keyed_accounts[1].account.difs = 0;
                 keyed_accounts[0].account.difs += payment.difs;
+                keyed_accounts[1].account.difs1 = 0;
+                keyed_accounts[0].account.difs1 += payment.difs;
                 return Ok(());
             }
             let existing = BudgetState::deserialize(&keyed_accounts[0].account.data).ok();

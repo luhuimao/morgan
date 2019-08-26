@@ -200,6 +200,7 @@ impl Accounts {
                 Err(TransactionError::InsufficientFundsForFee)
             } else {
                 called_accounts[0].difs -= fee;
+                called_accounts[0].difs1 -= fee;
                 Ok(called_accounts)
             }
         }
