@@ -484,6 +484,7 @@ mod tests {
                 data: vec![],
                 owner: id(),
                 executable: false,
+                difs1: 0,
             },
         };
         let segment_index = 0_usize;
