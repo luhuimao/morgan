@@ -21,5 +21,6 @@ pub fn create_loadable_account(name: &str) -> Account {
         owner: id(),
         data: name.as_bytes().to_vec(),
         executable: true,
+        difs1: 1,
     }
 }
