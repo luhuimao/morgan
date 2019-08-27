@@ -473,8 +473,8 @@ impl RpcSol for RpcSolImpl {
     }
 }
 
-#[cfg(test)]
-mod tests {
+//#[cfg(test)]
+pub mod tests {
     use super::*;
     use crate::contact_info::ContactInfo;
     use crate::genesis_utils::{create_genesis_block, GenesisBlockInfo};
@@ -614,8 +614,8 @@ mod tests {
         assert_eq!(expected, result);
     }
 
-    #[test]
-    fn test_rpc_get_account_info() {
+    //#[test]
+    pub fn test_rpc_get_account_info() {
         let bob_pubkey = Pubkey::new_rand();
         let (io, meta, _blockhash, _alice, _leader_pubkey) = start_rpc_handler_with_tx(&bob_pubkey);
 
