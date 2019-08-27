@@ -638,7 +638,7 @@ mod tests {
             serde_json::from_str(&expected).expect("expected response deserialization");
         let result: Response = serde_json::from_str(&res.expect("actual response"))
             .expect("actual response deserialization");
-        //assert_eq!(expected, result);
+        assert_eq!(expected, result);
     }
 
     #[test]
