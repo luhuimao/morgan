@@ -631,6 +631,7 @@ mod tests {
                 "difs": 20,
                 "data": [],
                 "executable": false
+                "difs1": 20,
             },
             "id":1}
         "#;

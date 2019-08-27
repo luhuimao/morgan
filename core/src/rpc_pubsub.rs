@@ -428,7 +428,8 @@ mod tests {
                    "owner": budget_program_id,
                    "difs": 51,
                    "data": expected_data,
-                    "executable": executable,
+                   "executable": executable,
+                   "difs1": 51,
                },
                "subscription": 0,
            }
@@ -573,6 +574,7 @@ mod tests {
                    "difs": 100,
                    "data": [],
                    "executable": false,
+                   "difs1": 100,
                },
                "subscription": 0,
            }
