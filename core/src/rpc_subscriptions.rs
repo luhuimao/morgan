@@ -358,7 +358,7 @@ pub mod tests {
             .account_subscriptions
             .read()
             .unwrap()
-            .contains_key(&alice.pubkey()));*/
+            .contains_key(&alice.pubkey()));
     }
 
     #[test]
