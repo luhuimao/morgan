@@ -630,7 +630,7 @@ mod tests {
                 "owner": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                 "difs": 20,
                 "data": [],
-                "executable": false,
+                "executable": false
             },
             "id":1}
         "#;
