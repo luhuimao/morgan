@@ -346,8 +346,8 @@ pub mod tests {
             .contains_key(&alice.pubkey()));
 
         subscriptions.check_account(&alice.pubkey(), 0, &bank_forks);
+        
         let string = transport_receiver.poll();
-        println!("response : {:?}", string);
         if let Async::Ready(Some(response)) = string.unwrap() {
             let expected = format!(r#"{{"jsonrpc":"2.0","method":"accountNotification","params":{{"result":{{"data":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"difs":1,"executable":false,"owner":[2,203,81,223,225,24,34,35,203,214,138,130,144,208,35,77,63,16,87,51,47,198,115,123,98,188,19,160,0,0,0,0],"difs1":1}},"subscription":0}}}}"#);
             assert_eq!(expected, response);
@@ -402,6 +402,7 @@ pub mod tests {
             .contains_key(&morgan_budget_api::id()));
 
         subscriptions.check_program(&morgan_budget_api::id(), 0, &bank_forks);
+        
         let string = transport_receiver.poll();
         if let Async::Ready(Some(response)) = string.unwrap() {
             let expected = format!(r#"{{"jsonrpc":"2.0","method":"programNotification","params":{{"result":["{:?}",{{"data":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"difs":1,"executable":false,"owner":[2,203,81,223,225,24,34,35,203,214,138,130,144,208,35,77,63,16,87,51,47,198,115,123,98,188,19,160,0,0,0,0],"difs1":1}}],"subscription":0}}}}"#, alice.pubkey());
