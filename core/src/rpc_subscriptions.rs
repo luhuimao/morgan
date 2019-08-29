@@ -295,7 +295,7 @@ impl RpcSubscriptions {
     }
 }
 
-//#[cfg(test)]
+#[cfg(test)]
 pub mod tests {
     use super::*;
     use crate::genesis_utils::{create_genesis_block, GenesisBlockInfo};
@@ -305,8 +305,8 @@ pub mod tests {
     use morgan_sdk::system_transaction;
     use tokio::prelude::{Async, Stream};
 
-    //#[test]
-    pub fn test_check_account_subscribe() {
+    #[test]
+    fn test_check_account_subscribe() {
         let GenesisBlockInfo {
             genesis_block,
             mint_keypair,
@@ -350,23 +350,8 @@ pub mod tests {
         let string = transport_receiver.poll();
 
         if let Async::Ready(Some(response)) = string.unwrap() {
-            let expected = format!(r#" {{
-                                        "jsonrpc": "2.0",
-                                        "method": "accountNotification",
-                                        "params": {{
-                                            "result": {{
-                                                "data": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                                                "difs": 1,
-                                                "executable": false,
-                                                "owner": [2,203,81,223,225,24,34,35,203,214,138,130,144,208,35,77,63,16,87,51,47,198,115,123,98,188,19,160,0,0,0,0],
-                                                "difs1": 1
-                                            }},
-                                            "subscription": 0
-                                        }}
-                                    }}"#);
-            
-            println!("{}", response);
-            //assert_eq!(expected, response);
+            let expected = format!(r#"{{"jsonrpc":"2.0","method":"accountNotification","params":{{"result":{{"data":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"difs":1,"difs1":1,"executable":false,"owner":[2,203,81,223,225,24,34,35,203,214,138,130,144,208,35,77,63,16,87,51,47,198,115,123,98,188,19,160,0,0,0,0],"difs1":1}},"subscription":0}}}}"#);
+            assert_eq!(expected, response);
         }
 
         subscriptions.remove_account_subscription(&sub_id);
@@ -377,8 +362,8 @@ pub mod tests {
             .contains_key(&alice.pubkey()));
     }
 
-    //#[test]
-    pub fn test_check_program_subscribe() {
+    #[test]
+    fn test_check_program_subscribe() {
         let GenesisBlockInfo {
             genesis_block,
             mint_keypair,
@@ -422,26 +407,8 @@ pub mod tests {
         let string = transport_receiver.poll();
 
         if let Async::Ready(Some(response)) = string.unwrap() {
-            let expected = format!(r#" {{
-                                        "jsonrpc": "2.0",
-                                        "method": "programNotification",
-                                        "params": {{
-                                            "result": ["{:?}",
-                                                        {{
-                                                            "data": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                                                            "difs": 1,
-                                                            "executable": false,
-                                                            "owner": [2,203,81,223,225,24,34,35,203,214,138,130,144,208,35,77,63,16,87,51,47,198,115,123,98,188,19,160,0,0,0,0],
-                                                            "difs1": 1
-                                                        }}
-                                            ],
-                                            "subscription": 0
-                                        }}
-                                    }}"#,
-                                    alice.pubkey());
-
-            println!("{}", response);
-            //assert_eq!(expected, response);
+            let expected = format!(r#"{{"jsonrpc":"2.0","method":"programNotification","params":{{"result":["{:?}",{{"data":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"difs":1,"difs1":1,"executable":false,"owner":[2,203,81,223,225,24,34,35,203,214,138,130,144,208,35,77,63,16,87,51,47,198,115,123,98,188,19,160,0,0,0,0]}}],"subscription":0}}}}"#,alice.pubkey());
+            assert_eq!(expected, response);
         }
 
         subscriptions.remove_program_subscription(&sub_id);
@@ -494,16 +461,7 @@ pub mod tests {
             let expected_res: Option<transaction::Result<()>> = Some(Ok(()));
             let expected_res_str =
                 serde_json::to_string(&serde_json::to_value(expected_res).unwrap()).unwrap();
-            let expected = format!(r#"{{
-                                        "jsonrpc": "2.0",
-                                        "method": "signatureNotification",
-                                        "params": {{
-                                            "result": {},
-                                            "subscription": 0
-                                        }}
-                                    }}"#,
-                                    expected_res_str);
-            
+            let expected = format!(r#"{{"jsonrpc":"2.0","method":"signatureNotification","params":{{"result":{},"subscription":0}}}}"#,expected_res_str);
             assert_eq!(expected, response);
         }
 
