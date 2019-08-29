@@ -365,8 +365,7 @@ pub mod tests {
                                         }}
                                     }}"#);
             
-            println!("{}", response);
-            //assert_eq!(expected, response);
+            assert_eq!(expected, response);
         }
 
         subscriptions.remove_account_subscription(&sub_id);
@@ -440,8 +439,7 @@ pub mod tests {
                                     }}"#,
                                     alice.pubkey());
 
-            println!("{}", response);
-            //assert_eq!(expected, response);
+            assert_eq!(expected, response);
         }
 
         subscriptions.remove_program_subscription(&sub_id);
@@ -503,6 +501,7 @@ pub mod tests {
                                         }}
                                     }}"#,
                                     expected_res_str);
+            
             assert_eq!(expected, response);
         }
 
