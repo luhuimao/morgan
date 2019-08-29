@@ -364,7 +364,7 @@ pub mod tests {
                                             "subscription": 0
                                         }}
                                     }}"#);
-                                    
+
             assert_eq!(expected, response);
         }
 
@@ -511,4 +511,9 @@ pub mod tests {
             .unwrap()
             .contains_key(&signature));
     }
+}
+
+fn main() {
+    test_check_account_subscribe();
+    test_check_program_subscribe();
 }
