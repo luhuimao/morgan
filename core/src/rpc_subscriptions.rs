@@ -514,8 +514,3 @@ pub mod tests {
             .contains_key(&signature));
     }
 }
-
-fn main() {
-    test_check_account_subscribe();
-    test_check_program_subscribe();
-}
