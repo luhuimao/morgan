@@ -378,7 +378,7 @@ pub mod tests {
     }
 
     //#[test]
-    fn test_check_program_subscribe() {
+    pub fn test_check_program_subscribe() {
         let GenesisBlockInfo {
             genesis_block,
             mint_keypair,
