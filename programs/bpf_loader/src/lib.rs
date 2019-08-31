@@ -245,6 +245,7 @@ fn serialize_parameters(
             .unwrap();
         v.write_all(info.unsigned_key().as_ref()).unwrap();
         v.write_u64::<LittleEndian>(info.account.difs).unwrap();
+        v.write_u64::<LittleEndian>(info.account.difs1).unwrap();
         v.write_u64::<LittleEndian>(info.account.data.len() as u64)
             .unwrap();
         v.write_all(&info.account.data).unwrap();
@@ -258,22 +259,27 @@ fn serialize_parameters(
 }
 
 fn deserialize_parameters(keyed_accounts: &mut [KeyedAccount], buffer: &[u8]) {
+    
     assert_eq!(32, mem::size_of::<Pubkey>());
 
-    let mut start = mem::size_of::<u64>();
-    for info in keyed_accounts.iter_mut() {
-        start += mem::size_of::<u64>(); // skip signer_key boolean
-        start += mem::size_of::<Pubkey>(); // skip pubkey
-        info.account.difs = LittleEndian::read_u64(&buffer[start..]);
-        info.account.difs1 = info.account.difs;
+    let size_u64 = mem::size_of::<u64>();
+    let size_pubkey = mem::size_of::<Pubkey>();
+    let mut start = size_u64;
 
-        start += mem::size_of::<u64>() // skip difs
-                  + mem::size_of::<u64>(); // skip length tag
+    for info in keyed_accounts.iter_mut() {
+        start += size_u64; // skip signer_key boolean
+        start += size_pubkey; // skip pubkey
+        info.account.difs = LittleEndian::read_u64(&buffer[start..]);
+        start += size_u64; //skip difs
+        info.access.difs1 = LittleEndian::read_u64(&buffer[start..]);
+
+        start += size_u64 // skip difs1
+                  + size_u64; // skip length tag
         let end = start + info.account.data.len();
         info.account.data.clone_from_slice(&buffer[start..end]);
 
         start += info.account.data.len() // skip data
-                  + mem::size_of::<Pubkey>(); // skip owner
+                  + size_pubkey; // skip owner
     }
 }
 

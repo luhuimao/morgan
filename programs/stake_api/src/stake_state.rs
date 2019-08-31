@@ -167,7 +167,7 @@ impl<'a> StakeAccount for KeyedAccount<'a> {
                 stake_account.account.difs += stakers_reward;
                 vote_account.account.difs += voters_reward;
 
-                self.account.difs1 = self.account.difs;
+                self.account.difs1 -= stakers_reward + voters_reward;
                 stake_account.account.difs1 += stakers_reward;
                 vote_account.account.difs1 += voters_reward;
 

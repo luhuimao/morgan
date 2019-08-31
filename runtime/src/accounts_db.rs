@@ -703,7 +703,7 @@ mod tests {
                 } else {
                     let mut default_account = Account::default();
                     default_account.difs = account.difs;
-                    default_account.difs1 = account.difs;
+                    default_account.difs1 = account.difs1;
                     assert_eq!(default_account, account);
                 }
             }

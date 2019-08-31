@@ -24,6 +24,9 @@ pub struct Payment {
     /// Amount to be paid.
     pub difs: u64,
 
+    /// Test field for reputation
+    pub difs1: u64,
+    
     /// The `Pubkey` that `difs` should be paid to.
     pub to: Pubkey,
 }
