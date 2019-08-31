@@ -612,8 +612,8 @@ pub fn index_blobs_with_genesis(
     }
 }
 
-//#[cfg(test)]
-pub mod tests {
+#[cfg(test)]
+mod tests {
     use super::*;
     use bincode;
     use rand::Rng;
@@ -845,7 +845,7 @@ pub mod tests {
     }
 
     //#[test]
-    pub fn test_packet_partial_eq() {
+    fn test_packet_partial_eq() {
         let p1 = Packet::default();
         let mut p2 = Packet::default();
 
