@@ -849,12 +849,12 @@ pub mod tests {
         let p1 = Packet::default();
         let mut p2 = Packet::default();
 
-        //assert!(p1 == p2);
-        println!("p1 = {:?}\np2 = {:?}", p1, p2);
+        assert!(p1 == p2);
+        //println!("p1 = {:?}\np2 = {:?}", p1, p2);
 
         p2.data[1] = 4;
-        //assert!(p1 != p2);
-        println!("p1 = {:?}\np2 = {:?}", p1, p2);
+        assert!(p1 != p2);
+        //println!("p1 = {:?}\np2 = {:?}", p1, p2);
     }
 
     #[test]
