@@ -26,7 +26,7 @@ pub struct Payment {
 
     /// Test field for reputation
     pub difs1: u64,
-    
+
     /// The `Pubkey` that `difs` should be paid to.
     pub to: Pubkey,
 }
@@ -75,7 +75,7 @@ pub enum BudgetExpr {
 impl BudgetExpr {
     /// Create the simplest budget - one that pays `difs` to Pubkey.
     pub fn new_payment(difs: u64, to: &Pubkey) -> Self {
-        BudgetExpr::Pay(Payment { difs, to: *to })
+        BudgetExpr::Pay(Payment { difs, difs1: difs, to: *to })
     }
 
     /// Create a budget that pays `difs` to `to` after being witnessed by `from`.
