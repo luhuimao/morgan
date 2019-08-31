@@ -1,4 +1,4 @@
-use super::packet::tests;
+use morgan::packets::tests;
 
 fn main() {
 
