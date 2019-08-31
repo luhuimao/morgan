@@ -613,7 +613,7 @@ pub fn index_blobs_with_genesis(
 }
 
 //#[cfg(test)]
-mod tests {
+pub mod tests {
     use super::*;
     use bincode;
     use rand::Rng;
