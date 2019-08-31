@@ -612,7 +612,7 @@ pub fn index_blobs_with_genesis(
     }
 }
 
-#[cfg(test)]
+//#[cfg(test)]
 mod tests {
     use super::*;
     use bincode;
@@ -844,8 +844,8 @@ mod tests {
         assert_eq!(std::mem::align_of::<BlobData>(), BLOB_DATA_ALIGN);
     }
 
-    #[test]
-    fn test_packet_partial_eq() {
+    //#[test]
+    pub fn test_packet_partial_eq() {
         let p1 = Packet::default();
         let mut p2 = Packet::default();
 
@@ -853,6 +853,7 @@ mod tests {
         p2.data[1] = 4;
         assert!(p1 != p2);
     }
+
     #[test]
     fn test_blob_partial_eq() {
         let p1 = Blob::default();
