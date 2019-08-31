@@ -855,7 +855,7 @@ pub mod tests {
         p2.data[1] = 4;
         assert!(p1 != p2);
         //println!("p1 = {:?}\np2 = {:?}", p1, p2);
-        assert_eq(false);
+        assert_eq!(false);
     }
 
     #[test]
