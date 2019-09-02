@@ -342,7 +342,7 @@ impl RpcSol for RpcSolImpl {
     }
 
     fn request_airdrop(&self, meta: Self::Metadata, id: String, difs: u64) -> Result<String> {
-        trace!("request_airdrop id={} difs={}", id, difs);
+        trace!("request_airdrop id = {} difs = {}", id, difs);
 
         let drone_addr = meta
             .request_processor
@@ -351,6 +351,7 @@ impl RpcSol for RpcSolImpl {
             .config
             .drone_addr
             .ok_or_else(Error::invalid_request)?;
+
         let pubkey = verify_pubkey(id)?;
 
         let blockhash = meta
@@ -359,6 +360,7 @@ impl RpcSol for RpcSolImpl {
             .unwrap()
             .bank()
             .confirmed_last_blockhash();
+
         let transaction = request_airdrop_transaction(&drone_addr, &pubkey, difs, blockhash)
             .map_err(|err| {
                 info!("request_airdrop_transaction failed: {:?}", err);

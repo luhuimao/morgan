@@ -187,7 +187,7 @@ pub fn request_airdrop_transaction(
     blockhash: Hash,
 ) -> Result<Transaction, Error> {
     info!(
-        "request_airdrop_transaction: drone_addr={} id={} difs={} blockhash={}",
+        "request_airdrop_transaction: drone_addr = {} id = {} difs = {} blockhash = {}",
         drone_addr, id, difs, blockhash
     );
     // TODO: make this async tokio client
@@ -210,6 +210,7 @@ pub fn request_airdrop_transaction(
         );
         Err(Error::new(ErrorKind::Other, "Airdrop failed"))
     })?;
+    
     let transaction_length = LittleEndian::read_u16(&buffer) as usize;
     if transaction_length >= PACKET_DATA_SIZE {
         Err(Error::new(

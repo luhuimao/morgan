@@ -22,6 +22,7 @@ impl std::fmt::Display for SystemError {
         write!(f, "error")
     }
 }
+
 impl std::error::Error for SystemError {}
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -39,11 +40,15 @@ pub enum SystemInstruction {
     },
     /// Assign account to a program
     /// * Transaction::keys[0] - account to assign
-    Assign { program_id: Pubkey },
+    Assign {
+        program_id: Pubkey
+    },
     /// Transfer difs
     /// * Transaction::keys[0] - source
     /// * Transaction::keys[1] - destination
-    Transfer { difs: u64 },
+    Transfer {
+        difs: u64
+    },
 }
 
 pub fn create_account(
