@@ -199,7 +199,7 @@ impl Drop for Drone {
     }
 }
 
-#[derive(PartialEq, Display)]
+#[derive(PartialEq, Debug)]
 pub enum AirdropValueType {
     Difs,
     Difs1,
