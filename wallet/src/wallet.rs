@@ -10,7 +10,7 @@ use morgan_budget_api::budget_state::BudgetError;
 use morgan_client::client_error::ClientError;
 use morgan_client::rpc_client::RpcClient;
 #[cfg(not(test))]
-use morgan_drone::drone::request_airdrop_transaction;
+use morgan_drone::drone::{request_airdrop_transaction, AirdropValueType};
 use morgan_drone::drone::DRONE_PORT;
 #[cfg(test)]
 use morgan_drone::drone_mock::request_airdrop_transaction;
@@ -1132,7 +1132,7 @@ impl DroneKeypair {
         difs: u64,
         blockhash: Hash,
     ) -> Result<Self, Box<dyn error::Error>> {
-        let transaction = request_airdrop_transaction(drone_addr, to_pubkey, difs, blockhash)?;
+        let transaction = request_airdrop_transaction(drone_addr, to_pubkey, difs, blockhash, AirdropValueType::Difs)?;
         Ok(Self { transaction })
     }
 
