@@ -245,7 +245,7 @@ impl RpcSolImpl {
 
     fn request_airdrop(
         &self,
-        meta: Self::Metadata,
+        meta: Meta,
         id: String,
         value: u64,
         value_type: AirdropValueType,
