@@ -153,14 +153,14 @@ pub fn process_instruction(
                 difs1,
                 space,
                 program_id,
-            } => create_system_account_with_difs1(keyed_accounts, difs1, space, &program_id);
+            } => create_system_account_with_difs1(keyed_accounts, difs1, space, &program_id),
 
             SystemInstruction::Assign { program_id } => {
                 if !system_program::check_id(&keyed_accounts[FROM_ACCOUNT_INDEX].account.owner) {
                     Err(InstructionError::IncorrectProgramId)?;
                 }
                 assign_account_to_program(keyed_accounts, &program_id)
-            }
+            },
 
             SystemInstruction::Transfer { difs } => transfer_difs(keyed_accounts, difs),
         }

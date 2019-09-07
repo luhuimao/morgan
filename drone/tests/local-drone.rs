@@ -1,4 +1,4 @@
-use morgan_drone::drone::{request_airdrop_transaction, run_local_drone};
+use morgan_drone::drone::{request_airdrop_transaction, run_local_drone, AirdropValueType};
 use morgan_sdk::hash::Hash;
 use morgan_sdk::message::Message;
 use morgan_sdk::pubkey::Pubkey;
