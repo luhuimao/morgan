@@ -416,11 +416,11 @@ impl RpcSol for RpcSolImpl {
     }
 
     fn request_airdrop_with_difs(&self, meta: Self::Metadata, id: String, difs: u64) -> Result<String> {
-        self.request_airdrop(meta, id, difs, AirdropValueType::Difs);
+        self.request_airdrop(meta, id, difs, AirdropValueType::Difs)
     }
 
     fn request_airdrop_with_difs1(&self, meta: Self::Metadata, id: String, difs1: u64) -> Result<String> {
-        self.request_airdrop(meta, id, difs1, AirdropValueType::Difs1);
+        self.request_airdrop(meta, id, difs1, AirdropValueType::Difs1)
     }
 
     fn send_transaction(&self, meta: Self::Metadata, data: Vec<u8>) -> Result<String> {
