@@ -249,9 +249,9 @@ impl RpcSolImpl {
         meta: Self::Metadata,
         id: String,
         value: u64,
-        type: AirdropValueType,
+        value_type: AirdropValueType,
     ) -> Result<String> {
-        trace!("request_airdrop id = {} value = {} type = {}", id, value, type);
+        trace!("request_airdrop id = {} value = {} value_type = {}", id, value, value_type);
 
         let drone_addr = meta
             .request_processor
@@ -270,7 +270,7 @@ impl RpcSolImpl {
             .bank()
             .confirmed_last_blockhash();
 
-        let transaction = request_airdrop_transaction(&drone_addr, &pubkey, value, blockhash, type)
+        let transaction = request_airdrop_transaction(&drone_addr, &pubkey, value, blockhash, value_type)
             .map_err(|err| {
                 info!("request_airdrop_transaction failed: {:?}", err);
                 Error::internal_error()
