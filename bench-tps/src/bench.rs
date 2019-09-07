@@ -4,7 +4,7 @@ use log::*;
 use rayon::prelude::*;
 use morgan::gen_keys::GenKeys;
 use morgan_client::perf_utils::{sample_txs, SampleStats};
-use morgan_drone::drone::request_airdrop_transaction;
+use morgan_drone::drone::{request_airdrop_transaction, AirdropValueType};
 use morgan_metrics::datapoint_info;
 use morgan_sdk::client::Client;
 use morgan_sdk::hash::Hash;
@@ -457,7 +457,7 @@ pub fn airdrop_difs<T: Client>(
         );
 
         let (blockhash, _fee_calculator) = client.get_recent_blockhash().unwrap();
-        match request_airdrop_transaction(&drone_addr, &id.pubkey(), airdrop_amount, blockhash) {
+        match request_airdrop_transaction(&drone_addr, &id.pubkey(), airdrop_amount, blockhash, AirdropValueType::Difs) {
             Ok(transaction) => {
                 let signature = client.async_send_transaction(transaction).unwrap();
                 client

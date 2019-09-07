@@ -22,6 +22,6 @@ fn test_local_drone() {
     run_local_drone(keypair, sender, None);
     let drone_addr = receiver.recv().unwrap();
 
-    let result = request_airdrop_transaction(&drone_addr, &to, difs, blockhash);
+    let result = request_airdrop_transaction(&drone_addr, &to, difs, blockhash, AirdropValueType::Difs);
     assert_eq!(expected_tx, result.unwrap());
 }
