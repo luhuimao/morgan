@@ -199,6 +199,7 @@ impl Drop for Drone {
     }
 }
 
+#[derive(PartialEq)]
 pub enum AirdropValueType {
     Difs,
     Difs1,
@@ -230,7 +231,7 @@ pub fn request_airdrop_transaction(
             blockhash,
             to: *id,
         }
-    }
+    };
     let req = serialize(&req).expect("serialize drone request");
     stream.write_all(&req)?;
 
