@@ -120,7 +120,7 @@ fn transfer_difs1(
     }
     keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 -= difs1;
     keyed_accounts[TO_ACCOUNT_INDEX].account.difs1 += difs1;
-    keyed_accounts[FROM_ACCOUNT_INDEX].account.difs11 -= difs1;
+    keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 -= difs1;
     keyed_accounts[TO_ACCOUNT_INDEX].account.difs1 += difs1;
     Ok(())
 }
