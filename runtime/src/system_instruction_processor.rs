@@ -37,10 +37,44 @@ fn create_system_account(
     }
     
     keyed_accounts[FROM_ACCOUNT_INDEX].account.difs -= difs;
-    keyed_accounts[TO_ACCOUNT_INDEX].account.difs += difs;
-    keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 -= difs;
-    keyed_accounts[TO_ACCOUNT_INDEX].account.difs1 += difs;
+    keyed_accounts[TO_ACCOUNT_INDEX].account.difs += difs;    
+    keyed_accounts[TO_ACCOUNT_INDEX].account.owner = *program_id;
+    keyed_accounts[TO_ACCOUNT_INDEX].account.data = vec![0; space as usize];
+    keyed_accounts[TO_ACCOUNT_INDEX].account.executable = false;
+    Ok(())
+}
+
+fn create_system_account_with_difs1(
+    keyed_accounts: &mut [KeyedAccount],
+    difs1: u64,
+    space: u64,
+    program_id: &Pubkey,
+) -> Result<(), SystemError> {
+    if !system_program::check_id(&keyed_accounts[FROM_ACCOUNT_INDEX].account.owner) {
+        debug!("CreateAccount: invalid account[from] owner");
+        Err(SystemError::SourceNotSystemAccount)?;
+    }
+
+    if !keyed_accounts[TO_ACCOUNT_INDEX].account.data.is_empty()
+        || !system_program::check_id(&keyed_accounts[TO_ACCOUNT_INDEX].account.owner)
+    {
+        debug!(
+            "CreateAccount: invalid argument; account {} already in use",
+            keyed_accounts[TO_ACCOUNT_INDEX].unsigned_key()
+        );
+        Err(SystemError::AccountAlreadyInUse)?;
+    }
+
+    if difs1 > keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 {
+        debug!(
+            "CreateAccount: insufficient difs1 ({}, need {})",
+            keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1, difs1
+        );
+        Err(SystemError::ResultWithNegativeDifs1)?;
+    }
     
+    keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 -= difs1;
+    keyed_accounts[TO_ACCOUNT_INDEX].account.difs1 += difs1;    
     keyed_accounts[TO_ACCOUNT_INDEX].account.owner = *program_id;
     keyed_accounts[TO_ACCOUNT_INDEX].account.data = vec![0; space as usize];
     keyed_accounts[TO_ACCOUNT_INDEX].account.executable = false;
@@ -54,6 +88,7 @@ fn assign_account_to_program(
     keyed_accounts[FROM_ACCOUNT_INDEX].account.owner = *program_id;
     Ok(())
 }
+
 fn transfer_difs(
     keyed_accounts: &mut [KeyedAccount],
     difs: u64,
@@ -65,12 +100,28 @@ fn transfer_difs(
         );
         Err(SystemError::ResultWithNegativeDifs)?;
     }
-    
     keyed_accounts[FROM_ACCOUNT_INDEX].account.difs -= difs;
     keyed_accounts[TO_ACCOUNT_INDEX].account.difs += difs;
     keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 -= difs;
     keyed_accounts[TO_ACCOUNT_INDEX].account.difs1 += difs;
+    Ok(())
+}
 
+fn transfer_difs1(
+    keyed_accounts: &mut [KeyedAccount],
+    difs1: u64,
+) -> Result<(), SystemError> {
+    if difs1 > keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 {
+        debug!(
+            "Transfer: insufficient difs1 ({}, need {})",
+            keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1, difs1
+        );
+        Err(SystemError::ResultWithNegativeDifs1)?;
+    }
+    keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 -= difs1;
+    keyed_accounts[TO_ACCOUNT_INDEX].account.difs1 += difs1;
+    keyed_accounts[FROM_ACCOUNT_INDEX].account.difs11 -= difs1;
+    keyed_accounts[TO_ACCOUNT_INDEX].account.difs1 += difs1;
     Ok(())
 }
 
@@ -91,17 +142,26 @@ pub fn process_instruction(
         }
 
         match instruction {
+            
             SystemInstruction::CreateAccount {
                 difs,
                 space,
                 program_id,
             } => create_system_account(keyed_accounts, difs, space, &program_id),
+
+            SystemInstruction::CreateAccountWithDifs1 {
+                difs1,
+                space,
+                program_id,
+            } => create_system_account_with_difs1(keyed_accounts, difs1, space, &program_id);
+
             SystemInstruction::Assign { program_id } => {
                 if !system_program::check_id(&keyed_accounts[FROM_ACCOUNT_INDEX].account.owner) {
                     Err(InstructionError::IncorrectProgramId)?;
                 }
                 assign_account_to_program(keyed_accounts, &program_id)
             }
+
             SystemInstruction::Transfer { difs } => transfer_difs(keyed_accounts, difs),
         }
         .map_err(|e| InstructionError::CustomError(e as u32))

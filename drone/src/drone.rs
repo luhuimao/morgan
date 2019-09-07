@@ -51,6 +51,11 @@ pub enum DroneRequest {
         to: Pubkey,
         blockhash: Hash,
     },
+    GetAirdropWithDifs1 {
+        difs1: u64,
+        to: Pubkey,
+        blockhash: Hash,
+    }
 }
 
 pub struct Drone {
@@ -136,9 +141,23 @@ impl Drone {
                         ),
                     ))
                 }
+            },
+            DroneRequest::GetAirdropWithDifs1 {
+                difs1,
+                to,
+                blockhash,
+            } => {
+                let create_instruction = system_instruction::create_user_account_with_difs1(
+                    &self.mint_keypair.pubkey(),
+                    &to,
+                    difs1,
+                );
+                let message = Message::new(vec![create_instruction]);
+                Ok(Transaction::new(&[&self.mint_keypair], message, blockhash))
             }
         }
     }
+
     pub fn process_drone_request(&mut self, bytes: &BytesMut) -> Result<Bytes, io::Error> {
         let req: DroneRequest = deserialize(bytes).or_else(|err| {
             Err(io::Error::new(
@@ -180,24 +199,38 @@ impl Drop for Drone {
     }
 }
 
+pub enum AirdropValueType {
+    Difs,
+    Difs1,
+}
+
 pub fn request_airdrop_transaction(
     drone_addr: &SocketAddr,
     id: &Pubkey,
-    difs: u64,
+    value: u64,
     blockhash: Hash,
+    type: AirdropValueType,
 ) -> Result<Transaction, Error> {
     info!(
-        "request_airdrop_transaction: drone_addr = {} id = {} difs = {} blockhash = {}",
-        drone_addr, id, difs, blockhash
+        "request_airdrop_transaction: drone_addr = {} id = {} value = {} blockhash = {}",
+        drone_addr, id, value, blockhash
     );
     // TODO: make this async tokio client
     let mut stream = TcpStream::connect_timeout(drone_addr, Duration::new(3, 0))?;
     stream.set_read_timeout(Some(Duration::new(10, 0)))?;
-    let req = DroneRequest::GetAirdrop {
-        difs,
-        blockhash,
-        to: *id,
-    };
+    let req = if type == AirdropValueType::Difs {
+        DroneRequest::GetAirdrop {
+            difs: value,
+            blockhash,
+            to: *id,
+        }
+    } else {
+        DroneRequest::GetAirdropWithDifs1 {
+            difs1: value,
+            blockhash,
+            to: *id,
+        }
+    }
     let req = serialize(&req).expect("serialize drone request");
     stream.write_all(&req)?;
 

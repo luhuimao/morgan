@@ -8,6 +8,7 @@ use num_derive::FromPrimitive;
 pub enum SystemError {
     AccountAlreadyInUse,
     ResultWithNegativeDifs,
+    ResultWithNegativeDifs1,
     SourceNotSystemAccount,
 }
 
@@ -35,6 +36,17 @@ pub enum SystemInstruction {
     /// * program_id - the program id of the new account
     CreateAccount {
         difs: u64,
+        space: u64,
+        program_id: Pubkey,
+    },
+    /// Create a new account
+    /// * Transaction::keys[0] - source
+    /// * Transaction::keys[1] - new account key
+    /// * difs1 - number of difs1 to transfer to the new account
+    /// * space - memory to allocate if greater then zero
+    /// * program_id - the program id of the new account
+    CreateAccountWithDifs1 {
+        difs1: u64,
         space: u64,
         program_id: Pubkey,
     },
@@ -73,10 +85,38 @@ pub fn create_account(
     )
 }
 
+pub fn create_account_with_difs1(
+    from_pubkey: &Pubkey,
+    to_pubkey: &Pubkey,
+    difs1: u64,
+    space: u64,
+    program_id: &Pubkey,
+) -> Instruction {
+    let account_metas = vec![
+        AccountMeta::new(*from_pubkey, true),
+        AccountMeta::new(*to_pubkey, false),
+    ];
+    Instruction::new(
+        system_program::id(),
+        &SystemInstruction::CreateAccountWithDifs1 {
+            difs1,
+            space,
+            program_id: *program_id,
+        },
+        account_metas,
+    )
+}
+
 /// Create and sign a transaction to create a system account
 pub fn create_user_account(from_pubkey: &Pubkey, to_pubkey: &Pubkey, difs: u64) -> Instruction {
     let program_id = system_program::id();
     create_account(from_pubkey, to_pubkey, difs, 0, &program_id)
+}
+
+/// Create and sign a transaction to create a system account with difs1
+pub fn create_user_account_with_difs1(from_pubkey: &Pubkey, to_pubkey: &Pubkey, difs: u64) -> Instruction {
+    let program_id = system_program::id();
+    create_account_with_difs1(from_pubkey, to_pubkey, difs, 0, &program_id)
 }
 
 pub fn assign(from_pubkey: &Pubkey, program_id: &Pubkey) -> Instruction {

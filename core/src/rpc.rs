@@ -9,6 +9,7 @@ use bincode::{deserialize, serialize};
 use jsonrpc_core::{Error, Metadata, Result};
 use jsonrpc_derive::rpc;
 use morgan_drone::drone::request_airdrop_transaction;
+use morgan_drone::drone::AirdropValueType;
 use morgan_runtime::bank::Bank;
 use morgan_sdk::account::Account;
 use morgan_sdk::fee_calculator::FeeCalculator;
@@ -197,8 +198,11 @@ pub trait RpcSol {
     #[rpc(meta, name = "getTxnCnt")]
     fn get_transaction_count(&self, _: Self::Metadata) -> Result<u64>;
 
-    #[rpc(meta, name = "requestDif")]
-    fn request_airdrop(&self, _: Self::Metadata, _: String, _: u64) -> Result<String>;
+    #[rpc(meta, name = "requestDifs")]
+    fn request_airdrop_with_difs(&self, _: Self::Metadata, _: String, _: u64) -> Result<String>;
+
+    #[rpc(meta, name = "requestDifs1")]
+    fn request_airdrop_with_difs1(&self, _: Self::Metadata, _: String, _: u64) -> Result<String>;
 
     #[rpc(meta, name = "sendTxn")]
     fn send_transaction(&self, _: Self::Metadata, _: Vec<u8>) -> Result<String>;
@@ -237,6 +241,77 @@ pub trait RpcSol {
 }
 
 pub struct RpcSolImpl;
+
+impl RpcSolImpl {
+
+    fn request_airdrop(
+        &self,
+        meta: Self::Metadata,
+        id: String,
+        value: u64,
+        type: AirdropValueType,
+    ) -> Result<String> {
+        trace!("request_airdrop id = {} value = {} type = {}", id, value, type);
+
+        let drone_addr = meta
+            .request_processor
+            .read()
+            .unwrap()
+            .config
+            .drone_addr
+            .ok_or_else(Error::invalid_request)?;
+
+        let pubkey = verify_pubkey(id)?;
+
+        let blockhash = meta
+            .request_processor
+            .read()
+            .unwrap()
+            .bank()
+            .confirmed_last_blockhash();
+
+        let transaction = request_airdrop_transaction(&drone_addr, &pubkey, value, blockhash, type)
+            .map_err(|err| {
+                info!("request_airdrop_transaction failed: {:?}", err);
+                Error::internal_error()
+            })?;
+
+        let data = serialize(&transaction).map_err(|err| {
+            info!("request_airdrop: serialize error: {:?}", err);
+            Error::internal_error()
+        })?;
+
+        let transactions_socket = UdpSocket::bind("0.0.0.0:0").unwrap();
+        let transactions_addr = get_tpu_addr(&meta.cluster_info)?;
+        transactions_socket
+            .send_to(&data, transactions_addr)
+            .map_err(|err| {
+                info!("request_airdrop: send_to error: {:?}", err);
+                Error::internal_error()
+            })?;
+
+        let signature = transaction.signatures[0];
+        let now = Instant::now();
+        let mut signature_status;
+        loop {
+            signature_status = meta
+                .request_processor
+                .read()
+                .unwrap()
+                .get_signature_status(signature);
+
+            if signature_status == Some(Ok(())) {
+                info!("airdrop signature ok");
+                return Ok(signature.to_string());
+            } else if now.elapsed().as_secs() > 5 {
+                info!("airdrop signature timeout");
+                return Err(Error::internal_error());
+            }
+            sleep(Duration::from_millis(100));
+        }
+    }
+}
+
 impl RpcSol for RpcSolImpl {
     type Metadata = Meta;
 
@@ -341,65 +416,12 @@ impl RpcSol for RpcSolImpl {
             .get_transaction_count()
     }
 
-    fn request_airdrop(&self, meta: Self::Metadata, id: String, difs: u64) -> Result<String> {
-        trace!("request_airdrop id = {} difs = {}", id, difs);
+    fn request_airdrop_with_difs(&self, meta: Self::Metadata, id: String, difs: u64) -> Result<String> {
+        self.request_airdrop(meta, id, difs, AirdropValueType::Difs);
+    }
 
-        let drone_addr = meta
-            .request_processor
-            .read()
-            .unwrap()
-            .config
-            .drone_addr
-            .ok_or_else(Error::invalid_request)?;
-
-        let pubkey = verify_pubkey(id)?;
-
-        let blockhash = meta
-            .request_processor
-            .read()
-            .unwrap()
-            .bank()
-            .confirmed_last_blockhash();
-
-        let transaction = request_airdrop_transaction(&drone_addr, &pubkey, difs, blockhash)
-            .map_err(|err| {
-                info!("request_airdrop_transaction failed: {:?}", err);
-                Error::internal_error()
-            })?;;
-
-        let data = serialize(&transaction).map_err(|err| {
-            info!("request_airdrop: serialize error: {:?}", err);
-            Error::internal_error()
-        })?;
-
-        let transactions_socket = UdpSocket::bind("0.0.0.0:0").unwrap();
-        let transactions_addr = get_tpu_addr(&meta.cluster_info)?;
-        transactions_socket
-            .send_to(&data, transactions_addr)
-            .map_err(|err| {
-                info!("request_airdrop: send_to error: {:?}", err);
-                Error::internal_error()
-            })?;
-
-        let signature = transaction.signatures[0];
-        let now = Instant::now();
-        let mut signature_status;
-        loop {
-            signature_status = meta
-                .request_processor
-                .read()
-                .unwrap()
-                .get_signature_status(signature);
-
-            if signature_status == Some(Ok(())) {
-                info!("airdrop signature ok");
-                return Ok(signature.to_string());
-            } else if now.elapsed().as_secs() > 5 {
-                info!("airdrop signature timeout");
-                return Err(Error::internal_error());
-            }
-            sleep(Duration::from_millis(100));
-        }
+    fn request_airdrop_with_difs1(&self, meta: Self::Metadata, id: String, difs1: u64) -> Result<String> {
+        self.request_airdrop(meta, id, difs1, AirdropValueType::Difs1);
     }
 
     fn send_transaction(&self, meta: Self::Metadata, data: Vec<u8>) -> Result<String> {
