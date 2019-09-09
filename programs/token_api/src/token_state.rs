@@ -101,6 +101,7 @@ impl TokenState {
         if input.is_empty() {
             Err(TokenError::InvalidArgument)?;
         }
+
         match input[0] {
             0 => Ok(TokenState::Unallocated),
             1 => Ok(TokenState::Token(
@@ -393,7 +394,6 @@ impl TokenState {
         if info[0].signer_key().is_none() {
             Err(TokenError::InvalidArgument)?;
         }
-
         let input_accounts: Vec<TokenState> = info
             .iter()
             .map(|keyed_account| {
@@ -438,7 +438,6 @@ impl TokenState {
                 Self::process_setowner(info, &input_accounts, &mut output_accounts)?
             }
         }
-
         for (index, account) in &output_accounts {
             info!("output_account: index={} data={:?}", index, account);
             Self::serialize(account, &mut info[*index].account.data)?;
