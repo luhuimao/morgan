@@ -427,6 +427,7 @@ mod tests {
                "result": {
                    "owner": budget_program_id,
                    "difs": 51,
+                   "reputations": 0,
                    "data": expected_data,
                     "executable": executable,
                },
@@ -571,6 +572,7 @@ mod tests {
                "result": {
                    "owner": system_program::id(),
                    "difs": 100,
+                   "reputations": 0,
                    "data": [],
                    "executable": false,
                },
