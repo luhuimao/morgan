@@ -18,6 +18,7 @@ pub fn check_id(program_id: &Pubkey) -> bool {
 pub fn create_loadable_account(name: &str) -> Account {
     Account {
         difs: 1,
+        reputations: 0,
         owner: id(),
         data: name.as_bytes().to_vec(),
         executable: true,

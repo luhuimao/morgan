@@ -653,7 +653,6 @@ impl Bank {
         );
         let mut loaded_accounts = self.load_accounts(txs, sig_results, &mut error_counters);
         let tick_height = self.tick_height();
-
         let load_elapsed = now.elapsed();
         let now = Instant::now();
         let executed: Vec<Result<()>> =
@@ -809,6 +808,17 @@ impl Bank {
     pub fn get_balance(&self, pubkey: &Pubkey) -> u64 {
         self.get_account(pubkey)
             .map(|x| Self::read_balance(&x))
+            .unwrap_or(0)
+    }
+
+    pub fn read_reputation(account: &Account) -> u64 {
+        account.reputations
+    }
+    /// Each program would need to be able to introspect its own state
+    /// this is hard-coded to the Budget language
+    pub fn get_reputation(&self, pubkey: &Pubkey) -> u64 {
+        self.get_account(pubkey)
+            .map(|x| Self::read_reputation(&x))
             .unwrap_or(0)
     }
 

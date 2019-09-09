@@ -12,7 +12,7 @@ use test::Bencher;
 fn deposit_many(bank: &Bank, pubkeys: &mut Vec<Pubkey>, num: usize) {
     for t in 0..num {
         let pubkey = Pubkey::new_rand();
-        let account = Account::new((t + 1) as u64, 0, &Account::default().owner);
+        let account = Account::new((t + 1) as u64, 0, 0, &Account::default().owner);
         pubkeys.push(pubkey.clone());
         assert!(bank.get_account(&pubkey).is_none());
         bank.deposit(&pubkey, (t + 1) as u64);

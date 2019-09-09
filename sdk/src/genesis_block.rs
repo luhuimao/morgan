@@ -33,7 +33,7 @@ pub fn create_genesis_block(difs: u64) -> (GenesisBlock, Keypair) {
             &Pubkey::default(),
             &[(
                 mint_keypair.pubkey(),
-                Account::new(difs, 0, &system_program::id()),
+                Account::new(difs, 0, 0, &system_program::id()),
             )],
             &[],
         ),
@@ -109,9 +109,9 @@ mod tests {
             &[
                 (
                     mint_keypair.pubkey(),
-                    Account::new(10_000, 0, &Pubkey::default()),
+                    Account::new(10_000, 0, 0, &Pubkey::default()),
                 ),
-                (Pubkey::new_rand(), Account::new(1, 0, &Pubkey::default())),
+                (Pubkey::new_rand(), Account::new(1, 0, 0, &Pubkey::default())),
             ],
             &[("hi".to_string(), Pubkey::new_rand())],
         );

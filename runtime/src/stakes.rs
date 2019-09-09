@@ -244,7 +244,7 @@ mod tests {
         }
 
         // not a stake account, and whacks above entry
-        stakes.store(&stake_pubkey, &Account::new(1, 0, &morgan_stake_api::id()));
+        stakes.store(&stake_pubkey, &Account::new(1, 0, 0, &morgan_stake_api::id()));
         {
             let vote_accounts = stakes.vote_accounts();
             assert!(vote_accounts.get(&vote_pubkey).is_some());

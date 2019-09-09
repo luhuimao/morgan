@@ -61,7 +61,7 @@ impl Deref for SlotHashes {
 }
 
 pub fn create_account(difs: u64) -> Account {
-    Account::new(difs, SlotHashes::size_of(), &syscall::id())
+    Account::new(difs, 0, SlotHashes::size_of(), &syscall::id())
 }
 
 #[cfg(test)]

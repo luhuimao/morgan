@@ -481,7 +481,7 @@ mod tests {
         let paths = get_tmp_accounts_path!();
         let db = AccountsDB::new(&paths.paths);
         let key = Pubkey::default();
-        let account0 = Account::new(1, 0, &key);
+        let account0 = Account::new(1, 0, 0, &key);
 
         db.store(0, &[(&key, &account0)]);
         db.add_root(0);
@@ -495,11 +495,11 @@ mod tests {
         let paths = get_tmp_accounts_path!();
         let db = AccountsDB::new(&paths.paths);
         let key = Pubkey::default();
-        let account0 = Account::new(1, 0, &key);
+        let account0 = Account::new(1, 0, 0, &key);
 
         db.store(0, &[(&key, &account0)]);
 
-        let account1 = Account::new(0, 0, &key);
+        let account1 = Account::new(0, 0, 0, &key);
         db.store(1, &[(&key, &account1)]);
 
         let ancestors = vec![(1, 1)].into_iter().collect();
@@ -515,11 +515,11 @@ mod tests {
         let paths = get_tmp_accounts_path!();
         let db = AccountsDB::new(&paths.paths);
         let key = Pubkey::default();
-        let account0 = Account::new(1, 0, &key);
+        let account0 = Account::new(1, 0, 0, &key);
 
         db.store(0, &[(&key, &account0)]);
 
-        let account1 = Account::new(0, 0, &key);
+        let account1 = Account::new(0, 0, 0, &key);
         db.store(1, &[(&key, &account1)]);
         db.add_root(0);
 
@@ -536,7 +536,7 @@ mod tests {
         let paths = get_tmp_accounts_path!();
         let db = AccountsDB::new(&paths.paths);
         let key = Pubkey::default();
-        let account0 = Account::new(1, 0, &key);
+        let account0 = Account::new(1, 0, 0, &key);
 
         // store value 1 in the "root", i.e. db zero
         db.store(0, &[(&key, &account0)]);
@@ -551,7 +551,7 @@ mod tests {
         //                                       (via root0)
 
         // store value 0 in one child
-        let account1 = Account::new(0, 0, &key);
+        let account1 = Account::new(0, 0, 0, &key);
         db.store(1, &[(&key, &account1)]);
 
         // masking accounts is done at the Accounts level, at accountsDB we see
@@ -621,7 +621,7 @@ mod tests {
         assert!(check_storage(&db, 2));
 
         let pubkey = Pubkey::new_rand();
-        let account = Account::new(1, ACCOUNT_DATA_FILE_SIZE as usize / 3, &pubkey);
+        let account = Account::new(1, 0, ACCOUNT_DATA_FILE_SIZE as usize / 3, &pubkey);
         db.store(1, &[(&pubkey, &account)]);
         db.store(1, &[(&pubkeys[0], &account)]);
         {
@@ -646,11 +646,11 @@ mod tests {
         // 1 token in the "root", i.e. db zero
         let paths = get_tmp_accounts_path!();
         let db0 = AccountsDB::new(&paths.paths);
-        let account0 = Account::new(1, 0, &key);
+        let account0 = Account::new(1, 0, 0, &key);
         db0.store(0, &[(&key, &account0)]);
 
         // 0 difs in the child
-        let account1 = Account::new(0, 0, &key);
+        let account1 = Account::new(0, 0, 0, &key);
         db0.store(1, &[(&key, &account1)]);
 
         // masking accounts is done at the Accounts level, at accountsDB we see
@@ -671,7 +671,7 @@ mod tests {
     ) {
         for t in 0..num {
             let pubkey = Pubkey::new_rand();
-            let account = Account::new((t + 1) as u64, space, &Account::default().owner);
+            let account = Account::new((t + 1) as u64, 0, space, &Account::default().owner);
             pubkeys.push(pubkey.clone());
             let ancestors = vec![(fork, 0)].into_iter().collect();
             assert!(accounts.load_slow(&ancestors, &pubkey).is_none());
@@ -679,7 +679,7 @@ mod tests {
         }
         for t in 0..num_vote {
             let pubkey = Pubkey::new_rand();
-            let account = Account::new((num + t + 1) as u64, space, &morgan_vote_api::id());
+            let account = Account::new((num + t + 1) as u64, 0, space, &morgan_vote_api::id());
             pubkeys.push(pubkey.clone());
             let ancestors = vec![(fork, 0)].into_iter().collect();
             assert!(accounts.load_slow(&ancestors, &pubkey).is_none());
@@ -764,7 +764,7 @@ mod tests {
         let mut keys = vec![];
         for i in 0..9 {
             let key = Pubkey::new_rand();
-            let account = Account::new(i + 1, size as usize / 4, &key);
+            let account = Account::new(i + 1, 0, size as usize / 4, &key);
             accounts.store(0, &[(&key, &account)]);
             keys.push(key);
         }
@@ -795,7 +795,7 @@ mod tests {
             AccountStorageStatus::StorageFull,
         ];
         let pubkey1 = Pubkey::new_rand();
-        let account1 = Account::new(1, ACCOUNT_DATA_FILE_SIZE as usize / 2, &pubkey1);
+        let account1 = Account::new(1, 0, ACCOUNT_DATA_FILE_SIZE as usize / 2, &pubkey1);
         accounts.store(0, &[(&pubkey1, &account1)]);
         {
             let stores = accounts.storage.read().unwrap();
@@ -805,7 +805,7 @@ mod tests {
         }
 
         let pubkey2 = Pubkey::new_rand();
-        let account2 = Account::new(1, ACCOUNT_DATA_FILE_SIZE as usize / 2, &pubkey2);
+        let account2 = Account::new(1, 0, ACCOUNT_DATA_FILE_SIZE as usize / 2, &pubkey2);
         accounts.store(0, &[(&pubkey2, &account2)]);
         {
             let stores = accounts.storage.read().unwrap();
@@ -883,7 +883,7 @@ mod tests {
         let paths = get_tmp_accounts_path!();
         let accounts = AccountsDB::new(&paths.paths);
         let pubkey = Pubkey::new_rand();
-        let account = Account::new(1, 0, &Account::default().owner);
+        let account = Account::new(1, 0, 0, &Account::default().owner);
         //store an account
         accounts.store(0, &[(&pubkey, &account)]);
         let ancestors = vec![(0, 0)].into_iter().collect();

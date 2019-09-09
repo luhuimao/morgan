@@ -9,6 +9,7 @@ use morgan_sdk::system_program;
 use morgan_sdk::transaction::TransactionError;
 use std::collections::HashMap;
 use std::sync::RwLock;
+use log::*;
 
 #[cfg(unix)]
 use libloading::os::unix::*;
@@ -126,7 +127,6 @@ impl MessageProcessor {
         tick_height: u64,
     ) -> Result<(), InstructionError> {
         let program_id = instruction.program_id(&message.account_keys);
-
         let mut keyed_accounts = create_keyed_accounts(executable_accounts);
         let mut keyed_accounts2: Vec<_> = instruction
             .accounts
@@ -288,7 +288,7 @@ mod tests {
             pre: &Pubkey,
             post: &Pubkey,
         ) -> Result<(), InstructionError> {
-            verify_instruction(&ix, &pre, 0, &[], &Account::new(0, 0, post))
+            verify_instruction(&ix, &pre, 0, &[], &Account::new(0, 0, 0, post))
         }
 
         let system_program_id = system_program::id();
@@ -311,7 +311,7 @@ mod tests {
     fn test_verify_instruction_change_data() {
         fn change_data(program_id: &Pubkey) -> Result<(), InstructionError> {
             let alice_program_id = Pubkey::new_rand();
-            let account = Account::new(0, 0, &alice_program_id);
+            let account = Account::new(0, 0, 0, &alice_program_id);
             verify_instruction(&program_id, &alice_program_id, 0, &[42], &account)
         }
 

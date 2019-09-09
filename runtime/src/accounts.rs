@@ -678,10 +678,10 @@ mod tests {
         let key0 = keypair.pubkey();
         let key1 = Pubkey::new(&[5u8; 32]);
 
-        let account = Account::new(1, 1, &Pubkey::default());
+        let account = Account::new(1, 0, 1, &Pubkey::default());
         accounts.push((key0, account));
 
-        let account = Account::new(2, 1, &Pubkey::default());
+        let account = Account::new(2, 0, 1, &Pubkey::default());
         accounts.push((key1, account));
 
         let instructions = vec![CompiledInstruction::new(1, &(), vec![0])];
@@ -711,7 +711,7 @@ mod tests {
         let keypair = Keypair::new();
         let key0 = keypair.pubkey();
 
-        let account = Account::new(1, 1, &Pubkey::default());
+        let account = Account::new(1, 0, 1, &Pubkey::default());
         accounts.push((key0, account));
 
         let instructions = vec![CompiledInstruction::new(1, &(), vec![0])];
@@ -745,7 +745,7 @@ mod tests {
         let keypair = Keypair::new();
         let key0 = keypair.pubkey();
 
-        let account = Account::new(1, 1, &Pubkey::new_rand()); // <-- owner is not the system program
+        let account = Account::new(1, 0, 1, &Pubkey::new_rand()); // <-- owner is not the system program
         accounts.push((key0, account));
 
         let instructions = vec![CompiledInstruction::new(1, &(), vec![0])];
@@ -776,10 +776,10 @@ mod tests {
         let key0 = keypair.pubkey();
         let key1 = Pubkey::new(&[5u8; 32]);
 
-        let account = Account::new(1, 1, &Pubkey::default());
+        let account = Account::new(1, 0, 1, &Pubkey::default());
         accounts.push((key0, account));
 
-        let account = Account::new(2, 1, &Pubkey::default());
+        let account = Account::new(2, 0, 1, &Pubkey::default());
         accounts.push((key1, account));
 
         let instructions = vec![CompiledInstruction::new(2, &(), vec![0, 1])];
@@ -820,35 +820,35 @@ mod tests {
         let key5 = Pubkey::new(&[9u8; 32]);
         let key6 = Pubkey::new(&[10u8; 32]);
 
-        let account = Account::new(1, 1, &Pubkey::default());
+        let account = Account::new(1, 0, 1, &Pubkey::default());
         accounts.push((key0, account));
 
-        let mut account = Account::new(40, 1, &Pubkey::default());
+        let mut account = Account::new(40, 0, 1, &Pubkey::default());
         account.executable = true;
         account.owner = native_loader::id();
         accounts.push((key1, account));
 
-        let mut account = Account::new(41, 1, &Pubkey::default());
+        let mut account = Account::new(41, 0, 1, &Pubkey::default());
         account.executable = true;
         account.owner = key1;
         accounts.push((key2, account));
 
-        let mut account = Account::new(42, 1, &Pubkey::default());
+        let mut account = Account::new(42, 0, 1, &Pubkey::default());
         account.executable = true;
         account.owner = key2;
         accounts.push((key3, account));
 
-        let mut account = Account::new(43, 1, &Pubkey::default());
+        let mut account = Account::new(43, 0, 1, &Pubkey::default());
         account.executable = true;
         account.owner = key3;
         accounts.push((key4, account));
 
-        let mut account = Account::new(44, 1, &Pubkey::default());
+        let mut account = Account::new(44, 0, 1, &Pubkey::default());
         account.executable = true;
         account.owner = key4;
         accounts.push((key5, account));
 
-        let mut account = Account::new(45, 1, &Pubkey::default());
+        let mut account = Account::new(45, 0, 1, &Pubkey::default());
         account.executable = true;
         account.owner = key5;
         accounts.push((key6, account));
@@ -878,10 +878,10 @@ mod tests {
         let key0 = keypair.pubkey();
         let key1 = Pubkey::new(&[5u8; 32]);
 
-        let account = Account::new(1, 1, &Pubkey::default());
+        let account = Account::new(1, 0, 1, &Pubkey::default());
         accounts.push((key0, account));
 
-        let mut account = Account::new(40, 1, &Pubkey::default());
+        let mut account = Account::new(40, 0, 1, &Pubkey::default());
         account.executable = true;
         account.owner = Pubkey::default();
         accounts.push((key1, account));
@@ -911,10 +911,10 @@ mod tests {
         let key0 = keypair.pubkey();
         let key1 = Pubkey::new(&[5u8; 32]);
 
-        let account = Account::new(1, 1, &Pubkey::default());
+        let account = Account::new(1, 0, 1, &Pubkey::default());
         accounts.push((key0, account));
 
-        let mut account = Account::new(40, 1, &Pubkey::default());
+        let mut account = Account::new(40, 0, 1, &Pubkey::default());
         account.owner = native_loader::id();
         accounts.push((key1, account));
 
@@ -945,20 +945,20 @@ mod tests {
         let key2 = Pubkey::new(&[6u8; 32]);
         let key3 = Pubkey::new(&[7u8; 32]);
 
-        let account = Account::new(1, 1, &Pubkey::default());
+        let account = Account::new(1, 0, 1, &Pubkey::default());
         accounts.push((key0, account));
 
-        let mut account = Account::new(40, 1, &Pubkey::default());
+        let mut account = Account::new(40, 0, 1, &Pubkey::default());
         account.executable = true;
         account.owner = native_loader::id();
         accounts.push((key1, account));
 
-        let mut account = Account::new(41, 1, &Pubkey::default());
+        let mut account = Account::new(41, 0, 1, &Pubkey::default());
         account.executable = true;
         account.owner = key1;
         accounts.push((key2, account));
 
-        let mut account = Account::new(42, 1, &Pubkey::default());
+        let mut account = Account::new(42, 0, 1, &Pubkey::default());
         account.executable = true;
         account.owner = key2;
         accounts.push((key3, account));
@@ -1005,7 +1005,7 @@ mod tests {
         let keypair = Keypair::new();
         let pubkey = keypair.pubkey();
 
-        let account = Account::new(10, 1, &Pubkey::default());
+        let account = Account::new(10, 0, 1, &Pubkey::default());
         accounts.push((pubkey, account));
 
         let instructions = vec![CompiledInstruction::new(0, &(), vec![0, 1])];
@@ -1034,13 +1034,13 @@ mod tests {
 
         // Load accounts owned by various programs into AccountsDB
         let pubkey0 = Pubkey::new_rand();
-        let account0 = Account::new(1, 0, &Pubkey::new(&[2; 32]));
+        let account0 = Account::new(1, 0, 0, &Pubkey::new(&[2; 32]));
         accounts.store_slow(0, &pubkey0, &account0);
         let pubkey1 = Pubkey::new_rand();
-        let account1 = Account::new(1, 0, &Pubkey::new(&[2; 32]));
+        let account1 = Account::new(1, 0, 0, &Pubkey::new(&[2; 32]));
         accounts.store_slow(0, &pubkey1, &account1);
         let pubkey2 = Pubkey::new_rand();
-        let account2 = Account::new(1, 0, &Pubkey::new(&[3; 32]));
+        let account2 = Account::new(1, 0, 0, &Pubkey::new(&[3; 32]));
         accounts.store_slow(0, &pubkey2, &account2);
 
         let loaded = accounts.load_by_program(0, &Pubkey::new(&[2; 32]));

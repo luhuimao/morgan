@@ -7,6 +7,8 @@ use std::{cmp, fmt};
 pub struct Account {
     /// difs in the account
     pub difs: u64,
+    /// reputations in the account
+    pub reputations: u64,
     /// data held in this account
     pub data: Vec<u8>,
     /// the program that owns this account. If executable, the program that loads this account.
@@ -37,9 +39,10 @@ impl fmt::Debug for Account {
 
 impl Account {
     // TODO do we want to add executable and leader_owner even though they should always be false/default?
-    pub fn new(difs: u64, space: usize, owner: &Pubkey) -> Account {
+    pub fn new(difs: u64, reputations: u64, space: usize, owner: &Pubkey) -> Account {
         Account {
             difs,
+            reputations,
             data: vec![0u8; space],
             owner: *owner,
             executable: false,

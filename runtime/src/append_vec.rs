@@ -7,6 +7,7 @@ use std::mem;
 use std::path::Path;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::Mutex;
+use log::*;
 
 //Data is aligned at the next 64 byte offset. Without alignment loading the memory may
 //crash on some architectures.
@@ -34,6 +35,8 @@ pub struct AccountBalance {
     pub owner: Pubkey,
     /// this account's data contains a loaded program (and is now read-only)
     pub executable: bool,
+    /// reputations in the account
+    pub reputations: u64,
 }
 
 /// References to Memory Mapped memory
@@ -49,6 +52,7 @@ impl<'a> StoredAccount<'a> {
     pub fn clone_account(&self) -> Account {
         Account {
             difs: self.balance.difs,
+            reputations: self.balance.reputations,
             owner: self.balance.owner,
             executable: self.balance.executable,
             data: self.data.to_vec(),
@@ -213,6 +217,7 @@ impl AppendVec {
                 difs: account.difs,
                 owner: account.owner,
                 executable: account.executable,
+                reputations: account.reputations,
             };
             let balance_ptr = &balance as *const AccountBalance;
             let data_len = storage_meta.data_len as usize;
@@ -275,7 +280,7 @@ pub mod test_utils {
 
     pub fn create_test_account(sample: usize) -> (StorageMeta, Account) {
         let data_len = sample % 256;
-        let mut account = Account::new(sample as u64, 0, &Pubkey::default());
+        let mut account = Account::new(sample as u64, 0, 0, &Pubkey::default());
         account.data = (0..data_len).map(|_| data_len as u8).collect();
         let storage_meta = StorageMeta {
             write_version: 0,
