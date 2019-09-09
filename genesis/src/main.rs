@@ -193,12 +193,12 @@ fn main() -> Result<(), Box<dyn error::Error>> {
             // the mint
             (
                 mint_keypair.pubkey(),
-                Account::new(difs, 0, &system_program::id()),
+                Account::new(difs, 0, 0, &system_program::id()),
             ),
             // node needs an account to issue votes from
             (
                 bootstrap_leader_keypair.pubkey(),
-                Account::new(1, 0, &system_program::id()),
+                Account::new(1, 0, 0, &system_program::id()),
             ),
             // where votes go to
             (bootstrap_vote_keypair.pubkey(), vote_account),
