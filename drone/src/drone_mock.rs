@@ -12,7 +12,7 @@ pub fn request_airdrop_transaction(
     _id: &Pubkey,
     value: u64,
     _blockhash: Hash,
-    value_type: AirdropValueType;
+    value_type: AirdropValueType,
 ) -> Result<Transaction, Error> {
     if value == 0 {
         Err(Error::new(ErrorKind::Other, "Airdrop failed"))?
@@ -24,6 +24,6 @@ pub fn request_airdrop_transaction(
         system_transaction::create_user_account(&key, &to, value, blockhash)
     } else {
         system_transaction::create_user_account_with_difs1(&key, &to, value, blockhash)
-    }
+    };
     Ok(tx)
 }
