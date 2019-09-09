@@ -3,7 +3,7 @@ use morgan_sdk::pubkey::Pubkey;
 use morgan_sdk::signature::{Keypair, KeypairUtil};
 use morgan_sdk::system_transaction;
 use morgan_sdk::transaction::Transaction;
-use morgan_drone::drone::AirdropValueType;
+use crate::drone::AirdropValueType;
 use std::io::{Error, ErrorKind};
 use std::net::SocketAddr;
 
