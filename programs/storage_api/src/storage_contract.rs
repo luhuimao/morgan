@@ -65,7 +65,7 @@ pub enum StorageContract {
 
 // utility function, used by Bank, tests, genesis
 pub fn create_validator_storage_account(difs: u64) -> Account {
-    let mut storage_account = Account::new(difs, STORAGE_ACCOUNT_SPACE as usize, &crate::id());
+    let mut storage_account = Account::new(difs, 0, STORAGE_ACCOUNT_SPACE as usize, &crate::id());
 
     storage_account
         .set_state(&StorageContract::ValidatorStorage {
@@ -473,6 +473,7 @@ mod tests {
         let mut account = StorageAccount {
             account: &mut Account {
                 difs: 0,
+                reputations: 0,
                 data: vec![],
                 owner: id(),
                 executable: false,
