@@ -773,7 +773,7 @@ mod tests {
 
         // Expect internal error because no drone is available
         let req = format!(
-            r#"{{"jsonrpc":"2.0","id":1,"method":"requestDif","params":["{}", 50]}}"#,
+            r#"{{"jsonrpc":"2.0","id":1,"method":"requestDifs","params":["{}", 50]}}"#,
             bob_pubkey
         );
         let res = io.handle_request_sync(&req, meta);
