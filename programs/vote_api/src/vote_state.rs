@@ -307,7 +307,7 @@ pub fn create_account(
     commission: u32,
     difs: u64,
 ) -> Account {
-    let mut vote_account = Account::new(difs, VoteState::size_of(), &id());
+    let mut vote_account = Account::new(difs, 0, VoteState::size_of(), &id());
 
     initialize_account(
         &mut KeyedAccount::new(vote_pubkey, false, &mut vote_account),
@@ -353,7 +353,7 @@ mod tests {
     #[test]
     fn test_initialize_vote_account() {
         let vote_account_pubkey = Pubkey::new_rand();
-        let mut vote_account = Account::new(100, VoteState::size_of(), &id());
+        let mut vote_account = Account::new(100, 0, VoteState::size_of(), &id());
 
         let node_pubkey = Pubkey::new_rand();
 
@@ -377,6 +377,7 @@ mod tests {
 
     fn create_test_slot_hashes_account(slot_hashes: &[(u64, Hash)]) -> (Pubkey, Account) {
         let mut slot_hashes_account = Account::new(
+            0,
             0,
             serialized_size(&slot_hashes).unwrap() as usize,
             &syscall::id(),
@@ -581,7 +582,7 @@ mod tests {
     #[test]
     fn test_vote_without_initialization() {
         let vote_pubkey = Pubkey::new_rand();
-        let mut vote_account = Account::new(100, VoteState::size_of(), &id());
+        let mut vote_account = Account::new(100, 0, VoteState::size_of(), &id());
 
         let res = simulate_process_vote_unchecked(
             &vote_pubkey,
