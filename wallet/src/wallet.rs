@@ -1132,6 +1132,7 @@ impl DroneKeypair {
         difs: u64,
         blockhash: Hash,
     ) -> Result<Self, Box<dyn error::Error>> {
+        let transaction = request_airdrop_transaction(drone_addr, to_pubkey, difs, blockhash)?;
         let transaction = request_airdrop_transaction(drone_addr, to_pubkey, difs, blockhash, AirdropValueType::Difs)?;
         Ok(Self { transaction })
     }
