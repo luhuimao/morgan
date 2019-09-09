@@ -187,7 +187,7 @@ pub fn create_delegate_stake_account(
     vote_state: &VoteState,
     difs: u64,
 ) -> Account {
-    let mut stake_account = Account::new(difs, std::mem::size_of::<StakeState>(), &id());
+    let mut stake_account = Account::new(difs, 0, std::mem::size_of::<StakeState>(), &id());
 
     stake_account
         .set_state(&StakeState::Delegate {
@@ -223,7 +223,7 @@ mod tests {
         vote_keyed_account.set_state(&vote_state).unwrap();
 
         let stake_pubkey = Pubkey::default();
-        let mut stake_account = Account::new(0, std::mem::size_of::<StakeState>(), &id());
+        let mut stake_account = Account::new(0, 0, std::mem::size_of::<StakeState>(), &id());
 
         let mut stake_keyed_account = KeyedAccount::new(&stake_pubkey, false, &mut stake_account);
 
@@ -330,6 +330,7 @@ mod tests {
         let pubkey = Pubkey::default();
         let mut stake_account = Account::new(
             STAKE_GETS_PAID_EVERY_VOTE,
+            0,
             std::mem::size_of::<StakeState>(),
             &id(),
         );
@@ -341,7 +342,7 @@ mod tests {
             .delegate_stake(&vote_keyed_account)
             .is_ok());
 
-        let mut mining_pool_account = Account::new(0, std::mem::size_of::<StakeState>(), &id());
+        let mut mining_pool_account = Account::new(0, 0, std::mem::size_of::<StakeState>(), &id());
         let mut mining_pool_keyed_account =
             KeyedAccount::new(&pubkey, true, &mut mining_pool_account);
 
@@ -402,7 +403,7 @@ mod tests {
         vote_keyed_account.set_state(&vote_state).unwrap();
 
         let pubkey = Pubkey::default();
-        let mut stake_account = Account::new(0, std::mem::size_of::<StakeState>(), &id());
+        let mut stake_account = Account::new(0, 0, std::mem::size_of::<StakeState>(), &id());
         let mut stake_keyed_account = KeyedAccount::new(&pubkey, true, &mut stake_account);
         stake_keyed_account.initialize_delegate().unwrap();
 
@@ -411,7 +412,7 @@ mod tests {
             .delegate_stake(&vote_keyed_account)
             .is_ok());
 
-        let mut mining_pool_account = Account::new(0, std::mem::size_of::<StakeState>(), &id());
+        let mut mining_pool_account = Account::new(0, 0, std::mem::size_of::<StakeState>(), &id());
         let mut mining_pool_keyed_account =
             KeyedAccount::new(&pubkey, true, &mut mining_pool_account);
         mining_pool_keyed_account
