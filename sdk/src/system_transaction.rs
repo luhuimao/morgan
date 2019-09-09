@@ -23,6 +23,22 @@ pub fn create_account(
     Transaction::new_signed_instructions(&[from_keypair], instructions, recent_blockhash)
 }
 
+/// Create and sign new SystemInstruction::CreateAccountWithDifs1 transaction
+pub fn create_account_with_difs1(
+    from_keypair: &Keypair,
+    to: &Pubkey,
+    recent_blockhash: Hash,
+    difs1: u64,
+    space: u64,
+    program_id: &Pubkey,
+) -> Transaction {
+    let from_pubkey = from_keypair.pubkey();
+    let create_instruction =
+        system_instruction::create_account_with_difs1(&from_pubkey, to, difs1, space, program_id);
+    let instructions = vec![create_instruction];
+    Transaction::new_signed_instructions(&[from_keypair], instructions, recent_blockhash)
+}
+
 /// Create and sign a transaction to create a system account
 pub fn create_user_account(
     from_keypair: &Keypair,
@@ -32,6 +48,17 @@ pub fn create_user_account(
 ) -> Transaction {
     let program_id = system_program::id();
     create_account(from_keypair, to, recent_blockhash, difs, 0, &program_id)
+}
+
+/// Create and sign a transaction to create a system account with difs1
+pub fn create_user_account_with_difs1(
+    from_keypair: &Keypair,
+    to: &Pubkey,
+    difs1: u64,
+    recent_blockhash: Hash,
+) -> Transaction {
+    let program_id = system_program::id();
+    create_account_with_difs1(from_keypair, to, recent_blockhash, difs1, 0, &program_id)
 }
 
 /// Create and sign new system_instruction::Assign transaction
