@@ -8,7 +8,7 @@ use crate::storage_stage::StorageState;
 use bincode::{deserialize, serialize};
 use jsonrpc_core::{Error, Metadata, Result};
 use jsonrpc_derive::rpc;
-use morgan_drone::drone::request_airdrop_transaction;
+use morgan_drone::drone::{request_airdrop_transaction, request_reputation_airdrop_transaction};
 use morgan_runtime::bank::Bank;
 use morgan_sdk::account::Account;
 use morgan_sdk::fee_calculator::FeeCalculator;
@@ -72,6 +72,10 @@ impl JsonRpcRequestProcessor {
 
     pub fn get_balance(&self, pubkey: &Pubkey) -> u64 {
         self.bank().get_balance(&pubkey)
+    }
+
+    pub fn get_reputation(&self, pubkey: &Pubkey) -> u64 {
+        self.bank().get_reputation(&pubkey)
     }
 
     fn get_recent_blockhash(&self) -> (String, FeeCalculator) {
@@ -181,6 +185,9 @@ pub trait RpcSol {
     #[rpc(meta, name = "getDif")]
     fn get_balance(&self, _: Self::Metadata, _: String) -> Result<u64>;
 
+    #[rpc(meta, name = "getReputation")]
+    fn get_reputation(&self, _: Self::Metadata, _: String) -> Result<u64>;
+
     #[rpc(meta, name = "getClusterNodes")]
     fn get_cluster_nodes(&self, _: Self::Metadata) -> Result<Vec<RpcContactInfo>>;
 
@@ -199,6 +206,9 @@ pub trait RpcSol {
 
     #[rpc(meta, name = "requestDif")]
     fn request_airdrop(&self, _: Self::Metadata, _: String, _: u64) -> Result<String>;
+
+    #[rpc(meta, name = "requestReputation")]
+    fn request_reputation(&self, _: Self::Metadata, _: String, _: u64) -> Result<String>;
 
     #[rpc(meta, name = "sendTxn")]
     fn send_transaction(&self, _: Self::Metadata, _: Vec<u8>) -> Result<String>;
@@ -263,6 +273,12 @@ impl RpcSol for RpcSolImpl {
         debug!("get_balance rpc request received: {:?}", id);
         let pubkey = verify_pubkey(id)?;
         Ok(meta.request_processor.read().unwrap().get_balance(&pubkey))
+    }
+
+    fn get_reputation(&self, meta: Self::Metadata, id: String) -> Result<u64> {
+        debug!("get_reputation rpc request received: {:?}", id);
+        let pubkey = verify_pubkey(id)?;
+        Ok(meta.request_processor.read().unwrap().get_reputation(&pubkey))
     }
 
     fn get_cluster_nodes(&self, meta: Self::Metadata) -> Result<Vec<RpcContactInfo>> {
@@ -362,6 +378,65 @@ impl RpcSol for RpcSolImpl {
         let transaction = request_airdrop_transaction(&drone_addr, &pubkey, difs, blockhash)
             .map_err(|err| {
                 info!("request_airdrop_transaction failed: {:?}", err);
+                Error::internal_error()
+            })?;;
+
+        let data = serialize(&transaction).map_err(|err| {
+            info!("request_airdrop: serialize error: {:?}", err);
+            Error::internal_error()
+        })?;
+
+        let transactions_socket = UdpSocket::bind("0.0.0.0:0").unwrap();
+        let transactions_addr = get_tpu_addr(&meta.cluster_info)?;
+        transactions_socket
+            .send_to(&data, transactions_addr)
+            .map_err(|err| {
+                info!("request_airdrop: send_to error: {:?}", err);
+                Error::internal_error()
+            })?;
+
+        let signature = transaction.signatures[0];
+        let now = Instant::now();
+        let mut signature_status;
+        loop {
+            signature_status = meta
+                .request_processor
+                .read()
+                .unwrap()
+                .get_signature_status(signature);
+
+            if signature_status == Some(Ok(())) {
+                info!("airdrop signature ok");
+                return Ok(signature.to_string());
+            } else if now.elapsed().as_secs() > 5 {
+                info!("airdrop signature timeout");
+                return Err(Error::internal_error());
+            }
+            sleep(Duration::from_millis(100));
+        }
+    }
+
+    fn request_reputation(&self, meta: Self::Metadata, id: String, reputations: u64) -> Result<String> {
+        trace!("request_reputation id={} difs={}", id, reputations);
+
+        let drone_addr = meta
+            .request_processor
+            .read()
+            .unwrap()
+            .config
+            .drone_addr
+            .ok_or_else(Error::invalid_request)?;
+        let pubkey = verify_pubkey(id)?;
+
+        let blockhash = meta
+            .request_processor
+            .read()
+            .unwrap()
+            .bank()
+            .confirmed_last_blockhash();
+        let transaction = request_reputation_airdrop_transaction(&drone_addr, &pubkey, reputations, blockhash)
+            .map_err(|err| {
+                info!("request_reputation_airdrop_transaction failed: {:?}", err);
                 Error::internal_error()
             })?;;
 
@@ -564,6 +639,24 @@ mod tests {
     }
 
     #[test]
+    fn test_rpc_get_reputation() {
+        let bob_pubkey = Pubkey::new_rand();
+        let (io, meta, _blockhash, _alice, _leader_pubkey) = start_rpc_handler_with_tx(&bob_pubkey);
+
+        let req = format!(
+            r#"{{"jsonrpc":"2.0","id":1,"method":"getReputation","params":["{}"]}}"#,
+            bob_pubkey
+        );
+        let res = io.handle_request_sync(&req, meta);
+        let expected = format!(r#"{{"jsonrpc":"2.0","result":0,"id":1}}"#);
+        let expected: Response =
+            serde_json::from_str(&expected).expect("expected response deserialization");
+        let result: Response = serde_json::from_str(&res.expect("actual response"))
+            .expect("actual response deserialization");
+        assert_eq!(expected, result);
+    }
+
+    #[test]
     fn test_rpc_get_cluster_nodes() {
         let bob_pubkey = Pubkey::new_rand();
         let (io, meta, _blockhash, _alice, leader_pubkey) = start_rpc_handler_with_tx(&bob_pubkey);
@@ -629,6 +722,7 @@ mod tests {
             "result":{
                 "owner": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                 "difs": 20,
+                "reputations": 0,
                 "data": [],
                 "executable": false
             },
