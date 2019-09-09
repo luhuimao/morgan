@@ -51,6 +51,11 @@ pub enum DroneRequest {
         to: Pubkey,
         blockhash: Hash,
     },
+    GetReputation {
+        reputations: u64,
+        to: Pubkey,
+        blockhash: Hash,
+    },
 }
 
 pub struct Drone {
@@ -133,6 +138,37 @@ impl Drone {
                         format!(
                             "token limit reached; req: {} current: {} cap: {}",
                             difs, self.request_current, self.request_cap
+                        ),
+                    ))
+                }
+            }
+            DroneRequest::GetReputation {
+                reputations,
+                to,
+                blockhash,
+            } => {
+                if self.check_request_limit(reputations) {
+                    self.request_current += reputations;
+                    datapoint_info!(
+                        "drone-airdrop",
+                        ("request_amount", reputations, i64),
+                        ("request_current", self.request_current, i64)
+                    );
+                    info!("Requesting reputation airdrop of {} to {:?}", reputations, to);
+
+                    let create_instruction = system_instruction::create_user_account_with_reputation(
+                        &self.mint_keypair.pubkey(),
+                        &to,
+                        reputations,
+                    );
+                    let message = Message::new(vec![create_instruction]);
+                    Ok(Transaction::new(&[&self.mint_keypair], message, blockhash))
+                } else {
+                    Err(Error::new(
+                        ErrorKind::Other,
+                        format!(
+                            "token limit reached; req: {} current: {} cap: {}",
+                            reputations, self.request_current, self.request_cap
                         ),
                     ))
                 }
@@ -236,6 +272,67 @@ pub fn request_airdrop_transaction(
         Err(Error::new(
             ErrorKind::Other,
             format!("request_airdrop_transaction deserialize failure: {:?}", err),
+        ))
+    })?;
+    Ok(transaction)
+}
+
+pub fn request_reputation_airdrop_transaction(
+    drone_addr: &SocketAddr,
+    id: &Pubkey,
+    reputations: u64,
+    blockhash: Hash,
+) -> Result<Transaction, Error> {
+    info!(
+        "request_reputation_airdrop_transaction: drone_addr={} id={} reputations={} blockhash={}",
+        drone_addr, id, reputations, blockhash
+    );
+    // TODO: make this async tokio client
+    let mut stream = TcpStream::connect_timeout(drone_addr, Duration::new(3, 0))?;
+    stream.set_read_timeout(Some(Duration::new(10, 0)))?;
+    let req = DroneRequest::GetReputation {
+        reputations,
+        blockhash,
+        to: *id,
+    };
+    let req = serialize(&req).expect("serialize drone request");
+    stream.write_all(&req)?;
+
+    // Read length of transaction
+    let mut buffer = [0; 2];
+    stream.read_exact(&mut buffer).or_else(|err| {
+        info!(
+            "request_reputation_airdrop_transaction: buffer length read_exact error: {:?}",
+            err
+        );
+        Err(Error::new(ErrorKind::Other, "Airdrop failed"))
+    })?;
+    let transaction_length = LittleEndian::read_u16(&buffer) as usize;
+    if transaction_length >= PACKET_DATA_SIZE {
+        Err(Error::new(
+            ErrorKind::Other,
+            format!(
+                "request_reputation_airdrop_transaction: invalid transaction_length from drone: {}",
+                transaction_length
+            ),
+        ))?;
+    }
+
+    // Read the transaction
+    let mut buffer = Vec::new();
+    buffer.resize(transaction_length, 0);
+    stream.read_exact(&mut buffer).or_else(|err| {
+        info!(
+            "request_reputation_airdrop_transaction: buffer read_exact error: {:?}",
+            err
+        );
+        Err(Error::new(ErrorKind::Other, "Airdrop failed"))
+    })?;
+
+    let transaction: Transaction = deserialize(&buffer).or_else(|err| {
+        Err(Error::new(
+            ErrorKind::Other,
+            format!("request_reputation_airdrop_transaction deserialize failure: {:?}", err),
         ))
     })?;
     Ok(transaction)
@@ -394,6 +491,48 @@ mod tests {
             instruction,
             SystemInstruction::CreateAccount {
                 difs: 2,
+                reputations: 0,
+                space: 0,
+                program_id: Pubkey::default()
+            }
+        );
+
+        let mint = Keypair::new();
+        drone = Drone::new(mint, None, Some(1));
+        let tx = drone.build_airdrop_transaction(request);
+        assert!(tx.is_err());
+    }
+
+    #[test]
+    fn test_drone_build_reputation_airdrop_transaction() {
+        let to = Pubkey::new_rand();
+        let blockhash = Hash::default();
+        let request = DroneRequest::GetReputation {
+            reputations: 2,
+            to,
+            blockhash,
+        };
+
+        let mint = Keypair::new();
+        let mint_pubkey = mint.pubkey();
+        let mut drone = Drone::new(mint, None, None);
+
+        let tx = drone.build_airdrop_transaction(request).unwrap();
+        let message = tx.message();
+
+        assert_eq!(tx.signatures.len(), 1);
+        assert_eq!(
+            message.account_keys,
+            vec![mint_pubkey, to, Pubkey::default()]
+        );
+        assert_eq!(message.recent_blockhash, blockhash);
+
+        assert_eq!(message.instructions.len(), 1);
+        let instruction: SystemInstruction = deserialize(&message.instructions[0].data).unwrap();
+        assert_eq!(
+            instruction,
+            SystemInstruction::CreateAccountWithReputation {
+                reputations: 2,
                 space: 0,
                 program_id: Pubkey::default()
             }
@@ -422,6 +561,40 @@ mod tests {
         let keypair = Keypair::new();
         let expected_instruction =
             system_instruction::create_user_account(&keypair.pubkey(), &to, difs);
+        let message = Message::new(vec![expected_instruction]);
+        let expected_tx = Transaction::new(&[&keypair], message, blockhash);
+        let expected_bytes = serialize(&expected_tx).unwrap();
+        let mut expected_vec_with_length = vec![0; 2];
+        LittleEndian::write_u16(&mut expected_vec_with_length, expected_bytes.len() as u16);
+        expected_vec_with_length.extend_from_slice(&expected_bytes);
+
+        let mut drone = Drone::new(keypair, None, None);
+        let response = drone.process_drone_request(&bytes);
+        let response_vec = response.unwrap().to_vec();
+        assert_eq!(expected_vec_with_length, response_vec);
+
+        let mut bad_bytes = BytesMut::with_capacity(9);
+        bad_bytes.put("bad bytes");
+        assert!(drone.process_drone_request(&bad_bytes).is_err());
+    }
+
+    #[test]
+    fn test_process_reputation_drone_request() {
+        let to = Pubkey::new_rand();
+        let blockhash = Hash::new(&to.as_ref());
+        let reputations = 50;
+        let req = DroneRequest::GetReputation {
+            reputations,
+            blockhash,
+            to,
+        };
+        let req = serialize(&req).unwrap();
+        let mut bytes = BytesMut::with_capacity(req.len());
+        bytes.put(&req[..]);
+
+        let keypair = Keypair::new();
+        let expected_instruction =
+            system_instruction::create_user_account_with_reputation(&keypair.pubkey(), &to, reputations);
         let message = Message::new(vec![expected_instruction]);
         let expected_tx = Transaction::new(&[&keypair], message, blockhash);
         let expected_bytes = serialize(&expected_tx).unwrap();
