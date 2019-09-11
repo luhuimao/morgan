@@ -197,10 +197,10 @@ pub trait RpcSol {
     #[rpc(meta, name = "getTxnCnt")]
     fn get_transaction_count(&self, _: Self::Metadata) -> Result<u64>;
 
-    #[rpc(meta, name = "requestDifs")]
+    #[rpc(meta, name = "requestDif")]
     fn request_airdrop_with_difs(&self, _: Self::Metadata, _: String, _: u64) -> Result<String>;
 
-    #[rpc(meta, name = "requestDifs1")]
+    #[rpc(meta, name = "requestDif1")]
     fn request_airdrop_with_difs1(&self, _: Self::Metadata, _: String, _: u64) -> Result<String>;
 
     #[rpc(meta, name = "sendTxn")]
