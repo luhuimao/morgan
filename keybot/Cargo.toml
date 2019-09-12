@@ -1,0 +1,21 @@
+[package]
+name = "morgan-keybot"
+version = "0.15.3"
+description = "Morgan key generation utility"
+authors = ["Morgan Maintainers <maintainers@morgan.com>"]
+repository = "https://github.com/morgan-labs/morgan"
+license = "Apache-2.0"
+homepage = "https://morgan.com/"
+edition = "2018"
+
+[features]
+cuda = []
+erasure = []
+
+[dependencies]
+dirs = "1.0.5"
+clap = "2.33"
+morgan-interface = { path = "../interface", version = "0.15.3"     }
+[[bin]]
+name = "morgan-keybot"
+path = "src/keygen.rs"
