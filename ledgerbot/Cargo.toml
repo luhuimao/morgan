@@ -1,0 +1,24 @@
+[package]
+authors = ["Morgan Maintainers <maintainers@morgan.com>"]
+edition = "2018"
+name = "morgan-ledgerbot"
+description = "Blockchain, Rebuilt for Scale"
+version = "0.15.3"
+repository = "https://github.com/morgan-labs/morgan"
+license = "Apache-2.0"
+homepage = "https://morgan.com/"
+
+[dependencies]
+clap = "2.33.0"
+serde_json = "1.0.39"
+morgan = { path = "../core", version = "0.15.3"     }
+morgan-interface = { path = "../interface", version = "0.15.3"     }
+morgan-logger = { path = "../logger", version = "0.15.3"     }
+morgan-runtime = { path = "../runtime", version = "0.15.3"     }
+
+[dev-dependencies]
+assert_cmd = "0.11"
+
+[features]
+cuda = ["morgan/cuda"]
+erasure = []
