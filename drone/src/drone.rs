@@ -162,7 +162,7 @@ impl Drone {
         let req: DroneRequest = deserialize(bytes).or_else(|err| {
             Err(io::Error::new(
                 io::ErrorKind::Other,
-                format!("deserialize packet in drone: {:?}", err),
+                format!("deserialize packet in drone 1: {:?}", err),
             ))
         })?;
 
