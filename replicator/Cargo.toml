@@ -12,8 +12,7 @@ clap = "2.33.0"
 morgan = { path = "../core", version = "0.15.3"     }
 morgan-logger = { path = "../logger", version = "0.15.3"     }
 morgan-netutil = { path = "../netutil", version = "0.15.3"     }
-morgan-sdk = { path = "../sdk", version = "0.15.3"     }
-
+morgan-interface = { path = "../interface", version = "0.15.3"     }
 [features]
 chacha = ["morgan/chacha"]
 cuda = ["morgan/cuda"]

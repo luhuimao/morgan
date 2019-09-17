@@ -3,7 +3,7 @@ use morgan::cluster_info::{Node, FULLNODE_PORT_RANGE};
 use morgan::contact_info::ContactInfo;
 use morgan::replicator::Replicator;
 use morgan::socketaddr;
-use morgan_sdk::signature::{read_keypair, Keypair, KeypairUtil};
+use morgan_interface::signature::{read_keypair, Keypair, KeypairUtil};
 use std::process::exit;
 use std::sync::Arc;
 
