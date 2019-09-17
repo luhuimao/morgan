@@ -7,7 +7,7 @@ use morgan::service::Service;
 use morgan::socketaddr;
 use morgan::validator::{Validator, ValidatorConfig};
 use morgan_netutil::parse_port_range;
-use morgan_sdk::signature::{read_keypair, Keypair, KeypairUtil};
+use morgan_interface::signature::{read_keypair, Keypair, KeypairUtil};
 use std::fs::File;
 use std::net::SocketAddr;
 use std::process::exit;
