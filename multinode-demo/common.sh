@@ -54,13 +54,13 @@ else
 fi
 
 morgan_bench_tps=$(morgan_program bench-tps)
-morgan_drone=$(morgan_program drone)
+morgan_tokenbot=$(morgan_program tokenbot)
 morgan_validator=$(morgan_program validator)
 morgan_validator_cuda=$(morgan_program validator-cuda)
 morgan_genesis=$(morgan_program genesis)
 morgan_gossip=$(morgan_program gossip)
-morgan_keygen=$(morgan_program keygen)
-morgan_ledger_tool=$(morgan_program ledger-tool)
+morgan_keybot=$(morgan_program keybot)
+morgan_ledgerbot=$(morgan_program ledgerbot)
 morgan_wallet=$(morgan_program wallet)
 morgan_replicator=$(morgan_program replicator)
 

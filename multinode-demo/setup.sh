@@ -8,11 +8,11 @@ set -e
 "$here"/clear-config.sh
 
 # Create genesis ledger
-$morgan_keygen -o "$SOLANA_CONFIG_DIR"/mint-keypair.json
-$morgan_keygen -o "$SOLANA_CONFIG_DIR"/bootstrap-leader-keypair.json
-$morgan_keygen -o "$SOLANA_CONFIG_DIR"/bootstrap-leader-vote-keypair.json
-$morgan_keygen -o "$SOLANA_CONFIG_DIR"/bootstrap-leader-stake-keypair.json
-$morgan_keygen -o "$SOLANA_CONFIG_DIR"/bootstrap-leader-storage-keypair.json
+$morgan_keybot -o "$SOLANA_CONFIG_DIR"/mint-keypair.json
+$morgan_keybot -o "$SOLANA_CONFIG_DIR"/bootstrap-leader-keypair.json
+$morgan_keybot -o "$SOLANA_CONFIG_DIR"/bootstrap-leader-vote-keypair.json
+$morgan_keybot -o "$SOLANA_CONFIG_DIR"/bootstrap-leader-stake-keypair.json
+$morgan_keybot -o "$SOLANA_CONFIG_DIR"/bootstrap-leader-storage-keypair.json
 
 args=("$@")
 default_arg --bootstrap-leader-keypair "$SOLANA_CONFIG_DIR"/bootstrap-leader-keypair.json

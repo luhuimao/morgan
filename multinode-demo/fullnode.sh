@@ -82,16 +82,16 @@ setup_validator_accounts() {
   declare stake=$6
 
   declare node_pubkey
-  node_pubkey=$($morgan_keygen pubkey "$node_keypair_path")
+  node_pubkey=$($morgan_keybot pubkey "$node_keypair_path")
 
   declare vote_pubkey
-  vote_pubkey=$($morgan_keygen pubkey "$vote_keypair_path")
+  vote_pubkey=$($morgan_keybot pubkey "$vote_keypair_path")
 
   declare stake_pubkey
-  stake_pubkey=$($morgan_keygen pubkey "$stake_keypair_path")
+  stake_pubkey=$($morgan_keybot pubkey "$stake_keypair_path")
 
   declare storage_pubkey
-  storage_pubkey=$($morgan_keygen pubkey "$storage_keypair_path")
+  storage_pubkey=$($morgan_keybot pubkey "$storage_keypair_path")
 
   if [[ -f $configured_flag ]]; then
     echo "Vote and stake accounts have already been configured"
@@ -136,7 +136,7 @@ setup_replicator_account() {
   declare stake=$4
 
   declare storage_pubkey
-  storage_pubkey=$($morgan_keygen pubkey "$storage_keypair_path")
+  storage_pubkey=$($morgan_keybot pubkey "$storage_keypair_path")
 
   if [[ -f $configured_flag ]]; then
     echo "Replicator account has already been configured"
@@ -251,11 +251,11 @@ if [[ $node_type = replicator ]]; then
   configured_flag=$SOLANA_CONFIG_DIR/replicator$label.configured
 
   mkdir -p "$SOLANA_CONFIG_DIR"
-  [[ -r "$identity_keypair_path" ]] || $morgan_keygen -o "$identity_keypair_path"
-  [[ -r "$storage_keypair_path" ]] || $morgan_keygen -o "$storage_keypair_path"
+  [[ -r "$identity_keypair_path" ]] || $morgan_keybot -o "$identity_keypair_path"
+  [[ -r "$storage_keypair_path" ]] || $morgan_keybot -o "$storage_keypair_path"
 
-  identity_pubkey=$($morgan_keygen pubkey "$identity_keypair_path")
-  storage_pubkey=$($morgan_keygen pubkey "$storage_keypair_path")
+  identity_pubkey=$($morgan_keybot pubkey "$identity_keypair_path")
+  storage_pubkey=$($morgan_keybot pubkey "$storage_keypair_path")
 
   cat <<EOF
 ======================[ $node_type configuration ]======================
@@ -278,7 +278,7 @@ elif [[ $node_type = bootstrap_leader ]]; then
   [[ -f "$SOLANA_CONFIG_DIR"/bootstrap-leader-keypair.json ]] ||
     ledger_not_setup "$SOLANA_CONFIG_DIR/bootstrap-leader-keypair.json not found"
 
-  #$morgan_ledger_tool --ledger "$SOLANA_CONFIG_DIR"/bootstrap-leader-ledger verify
+  #$morgan_ledgerbot --ledger "$SOLANA_CONFIG_DIR"/bootstrap-leader-ledger verify
 
   : "${identity_keypair_path:=$SOLANA_CONFIG_DIR/bootstrap-leader-keypair.json}"
   vote_keypair_path="$SOLANA_CONFIG_DIR"/bootstrap-leader-vote-keypair.json
@@ -308,10 +308,10 @@ elif [[ $node_type = validator ]]; then
   configured_flag=$SOLANA_CONFIG_DIR/validator$label.configured
 
   mkdir -p "$SOLANA_CONFIG_DIR"
-  [[ -r "$identity_keypair_path" ]] || $morgan_keygen -o "$identity_keypair_path"
-  [[ -r "$vote_keypair_path" ]] || $morgan_keygen -o "$vote_keypair_path"
-  [[ -r "$stake_keypair_path" ]] || $morgan_keygen -o "$stake_keypair_path"
-  [[ -r "$storage_keypair_path" ]] || $morgan_keygen -o "$storage_keypair_path"
+  [[ -r "$identity_keypair_path" ]] || $morgan_keybot -o "$identity_keypair_path"
+  [[ -r "$vote_keypair_path" ]] || $morgan_keybot -o "$vote_keypair_path"
+  [[ -r "$stake_keypair_path" ]] || $morgan_keybot -o "$stake_keypair_path"
+  [[ -r "$storage_keypair_path" ]] || $morgan_keybot -o "$storage_keypair_path"
 
   default_arg --entrypoint "$entrypoint_address"
   default_arg --rpc-drone-address "${entrypoint_address%:*}:11100"
@@ -324,9 +324,9 @@ fi
 
 
 if [[ $node_type != replicator ]]; then
-  identity_pubkey=$($morgan_keygen pubkey "$identity_keypair_path")
-  vote_pubkey=$($morgan_keygen pubkey "$vote_keypair_path")
-  storage_pubkey=$($morgan_keygen pubkey "$storage_keypair_path")
+  identity_pubkey=$($morgan_keybot pubkey "$identity_keypair_path")
+  vote_pubkey=$($morgan_keybot pubkey "$vote_keypair_path")
+  storage_pubkey=$($morgan_keybot pubkey "$storage_keypair_path")
 
   cat <<EOF
 ======================[ $node_type configuration ]======================
@@ -382,7 +382,7 @@ while true; do
 
   if [[ ! -d "$ledger_config_dir" ]]; then
     cp -a "$SOLANA_RSYNC_CONFIG_DIR"/ledger/ "$ledger_config_dir"
-    #$morgan_ledger_tool --ledger "$ledger_config_dir" verify
+    #$morgan_ledgerbot --ledger "$ledger_config_dir" verify
   fi
 
   trap '[[ -n $pid ]] && kill "$pid" >/dev/null 2>&1 && wait "$pid"' INT TERM ERR

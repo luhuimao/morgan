@@ -14,7 +14,7 @@ usage() {
   echo
   echo " Run bench-tps "
   echo
-  echo "   extra args: additional arguments are pass along to morgan-bench-tps"
+  echo "   extra args: additional arguments are pass along to morgan-benchbot"
   echo
   exit 1
 }
