@@ -4,7 +4,7 @@ use log::*;
 use rayon::prelude::*;
 use morgan::gen_keys::GenKeys;
 use morgan_client::perf_utils::{sample_txs, SampleStats};
-use morgan_drone::drone::request_airdrop_transaction;
+use morgan_tokenbot::drone::request_airdrop_transaction;
 use morgan_metrics::datapoint_info;
 use morgan_interface::client::Client;
 use morgan_interface::hash::Hash;
@@ -626,7 +626,7 @@ mod tests {
     use morgan::local_cluster::{ClusterConfig, LocalCluster};
     use morgan::validator::ValidatorConfig;
     use morgan_client::thin_client::create_client;
-    use morgan_drone::drone::run_local_drone;
+    use morgan_tokenbot::drone::run_local_drone;
     use morgan_runtime::bank::Bank;
     use morgan_runtime::bank_client::BankClient;
     use morgan_interface::client::SyncClient;

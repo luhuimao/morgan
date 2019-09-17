@@ -14,7 +14,7 @@ rayon = "1.0.3"
 serde_json = "1.0.39"
 morgan = { path = "../core", version = "0.15.3"     }
 morgan-client = { path = "../client", version = "0.15.3"     }
-morgan-drone = { path = "../drone", version = "0.15.3"     }
+morgan-tokenbot = { path = "../tokenbot", version = "0.15.3"     }
 morgan-logger = { path = "../logger", version = "0.15.3"     }
 morgan-metrics = { path = "../metrics", version = "0.15.3"     }
 morgan-netutil = { path = "../netutil", version = "0.15.3"     }

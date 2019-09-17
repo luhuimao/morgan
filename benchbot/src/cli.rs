@@ -3,7 +3,7 @@ use std::process::exit;
 use std::time::Duration;
 
 use clap::{crate_description, crate_name, crate_version, App, Arg, ArgMatches};
-use morgan_drone::drone::DRONE_PORT;
+use morgan_tokenbot::drone::DRONE_PORT;
 use morgan_interface::signature::{read_keypair, Keypair, KeypairUtil};
 
 /// Holds the configuration for a single run of the benchmark
