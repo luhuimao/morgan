@@ -3,10 +3,10 @@
 //!  and give reward for good proofs.
 use crate::storage_contract::StorageAccount;
 use crate::storage_instruction::StorageInstruction;
-use morgan_sdk::account::KeyedAccount;
-use morgan_sdk::instruction::InstructionError;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::timing::DEFAULT_TICKS_PER_SLOT;
+use morgan_interface::account::KeyedAccount;
+use morgan_interface::instruction::InstructionError;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::timing::DEFAULT_TICKS_PER_SLOT;
 
 pub fn process_instruction(
     _program_id: &Pubkey,
@@ -105,14 +105,14 @@ mod tests {
     use log::*;
     use morgan_runtime::bank::Bank;
     use morgan_runtime::bank_client::BankClient;
-    use morgan_sdk::account::{create_keyed_accounts, Account};
-    use morgan_sdk::client::SyncClient;
-    use morgan_sdk::genesis_block::create_genesis_block;
-    use morgan_sdk::hash::{hash, Hash};
-    use morgan_sdk::instruction::Instruction;
-    use morgan_sdk::message::Message;
-    use morgan_sdk::pubkey::Pubkey;
-    use morgan_sdk::signature::{Keypair, KeypairUtil, Signature};
+    use morgan_interface::account::{create_keyed_accounts, Account};
+    use morgan_interface::client::SyncClient;
+    use morgan_interface::genesis_block::create_genesis_block;
+    use morgan_interface::hash::{hash, Hash};
+    use morgan_interface::instruction::Instruction;
+    use morgan_interface::message::Message;
+    use morgan_interface::pubkey::Pubkey;
+    use morgan_interface::signature::{Keypair, KeypairUtil, Signature};
     use std::collections::HashMap;
     use std::sync::Arc;
 

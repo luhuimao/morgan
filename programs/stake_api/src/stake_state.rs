@@ -5,10 +5,10 @@
 
 use crate::id;
 use serde_derive::{Deserialize, Serialize};
-use morgan_sdk::account::{Account, KeyedAccount};
-use morgan_sdk::account_utils::State;
-use morgan_sdk::instruction::InstructionError;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::account::{Account, KeyedAccount};
+use morgan_interface::account_utils::State;
+use morgan_interface::instruction::InstructionError;
+use morgan_interface::pubkey::Pubkey;
 use morgan_vote_api::vote_state::VoteState;
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
@@ -203,9 +203,9 @@ pub fn create_delegate_stake_account(
 mod tests {
     use super::*;
     use crate::id;
-    use morgan_sdk::account::Account;
-    use morgan_sdk::pubkey::Pubkey;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_interface::account::Account;
+    use morgan_interface::pubkey::Pubkey;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
     use morgan_vote_api::vote_state;
 
     #[test]

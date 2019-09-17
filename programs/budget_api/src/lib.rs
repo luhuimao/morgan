@@ -8,4 +8,4 @@ const BUDGET_PROGRAM_ID: [u8; 32] = [
     198, 115, 123, 98, 188, 19, 160, 0, 0, 0, 0,
 ];
 
-morgan_sdk::morgan_program_id!(BUDGET_PROGRAM_ID);
+morgan_interface::morgan_program_id!(BUDGET_PROGRAM_ID);

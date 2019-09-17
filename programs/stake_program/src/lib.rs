@@ -6,4 +6,4 @@ macro_rules! morgan_stake_program {
 }
 
 use morgan_stake_api::stake_instruction::process_instruction;
-morgan_sdk::morgan_entrypoint!(process_instruction);
+morgan_interface::morgan_entrypoint!(process_instruction);

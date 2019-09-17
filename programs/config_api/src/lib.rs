@@ -8,7 +8,7 @@ const CONFIG_PROGRAM_ID: [u8; 32] = [
     64, 25, 163, 35, 239, 160, 0, 0, 0, 0,
 ];
 
-morgan_sdk::morgan_program_id!(CONFIG_PROGRAM_ID);
+morgan_interface::morgan_program_id!(CONFIG_PROGRAM_ID);
 
 pub trait ConfigState: Serialize {
     /// Maximum space that the serialized representation will require

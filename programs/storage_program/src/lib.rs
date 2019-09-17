@@ -11,4 +11,4 @@ macro_rules! morgan_storage_program {
 }
 
 use morgan_storage_api::storage_processor::process_instruction;
-morgan_sdk::morgan_entrypoint!(process_instruction);
+morgan_interface::morgan_entrypoint!(process_instruction);

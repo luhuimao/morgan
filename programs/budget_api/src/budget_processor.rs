@@ -5,9 +5,9 @@ use crate::budget_state::{BudgetError, BudgetState};
 use bincode::deserialize;
 use chrono::prelude::{DateTime, Utc};
 use log::*;
-use morgan_sdk::account::KeyedAccount;
-use morgan_sdk::instruction::InstructionError;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::account::KeyedAccount;
+use morgan_interface::instruction::InstructionError;
+use morgan_interface::pubkey::Pubkey;
 
 /// Process a Witness Signature. Any payment plans waiting on this signature
 /// will progress one step.
@@ -147,12 +147,12 @@ mod tests {
     use crate::id;
     use morgan_runtime::bank::Bank;
     use morgan_runtime::bank_client::BankClient;
-    use morgan_sdk::client::SyncClient;
-    use morgan_sdk::genesis_block::create_genesis_block;
-    use morgan_sdk::instruction::InstructionError;
-    use morgan_sdk::message::Message;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
-    use morgan_sdk::transaction::TransactionError;
+    use morgan_interface::client::SyncClient;
+    use morgan_interface::genesis_block::create_genesis_block;
+    use morgan_interface::instruction::InstructionError;
+    use morgan_interface::message::Message;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
+    use morgan_interface::transaction::TransactionError;
 
     fn create_bank(difs: u64) -> (Bank, Keypair) {
         let (genesis_block, mint_keypair) = create_genesis_block(difs);

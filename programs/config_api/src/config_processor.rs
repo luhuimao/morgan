@@ -1,9 +1,9 @@
 //! Config program
 
 use log::*;
-use morgan_sdk::account::KeyedAccount;
-use morgan_sdk::instruction::InstructionError;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::account::KeyedAccount;
+use morgan_interface::instruction::InstructionError;
+use morgan_interface::pubkey::Pubkey;
 
 pub fn process_instruction(
     _program_id: &Pubkey,
@@ -33,11 +33,11 @@ mod tests {
     use serde_derive::{Deserialize, Serialize};
     use morgan_runtime::bank::Bank;
     use morgan_runtime::bank_client::BankClient;
-    use morgan_sdk::client::SyncClient;
-    use morgan_sdk::genesis_block::create_genesis_block;
-    use morgan_sdk::message::Message;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
-    use morgan_sdk::system_instruction;
+    use morgan_interface::client::SyncClient;
+    use morgan_interface::genesis_block::create_genesis_block;
+    use morgan_interface::message::Message;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
+    use morgan_interface::system_instruction;
 
     #[derive(Serialize, Deserialize, Default, Debug, PartialEq)]
     struct MyConfig {

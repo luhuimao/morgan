@@ -7,11 +7,11 @@ use bincode::deserialize;
 use log::*;
 use serde_derive::{Deserialize, Serialize};
 use morgan_metrics::datapoint_warn;
-use morgan_sdk::account::KeyedAccount;
-use morgan_sdk::instruction::{AccountMeta, Instruction, InstructionError};
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::syscall::slot_hashes;
-use morgan_sdk::system_instruction;
+use morgan_interface::account::KeyedAccount;
+use morgan_interface::instruction::{AccountMeta, Instruction, InstructionError};
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::syscall::slot_hashes;
+use morgan_interface::system_instruction;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub enum VoteInstruction {
@@ -144,7 +144,7 @@ pub fn process_instruction(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use morgan_sdk::account::Account;
+    use morgan_interface::account::Account;
 
     // these are for 100% coverage in this file
     #[test]

@@ -3,8 +3,8 @@
 use crate::exchange_state::*;
 use crate::id;
 use serde_derive::{Deserialize, Serialize};
-use morgan_sdk::instruction::{AccountMeta, Instruction};
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::instruction::{AccountMeta, Instruction};
+use morgan_interface::pubkey::Pubkey;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct TradeRequestInfo {

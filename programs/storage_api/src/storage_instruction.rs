@@ -1,11 +1,11 @@
 use crate::id;
 use crate::storage_contract::{CheckedProof, STORAGE_ACCOUNT_SPACE};
 use serde_derive::{Deserialize, Serialize};
-use morgan_sdk::hash::Hash;
-use morgan_sdk::instruction::{AccountMeta, Instruction};
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::Signature;
-use morgan_sdk::system_instruction;
+use morgan_interface::hash::Hash;
+use morgan_interface::instruction::{AccountMeta, Instruction};
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::Signature;
+use morgan_interface::system_instruction;
 use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

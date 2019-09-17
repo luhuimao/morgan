@@ -4,9 +4,9 @@ use crate::id;
 use bincode::serialized_size;
 use chrono::prelude::{DateTime, Utc};
 use serde_derive::{Deserialize, Serialize};
-use morgan_sdk::instruction::{AccountMeta, Instruction};
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::system_instruction;
+use morgan_interface::instruction::{AccountMeta, Instruction};
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::system_instruction;
 
 /// A smart contract.
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]

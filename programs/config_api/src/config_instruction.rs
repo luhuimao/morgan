@@ -1,8 +1,8 @@
 use crate::id;
 use crate::ConfigState;
-use morgan_sdk::instruction::{AccountMeta, Instruction};
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::system_instruction;
+use morgan_interface::instruction::{AccountMeta, Instruction};
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::system_instruction;
 
 /// Create a new, empty configuration account
 pub fn create_account<T: ConfigState>(

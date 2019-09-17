@@ -3,7 +3,7 @@
  * another
  */
 
-#include <morgan_sdk.h>
+#include <morgan_interface.h>
 
 /**
  * Number of SolKeyedAccount expected. The program should bail if an

@@ -2,7 +2,7 @@
  * @brief Example C++-based BPF program that prints out the parameters
  * passed to it
  */
-#include <morgan_sdk.h>
+#include <morgan_interface.h>
 
 extern bool entrypoint(const uint8_t *input) {
   SolKeyedAccount ka[1];

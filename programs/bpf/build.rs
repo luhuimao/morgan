@@ -52,7 +52,7 @@ fn main() {
             .expect("Failed to build C-based BPF programs")
             .success());
 
-        rerun_if_changed(&["c/makefile"], &["c/src", "../../sdk"], &["/target/"]);
+        rerun_if_changed(&["c/makefile"], &["c/src", "../../interface"], &["/target/"]);
     }
 
     let bpf_rust = !env::var("CARGO_FEATURE_BPF_RUST").is_err();
@@ -94,6 +94,6 @@ fn main() {
                 .success());
         }
 
-        rerun_if_changed(&[], &["rust", "../../sdk", &install_dir], &["/target/"]);
+        rerun_if_changed(&[], &["rust", "../../interface", &install_dir], &["/target/"]);
     }
 }

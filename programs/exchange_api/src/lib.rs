@@ -10,15 +10,15 @@ pub const EXCHANGE_PROGRAM_ID: [u8; 32] = [
     33, 70, 185, 192, 42, 31, 141, 152, 0, 0, 0, 0,
 ];
 
-morgan_sdk::morgan_program_id!(EXCHANGE_PROGRAM_ID);
+morgan_interface::morgan_program_id!(EXCHANGE_PROGRAM_ID);
 
 pub const EXCHANGE_FAUCET_ID: [u8; 32] = [
     3, 147, 111, 103, 210, 47, 23, 11, 176, 29, 147, 89, 237, 155, 21, 62, 107, 105, 157, 1, 98,
     204, 206, 211, 54, 212, 79, 15, 160, 0, 0, 0,
 ];
 
-pub fn faucet_id() -> morgan_sdk::pubkey::Pubkey {
-    morgan_sdk::pubkey::Pubkey::new(&EXCHANGE_FAUCET_ID)
+pub fn faucet_id() -> morgan_interface::pubkey::Pubkey {
+    morgan_interface::pubkey::Pubkey::new(&EXCHANGE_FAUCET_ID)
 }
 
 #[cfg(test)]

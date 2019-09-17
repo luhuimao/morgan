@@ -12,8 +12,7 @@ homepage = "https://morgan.com/"
 edition = "2018"
 
 [dependencies]
-morgan-sdk-bpf-utils = { path = "../../../../sdk/bpf/rust-utils", version = "0.15.3"    }
-
+morgan-interface-bpf-utils = { path = "../../../../interface/bpf/rust-utils", version = "0.15.3"    }
 [workspace]
 members = []
 

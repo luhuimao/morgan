@@ -1,4 +1,4 @@
-#include <morgan_sdk.h>
+#include <morgan_interface.h>
 
 struct foo {const uint8_t *input;};
 void foo(const uint8_t *input, struct foo foo) ;

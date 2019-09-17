@@ -6,4 +6,4 @@ const STAKE_PROGRAM_ID: [u8; 32] = [
     120, 114, 43, 104, 164, 157, 192, 0, 0, 0, 0,
 ];
 
-morgan_sdk::morgan_program_id!(STAKE_PROGRAM_ID);
+morgan_interface::morgan_program_id!(STAKE_PROGRAM_ID);

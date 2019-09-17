@@ -5,4 +5,4 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
-./../../../sdk/bpf/rust-utils/build.sh "$PWD"/"$1"
+./../../../interface/bpf/rust-utils/build.sh "$PWD"/"$1"

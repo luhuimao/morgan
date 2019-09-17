@@ -3,8 +3,8 @@ mod bpf {
     use morgan_runtime::bank::Bank;
     use morgan_runtime::bank_client::BankClient;
     use morgan_runtime::loader_utils::load_program;
-    use morgan_sdk::genesis_block::create_genesis_block;
-    use morgan_sdk::native_loader;
+    use morgan_interface::genesis_block::create_genesis_block;
+    use morgan_interface::native_loader;
     use std::env;
     use std::fs::File;
     use std::path::PathBuf;
@@ -28,9 +28,9 @@ mod bpf {
     mod bpf_c {
         use super::*;
         use morgan_runtime::loader_utils::create_invoke_instruction;
-        use morgan_sdk::bpf_loader;
-        use morgan_sdk::client::SyncClient;
-        use morgan_sdk::signature::KeypairUtil;
+        use morgan_interface::bpf_loader;
+        use morgan_interface::client::SyncClient;
+        use morgan_interface::signature::KeypairUtil;
         use std::io::Read;
 
         #[test]
@@ -97,9 +97,9 @@ mod bpf {
     #[cfg(feature = "bpf_rust")]
     mod bpf_rust {
         use super::*;
-        use morgan_sdk::client::SyncClient;
-        use morgan_sdk::instruction::{AccountMeta, Instruction};
-        use morgan_sdk::signature::{Keypair, KeypairUtil};
+        use morgan_interface::client::SyncClient;
+        use morgan_interface::instruction::{AccountMeta, Instruction};
+        use morgan_interface::signature::{Keypair, KeypairUtil};
         use std::io::Read;
 
         #[test]

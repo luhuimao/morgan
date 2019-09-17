@@ -9,4 +9,4 @@ macro_rules! morgan_exchange_program {
 }
 use morgan_exchange_api::exchange_processor::process_instruction;
 
-morgan_sdk::morgan_entrypoint!(process_instruction);
+morgan_interface::morgan_entrypoint!(process_instruction);

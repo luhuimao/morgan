@@ -1,9 +1,9 @@
 use log::*;
 use num_derive::FromPrimitive;
 use serde_derive::{Deserialize, Serialize};
-use morgan_sdk::account::KeyedAccount;
-use morgan_sdk::instruction_processor_utils::DecodeError;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::account::KeyedAccount;
+use morgan_interface::instruction_processor_utils::DecodeError;
+use morgan_interface::pubkey::Pubkey;
 
 #[derive(Serialize, Debug, PartialEq, FromPrimitive)]
 pub enum TokenError {

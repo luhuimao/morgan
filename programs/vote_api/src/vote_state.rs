@@ -4,12 +4,12 @@ use crate::id;
 use bincode::{deserialize, serialize_into, serialized_size, ErrorKind};
 use log::*;
 use serde_derive::{Deserialize, Serialize};
-use morgan_sdk::account::{Account, KeyedAccount};
-use morgan_sdk::account_utils::State;
-use morgan_sdk::hash::Hash;
-use morgan_sdk::instruction::InstructionError;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::syscall::slot_hashes;
+use morgan_interface::account::{Account, KeyedAccount};
+use morgan_interface::account_utils::State;
+use morgan_interface::hash::Hash;
+use morgan_interface::instruction::InstructionError;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::syscall::slot_hashes;
 use std::collections::VecDeque;
 
 // Maximum number of votes to keep around
@@ -342,11 +342,11 @@ mod tests {
     use super::*;
     use crate::vote_state;
     use bincode::serialized_size;
-    use morgan_sdk::account::Account;
-    use morgan_sdk::account_utils::State;
-    use morgan_sdk::hash::hash;
-    use morgan_sdk::syscall;
-    use morgan_sdk::syscall::slot_hashes;
+    use morgan_interface::account::Account;
+    use morgan_interface::account_utils::State;
+    use morgan_interface::hash::hash;
+    use morgan_interface::syscall;
+    use morgan_interface::syscall::slot_hashes;
 
     const MAX_RECENT_VOTES: usize = 16;
 

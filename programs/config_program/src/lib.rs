@@ -6,4 +6,4 @@ macro_rules! morgan_config_program {
 }
 use morgan_config_api::config_processor::process_instruction;
 
-morgan_sdk::morgan_entrypoint!(process_instruction);
+morgan_interface::morgan_entrypoint!(process_instruction);

@@ -1,4 +1,4 @@
-#include <morgan_sdk.h>
+#include <morgan_interface.h>
 
 static const char msg[] = "This is a message";
 static const char msg2[] = "This is a different message";

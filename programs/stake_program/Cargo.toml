@@ -11,7 +11,7 @@ edition = "2018"
 [dependencies]
 log = "0.4.2"
 morgan-logger = { path = "../../logger", version = "0.15.3"     }
-morgan-sdk = { path = "../../sdk", version = "0.15.3"     }
+morgan-interface = { path = "../../interface", version = "0.15.3"     }
 morgan-stake-api = { path = "../stake_api", version = "0.15.3"     }
 
 [lib]

@@ -6,4 +6,4 @@ macro_rules! morgan_vote_program {
 }
 
 use morgan_vote_api::vote_instruction::process_instruction;
-morgan_sdk::morgan_entrypoint!(process_instruction);
+morgan_interface::morgan_entrypoint!(process_instruction);

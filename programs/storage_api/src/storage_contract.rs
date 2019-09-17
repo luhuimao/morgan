@@ -1,13 +1,13 @@
 use crate::get_segment_from_slot;
 use log::*;
 use serde_derive::{Deserialize, Serialize};
-use morgan_sdk::account::Account;
-use morgan_sdk::account::KeyedAccount;
-use morgan_sdk::account_utils::State;
-use morgan_sdk::hash::Hash;
-use morgan_sdk::instruction::InstructionError;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::Signature;
+use morgan_interface::account::Account;
+use morgan_interface::account::KeyedAccount;
+use morgan_interface::account_utils::State;
+use morgan_interface::hash::Hash;
+use morgan_interface::instruction::InstructionError;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::Signature;
 use std::collections::HashMap;
 
 pub const TOTAL_VALIDATOR_REWARDS: u64 = 1;

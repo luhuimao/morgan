@@ -1,6 +1,6 @@
 use crate::morgan_storage_program;
-use morgan_sdk::genesis_block::GenesisBlock;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::genesis_block::GenesisBlock;
+use morgan_interface::pubkey::Pubkey;
 use morgan_storage_api::storage_contract;
 
 pub trait GenesisBlockUtil {

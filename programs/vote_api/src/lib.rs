@@ -6,4 +6,4 @@ const VOTE_PROGRAM_ID: [u8; 32] = [
     16, 67, 252, 13, 163, 83, 128, 0, 0, 0, 0,
 ];
 
-morgan_sdk::morgan_program_id!(VOTE_PROGRAM_ID);
+morgan_interface::morgan_program_id!(VOTE_PROGRAM_ID);

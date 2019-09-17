@@ -25,7 +25,6 @@ solana_rbpf = "=0.1.12"
 morgan-bpfloader = { path = "../bpf_loader", version = "0.15.3"     }
 morgan-logger = { path = "../../logger", version = "0.15.3"     }
 morgan-runtime = { path = "../../runtime", version = "0.15.3"     }
-morgan-sdk = { path = "../../sdk", version = "0.15.3"     }
-
+morgan-interface = { path = "../../interface", version = "0.15.3"     }
 [[bench]]
 name = "bpf_loader"

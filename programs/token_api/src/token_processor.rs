@@ -1,8 +1,8 @@
 use crate::token_state::TokenState;
 use log::*;
-use morgan_sdk::account::KeyedAccount;
-use morgan_sdk::instruction::InstructionError;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::account::KeyedAccount;
+use morgan_interface::instruction::InstructionError;
+use morgan_interface::pubkey::Pubkey;
 
 pub fn process_instruction(
     program_id: &Pubkey,
