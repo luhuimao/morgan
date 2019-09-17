@@ -534,7 +534,7 @@ start() {
   SECONDS=0
   for ((i=0; i < "$numClients" && i < "$numClientsRequested"; i++)) do
     if [[ $i -lt "$numBenchTpsClients" ]]; then
-      startClient "${clientIpList[$i]}" "morgan-bench-tps"
+      startClient "${clientIpList[$i]}" "morgan-benchbot"
     else
       startClient "${clientIpList[$i]}" "morgan-bench-exchange"
     fi

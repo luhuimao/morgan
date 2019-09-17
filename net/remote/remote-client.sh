@@ -55,7 +55,7 @@ scripts/net-stats.sh  > net-stats.log 2>&1 &
 case $clientToRun in
 morgan-bench-tps)
   clientCommand="\
-    morgan-bench-tps \
+    morgan-benchbot \
       --entrypoint $entrypointIp:10001 \
       --drone $entrypointIp:11100 \
       --duration 7500 \
@@ -65,7 +65,7 @@ morgan-bench-tps)
   "
   ;;
 morgan-bench-exchange)
-  morgan-keygen -o bench.keypair
+  morgan-keybot -o bench.keypair
   clientCommand="\
     morgan-bench-exchange \
       --entrypoint $entrypointIp:10001 \

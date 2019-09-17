@@ -78,8 +78,8 @@ local|tar)
 
   morgan_gossip=morgan-gossip
   morgan_install=morgan-install
-  morgan_keygen=morgan-keygen
-  morgan_ledger_tool=morgan-ledger-tool
+  morgan_keybot=morgan-keybot
+  morgan_ledgerbot=morgan-ledgerbot
 
   ledger=config-local/bootstrap-leader-ledger
   client_id=config-local/client-id.json
@@ -102,7 +102,7 @@ fi
 echo "+++ $sanityTargetIp: node count ($numSanityNodes expected)"
 (
   set -x
-  $morgan_keygen -o "$client_id"
+  $morgan_keybot -o "$client_id"
 
   nodeArg="num-nodes"
   if $rejectExtraNodes; then
@@ -136,7 +136,7 @@ if $ledgerVerify; then
       rm -rf /var/tmp/ledger-verify
       du -hs "$ledger"
       time cp -r "$ledger" /var/tmp/ledger-verify
-      time $morgan_ledger_tool --ledger /var/tmp/ledger-verify verify
+      time $morgan_ledgerbot --ledger /var/tmp/ledger-verify verify
     )
   else
     echo "^^^ +++"
@@ -177,7 +177,7 @@ if $installCheck && [[ -r update_manifest_keypair.json ]]; then
 
   (
     set -x
-    update_manifest_pubkey=$($morgan_keygen pubkey update_manifest_keypair.json)
+    update_manifest_pubkey=$($morgan_keybot pubkey update_manifest_keypair.json)
     rm -rf install-data-dir
     $morgan_install init \
       --no-modify-path \
