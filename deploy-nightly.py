@@ -171,9 +171,9 @@ def build(rust_version,cargoFeatures,release=False):
             #copy2(f"vendor/rustelo-rust/soros/target/{target}/release/soros-fullnode-config", f"libs/{target}/buffett-fullnode-config")
             copy2(f"vendor/rustelo-rust/soros/target/{target}/release/soros-drone", f"libs/{target}/buffett-drone")
             copy2(f"vendor/rustelo-rust/soros/target/{target}/release/soros-bench-tps", f"libs/{target}/buffett-bench-tps")
-            copy2(f"vendor/rustelo-rust/soros/target/{target}/release/soros-ledger-tool", f"libs/{target}/buffett-ledger-tool")
+            copy2(f"vendor/rustelo-rust/soros/target/{target}/release/soros-ledgerbot", f"libs/{target}/buffett-ledgerbot")
             copy2(f"vendor/rustelo-rust/soros/target/{target}/release/soros-genesis", f"libs/{target}/buffett-genesis")
-            copy2(f"vendor/rustelo-rust/soros/target/{target}/release/soros-keygen", f"libs/{target}/buffett-keygen")
+            copy2(f"vendor/rustelo-rust/soros/target/{target}/release/soros-keybot", f"libs/{target}/buffett-keybot")
 
     else:
         target = default_target
@@ -197,13 +197,13 @@ def build(rust_version,cargoFeatures,release=False):
         BIN_CRATES=[
             "bench-exchange",
             "bench-streamer",
-            "bench-tps",
-            "drone",
+            "benchbot",
+            "tokenbot",
             "genesis",
             "gossip",
             "install",
-            "keygen",
-            "ledger-tool",
+            "keybot",
+            "ledgerbot",
             "validator",
             "wallet"
         ]
@@ -287,8 +287,8 @@ def deploy_bin(target):
         rmtree("/bitconch/soros",onerror=rmtree_onerror)
         prnt_run("Copy the soros scripts to /bitconch/soros")
     # create the working directory data directory
-    # copytree(f"soros.scripts/demo", "/bitconch/soros/demo")
-    # copytree(f"soros.scripts/scripts", "/bitconch/soros/scripts")
+    copytree(f"multinode-demo", "/bitconch/soros/demo")
+    copytree(f"scripts", "/bitconch/soros/scripts")
 
    
 parser = argparse.ArgumentParser()
@@ -307,7 +307,7 @@ prnt_run("Please run /usr/bin/bitconch/soros/demo/setup.sh")
 
 # Setup the boot leader with stake of 500K dif
 if click.confirm('Do you want to run setup to create genesis file and id files?', default=True):
-    execute_shell("/bitconch/soros/demo/setup.sh -b 500000",cwd="/bitconch/soros")
+    execute_shell("/bitconch/soros/demo/setup.sh ",cwd="/bitconch/soros")
 
 
 # 
