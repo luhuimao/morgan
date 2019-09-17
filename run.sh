@@ -12,7 +12,7 @@ cd "$(dirname "$0")/"
 PATH=$PWD/target/debug:$PATH
 
 ok=true
-for program in morgan-{drone,genesis,keygen,validator}; do
+for program in morgan-{drone,genesis,keybot,validator}; do
   $program -V || ok=false
 done
 $ok || {
@@ -40,11 +40,11 @@ export RUST_BACKTRACE=1
 dataDir=$PWD/target/"$(basename "$0" .sh)"
 
 set -x
-morgan-keygen -o "$dataDir"/config/leader-keypair.json
-morgan-keygen -o "$dataDir"/config/leader-vote-account-keypair.json
-morgan-keygen -o "$dataDir"/config/leader-stake-account-keypair.json
-morgan-keygen -o "$dataDir"/config/drone-keypair.json
-morgan-keygen -o "$dataDir"/config/leader-storage-account-keypair.json
+morgan-keybot -o "$dataDir"/config/leader-keypair.json
+morgan-keybot -o "$dataDir"/config/leader-vote-account-keypair.json
+morgan-keybot -o "$dataDir"/config/leader-stake-account-keypair.json
+morgan-keybot -o "$dataDir"/config/drone-keypair.json
+morgan-keybot -o "$dataDir"/config/leader-storage-account-keypair.json
 
 leaderVoteAccountPubkey=$(\
   morgan-wallet \
@@ -64,7 +64,7 @@ morgan-genesis \
   --bootstrap-storage-keypair "$dataDir"/config/leader-storage-account-keypair.json \
   --ledger "$dataDir"/ledger
 
-morgan-drone --keypair "$dataDir"/config/drone-keypair.json &
+morgan-tokenbot --keypair "$dataDir"/config/drone-keypair.json &
 drone=$!
 
 args=(
