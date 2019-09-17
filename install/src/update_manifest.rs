@@ -1,7 +1,7 @@
 use serde_derive::{Deserialize, Serialize};
 use morgan_config_api::ConfigState;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::{Signable, Signature};
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::{Signable, Signature};
 use std::error;
 use std::io;
 

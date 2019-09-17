@@ -2,7 +2,7 @@
 extern crate lazy_static;
 
 use clap::{crate_description, crate_name, crate_version, App, AppSettings, Arg, SubCommand};
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::pubkey::Pubkey;
 
 mod build_env;
 mod command;
