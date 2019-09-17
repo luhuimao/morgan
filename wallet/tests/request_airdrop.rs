@@ -1,7 +1,7 @@
 use morgan::validator::new_validator_for_tests;
 use morgan_client::rpc_client::RpcClient;
-use morgan_drone::drone::run_local_drone;
-use morgan_sdk::signature::KeypairUtil;
+use morgan_tokenbot::drone::run_local_drone;
+use morgan_interface::signature::KeypairUtil;
 use morgan_wallet::wallet::{process_command, WalletCommand, WalletConfig};
 use std::fs::remove_dir_all;
 use std::sync::mpsc::channel;

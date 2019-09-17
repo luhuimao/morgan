@@ -1,5 +1,5 @@
 use clap::{crate_description, crate_name, crate_version, Arg, ArgMatches};
-use morgan_sdk::signature::{gen_keypair_file, read_keypair, KeypairUtil};
+use morgan_interface::signature::{gen_keypair_file, read_keypair, KeypairUtil};
 use morgan_wallet::wallet::{app, parse_command, process_command, WalletConfig, WalletError};
 use std::error;
 

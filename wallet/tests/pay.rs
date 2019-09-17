@@ -1,9 +1,9 @@
 use chrono::prelude::*;
 use serde_json::Value;
 use morgan_client::rpc_client::RpcClient;
-use morgan_drone::drone::run_local_drone;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::KeypairUtil;
+use morgan_tokenbot::drone::run_local_drone;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::KeypairUtil;
 use morgan_wallet::wallet::{
     process_command, request_and_confirm_airdrop, WalletCommand, WalletConfig,
 };

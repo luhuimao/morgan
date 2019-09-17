@@ -19,10 +19,10 @@ num-traits = "0.2"
 serde_json = "1.0.39"
 morgan-budget-api = { path = "../programs/budget_api", version = "0.15.3"     }
 morgan-client = { path = "../client", version = "0.15.3"     }
-morgan-drone = { path = "../drone", version = "0.15.3"     }
+morgan-tokenbot = { path = "../tokenbot", version = "0.15.3"     }
 morgan-logger = { path = "../logger", version = "0.15.3"     }
 morgan-netutil = { path = "../netutil", version = "0.15.3"     }
-morgan-sdk = { path = "../sdk", version = "0.15.3"     }
+morgan-interface = { path = "../interface", version = "0.15.3"     }
 morgan-stake-api = { path = "../programs/stake_api", version = "0.15.3"     }
 morgan-storage-api = { path = "../programs/storage_api", version = "0.15.3"     }
 morgan-vote-api = { path = "../programs/vote_api", version = "0.15.3"     }

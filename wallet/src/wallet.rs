@@ -10,22 +10,22 @@ use morgan_budget_api::budget_state::BudgetError;
 use morgan_client::client_error::ClientError;
 use morgan_client::rpc_client::RpcClient;
 #[cfg(not(test))]
-use morgan_drone::drone::request_airdrop_transaction;
-use morgan_drone::drone::DRONE_PORT;
+use morgan_tokenbot::drone::request_airdrop_transaction;
+use morgan_tokenbot::drone::DRONE_PORT;
 #[cfg(test)]
-use morgan_drone::drone_mock::request_airdrop_transaction;
-use morgan_sdk::account_utils::State;
-use morgan_sdk::bpf_loader;
-use morgan_sdk::hash::Hash;
-use morgan_sdk::instruction::InstructionError;
-use morgan_sdk::instruction_processor_utils::DecodeError;
-use morgan_sdk::loader_instruction;
-use morgan_sdk::message::Message;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::{read_keypair, Keypair, KeypairUtil, Signature};
-use morgan_sdk::system_instruction::SystemError;
-use morgan_sdk::system_transaction;
-use morgan_sdk::transaction::{Transaction, TransactionError};
+use morgan_tokenbot::drone_mock::request_airdrop_transaction;
+use morgan_interface::account_utils::State;
+use morgan_interface::bpf_loader;
+use morgan_interface::hash::Hash;
+use morgan_interface::instruction::InstructionError;
+use morgan_interface::instruction_processor_utils::DecodeError;
+use morgan_interface::loader_instruction;
+use morgan_interface::message::Message;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::{read_keypair, Keypair, KeypairUtil, Signature};
+use morgan_interface::system_instruction::SystemError;
+use morgan_interface::system_transaction;
+use morgan_interface::transaction::{Transaction, TransactionError};
 use morgan_stake_api::stake_instruction;
 use morgan_storage_api::storage_instruction;
 use morgan_vote_api::vote_instruction;
@@ -1670,8 +1670,8 @@ mod tests {
     use super::*;
     use serde_json::Value;
     use morgan_client::mock_rpc_client_request::SIGNATURE;
-    use morgan_sdk::signature::gen_keypair_file;
-    use morgan_sdk::transaction::TransactionError;
+    use morgan_interface::signature::gen_keypair_file;
+    use morgan_interface::transaction::TransactionError;
     use std::net::{Ipv4Addr, SocketAddr};
     use std::path::PathBuf;
 
