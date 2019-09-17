@@ -119,8 +119,8 @@ $ morgan-gossip --entrypoint testnet.morgan.com:10001 spy
 
 Now configure a key pair for your validator by running:
 ```bash
-$ morgan-keygen -o ~/validator-keypair.json
-$ morgan-keygen pubkey ~/validator-keypair.json
+$ morgan-keybot -o ~/validator-keypair.json
+$ morgan-keybot pubkey ~/validator-keypair.json
 ```
 
 Then use one of the following commands, depending on your installation
@@ -165,7 +165,7 @@ accounts: ...
 
 The **identity pubkey** for your validator can also be found by running:
 ```bash
-$ morgan-keygen pubkey ~/validator-keypair.json
+$ morgan-keybot pubkey ~/validator-keypair.json
 ```
 
 From another console, confirm the IP address and **identity pubkey** of your validator is visible in the
@@ -183,9 +183,9 @@ $ morgan-wallet show-vote-account 2ozWvfaXQd1X6uKh8jERoRGApDqSqcEy6fF1oN13LL2G
 The vote pubkey for the validator can also be found by running:
 ```bash
 # If this is a `morgan-install`-installation run:
-$ morgan-keygen pubkey ~/.local/share/morgan/install/active_release/config-local/validator-vote-keypair.json
+$ morgan-keybot pubkey ~/.local/share/morgan/install/active_release/config-local/validator-vote-keypair.json
 # Otherwise run:
-$ morgan-keygen pubkey ./config-local/validator-vote-keypair.json
+$ morgan-keybot pubkey ./config-local/validator-vote-keypair.json
 ```
 
 ### Sharing Metrics From Your Validator

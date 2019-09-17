@@ -36,7 +36,7 @@ all the cluster functionality through the publicly available interfaces.
 
 ```rust,ignore
 use crate::contact_info::ContactInfo;
-use morgan_sdk::signature::{Keypair, KeypairUtil};
+use morgan_interface::signature::{Keypair, KeypairUtil};
 pub fn test_this_behavior(
     entry_point_info: &ContactInfo,
     funding_keypair: &Keypair,

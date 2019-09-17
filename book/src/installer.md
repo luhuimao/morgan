@@ -49,7 +49,7 @@ $ cargo run -- --help
 Given a morgan release tarball (as created by `ci/publish-tarball.sh`) that has already been uploaded to a publicly accessible URL,
 the following commands will deploy the update:
 ```bash
-$ morgan-keygen -o update-manifest.json  # <-- only generated once, the public key is shared with users
+$ morgan-keybot -o update-manifest.json  # <-- only generated once, the public key is shared with users
 $ morgan-install deploy http://example.com/path/to/morgan-release.tar.bz2 update-manifest.json
 ```
 
@@ -57,7 +57,7 @@ $ morgan-install deploy http://example.com/path/to/morgan-release.tar.bz2 update
 ```bash
 $ morgan-install init --pubkey 92DMonmBYXwEMHJ99c9ceRSpAmk9v6i3RdvDdXaVcrfj  # <-- pubkey is obtained from whoever is deploying the updates
 $ export PATH=~/.local/share/morgan-install/bin:$PATH
-$ morgan-keygen ...  # <-- runs the latest morgan-keygen
+$ morgan-keybot ...  # <-- runs the latest morgan-keybot
 $ morgan-install run morgan-validator ...  # <-- runs a validator, restarting it as necesary when an update is applied
 ```
 
@@ -72,7 +72,7 @@ The update tarball itself is hosted elsewhere, off-chain and can be fetched from
 the specified `download_url`.
 
 ```rust,ignore
-use morgan_sdk::signature::Signature;
+use morgan_scrypto::signature::Signature;
 
 /// Information required to download and apply a given update
 pub struct UpdateManifest {
