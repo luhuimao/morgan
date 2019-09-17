@@ -3,8 +3,8 @@
 use jsonrpc_core::{Error, MetaIoHandler, Metadata, Result};
 use jsonrpc_derive::rpc;
 use jsonrpc_http_server::{hyper, AccessControlAllowOrigin, DomainsValidation, ServerBuilder};
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::{Keypair, KeypairUtil, Signature};
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::{Keypair, KeypairUtil, Signature};
 use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -169,7 +169,7 @@ impl Default for LocalVoteSigner {
 mod tests {
     use super::*;
     use jsonrpc_core::{types::*, Response};
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_interface::signature::{Keypair, KeypairUtil};
     use std::mem;
 
     fn start_rpc_handler() -> (MetaIoHandler<Meta>, Meta) {
