@@ -14,14 +14,14 @@ extern crate morgan_exchange_program;
 
 use clap::{crate_description, crate_name, crate_version, value_t_or_exit, App, Arg};
 use morgan::blocktree::create_new_ledger;
-use morgan_sdk::account::Account;
-use morgan_sdk::fee_calculator::FeeCalculator;
-use morgan_sdk::genesis_block::GenesisBlock;
-use morgan_sdk::hash::{hash, Hash};
-use morgan_sdk::poh_config::PohConfig;
-use morgan_sdk::signature::{read_keypair, KeypairUtil};
-use morgan_sdk::system_program;
-use morgan_sdk::timing;
+use morgan_interface::account::Account;
+use morgan_interface::fee_calculator::FeeCalculator;
+use morgan_interface::genesis_block::GenesisBlock;
+use morgan_interface::hash::{hash, Hash};
+use morgan_interface::poh_config::PohConfig;
+use morgan_interface::signature::{read_keypair, KeypairUtil};
+use morgan_interface::system_program;
+use morgan_interface::timing;
 use morgan_stake_api::stake_state;
 use morgan_storage_program::genesis_block_util::GenesisBlockUtil;
 use morgan_vote_api::vote_state;
@@ -269,15 +269,15 @@ mod tests {
         let ids = [
             (
                 "11111111111111111111111111111111",
-                morgan_sdk::system_program::id(),
+                morgan_interface::system_program::id(),
             ),
             (
                 "NativeLoader1111111111111111111111111111111",
-                morgan_sdk::native_loader::id(),
+                morgan_interface::native_loader::id(),
             ),
             (
                 "BPFLoader1111111111111111111111111111111111",
-                morgan_sdk::bpf_loader::id(),
+                morgan_interface::bpf_loader::id(),
             ),
             (
                 "Budget1111111111111111111111111111111111111",
@@ -319,9 +319,9 @@ mod tests {
     fn test_program_id_uniqueness() {
         let mut unique = HashSet::new();
         let ids = vec![
-            morgan_sdk::system_program::id(),
-            morgan_sdk::native_loader::id(),
-            morgan_sdk::bpf_loader::id(),
+            morgan_interface::system_program::id(),
+            morgan_interface::native_loader::id(),
+            morgan_interface::bpf_loader::id(),
             morgan_budget_api::id(),
             morgan_storage_api::id(),
             morgan_token_api::id(),
