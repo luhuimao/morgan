@@ -7,7 +7,7 @@ use clap::{crate_description, crate_name, crate_version, App, AppSettings, Arg, 
 use morgan::contact_info::ContactInfo;
 use morgan::gossip_service::discover;
 use morgan_client::rpc_client::RpcClient;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::pubkey::Pubkey;
 use std::error;
 use std::net::SocketAddr;
 use std::process::exit;

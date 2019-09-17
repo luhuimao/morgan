@@ -14,8 +14,7 @@ env_logger = "0.6.1"
 morgan = { path = "../core", version = "0.15.3"     }
 morgan-client = { path = "../client", version = "0.15.3"      }
 morgan-netutil = { path = "../netutil", version = "0.15.3"     }
-morgan-sdk = { path = "../sdk", version = "0.15.3"     }
-
+morgan-interface = { path = "../interface", version = "0.15.3"     }
 [features]
 chacha = []
 cuda = []
