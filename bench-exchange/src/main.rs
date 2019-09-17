@@ -9,7 +9,7 @@ extern crate morgan_exchange_program;
 use crate::bench::{airdrop_difs, do_bench_exchange, Config};
 use log::*;
 use morgan::gossip_service::{discover_cluster, get_clients};
-use morgan_sdk::signature::KeypairUtil;
+use morgan_interface::signature::KeypairUtil;
 
 fn main() {
     morgan_logger::setup();

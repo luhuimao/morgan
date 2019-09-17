@@ -2,7 +2,7 @@ use itertools::EitherOrBoth::{Both, Left, Right};
 use itertools::Itertools;
 use log::*;
 use morgan_exchange_api::exchange_state::*;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::pubkey::Pubkey;
 use std::cmp::Ordering;
 use std::collections::BinaryHeap;
 use std::{error, fmt};

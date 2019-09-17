@@ -25,14 +25,14 @@ serde_json = "1.0.38"
 # morgan-runtime = { path = "../morgan/runtime"}
 morgan = { path = "../core", version = "0.15.3"     }
 morgan-client = { path = "../client", version = "0.15.3"     }
-morgan-drone = { path = "../drone", version = "0.15.3"     }
+morgan-tokenbot = { path = "../tokenbot", version = "0.15.3"     }
 morgan-exchange-api = { path = "../programs/exchange_api", version = "0.15.3"     }
 morgan-exchange-program = { path = "../programs/exchange_program", version = "0.15.3"     }
 morgan-logger = { path = "../logger", version = "0.15.3"     }
 morgan-metrics = { path = "../metrics", version = "0.15.3"     }
 morgan-netutil = { path = "../netutil", version = "0.15.3"     }
 morgan-runtime = { path = "../runtime", version = "0.15.3"     }
-morgan-sdk = { path = "../sdk", version = "0.15.3"     }
+morgan-interface = { path = "../interface", version = "0.15.3"     }
 ws = "0.8.1"
 untrusted = "0.6.2"
 
