@@ -2,8 +2,8 @@ use crate::client_error::ClientError;
 use crate::generic_rpc_client_request::GenericRpcClientRequest;
 use crate::rpc_request::RpcRequest;
 use serde_json::{Number, Value};
-use morgan_sdk::fee_calculator::FeeCalculator;
-use morgan_sdk::transaction::{self, TransactionError};
+use morgan_interface::fee_calculator::FeeCalculator;
+use morgan_interface::transaction::{self, TransactionError};
 
 pub const PUBKEY: &str = "7RoSF9fUmdphVCpabEoefH81WwrW7orsWonXWqTXkKV8";
 pub const SIGNATURE: &str =

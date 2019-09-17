@@ -1,5 +1,5 @@
 use crate::rpc_request;
-use morgan_sdk::transaction::TransactionError;
+use morgan_interface::transaction::TransactionError;
 use std::{fmt, io};
 
 #[derive(Debug)]

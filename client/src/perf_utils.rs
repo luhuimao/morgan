@@ -1,6 +1,6 @@
 use log::*;
-use morgan_sdk::client::Client;
-use morgan_sdk::timing::duration_as_s;
+use morgan_interface::client::Client;
+use morgan_interface::timing::duration_as_s;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, RwLock};
 use std::thread::sleep;
