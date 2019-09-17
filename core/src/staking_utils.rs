@@ -1,7 +1,7 @@
 use hashbrown::HashMap;
 use morgan_runtime::bank::Bank;
-use morgan_sdk::account::Account;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::account::Account;
+use morgan_interface::pubkey::Pubkey;
 use morgan_vote_api::vote_state::VoteState;
 use std::borrow::Borrow;
 
@@ -117,10 +117,10 @@ pub(crate) mod tests {
         BOOTSTRAP_LEADER_DIFS,
     };
     use hashbrown::HashSet;
-    use morgan_sdk::instruction::Instruction;
-    use morgan_sdk::pubkey::Pubkey;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
-    use morgan_sdk::transaction::Transaction;
+    use morgan_interface::instruction::Instruction;
+    use morgan_interface::pubkey::Pubkey;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
+    use morgan_interface::transaction::Transaction;
     use morgan_stake_api::stake_instruction;
     use morgan_vote_api::vote_instruction;
     use std::iter::FromIterator;

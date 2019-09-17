@@ -17,11 +17,11 @@ use morgan::poh_recorder::WorkingBankEntries;
 use morgan::service::Service;
 use morgan::test_tx::test_tx;
 use morgan_runtime::bank::Bank;
-use morgan_sdk::hash::hash;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::Signature;
-use morgan_sdk::system_transaction;
-use morgan_sdk::timing::{
+use morgan_interface::hash::hash;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::Signature;
+use morgan_interface::system_transaction;
+use morgan_interface::timing::{
     duration_as_ms, timestamp, DEFAULT_TICKS_PER_SLOT, MAX_RECENT_BLOCKHASHES,
 };
 use std::iter;

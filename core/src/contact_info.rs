@@ -1,11 +1,11 @@
 use bincode::serialize;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::pubkey::Pubkey;
 #[cfg(test)]
-use morgan_sdk::rpc_port;
+use morgan_interface::rpc_port;
 #[cfg(test)]
-use morgan_sdk::signature::{Keypair, KeypairUtil};
-use morgan_sdk::signature::{Signable, Signature};
-use morgan_sdk::timing::timestamp;
+use morgan_interface::signature::{Keypair, KeypairUtil};
+use morgan_interface::signature::{Signable, Signature};
+use morgan_interface::timing::timestamp;
 use std::cmp::{Ord, Ordering, PartialEq, PartialOrd};
 use std::net::{IpAddr, SocketAddr};
 

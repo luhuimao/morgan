@@ -18,9 +18,9 @@ use rocksdb;
 
 use morgan_metrics::{datapoint_error, datapoint_info};
 
-use morgan_sdk::genesis_block::GenesisBlock;
-use morgan_sdk::hash::Hash;
-use morgan_sdk::signature::{Keypair, KeypairUtil};
+use morgan_interface::genesis_block::GenesisBlock;
+use morgan_interface::hash::Hash;
+use morgan_interface::signature::{Keypair, KeypairUtil};
 
 use std::borrow::{Borrow, Cow};
 use std::cell::RefCell;
@@ -1634,8 +1634,8 @@ pub mod tests {
     use rand::seq::SliceRandom;
     use rand::thread_rng;
     use rand::Rng;
-    use morgan_sdk::hash::Hash;
-    use morgan_sdk::pubkey::Pubkey;
+    use morgan_interface::hash::Hash;
+    use morgan_interface::pubkey::Pubkey;
     use std::cmp::min;
     use std::collections::HashSet;
     use std::iter::once;

@@ -3,7 +3,7 @@
 use rand::{Rng, SeedableRng};
 use rand_chacha::ChaChaRng;
 use rayon::prelude::*;
-use morgan_sdk::signature::Keypair;
+use morgan_interface::signature::Keypair;
 
 pub struct GenKeys {
     generator: ChaChaRng,
@@ -40,8 +40,8 @@ impl GenKeys {
 #[cfg(test)]
 mod tests {
     use super::*;
-    pub use morgan_sdk::pubkey::Pubkey;
-    use morgan_sdk::signature::KeypairUtil;
+    pub use morgan_interface::pubkey::Pubkey;
+    use morgan_interface::signature::KeypairUtil;
     use std::collections::HashSet;
 
     #[test]

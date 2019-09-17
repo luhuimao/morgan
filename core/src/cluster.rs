@@ -1,4 +1,4 @@
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::pubkey::Pubkey;
 
 pub trait Cluster {
     fn get_node_pubkeys(&self) -> Vec<Pubkey>;

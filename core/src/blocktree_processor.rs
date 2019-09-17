@@ -6,11 +6,11 @@ use rayon::prelude::*;
 use morgan_metrics::{datapoint, datapoint_error, inc_new_counter_debug};
 use morgan_runtime::bank::Bank;
 use morgan_runtime::locked_accounts_results::LockedAccountsResults;
-use morgan_sdk::genesis_block::GenesisBlock;
-use morgan_sdk::timing::duration_as_ms;
-use morgan_sdk::timing::MAX_RECENT_BLOCKHASHES;
-use morgan_sdk::transaction::Result;
-use morgan_sdk::transaction::Transaction;
+use morgan_interface::genesis_block::GenesisBlock;
+use morgan_interface::timing::duration_as_ms;
+use morgan_interface::timing::MAX_RECENT_BLOCKHASHES;
+use morgan_interface::transaction::Result;
+use morgan_interface::transaction::Transaction;
 use std::result;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
@@ -302,12 +302,12 @@ pub mod tests {
         create_genesis_block, create_genesis_block_with_leader, GenesisBlockInfo,
     };
     use morgan_runtime::epoch_schedule::EpochSchedule;
-    use morgan_sdk::hash::Hash;
-    use morgan_sdk::instruction::InstructionError;
-    use morgan_sdk::pubkey::Pubkey;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
-    use morgan_sdk::system_transaction;
-    use morgan_sdk::transaction::TransactionError;
+    use morgan_interface::hash::Hash;
+    use morgan_interface::instruction::InstructionError;
+    use morgan_interface::pubkey::Pubkey;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
+    use morgan_interface::system_transaction;
+    use morgan_interface::transaction::TransactionError;
 
     pub fn fill_blocktree_slot_with_ticks(
         blocktree: &Blocktree,

@@ -3,7 +3,7 @@ use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use rayon::prelude::*;
 use morgan::cluster_info::{compute_retransmit_peers, ClusterInfo};
 use morgan::contact_info::ContactInfo;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::pubkey::Pubkey;
 use std::sync::mpsc::channel;
 use std::sync::mpsc::TryRecvError;
 use std::sync::mpsc::{Receiver, Sender};

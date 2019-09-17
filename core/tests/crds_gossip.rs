@@ -8,9 +8,9 @@ use morgan::crds_gossip_error::CrdsGossipError;
 use morgan::crds_gossip_push::CRDS_GOSSIP_PUSH_MSG_TIMEOUT_MS;
 use morgan::crds_value::CrdsValue;
 use morgan::crds_value::CrdsValueLabel;
-use morgan_sdk::hash::hash;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::timing::timestamp;
+use morgan_interface::hash::hash;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::timing::timestamp;
 use std::sync::{Arc, Mutex};
 
 type Node = Arc<Mutex<CrdsGossip>>;

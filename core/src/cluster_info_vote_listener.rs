@@ -87,9 +87,9 @@ impl Service for ClusterInfoVoteListener {
 mod tests {
     use crate::locktower::MAX_RECENT_VOTES;
     use crate::packet;
-    use morgan_sdk::hash::Hash;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
-    use morgan_sdk::transaction::Transaction;
+    use morgan_interface::hash::Hash;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
+    use morgan_interface::transaction::Transaction;
     use morgan_vote_api::vote_instruction;
     use morgan_vote_api::vote_state::Vote;
 

@@ -17,11 +17,11 @@ use crate::leader_schedule_utils;
 use crate::poh::Poh;
 use crate::result::{Error, Result};
 use morgan_runtime::bank::Bank;
-use morgan_sdk::hash::Hash;
-use morgan_sdk::poh_config::PohConfig;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::timing;
-use morgan_sdk::transaction::Transaction;
+use morgan_interface::hash::Hash;
+use morgan_interface::poh_config::PohConfig;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::timing;
+use morgan_interface::transaction::Transaction;
 use std::sync::mpsc::{channel, Receiver, Sender, SyncSender};
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
@@ -447,8 +447,8 @@ mod tests {
     use crate::blocktree::{get_tmp_ledger_path, Blocktree};
     use crate::genesis_utils::{create_genesis_block, GenesisBlockInfo};
     use crate::test_tx::test_tx;
-    use morgan_sdk::hash::hash;
-    use morgan_sdk::timing::DEFAULT_TICKS_PER_SLOT;
+    use morgan_interface::hash::hash;
+    use morgan_interface::timing::DEFAULT_TICKS_PER_SLOT;
     use std::sync::mpsc::sync_channel;
 
     #[test]

@@ -9,7 +9,7 @@ use crate::result::Result;
 use crate::service::Service;
 use morgan_metrics::datapoint_info;
 use morgan_runtime::epoch_schedule::EpochSchedule;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::pubkey::Pubkey;
 use std::collections::BTreeSet;
 use std::net::UdpSocket;
 use std::ops::Bound::{Excluded, Unbounded};

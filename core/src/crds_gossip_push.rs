@@ -21,9 +21,9 @@ use rand;
 use rand::distributions::{Distribution, WeightedIndex};
 use rand::seq::SliceRandom;
 use morgan_runtime::bloom::Bloom;
-use morgan_sdk::hash::Hash;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::timing::timestamp;
+use morgan_interface::hash::Hash;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::timing::timestamp;
 use std::cmp;
 
 pub const CRDS_GOSSIP_NUM_ACTIVE: usize = 30;

@@ -7,8 +7,8 @@ use crate::result::Result;
 use bincode::serialize;
 use chrono::{SecondsFormat, Utc};
 use serde_json::json;
-use morgan_sdk::hash::Hash;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::hash::Hash;
+use morgan_interface::pubkey::Pubkey;
 use std::cell::RefCell;
 use std::io::prelude::*;
 use std::net::Shutdown;
@@ -170,9 +170,9 @@ mod test {
     use crate::entry::Entry;
     use chrono::{DateTime, FixedOffset};
     use serde_json::Value;
-    use morgan_sdk::hash::Hash;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
-    use morgan_sdk::system_transaction;
+    use morgan_interface::hash::Hash;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
+    use morgan_interface::system_transaction;
     use std::collections::HashSet;
 
     #[test]

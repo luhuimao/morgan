@@ -20,8 +20,8 @@ use hashbrown::HashMap;
 use rand;
 use rand::distributions::{Distribution, WeightedIndex};
 use morgan_runtime::bloom::Bloom;
-use morgan_sdk::hash::Hash;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::hash::Hash;
+use morgan_interface::pubkey::Pubkey;
 use std::cmp;
 use std::collections::VecDeque;
 

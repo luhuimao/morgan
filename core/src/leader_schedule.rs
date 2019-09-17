@@ -1,7 +1,7 @@
 use rand::distributions::{Distribution, WeightedIndex};
 use rand::SeedableRng;
 use rand_chacha::ChaChaRng;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::pubkey::Pubkey;
 use std::ops::Index;
 
 /// Stake-weighted leader schedule for one epoch.

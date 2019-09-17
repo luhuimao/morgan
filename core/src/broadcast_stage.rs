@@ -14,9 +14,9 @@ use morgan_metrics::{
     datapoint, inc_new_counter_debug, inc_new_counter_error, inc_new_counter_info,
     inc_new_counter_warn,
 };
-use morgan_sdk::hash::Hash;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::timing::duration_as_ms;
+use morgan_interface::hash::Hash;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::timing::duration_as_ms;
 use std::net::UdpSocket;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{Receiver, RecvTimeoutError};
@@ -301,8 +301,8 @@ mod test {
     use crate::genesis_utils::{create_genesis_block, GenesisBlockInfo};
     use crate::service::Service;
     use morgan_runtime::bank::Bank;
-    use morgan_sdk::hash::Hash;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_interface::hash::Hash;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
     use std::sync::atomic::AtomicBool;
     use std::sync::mpsc::channel;
     use std::sync::{Arc, RwLock};

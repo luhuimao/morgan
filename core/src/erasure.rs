@@ -282,8 +282,8 @@ pub mod test {
     use crate::blocktree::get_tmp_ledger_path;
     use crate::blocktree::Blocktree;
     use crate::packet::{index_blobs, SharedBlob, BLOB_DATA_SIZE, BLOB_HEADER_SIZE};
-    use morgan_sdk::pubkey::Pubkey;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_interface::pubkey::Pubkey;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
     use std::borrow::Borrow;
 
     /// Specifies the contents of a 16-data-blob and 4-coding-blob erasure set

@@ -1,8 +1,8 @@
 use crate::leader_schedule::LeaderSchedule;
 use crate::staking_utils;
 use morgan_runtime::bank::Bank;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::timing::NUM_CONSECUTIVE_LEADER_SLOTS;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::timing::NUM_CONSECUTIVE_LEADER_SLOTS;
 
 /// Return the leader schedule for the given epoch.
 pub fn leader_schedule(epoch_height: u64, bank: &Bank) -> Option<LeaderSchedule> {

@@ -5,10 +5,10 @@ use jsonrpc_core::{Error, ErrorCode, Result};
 use jsonrpc_derive::rpc;
 use jsonrpc_pubsub::typed::Subscriber;
 use jsonrpc_pubsub::{Session, SubscriptionId};
-use morgan_sdk::account::Account;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::Signature;
-use morgan_sdk::transaction;
+use morgan_interface::account::Account;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::Signature;
+use morgan_interface::transaction;
 use std::sync::{atomic, Arc};
 
 #[rpc(server)]
@@ -245,11 +245,11 @@ mod tests {
     use morgan_budget_api;
     use morgan_budget_api::budget_instruction;
     use morgan_runtime::bank::Bank;
-    use morgan_sdk::pubkey::Pubkey;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
-    use morgan_sdk::system_program;
-    use morgan_sdk::system_transaction;
-    use morgan_sdk::transaction::{self, Transaction};
+    use morgan_interface::pubkey::Pubkey;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
+    use morgan_interface::system_program;
+    use morgan_interface::system_transaction;
+    use morgan_interface::transaction::{self, Transaction};
     use std::sync::RwLock;
     use std::thread::sleep;
     use std::time::Duration;

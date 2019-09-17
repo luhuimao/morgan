@@ -18,8 +18,8 @@ use morgan::streamer;
 use morgan::tvu::{Sockets, Tvu};
 use morgan::validator;
 use morgan_runtime::epoch_schedule::MINIMUM_SLOT_LENGTH;
-use morgan_sdk::signature::{Keypair, KeypairUtil};
-use morgan_sdk::system_transaction;
+use morgan_interface::signature::{Keypair, KeypairUtil};
+use morgan_interface::system_transaction;
 use std::fs::remove_dir_all;
 use std::net::UdpSocket;
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -137,7 +137,7 @@ fn test_replay() {
             &poh_recorder,
             &leader_schedule_cache,
             &exit,
-            &morgan_sdk::hash::Hash::default(),
+            &morgan_interface::hash::Hash::default(),
             completed_slots_receiver,
         );
 

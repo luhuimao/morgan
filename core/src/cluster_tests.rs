@@ -10,16 +10,16 @@ use crate::gossip_service::discover_cluster;
 use crate::locktower::VOTE_THRESHOLD_DEPTH;
 use morgan_client::thin_client::create_client;
 use morgan_runtime::epoch_schedule::MINIMUM_SLOT_LENGTH;
-use morgan_sdk::client::SyncClient;
-use morgan_sdk::hash::Hash;
-use morgan_sdk::poh_config::PohConfig;
-use morgan_sdk::signature::{Keypair, KeypairUtil, Signature};
-use morgan_sdk::system_transaction;
-use morgan_sdk::timing::{
+use morgan_interface::client::SyncClient;
+use morgan_interface::hash::Hash;
+use morgan_interface::poh_config::PohConfig;
+use morgan_interface::signature::{Keypair, KeypairUtil, Signature};
+use morgan_interface::system_transaction;
+use morgan_interface::timing::{
     duration_as_ms, DEFAULT_NUM_TICKS_PER_SECOND, DEFAULT_TICKS_PER_SLOT,
     NUM_CONSECUTIVE_LEADER_SLOTS,
 };
-use morgan_sdk::transport::TransportError;
+use morgan_interface::transport::TransportError;
 use std::thread::sleep;
 use std::time::Duration;
 

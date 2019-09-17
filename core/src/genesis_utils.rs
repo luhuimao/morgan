@@ -1,7 +1,7 @@
 pub use morgan_runtime::genesis_utils::{
     create_genesis_block_with_leader, GenesisBlockInfo, BOOTSTRAP_LEADER_DIFS,
 };
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::pubkey::Pubkey;
 
 // same as genesis_block::create_genesis_block, but with bootstrap_leader staking logic
 //  for the core crate tests

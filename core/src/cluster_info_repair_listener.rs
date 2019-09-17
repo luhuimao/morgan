@@ -9,7 +9,7 @@ use rand::SeedableRng;
 use rand_chacha::ChaChaRng;
 use morgan_metrics::datapoint;
 use morgan_runtime::epoch_schedule::EpochSchedule;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::pubkey::Pubkey;
 use std::cmp;
 use std::collections::HashMap;
 use std::mem;

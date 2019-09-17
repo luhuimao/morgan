@@ -3,9 +3,9 @@
 extern crate test;
 
 use morgan::entry::{next_entries, reconstruct_entries_from_blobs, EntrySlice};
-use morgan_sdk::hash::{hash, Hash};
-use morgan_sdk::signature::{Keypair, KeypairUtil};
-use morgan_sdk::system_transaction;
+use morgan_interface::hash::{hash, Hash};
+use morgan_interface::signature::{Keypair, KeypairUtil};
+use morgan_interface::system_transaction;
 use test::Bencher;
 
 #[bench]

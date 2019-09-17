@@ -90,7 +90,7 @@ mod tests {
     use crate::contact_info::ContactInfo;
     use crate::genesis_utils::{create_genesis_block, GenesisBlockInfo};
     use morgan_runtime::bank::Bank;
-    use morgan_sdk::signature::KeypairUtil;
+    use morgan_interface::signature::KeypairUtil;
     use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 
     #[test]

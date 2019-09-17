@@ -12,7 +12,7 @@ use crate::streamer::BlobReceiver;
 use crate::window_service::{should_retransmit_and_persist, WindowService};
 use morgan_metrics::{datapoint_info, inc_new_counter_error};
 use morgan_runtime::epoch_schedule::EpochSchedule;
-use morgan_sdk::hash::Hash;
+use morgan_interface::hash::Hash;
 use std::net::UdpSocket;
 use std::sync::atomic::AtomicBool;
 use std::sync::mpsc::channel;

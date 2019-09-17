@@ -5,7 +5,7 @@ use crate::result::{Error, Result};
 use crate::service::Service;
 use crate::streamer::{self, PacketReceiver, PacketSender};
 use morgan_metrics::{inc_new_counter_debug, inc_new_counter_info};
-use morgan_sdk::timing::DEFAULT_TICKS_PER_SLOT;
+use morgan_interface::timing::DEFAULT_TICKS_PER_SLOT;
 use std::net::UdpSocket;
 use std::sync::atomic::AtomicBool;
 use std::sync::mpsc::{channel, RecvTimeoutError};

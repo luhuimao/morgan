@@ -34,11 +34,11 @@ use morgan_netutil::{
     bind_in_range, bind_to, find_available_port_in_range, multi_bind_in_range, PortRange,
 };
 use morgan_runtime::bloom::Bloom;
-use morgan_sdk::hash::Hash;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::{Keypair, KeypairUtil, Signable, Signature};
-use morgan_sdk::timing::{duration_as_ms, timestamp};
-use morgan_sdk::transaction::Transaction;
+use morgan_interface::hash::Hash;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::{Keypair, KeypairUtil, Signable, Signature};
+use morgan_interface::timing::{duration_as_ms, timestamp};
+use morgan_interface::transaction::Transaction;
 use std::cmp::min;
 use std::collections::BTreeSet;
 use std::fmt;
@@ -1721,7 +1721,7 @@ mod tests {
     use crate::repair_service::RepairType;
     use crate::result::Error;
     use crate::test_tx::test_tx;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_interface::signature::{Keypair, KeypairUtil};
     use std::collections::HashSet;
     use std::net::{IpAddr, Ipv4Addr};
     use std::sync::{Arc, RwLock};

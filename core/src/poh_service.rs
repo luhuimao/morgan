@@ -3,7 +3,7 @@
 use crate::poh_recorder::PohRecorder;
 use crate::service::Service;
 use core_affinity;
-use morgan_sdk::poh_config::PohConfig;
+use morgan_interface::poh_config::PohConfig;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use std::thread::{self, sleep, Builder, JoinHandle};
@@ -92,8 +92,8 @@ mod tests {
     use crate::result::Result;
     use crate::test_tx::test_tx;
     use morgan_runtime::bank::Bank;
-    use morgan_sdk::hash::hash;
-    use morgan_sdk::pubkey::Pubkey;
+    use morgan_interface::hash::hash;
+    use morgan_interface::pubkey::Pubkey;
     use std::time::Duration;
 
     #[test]

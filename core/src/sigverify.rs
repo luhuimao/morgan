@@ -8,12 +8,12 @@ use crate::packet::{Packet, Packets};
 use crate::result::Result;
 use bincode::serialized_size;
 use morgan_metrics::inc_new_counter_debug;
-use morgan_sdk::message::MessageHeader;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::short_vec::decode_len;
-use morgan_sdk::signature::Signature;
+use morgan_interface::message::MessageHeader;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::short_vec::decode_len;
+use morgan_interface::signature::Signature;
 #[cfg(test)]
-use morgan_sdk::transaction::Transaction;
+use morgan_interface::transaction::Transaction;
 use std::mem::size_of;
 
 type TxOffsets = (Vec<u32>, Vec<u32>, Vec<u32>, Vec<u32>, Vec<Vec<u32>>);
@@ -300,7 +300,7 @@ mod tests {
     use crate::sigverify;
     use crate::test_tx::{test_multisig_tx, test_tx};
     use bincode::{deserialize, serialize};
-    use morgan_sdk::transaction::Transaction;
+    use morgan_interface::transaction::Transaction;
 
     const SIG_OFFSET: usize = 1;
 

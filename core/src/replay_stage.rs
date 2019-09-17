@@ -16,11 +16,11 @@ use crate::service::Service;
 use hashbrown::HashMap;
 use morgan_metrics::{datapoint_warn, inc_new_counter_error, inc_new_counter_info};
 use morgan_runtime::bank::Bank;
-use morgan_sdk::hash::Hash;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::KeypairUtil;
-use morgan_sdk::timing::{self, duration_as_ms};
-use morgan_sdk::transaction::Transaction;
+use morgan_interface::hash::Hash;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::KeypairUtil;
+use morgan_interface::timing::{self, duration_as_ms};
+use morgan_interface::transaction::Transaction;
 use morgan_vote_api::vote_instruction;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{channel, Receiver, RecvTimeoutError, Sender};
@@ -627,7 +627,7 @@ mod test {
     use crate::genesis_utils::create_genesis_block;
     use crate::packet::Blob;
     use crate::replay_stage::ReplayStage;
-    use morgan_sdk::hash::Hash;
+    use morgan_interface::hash::Hash;
     use std::fs::remove_dir_all;
     use std::sync::{Arc, RwLock};
 

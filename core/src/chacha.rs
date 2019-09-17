@@ -93,9 +93,9 @@ mod tests {
     use crate::chacha::chacha_cbc_encrypt_ledger;
     use crate::entry::Entry;
     use crate::gen_keys::GenKeys;
-    use morgan_sdk::hash::{hash, Hash, Hasher};
-    use morgan_sdk::signature::KeypairUtil;
-    use morgan_sdk::system_transaction;
+    use morgan_interface::hash::{hash, Hash, Hasher};
+    use morgan_interface::signature::KeypairUtil;
+    use morgan_interface::system_transaction;
     use std::fs::remove_file;
     use std::fs::File;
     use std::io::Read;

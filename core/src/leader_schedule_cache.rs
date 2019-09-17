@@ -3,7 +3,7 @@ use crate::leader_schedule::LeaderSchedule;
 use crate::leader_schedule_utils;
 use morgan_runtime::bank::Bank;
 use morgan_runtime::epoch_schedule::EpochSchedule;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::pubkey::Pubkey;
 use std::collections::hash_map::Entry;
 use std::collections::{HashMap, VecDeque};
 use std::sync::{Arc, RwLock};

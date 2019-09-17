@@ -6,7 +6,7 @@ use crate::packet::{
 };
 use crate::result::{Error, Result};
 use bincode;
-use morgan_sdk::timing::duration_as_ms;
+use morgan_interface::timing::duration_as_ms;
 use std::net::UdpSocket;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{Receiver, RecvTimeoutError, Sender};

@@ -8,13 +8,13 @@ use crate::storage_stage::StorageState;
 use bincode::{deserialize, serialize};
 use jsonrpc_core::{Error, Metadata, Result};
 use jsonrpc_derive::rpc;
-use morgan_drone::drone::{request_airdrop_transaction, request_reputation_airdrop_transaction};
+use morgan_tokenbot::drone::{request_airdrop_transaction, request_reputation_airdrop_transaction};
 use morgan_runtime::bank::Bank;
-use morgan_sdk::account::Account;
-use morgan_sdk::fee_calculator::FeeCalculator;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::Signature;
-use morgan_sdk::transaction::{self, Transaction};
+use morgan_interface::account::Account;
+use morgan_interface::fee_calculator::FeeCalculator;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::Signature;
+use morgan_interface::transaction::{self, Transaction};
 use morgan_vote_api::vote_state::VoteState;
 use std::net::{SocketAddr, UdpSocket};
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -554,11 +554,11 @@ mod tests {
     use crate::contact_info::ContactInfo;
     use crate::genesis_utils::{create_genesis_block, GenesisBlockInfo};
     use jsonrpc_core::{MetaIoHandler, Response};
-    use morgan_sdk::hash::{hash, Hash};
-    use morgan_sdk::instruction::InstructionError;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
-    use morgan_sdk::system_transaction;
-    use morgan_sdk::transaction::TransactionError;
+    use morgan_interface::hash::{hash, Hash};
+    use morgan_interface::instruction::InstructionError;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
+    use morgan_interface::system_transaction;
+    use morgan_interface::transaction::TransactionError;
     use std::thread;
 
     fn start_rpc_handler_with_tx(

@@ -9,9 +9,9 @@ use bincode::{deserialize, serialized_size};
 use chrono::prelude::Utc;
 use rayon::prelude::*;
 use morgan_budget_api::budget_instruction;
-use morgan_sdk::hash::{Hash, Hasher};
-use morgan_sdk::signature::{Keypair, KeypairUtil};
-use morgan_sdk::transaction::Transaction;
+use morgan_interface::hash::{Hash, Hasher};
+use morgan_interface::signature::{Keypair, KeypairUtil};
+use morgan_interface::transaction::Transaction;
 use std::borrow::Borrow;
 use std::sync::mpsc::{Receiver, Sender};
 use std::sync::{Arc, RwLock};
@@ -375,13 +375,13 @@ pub fn make_tiny_test_entries_from_hash(start: &Hash, num: usize) -> Vec<Entry> 
 
 pub fn make_tiny_test_entries(num: usize) -> Vec<Entry> {
     let zero = Hash::default();
-    let one = morgan_sdk::hash::hash(&zero.as_ref());
+    let one = morgan_interface::hash::hash(&zero.as_ref());
     make_tiny_test_entries_from_hash(&one, num)
 }
 
 pub fn make_large_test_entries(num_entries: usize) -> Vec<Entry> {
     let zero = Hash::default();
-    let one = morgan_sdk::hash::hash(&zero.as_ref());
+    let one = morgan_interface::hash::hash(&zero.as_ref());
     let keypair = Keypair::new();
     let pubkey = keypair.pubkey();
 
@@ -397,7 +397,7 @@ pub fn make_large_test_entries(num_entries: usize) -> Vec<Entry> {
 
 #[cfg(test)]
 pub fn make_consecutive_blobs(
-    id: &morgan_sdk::pubkey::Pubkey,
+    id: &morgan_interface::pubkey::Pubkey,
     num_blobs_to_make: u64,
     start_height: u64,
     start_hash: Hash,
@@ -433,11 +433,11 @@ mod tests {
     use super::*;
     use crate::entry::Entry;
     use crate::packet::{to_blobs, BLOB_DATA_SIZE, PACKET_DATA_SIZE};
-    use morgan_sdk::hash::hash;
-    use morgan_sdk::instruction::Instruction;
-    use morgan_sdk::pubkey::Pubkey;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
-    use morgan_sdk::system_transaction;
+    use morgan_interface::hash::hash;
+    use morgan_interface::instruction::Instruction;
+    use morgan_interface::pubkey::Pubkey;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
+    use morgan_interface::system_transaction;
     use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 
     fn create_sample_payment(keypair: &Keypair, hash: Hash) -> Transaction {
@@ -637,7 +637,7 @@ mod tests {
     fn test_next_entries() {
         morgan_logger::setup();
         let hash = Hash::default();
-        let next_hash = morgan_sdk::hash::hash(&hash.as_ref());
+        let next_hash = morgan_interface::hash::hash(&hash.as_ref());
         let keypair = Keypair::new();
         let tx_small = create_sample_timestamp(&keypair, next_hash);
         let tx_large = create_sample_payment(&keypair, next_hash);

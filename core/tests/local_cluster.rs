@@ -9,8 +9,8 @@ use morgan::gossip_service::discover_cluster;
 use morgan::local_cluster::{ClusterConfig, LocalCluster};
 use morgan::validator::ValidatorConfig;
 use morgan_runtime::epoch_schedule::{EpochSchedule, MINIMUM_SLOT_LENGTH};
-use morgan_sdk::poh_config::PohConfig;
-use morgan_sdk::timing;
+use morgan_interface::poh_config::PohConfig;
+use morgan_interface::timing;
 use std::time::Duration;
 
 #[test]

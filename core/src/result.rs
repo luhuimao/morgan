@@ -6,7 +6,7 @@ use crate::packet;
 use crate::poh_recorder;
 use bincode;
 use serde_json;
-use morgan_sdk::transaction;
+use morgan_interface::transaction;
 use std;
 use std::any::Any;
 

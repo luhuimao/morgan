@@ -11,7 +11,7 @@ use crate::service::Service;
 use crate::sigverify;
 use crate::streamer::{self, PacketReceiver};
 use morgan_metrics::{datapoint_info, inc_new_counter_info};
-use morgan_sdk::timing;
+use morgan_interface::timing;
 use std::sync::mpsc::{Receiver, RecvTimeoutError, Sender};
 use std::sync::{Arc, Mutex};
 use std::thread::{self, Builder, JoinHandle};

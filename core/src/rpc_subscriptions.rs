@@ -7,10 +7,10 @@ use jsonrpc_pubsub::typed::Sink;
 use jsonrpc_pubsub::SubscriptionId;
 use serde::Serialize;
 use morgan_runtime::bank::Bank;
-use morgan_sdk::account::Account;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::Signature;
-use morgan_sdk::transaction;
+use morgan_interface::account::Account;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::Signature;
+use morgan_interface::transaction;
 use morgan_vote_api::vote_state::MAX_LOCKOUT_HISTORY;
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
@@ -301,8 +301,8 @@ pub mod tests {
     use crate::genesis_utils::{create_genesis_block, GenesisBlockInfo};
     use jsonrpc_pubsub::typed::Subscriber;
     use morgan_budget_api;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
-    use morgan_sdk::system_transaction;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
+    use morgan_interface::system_transaction;
     use tokio::prelude::{Async, Stream};
 
     #[test]

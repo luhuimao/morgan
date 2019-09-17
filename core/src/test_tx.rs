@@ -1,10 +1,10 @@
-use morgan_sdk::hash::Hash;
-use morgan_sdk::instruction::CompiledInstruction;
-use morgan_sdk::signature::{Keypair, KeypairUtil};
-use morgan_sdk::system_instruction::SystemInstruction;
-use morgan_sdk::system_program;
-use morgan_sdk::system_transaction;
-use morgan_sdk::transaction::Transaction;
+use morgan_interface::hash::Hash;
+use morgan_interface::instruction::CompiledInstruction;
+use morgan_interface::signature::{Keypair, KeypairUtil};
+use morgan_interface::system_instruction::SystemInstruction;
+use morgan_interface::system_program;
+use morgan_interface::system_transaction;
+use morgan_interface::transaction::Transaction;
 
 pub fn test_tx() -> Transaction {
     let keypair1 = Keypair::new();

@@ -50,14 +50,14 @@ serde_json = "1.0.39"
 morgan-budget-api = { path = "../programs/budget_api", version = "0.15.3"     }
 morgan-budget-program = { path = "../programs/budget_program", version = "0.15.3"     }
 morgan-client = { path = "../client", version = "0.15.3"     }
-morgan-drone = { path = "../drone", version = "0.15.3"     }
+morgan-tokenbot = { path = "../tokenbot", version = "0.15.3"     }
 solana-ed25519-dalek = "0.2.0"
 morgan-kvstore = { path = "../kvstore", version = "0.15.3" , optional = true     }
 morgan-logger = { path = "../logger", version = "0.15.3"     }
 morgan-metrics = { path = "../metrics", version = "0.15.3"     }
 morgan-netutil = { path = "../netutil", version = "0.15.3"     }
 morgan-runtime = { path = "../runtime", version = "0.15.3"     }
-morgan-sdk = { path = "../sdk", version = "0.15.3"     }
+morgan-interface = { path = "../interface", version = "0.15.3"     }
 morgan-stake-api = { path = "../programs/stake_api", version = "0.15.3"     }
 morgan-stake-program = { path = "../programs/stake_program", version = "0.15.3"     }
 morgan-storage-api = { path = "../programs/storage_api", version = "0.15.3"     }

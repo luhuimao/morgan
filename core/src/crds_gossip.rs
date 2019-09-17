@@ -10,8 +10,8 @@ use crate::crds_gossip_push::{CrdsGossipPush, CRDS_GOSSIP_NUM_ACTIVE};
 use crate::crds_value::CrdsValue;
 use hashbrown::HashMap;
 use morgan_runtime::bloom::Bloom;
-use morgan_sdk::hash::Hash;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::hash::Hash;
+use morgan_interface::pubkey::Pubkey;
 
 ///The min size for bloom filters
 pub const CRDS_GOSSIP_BLOOM_SIZE: usize = 1000;
@@ -181,8 +181,8 @@ pub fn get_weight(max_weight: f32, time_since_last_selected: u32, stake: f32) ->
 mod test {
     use super::*;
     use crate::contact_info::ContactInfo;
-    use morgan_sdk::hash::hash;
-    use morgan_sdk::timing::timestamp;
+    use morgan_interface::hash::hash;
+    use morgan_interface::timing::timestamp;
 
     #[test]
     fn test_prune_errors() {

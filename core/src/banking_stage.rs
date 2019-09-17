@@ -19,13 +19,13 @@ use morgan_metrics::{inc_new_counter_debug, inc_new_counter_info, inc_new_counte
 use morgan_runtime::accounts_db::ErrorCounters;
 use morgan_runtime::bank::Bank;
 use morgan_runtime::locked_accounts_results::LockedAccountsResults;
-use morgan_sdk::poh_config::PohConfig;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::timing::{
+use morgan_interface::poh_config::PohConfig;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::timing::{
     self, duration_as_us, DEFAULT_TICKS_PER_SLOT, MAX_RECENT_BLOCKHASHES,
     MAX_TRANSACTION_FORWARDING_DELAY,
 };
-use morgan_sdk::transaction::{self, Transaction, TransactionError};
+use morgan_interface::transaction::{self, Transaction, TransactionError};
 use std::net::UdpSocket;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{Receiver, RecvTimeoutError};
@@ -850,10 +850,10 @@ mod tests {
     use crate::poh_recorder::WorkingBank;
     use crate::{get_tmp_ledger_path, tmp_ledger_name};
     use itertools::Itertools;
-    use morgan_sdk::instruction::InstructionError;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
-    use morgan_sdk::system_transaction;
-    use morgan_sdk::transaction::TransactionError;
+    use morgan_interface::instruction::InstructionError;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
+    use morgan_interface::system_transaction;
+    use morgan_interface::transaction::TransactionError;
     use std::sync::mpsc::channel;
     use std::thread::sleep;
 

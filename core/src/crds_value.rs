@@ -1,8 +1,8 @@
 use crate::contact_info::ContactInfo;
 use bincode::serialize;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::{Keypair, Signable, Signature};
-use morgan_sdk::transaction::Transaction;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::{Keypair, Signable, Signature};
+use morgan_interface::transaction::Transaction;
 use std::collections::BTreeSet;
 use std::fmt;
 
@@ -238,8 +238,8 @@ mod test {
     use crate::contact_info::ContactInfo;
     use crate::test_tx::test_tx;
     use bincode::deserialize;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
-    use morgan_sdk::timing::timestamp;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
+    use morgan_interface::timing::timestamp;
 
     #[test]
     fn test_labels() {
