@@ -1,6 +1,6 @@
 use crate::accounts::AccountLockType;
 use crate::bank::Bank;
-use morgan_sdk::transaction::{Result, Transaction};
+use morgan_interface::transaction::{Result, Transaction};
 use std::borrow::Borrow;
 
 // Represents the results of trying to lock a set of accounts
@@ -54,9 +54,9 @@ impl<'a, 'b, I: Borrow<Transaction>> Drop for LockedAccountsResults<'a, 'b, I> {
 mod tests {
     use super::*;
     use crate::genesis_utils::{create_genesis_block_with_leader, GenesisBlockInfo};
-    use morgan_sdk::pubkey::Pubkey;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
-    use morgan_sdk::system_transaction;
+    use morgan_interface::pubkey::Pubkey;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
+    use morgan_interface::system_transaction;
 
     #[test]
     fn test_account_locks() {

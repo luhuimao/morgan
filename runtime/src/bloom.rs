@@ -80,7 +80,7 @@ impl<T: AsRef<[u8]>> BloomHashIndex for T {
 #[cfg(test)]
 mod test {
     use super::*;
-    use morgan_sdk::hash::{hash, Hash};
+    use morgan_interface::hash::{hash, Hash};
 
     #[test]
     fn test_bloom_filter() {

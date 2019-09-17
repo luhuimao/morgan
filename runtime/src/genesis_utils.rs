@@ -1,8 +1,8 @@
-use morgan_sdk::account::Account;
-use morgan_sdk::genesis_block::GenesisBlock;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::{Keypair, KeypairUtil};
-use morgan_sdk::system_program;
+use morgan_interface::account::Account;
+use morgan_interface::genesis_block::GenesisBlock;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::{Keypair, KeypairUtil};
+use morgan_interface::system_program;
 use morgan_stake_api::stake_state;
 use morgan_vote_api::vote_state;
 

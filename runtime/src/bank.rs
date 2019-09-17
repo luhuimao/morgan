@@ -17,17 +17,17 @@ use log::*;
 use morgan_metrics::{
     datapoint_info, inc_new_counter_debug, inc_new_counter_error, inc_new_counter_info,
 };
-use morgan_sdk::account::Account;
-use morgan_sdk::fee_calculator::FeeCalculator;
-use morgan_sdk::genesis_block::GenesisBlock;
-use morgan_sdk::hash::{extend_and_hash, Hash};
-use morgan_sdk::native_loader;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::{Keypair, Signature};
-use morgan_sdk::syscall::slot_hashes::{self, SlotHashes};
-use morgan_sdk::system_transaction;
-use morgan_sdk::timing::{duration_as_ms, duration_as_us, MAX_RECENT_BLOCKHASHES};
-use morgan_sdk::transaction::{Result, Transaction, TransactionError};
+use morgan_interface::account::Account;
+use morgan_interface::fee_calculator::FeeCalculator;
+use morgan_interface::genesis_block::GenesisBlock;
+use morgan_interface::hash::{extend_and_hash, Hash};
+use morgan_interface::native_loader;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::{Keypair, Signature};
+use morgan_interface::syscall::slot_hashes::{self, SlotHashes};
+use morgan_interface::system_transaction;
+use morgan_interface::timing::{duration_as_ms, duration_as_us, MAX_RECENT_BLOCKHASHES};
+use morgan_interface::transaction::{Result, Transaction, TransactionError};
 use std::borrow::Borrow;
 use std::cmp;
 use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
@@ -299,11 +299,11 @@ impl Bank {
         // Add native programs mandatory for the MessageProcessor to function
         self.register_native_instruction_processor(
             "morgan_system_program",
-            &morgan_sdk::system_program::id(),
+            &morgan_interface::system_program::id(),
         );
         self.register_native_instruction_processor(
             "morgan_bpf_loader",
-            &morgan_sdk::bpf_loader::id(),
+            &morgan_interface::bpf_loader::id(),
         );
         self.register_native_instruction_processor(
             &morgan_vote_program!().0,
@@ -1028,12 +1028,12 @@ mod tests {
     use crate::genesis_utils::{
         create_genesis_block_with_leader, GenesisBlockInfo, BOOTSTRAP_LEADER_DIFS,
     };
-    use morgan_sdk::genesis_block::create_genesis_block;
-    use morgan_sdk::hash;
-    use morgan_sdk::instruction::InstructionError;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
-    use morgan_sdk::system_instruction;
-    use morgan_sdk::system_transaction;
+    use morgan_interface::genesis_block::create_genesis_block;
+    use morgan_interface::hash;
+    use morgan_interface::instruction::InstructionError;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
+    use morgan_interface::system_instruction;
+    use morgan_interface::system_transaction;
     use morgan_vote_api::vote_instruction;
     use morgan_vote_api::vote_state::VoteState;
 

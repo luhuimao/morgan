@@ -1,6 +1,6 @@
 use memmap::MmapMut;
-use morgan_sdk::account::Account;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::account::Account;
+use morgan_interface::pubkey::Pubkey;
 use std::fs::OpenOptions;
 use std::io::{Seek, SeekFrom, Write};
 use std::mem;
@@ -251,8 +251,8 @@ pub mod test_utils {
     use super::StorageMeta;
     use rand::distributions::Alphanumeric;
     use rand::{thread_rng, Rng};
-    use morgan_sdk::account::Account;
-    use morgan_sdk::pubkey::Pubkey;
+    use morgan_interface::account::Account;
+    use morgan_interface::pubkey::Pubkey;
     use std::fs::create_dir_all;
     use std::path::PathBuf;
 
@@ -297,7 +297,7 @@ pub mod tests {
     use super::*;
     use log::*;
     use rand::{thread_rng, Rng};
-    use morgan_sdk::timing::duration_as_ms;
+    use morgan_interface::timing::duration_as_ms;
     use std::time::Instant;
 
     #[test]

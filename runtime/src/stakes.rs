@@ -1,8 +1,8 @@
 //! Stakes serve as a cache of stake and vote accounts to derive
 //! node stakes
 use hashbrown::HashMap;
-use morgan_sdk::account::Account;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::account::Account;
+use morgan_interface::pubkey::Pubkey;
 use morgan_stake_api::stake_state::StakeState;
 
 #[derive(Default, Clone)]
@@ -82,7 +82,7 @@ impl Stakes {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use morgan_sdk::pubkey::Pubkey;
+    use morgan_interface::pubkey::Pubkey;
     use morgan_stake_api::stake_state;
     use morgan_vote_api::vote_state::{self, VoteState};
 

@@ -1,15 +1,15 @@
 use crate::bank::Bank;
-use morgan_sdk::client::{AsyncClient, Client, SyncClient};
-use morgan_sdk::fee_calculator::FeeCalculator;
-use morgan_sdk::hash::Hash;
-use morgan_sdk::instruction::Instruction;
-use morgan_sdk::message::Message;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::Signature;
-use morgan_sdk::signature::{Keypair, KeypairUtil};
-use morgan_sdk::system_instruction;
-use morgan_sdk::transaction::{self, Transaction};
-use morgan_sdk::transport::{Result, TransportError};
+use morgan_interface::client::{AsyncClient, Client, SyncClient};
+use morgan_interface::fee_calculator::FeeCalculator;
+use morgan_interface::hash::Hash;
+use morgan_interface::instruction::Instruction;
+use morgan_interface::message::Message;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::Signature;
+use morgan_interface::signature::{Keypair, KeypairUtil};
+use morgan_interface::system_instruction;
+use morgan_interface::transaction::{self, Transaction};
+use morgan_interface::transport::{Result, TransportError};
 use std::io;
 use std::sync::mpsc::{channel, Receiver, Sender};
 use std::sync::Arc;
@@ -216,8 +216,8 @@ impl BankClient {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use morgan_sdk::genesis_block::create_genesis_block;
-    use morgan_sdk::instruction::AccountMeta;
+    use morgan_interface::genesis_block::create_genesis_block;
+    use morgan_interface::instruction::AccountMeta;
 
     #[test]
     fn test_bank_client_new_with_keypairs() {

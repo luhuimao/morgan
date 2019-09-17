@@ -9,15 +9,15 @@ use bincode::serialize;
 use hashbrown::{HashMap, HashSet};
 use log::*;
 use morgan_metrics::inc_new_counter_error;
-use morgan_sdk::account::Account;
-use morgan_sdk::fee_calculator::FeeCalculator;
-use morgan_sdk::hash::{Hash, Hasher};
-use morgan_sdk::native_loader;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::{Keypair, KeypairUtil};
-use morgan_sdk::system_program;
-use morgan_sdk::transaction::Result;
-use morgan_sdk::transaction::{Transaction, TransactionError};
+use morgan_interface::account::Account;
+use morgan_interface::fee_calculator::FeeCalculator;
+use morgan_interface::hash::{Hash, Hasher};
+use morgan_interface::native_loader;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::{Keypair, KeypairUtil};
+use morgan_interface::system_program;
+use morgan_interface::transaction::Result;
+use morgan_interface::transaction::{Transaction, TransactionError};
 use std::borrow::Borrow;
 use std::env;
 use std::fs::remove_dir_all;
@@ -586,11 +586,11 @@ mod tests {
     // TODO: all the bank tests are bank specific, issue: 2194
 
     use super::*;
-    use morgan_sdk::account::Account;
-    use morgan_sdk::hash::Hash;
-    use morgan_sdk::instruction::CompiledInstruction;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
-    use morgan_sdk::transaction::Transaction;
+    use morgan_interface::account::Account;
+    use morgan_interface::hash::Hash;
+    use morgan_interface::instruction::CompiledInstruction;
+    use morgan_interface::signature::{Keypair, KeypairUtil};
+    use morgan_interface::transaction::Transaction;
     use std::thread::{sleep, Builder};
     use std::time::Duration;
 

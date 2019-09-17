@@ -3,9 +3,9 @@
 extern crate test;
 
 use morgan_runtime::bank::*;
-use morgan_sdk::account::Account;
-use morgan_sdk::genesis_block::create_genesis_block;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::account::Account;
+use morgan_interface::genesis_block::create_genesis_block;
+use morgan_interface::pubkey::Pubkey;
 use std::sync::Arc;
 use test::Bencher;
 

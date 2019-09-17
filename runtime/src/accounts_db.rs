@@ -24,8 +24,8 @@ use hashbrown::{HashMap, HashSet};
 use log::*;
 use rand::{thread_rng, Rng};
 use rayon::prelude::*;
-use morgan_sdk::account::Account;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::account::Account;
+use morgan_interface::pubkey::Pubkey;
 use std::fs::{create_dir_all, remove_dir_all};
 use std::path::Path;
 use std::sync::atomic::{AtomicUsize, Ordering};
@@ -430,7 +430,7 @@ mod tests {
     // TODO: all the bank tests are bank specific, issue: 2194
     use super::*;
     use rand::{thread_rng, Rng};
-    use morgan_sdk::account::Account;
+    use morgan_interface::account::Account;
 
     fn cleanup_paths(paths: &str) {
         let paths = get_paths_vec(&paths);

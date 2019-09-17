@@ -1,6 +1,6 @@
 use hashbrown::{HashMap, HashSet};
 use log::*;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::pubkey::Pubkey;
 
 pub type Fork = u64;
 
@@ -83,7 +83,7 @@ impl<T: Clone> AccountsIndex<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use morgan_sdk::signature::{Keypair, KeypairUtil};
+    use morgan_interface::signature::{Keypair, KeypairUtil};
 
     #[test]
     fn test_get_empty() {

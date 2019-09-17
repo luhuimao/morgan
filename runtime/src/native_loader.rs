@@ -6,11 +6,11 @@ use libloading::os::unix::*;
 #[cfg(windows)]
 use libloading::os::windows::*;
 use log::*;
-use morgan_sdk::account::KeyedAccount;
-use morgan_sdk::instruction::InstructionError;
-use morgan_sdk::instruction_processor_utils;
-use morgan_sdk::loader_instruction::LoaderInstruction;
-use morgan_sdk::pubkey::Pubkey;
+use morgan_interface::account::KeyedAccount;
+use morgan_interface::instruction::InstructionError;
+use morgan_interface::instruction_processor_utils;
+use morgan_interface::loader_instruction::LoaderInstruction;
+use morgan_interface::pubkey::Pubkey;
 use std::env;
 use std::path::PathBuf;
 use std::str;

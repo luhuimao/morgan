@@ -1,6 +1,6 @@
 use hashbrown::HashMap;
-use morgan_sdk::hash::Hash;
-use morgan_sdk::timing::timestamp;
+use morgan_interface::hash::Hash;
+use morgan_interface::timing::timestamp;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 struct HashAge {
@@ -109,7 +109,7 @@ impl BlockhashQueue {
 mod tests {
     use super::*;
     use bincode::serialize;
-    use morgan_sdk::hash::hash;
+    use morgan_interface::hash::hash;
 
     #[test]
     fn test_register_hash() {

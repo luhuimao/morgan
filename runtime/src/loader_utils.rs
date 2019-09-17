@@ -1,12 +1,12 @@
 use crate::bank_client::BankClient;
 use serde::Serialize;
-use morgan_sdk::client::SyncClient;
-use morgan_sdk::instruction::{AccountMeta, Instruction};
-use morgan_sdk::loader_instruction;
-use morgan_sdk::message::Message;
-use morgan_sdk::pubkey::Pubkey;
-use morgan_sdk::signature::{Keypair, KeypairUtil};
-use morgan_sdk::system_instruction;
+use morgan_interface::client::SyncClient;
+use morgan_interface::instruction::{AccountMeta, Instruction};
+use morgan_interface::loader_instruction;
+use morgan_interface::message::Message;
+use morgan_interface::pubkey::Pubkey;
+use morgan_interface::signature::{Keypair, KeypairUtil};
+use morgan_interface::system_instruction;
 
 pub fn load_program(
     bank_client: &BankClient,
