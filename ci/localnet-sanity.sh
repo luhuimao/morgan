@@ -261,7 +261,7 @@ verifyLedger() {
     (
       source multinode-demo/common.sh
       set -x
-      $morgan_ledger_tool --ledger "$SOLANA_CONFIG_DIR"/$ledger-ledger verify
+      $morgan_ledgerbot --ledger "$SOLANA_CONFIG_DIR"/$ledger-ledger verify
     ) || flag_error
   done
 }
@@ -307,7 +307,7 @@ while [[ $iteration -le $iterations ]]; do
     source multinode-demo/common.sh
     set -x
     client_keypair=/tmp/client-id.json-$$
-    $morgan_keygen -o $client_keypair || exit $?
+    $morgan_keybot -o $client_keypair || exit $?
     $morgan_gossip spy --num-nodes-exactly $numNodes || exit $?
     rm -rf $client_keypair
   ) || flag_error

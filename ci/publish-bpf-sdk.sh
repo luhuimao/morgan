@@ -24,7 +24,7 @@ else
       --volume "$PWD:/morgan" \
       eremite/aws-cli:2018.12.18 \
       /usr/bin/s3cmd --acl-public put /morgan/bpf-sdk.tar.bz2 \
-      s3://morgan-sdk/"$CHANNEL"/bpf-sdk.tar.bz2
+      s3://morgan-interface/"$CHANNEL"/bpf-sdk.tar.bz2
   )
 fi
 
