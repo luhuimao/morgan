@@ -1,6 +1,6 @@
 use crate::{influxdb, submit};
 use log::*;
-use morgan_sdk::timing;
+use morgan_interface::timing;
 use std::env;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
