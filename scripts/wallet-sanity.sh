@@ -43,7 +43,7 @@ pay_and_confirm() {
   $morgan_wallet "${entrypoint[@]}" confirm "$signature"
 }
 
-$morgan_keygen
+$morgan_keybot
 
 node_readiness=false
 timeout=60

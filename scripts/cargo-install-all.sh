@@ -37,8 +37,8 @@ BIN_CRATES=(
   genesis
   gossip
   install
-  keygen
-  ledger-tool
+  keybot
+  ledgerbot
   validator
   wallet
 )
