@@ -160,6 +160,7 @@ impl Drone {
 
     pub fn process_drone_request(&mut self, bytes: &BytesMut) -> Result<Bytes, io::Error> {
         let req: DroneRequest = deserialize(bytes).or_else(|err| {
+            println!("bytes = {:?}\n", bytes);
             Err(io::Error::new(
                 io::ErrorKind::Other,
                 format!("deserialize packet in drone 1: {:?}", err),
