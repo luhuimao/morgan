@@ -250,6 +250,7 @@ impl RpcSolImpl {
         value: u64,
         value_type: AirdropValueType,
     ) -> Result<String> {
+        println!("request airdrop\n");
         trace!("request_airdrop id = {} value = {} value_type = {:?}", id, value, value_type);
 
         let drone_addr = meta
