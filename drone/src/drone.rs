@@ -161,8 +161,8 @@ impl Drone {
 
     pub fn process_drone_request(&mut self, bytes: &BytesMut) -> Result<Bytes, io::Error> {
         let req: DroneRequest = deserialize(bytes).or_else(|err| {
-            let bt = Backtrace::new();
-            println!("bt = {:?}\n", bt);
+            //let bt = Backtrace::new();
+            //println!("bt = {:?}\n", bt);
             println!("bytes = {:?}\n", bytes);
             Err(io::Error::new(
                 io::ErrorKind::Other,
