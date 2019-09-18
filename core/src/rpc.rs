@@ -418,13 +418,13 @@ impl RpcSol for RpcSolImpl {
 
     fn request_airdrop_with_difs(&self, meta: Self::Metadata, id: String, difs: u64) -> Result<String> {
         println!("request airdrop with difs\n");
-        Some("dif")
+        Ok("dif")
         //self.request_airdrop(meta, id, difs, AirdropValueType::Difs)
     }
 
     fn request_airdrop_with_difs1(&self, meta: Self::Metadata, id: String, difs1: u64) -> Result<String> {
         println!("request airdrop with difs1\n");
-        Some("dif1")
+        Ok("dif1")
         //self.request_airdrop(meta, id, difs1, AirdropValueType::Difs1)
     }
 
