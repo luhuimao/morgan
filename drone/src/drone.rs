@@ -4,6 +4,7 @@
 //! checking requests against a request cap for a given time time_slice
 //! and (to come) an IP rate limit.
 
+use backtrace::Backtrace;
 use bincode::{deserialize, serialize};
 use byteorder::{ByteOrder, LittleEndian};
 use bytes::{Bytes, BytesMut};
@@ -160,6 +161,8 @@ impl Drone {
 
     pub fn process_drone_request(&mut self, bytes: &BytesMut) -> Result<Bytes, io::Error> {
         let req: DroneRequest = deserialize(bytes).or_else(|err| {
+            let bt = Backtrace::new();
+            println!("bt = {:?}\n", bt);
             println!("bytes = {:?}\n", bytes);
             Err(io::Error::new(
                 io::ErrorKind::Other,
