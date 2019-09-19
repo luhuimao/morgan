@@ -231,12 +231,6 @@ impl ReplayStage {
             };
             assert!(parent.is_frozen());
 
-            info!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-            info!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-            info!("leader_schedule_cache.slot_leader_at() being called");
-            info!("poh_slot : {:?}", poh_slot);
-            info!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-            info!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
             leader_schedule_cache.slot_leader_at(poh_slot, Some(&parent))
                 .map(|next_leader| {
                     debug!(
