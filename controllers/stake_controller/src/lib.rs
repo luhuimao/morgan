@@ -1,7 +1,7 @@
 #[macro_export]
-macro_rules! morgan_stake_program {
+macro_rules! morgan_stake_controller {
     () => {
-        ("morgan_stake_program".to_string(), morgan_stake_api::id())
+        ("morgan_stake_controller".to_string(), morgan_stake_api::id())
     };
 }
 

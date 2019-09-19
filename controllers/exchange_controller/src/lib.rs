@@ -1,8 +1,8 @@
 #[macro_export]
-macro_rules! morgan_exchange_program {
+macro_rules! morgan_exchange_controller {
     () => {
         (
-            "morgan_exchange_program".to_string(),
+            "morgan_exchange_controller".to_string(),
             morgan_exchange_api::id(),
         )
     };

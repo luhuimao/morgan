@@ -21,7 +21,7 @@ use morgan_interface::timing::DEFAULT_TICKS_PER_SLOT;
 use morgan_interface::transaction::Transaction;
 use morgan_stake_api::stake_instruction;
 use morgan_storage_api::storage_instruction;
-use morgan_storage_program::genesis_block_util::GenesisBlockUtil;
+use morgan_storage_controller::genesis_block_util::GenesisBlockUtil;
 use morgan_vote_api::vote_instruction;
 use morgan_vote_api::vote_state::VoteState;
 use std::collections::HashMap;

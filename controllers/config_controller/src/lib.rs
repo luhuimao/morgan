@@ -1,7 +1,7 @@
 #[macro_export]
-macro_rules! morgan_config_program {
+macro_rules! morgan_config_controller {
     () => {
-        ("morgan_config_program".to_string(), morgan_config_api::id())
+        ("morgan_config_controller".to_string(), morgan_config_api::id())
     };
 }
 use morgan_config_api::config_processor::process_instruction;

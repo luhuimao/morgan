@@ -24,10 +24,10 @@ declare print_free_tree=(
   'netutil/src'
   'runtime/src'
   'sdk/src'
-  'programs/vote_api/src'
-  'programs/vote_program/src'
-  'programs/stake_api/src'
-  'programs/stake_program/src'
+  'controllers/vote_api/src'
+  'controllers/vote_program/src'
+  'controllers/stake_api/src'
+  'controllers/stake_program/src'
 )
 
 if _ git --no-pager grep -n --max-depth=0 "${prints[@]/#/-e }" -- "${print_free_tree[@]}"; then

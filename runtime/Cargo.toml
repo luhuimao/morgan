@@ -26,11 +26,11 @@ serde_json = "1.0.38"
 morgan-logger = { path = "../logger", version = "0.15.3"     }
 morgan-metrics = { path = "../metrics", version = "0.15.3"     }
 morgan-interface = { path = "../interface", version = "0.15.3"     }
-morgan-stake-api = { path = "../programs/stake_api", version = "0.15.3"     }
-morgan-vote-api = { path = "../programs/vote_api", version = "0.15.3"     }
-morgan-vote-program = { path = "../programs/vote_program", version = "0.15.3"     }
-morgan-stake-program = { path = "../programs/stake_program", version = "0.15.3"     }
-morgan-noop-program = { path = "../programs/noop_program", version = "0.15.3"     }
+morgan-stake-api = { path = "../controllers/stake_api", version = "0.15.3"     }
+morgan-vote-api = { path = "../controllers/vote_api", version = "0.15.3"     }
+morgan-vote-controller = { path = "../controllers/vote_controller", version = "0.15.3"     }
+morgan-stake-controller = { path = "../controllers/stake_controller", version = "0.15.3"     }
+morgan-noop-controller = { path = "../controllers/noop_controller", version = "0.15.3"     }
 
 [lib]
 name = "morgan_runtime"

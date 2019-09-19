@@ -37,7 +37,7 @@ test-stable-perf)
     Cargo.toml$ \
     ci/test-stable-perf.sh \
     ci/test-stable.sh \
-    ^programs/ \
+    ^controllers/ \
     ^sdk/ \
   || {
     annotate --style info \
@@ -46,9 +46,9 @@ test-stable-perf)
   }
 
   # BPF program tests
-  _ make -C programs/bpf/c tests
+  _ make -C controllers/bpf/c tests
   _ cargo +"$rust_stable" test \
-    --manifest-path programs/bpf/Cargo.toml \
+    --manifest-path controllers/bpf/Cargo.toml \
     --no-default-features --features=bpf_c,bpf_rust
 
   # Run root package tests with these features

@@ -19,7 +19,7 @@ morgan-netutil = { path = "../netutil", version = "0.15.3"     }
 morgan-metrics = { path = "../metrics", version = "0.15.3"     }
 morgan-runtime = { path = "../runtime", version = "0.15.3"     }
 morgan-interface = { path = "../interface", version = "0.15.3"     }
-morgan-vote-api = { path = "../programs/vote_api", version = "0.15.3"     }
+morgan-vote-api = { path = "../controllers/vote_api", version = "0.15.3"     }
 morgan-vote-signer = { path = "../vote-signer", version = "0.15.3"     }
 
 [features]

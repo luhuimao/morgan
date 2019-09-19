@@ -59,7 +59,7 @@ pub fn create_genesis_block_with_leader(
                 ),
             ),
         ],
-        &[morgan_vote_program!(), morgan_stake_program!()],
+        &[morgan_vote_controller!(), morgan_vote_controller!()],
     );
 
     GenesisBlockInfo {

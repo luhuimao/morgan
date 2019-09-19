@@ -4,7 +4,7 @@ pub mod order_book;
 
 #[cfg(test)]
 #[macro_use]
-extern crate morgan_exchange_program;
+extern crate morgan_exchange_controller;
 
 use crate::bench::{airdrop_difs, do_bench_exchange, Config};
 use log::*;

@@ -1,16 +1,16 @@
 //! A command-line executable for generating the chain's genesis block.
 #[macro_use]
-extern crate morgan_vote_program;
+extern crate morgan_vote_controller;
 #[macro_use]
-extern crate morgan_stake_program;
+extern crate morgan_stake_controller;
 #[macro_use]
-extern crate morgan_budget_program;
+extern crate morgan_budget_controller;
 #[macro_use]
-extern crate morgan_token_program;
+extern crate morgan_token_controller;
 #[macro_use]
-extern crate morgan_config_program;
+extern crate morgan_config_controller;
 #[macro_use]
-extern crate morgan_exchange_program;
+extern crate morgan_exchange_controller;
 
 use clap::{crate_description, crate_name, crate_version, value_t_or_exit, App, Arg};
 use morgan::blocktree::create_new_ledger;
@@ -23,7 +23,7 @@ use morgan_interface::signature::{read_keypair, KeypairUtil};
 use morgan_interface::system_program;
 use morgan_interface::timing;
 use morgan_stake_api::stake_state;
-use morgan_storage_program::genesis_block_util::GenesisBlockUtil;
+use morgan_storage_controller::genesis_block_util::GenesisBlockUtil;
 use morgan_vote_api::vote_state;
 use std::error;
 use std::time::{Duration, Instant};
@@ -213,12 +213,12 @@ fn main() -> Result<(), Box<dyn error::Error>> {
             ),
         ],
         &[
-            morgan_vote_program!(),
-            morgan_stake_program!(),
-            morgan_budget_program!(),
-            morgan_token_program!(),
-            morgan_config_program!(),
-            morgan_exchange_program!(),
+            morgan_vote_controller!(),
+            morgan_stake_controller!(),
+            morgan_budget_controller!(),
+            morgan_token_controller!(),
+            morgan_config_controller!(),
+            morgan_exchange_controller!(),
         ],
     );
     genesis_block.add_storage_program(&bootstrap_storage_keypair.pubkey());

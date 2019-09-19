@@ -20,10 +20,10 @@ mod system_instruction_processor;
 extern crate morgan_metrics;
 
 #[macro_use]
-extern crate morgan_vote_program;
+extern crate morgan_vote_controller;
 
 #[macro_use]
-extern crate morgan_stake_program;
+extern crate morgan_stake_controller;
 
 #[macro_use]
 extern crate serde_derive;

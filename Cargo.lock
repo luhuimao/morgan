@@ -1437,10 +1437,10 @@ dependencies = [
  "matches 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "memmap 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "morgan-budget-api 0.15.3",
- "morgan-budget-program 0.15.3",
+ "morgan-budget-controller 0.15.3",
  "morgan-client 0.15.3",
- "morgan-config-program 0.15.3",
- "morgan-exchange-program 0.15.3",
+ "morgan-config-controller 0.15.3",
+ "morgan-exchange-controller 0.15.3",
  "morgan-interface 0.15.3",
  "morgan-kvstore 0.15.3",
  "morgan-logger 0.15.3",
@@ -1448,12 +1448,12 @@ dependencies = [
  "morgan-netutil 0.15.3",
  "morgan-runtime 0.15.3",
  "morgan-stake-api 0.15.3",
- "morgan-stake-program 0.15.3",
+ "morgan-stake-controller 0.15.3",
  "morgan-storage-api 0.15.3",
- "morgan-storage-program 0.15.3",
+ "morgan-storage-controller 0.15.3",
  "morgan-tokenbot 0.15.3",
  "morgan-vote-api 0.15.3",
- "morgan-vote-program 0.15.3",
+ "morgan-vote-controller 0.15.3",
  "morgan-vote-signer 0.15.3",
  "nix 0.14.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand 0.6.5 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1485,7 +1485,7 @@ dependencies = [
  "morgan 0.15.3",
  "morgan-client 0.15.3",
  "morgan-exchange-api 0.15.3",
- "morgan-exchange-program 0.15.3",
+ "morgan-exchange-controller 0.15.3",
  "morgan-interface 0.15.3",
  "morgan-logger 0.15.3",
  "morgan-metrics 0.15.3",
@@ -1576,7 +1576,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "morgan-budget-program"
+name = "morgan-budget-controller"
 version = "0.15.3"
 dependencies = [
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1617,7 +1617,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "morgan-config-program"
+name = "morgan-config-controller"
 version = "0.15.3"
 dependencies = [
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1641,7 +1641,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "morgan-exchange-program"
+name = "morgan-exchange-controller"
 version = "0.15.3"
 dependencies = [
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1651,7 +1651,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "morgan-failure-program"
+name = "morgan-failure-controller"
 version = "0.15.3"
 dependencies = [
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1667,20 +1667,20 @@ dependencies = [
  "hashbrown 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "morgan 0.15.3",
  "morgan-budget-api 0.15.3",
- "morgan-budget-program 0.15.3",
+ "morgan-budget-controller 0.15.3",
  "morgan-config-api 0.15.3",
- "morgan-config-program 0.15.3",
+ "morgan-config-controller 0.15.3",
  "morgan-exchange-api 0.15.3",
- "morgan-exchange-program 0.15.3",
+ "morgan-exchange-controller 0.15.3",
  "morgan-interface 0.15.3",
  "morgan-stake-api 0.15.3",
- "morgan-stake-program 0.15.3",
+ "morgan-stake-controller 0.15.3",
  "morgan-storage-api 0.15.3",
- "morgan-storage-program 0.15.3",
+ "morgan-storage-controller 0.15.3",
  "morgan-token-api 0.15.3",
- "morgan-token-program 0.15.3",
+ "morgan-token-controller 0.15.3",
  "morgan-vote-api 0.15.3",
- "morgan-vote-program 0.15.3",
+ "morgan-vote-controller 0.15.3",
  "serde_json 1.0.39 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -1822,7 +1822,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "morgan-noop-program"
+name = "morgan-noop-controller"
 version = "0.15.3"
 dependencies = [
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1857,11 +1857,11 @@ dependencies = [
  "morgan-interface 0.15.3",
  "morgan-logger 0.15.3",
  "morgan-metrics 0.15.3",
- "morgan-noop-program 0.15.3",
+ "morgan-noop-controller 0.15.3",
  "morgan-stake-api 0.15.3",
- "morgan-stake-program 0.15.3",
+ "morgan-stake-controller 0.15.3",
  "morgan-vote-api 0.15.3",
- "morgan-vote-program 0.15.3",
+ "morgan-vote-controller 0.15.3",
  "rand 0.6.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "rayon 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.91 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1884,7 +1884,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "morgan-stake-program"
+name = "morgan-stake-controller"
 version = "0.15.3"
 dependencies = [
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1908,7 +1908,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "morgan-storage-program"
+name = "morgan-storage-controller"
 version = "0.15.3"
 dependencies = [
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1932,7 +1932,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "morgan-token-program"
+name = "morgan-token-controller"
 version = "0.15.3"
 dependencies = [
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -2000,7 +2000,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "morgan-vote-program"
+name = "morgan-vote-controller"
 version = "0.15.3"
 dependencies = [
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -2037,7 +2037,7 @@ dependencies = [
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "morgan 0.15.3",
  "morgan-budget-api 0.15.3",
- "morgan-budget-program 0.15.3",
+ "morgan-budget-controller 0.15.3",
  "morgan-client 0.15.3",
  "morgan-interface 0.15.3",
  "morgan-logger 0.15.3",

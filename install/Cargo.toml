@@ -29,7 +29,7 @@ serde = "1.0.91"
 serde_derive = "1.0.91"
 serde_yaml = "0.8.9"
 morgan-client = { path = "../client", version = "0.15.3"     }
-morgan-config-api = { path = "../programs/config_api", version = "0.15.3"     }
+morgan-config-api = { path = "../controllers/config_api", version = "0.15.3"     }
 morgan-logger = { path = "../logger", version = "0.15.3"     }
 morgan-interface = { path = "../interface", version = "0.15.3"     }
 tar = "0.4.26"

@@ -14,7 +14,7 @@ fn test_program_native_noop() {
     let bank = Bank::new(&genesis_block);
     let bank_client = BankClient::new(bank);
 
-    let program = "morgan_noop_program".as_bytes().to_vec();
+    let program = "morgan_noop_controller".as_bytes().to_vec();
     let program_id = load_program(&bank_client, &alice_keypair, &native_loader::id(), program);
 
     // Call user program

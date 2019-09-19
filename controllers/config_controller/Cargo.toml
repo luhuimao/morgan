@@ -1,0 +1,18 @@
+[package]
+name = "morgan-config-controller"
+version = "0.15.3"
+description = "config controller"
+authors = ["Morgan Maintainers <maintainers@morgan.com>"]
+repository = "https://github.com/morgan-labs/morgan"
+license = "Apache-2.0"
+homepage = "https://morgan.com/"
+edition = "2018"
+
+[dependencies]
+log = "0.4.2"
+morgan-config-api = { path = "../config_api", version = "0.15.3"     }
+morgan-logger = { path = "../../logger", version = "0.15.3"     }
+morgan-interface = { path = "../../interface", version = "0.15.3"     }
+[lib]
+name = "morgan_config_controller"
+crate-type = ["lib","cdylib"]

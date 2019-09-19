@@ -1,7 +1,7 @@
 #[macro_export]
-macro_rules! morgan_budget_program {
+macro_rules! morgan_budget_controller {
     () => {
-        ("morgan_budget_program".to_string(), morgan_budget_api::id())
+        ("morgan_budget_controller".to_string(), morgan_budget_api::id())
     };
 }
 

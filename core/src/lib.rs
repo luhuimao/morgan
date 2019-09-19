@@ -71,7 +71,7 @@ pub mod validator;
 pub mod window_service;
 
 #[macro_use]
-extern crate morgan_budget_program;
+extern crate morgan_budget_controller;
 
 #[cfg(test)]
 #[cfg(any(feature = "chacha", feature = "cuda"))]

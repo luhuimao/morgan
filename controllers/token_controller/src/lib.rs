@@ -1,7 +1,7 @@
 #[macro_export]
-macro_rules! morgan_token_program {
+macro_rules! morgan_token_controller {
     () => {
-        ("morgan_token_program".to_string(), morgan_token_api::id())
+        ("morgan_token_controller".to_string(), morgan_token_api::id())
     };
 }
 

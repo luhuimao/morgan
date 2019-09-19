@@ -1,7 +1,7 @@
 #[macro_export]
-macro_rules! morgan_vote_program {
+macro_rules! morgan_vote_controller {
     () => {
-        ("morgan_vote_program".to_string(), morgan_vote_api::id())
+        ("morgan_vote_controller".to_string(), morgan_vote_api::id())
     };
 }
 

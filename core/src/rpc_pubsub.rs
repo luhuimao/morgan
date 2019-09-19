@@ -368,7 +368,7 @@ mod tests {
         // This test depends on the budget program
         genesis_block
             .native_instruction_processors
-            .push(morgan_budget_program!());
+            .push(morgan_budget_controller!());
 
         let bob_pubkey = Pubkey::new_rand();
         let witness = Keypair::new();

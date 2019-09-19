@@ -306,8 +306,8 @@ impl Bank {
             &morgan_interface::bpf_loader::id(),
         );
         self.register_native_instruction_processor(
-            &morgan_vote_program!().0,
-            &morgan_vote_program!().1,
+            &morgan_vote_controller!().0,
+            &morgan_vote_controller!().1,
         );
 
         // Add additional native programs specified in the genesis block

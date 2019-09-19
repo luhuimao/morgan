@@ -26,8 +26,8 @@ serde_json = "1.0.38"
 morgan = { path = "../core", version = "0.15.3"     }
 morgan-client = { path = "../client", version = "0.15.3"     }
 morgan-tokenbot = { path = "../tokenbot", version = "0.15.3"     }
-morgan-exchange-api = { path = "../programs/exchange_api", version = "0.15.3"     }
-morgan-exchange-program = { path = "../programs/exchange_program", version = "0.15.3"     }
+morgan-exchange-api = { path = "../controllers/exchange_api", version = "0.15.3"     }
+morgan-exchange-controller = { path = "../controllers/exchange_controller", version = "0.15.3"     }
 morgan-logger = { path = "../logger", version = "0.15.3"     }
 morgan-metrics = { path = "../metrics", version = "0.15.3"     }
 morgan-netutil = { path = "../netutil", version = "0.15.3"     }

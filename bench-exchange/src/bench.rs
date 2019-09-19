@@ -930,7 +930,7 @@ mod tests {
             node_stakes: vec![100_000; NUM_NODES],
             cluster_difs: 100_000_000_000_000,
             validator_config,
-            native_instruction_processors: [morgan_exchange_program!()].to_vec(),
+            native_instruction_processors: [morgan_exchange_controller!()].to_vec(),
             ..ClusterConfig::default()
         });
 
