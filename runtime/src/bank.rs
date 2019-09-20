@@ -804,11 +804,22 @@ impl Bank {
     pub fn read_balance(account: &Account) -> u64 {
         account.difs
     }
+
+    pub fn read_reputation(account: &Account) -> u64 {
+        account.difs1
+    }
+
     /// Each program would need to be able to introspect its own state
     /// this is hard-coded to the Budget language
     pub fn get_balance(&self, pubkey: &Pubkey) -> u64 {
         self.get_account(pubkey)
             .map(|x| Self::read_balance(&x))
+            .unwrap_or(0)
+    }
+
+    pub fn get_reputation(&self, pubkey: &Pubkey) -> u64 {
+        self.get_account(pubkey)
+            .map(|x| Self::read_reputation(&x))
             .unwrap_or(0)
     }
 

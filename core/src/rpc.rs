@@ -181,6 +181,9 @@ pub trait RpcSol {
     #[rpc(meta, name = "getDif")]
     fn get_balance(&self, _: Self::Metadata, _: String) -> Result<u64>;
 
+    #[rpc(meta, name = "getDif1")]
+    fn get_reputation(&self, _: Self::Metadata, _: String) -> Result<u64>;
+
     #[rpc(meta, name = "getClusterNodes")]
     fn get_cluster_nodes(&self, _: Self::Metadata) -> Result<Vec<RpcContactInfo>>;
 
@@ -198,10 +201,10 @@ pub trait RpcSol {
     fn get_transaction_count(&self, _: Self::Metadata) -> Result<u64>;
 
     #[rpc(meta, name = "requestDif")]
-    fn request_airdrop_with_difs(&self, _: Self::Metadata, _: String, _: u64) -> Result<String>;
+    fn request_airdrop_of_balance(&self, _: Self::Metadata, _: String, _: u64) -> Result<String>;
 
     #[rpc(meta, name = "requestDif1")]
-    fn request_airdrop_with_difs1(&self, _: Self::Metadata, _: String, _: u64) -> Result<String>;
+    fn request_airdrop_of_reputation(&self, _: Self::Metadata, _: String, _: u64) -> Result<String>;
 
     #[rpc(meta, name = "sendTxn")]
     fn send_transaction(&self, _: Self::Metadata, _: Vec<u8>) -> Result<String>;
@@ -340,6 +343,12 @@ impl RpcSol for RpcSolImpl {
         Ok(meta.request_processor.read().unwrap().get_balance(&pubkey))
     }
 
+    fn get_reputation(&self, meta: Self::Metadata, id: String) -> Result<u64> {
+        debug!("get_reputation rpc request received: {:?}", id);
+        let pubkey = verify_pubkey(id)?;
+        Ok(meta.request_processor.read().unwrap().get_reputation(&pubkey))
+    }
+
     fn get_cluster_nodes(&self, meta: Self::Metadata) -> Result<Vec<RpcContactInfo>> {
         let cluster_info = meta.cluster_info.read().unwrap();
         fn valid_address_or_none(addr: &SocketAddr) -> Option<SocketAddr> {
@@ -416,11 +425,11 @@ impl RpcSol for RpcSolImpl {
             .get_transaction_count()
     }
 
-    fn request_airdrop_with_difs(&self, meta: Self::Metadata, id: String, difs: u64) -> Result<String> {
+    fn request_airdrop_of_balance(&self, meta: Self::Metadata, id: String, difs: u64) -> Result<String> {
         self.request_airdrop(meta, id, difs, AirdropValueType::Difs)
     }
 
-    fn request_airdrop_with_difs1(&self, meta: Self::Metadata, id: String, difs1: u64) -> Result<String> {
+    fn request_airdrop_of_reputation(&self, meta: Self::Metadata, id: String, difs1: u64) -> Result<String> {
         self.request_airdrop(meta, id, difs1, AirdropValueType::Difs1)
     }
 
