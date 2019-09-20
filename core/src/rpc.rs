@@ -74,6 +74,10 @@ impl JsonRpcRequestProcessor {
         self.bank().get_balance(&pubkey)
     }
 
+    pub fn get_reputation(&self, pubkey: &Pubkey) -> u64 {
+        self.bank().get_reputation(&pubkey)
+    }
+
     fn get_recent_blockhash(&self) -> (String, FeeCalculator) {
         (
             self.bank().confirmed_last_blockhash().to_string(),
