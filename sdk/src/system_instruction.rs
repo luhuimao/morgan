@@ -39,17 +39,6 @@ pub enum SystemInstruction {
         space: u64,
         program_id: Pubkey,
     },
-    /// Create a new account
-    /// * Transaction::keys[0] - source
-    /// * Transaction::keys[1] - new account key
-    /// * difs1 - number of difs1 to transfer to the new account
-    /// * space - memory to allocate if greater then zero
-    /// * program_id - the program id of the new account
-    CreateAccountWithDifs1 {
-        difs1: u64,
-        space: u64,
-        program_id: Pubkey,
-    },
     /// Assign account to a program
     /// * Transaction::keys[0] - account to assign
     Assign {
@@ -60,6 +49,17 @@ pub enum SystemInstruction {
     /// * Transaction::keys[1] - destination
     Transfer {
         difs: u64
+    },
+    /// Create a new account
+    /// * Transaction::keys[0] - source
+    /// * Transaction::keys[1] - new account key
+    /// * difs1 - number of difs1 to transfer to the new account
+    /// * space - memory to allocate if greater then zero
+    /// * program_id - the program id of the new account
+    CreateAccountWithDifs1 {
+        difs1: u64,
+        space: u64,
+        program_id: Pubkey,
     },
 }
 
