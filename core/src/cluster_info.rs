@@ -12,6 +12,7 @@
 //! * layer 2 - Everyone else, if layer 1 is `2^10`, layer 2 should be able to fit `2^20` number of nodes.
 //!
 //! Bank needs to provide an interface for us to query the stake weight
+// use crate::bank_forks::BankForks;
 use crate::bank_forks::BankForks;
 use crate::blocktree::Blocktree;
 use crate::contact_info::ContactInfo;
