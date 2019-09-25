@@ -490,6 +490,7 @@ impl Bank {
             error_counters,
         )
     }
+
     fn check_refs(
         &self,
         txs: &[Transaction],
@@ -508,6 +509,7 @@ impl Bank {
             })
             .collect()
     }
+
     fn check_age(
         &self,
         txs: &[Transaction],
@@ -530,6 +532,7 @@ impl Bank {
             })
             .collect()
     }
+    
     fn check_signatures(
         &self,
         txs: &[Transaction],

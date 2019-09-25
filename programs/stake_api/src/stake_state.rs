@@ -167,10 +167,6 @@ impl<'a> StakeAccount for KeyedAccount<'a> {
                 stake_account.account.difs += stakers_reward;
                 vote_account.account.difs += voters_reward;
 
-                self.account.difs1 -= stakers_reward + voters_reward;
-                stake_account.account.difs1 += stakers_reward;
-                vote_account.account.difs1 += voters_reward;
-
                 stake_account.set_state(&StakeState::Delegate {
                     voter_pubkey,
                     credits_observed: vote_state.credits(),

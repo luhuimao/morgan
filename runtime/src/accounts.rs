@@ -287,7 +287,7 @@ impl Accounts {
         error_counters: &mut ErrorCounters,
     ) -> Vec<Result<(InstructionAccounts, InstructionLoaders)>> {
         //PERF: hold the lock to scan for the references, but not to clone the accounts
-        //TODO: two locks usually leads to deadlocks, should this be one structure?
+        //TODO: two locks usually leads to deadlocks, should this be one structure?He
         let accounts_index = self.accounts_db.accounts_index.read().unwrap();
         let storage = self.accounts_db.storage.read().unwrap();
         txs.iter()
