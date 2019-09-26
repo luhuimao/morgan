@@ -1,7 +1,7 @@
 use serde_json;
 use serde_json::Value;
-use morgan_metrics;
-use morgan_metrics::influxdb;
+use morgan_metricbot;
+use morgan_metricbot::influxdb;
 use std::collections::HashMap;
 use std::env;
 use std::fs::File;
@@ -14,7 +14,7 @@ fn get_last_metrics(metric: &str, db: &str, name: &str, branch: &str) -> Result<
         metric, db, name, branch
     );
 
-    let response = morgan_metrics::query(&query)?;
+    let response = morgan_metricbot::query(&query)?;
 
     match serde_json::from_str(&response) {
         Result::Ok(v) => {
@@ -66,7 +66,7 @@ fn main() {
                 let median = v["median"].to_string().parse().unwrap();
                 let deviation = v["deviation"].to_string().parse().unwrap();
                 if upload_metrics {
-                    morgan_metrics::submit(
+                    morgan_metricbot::submit(
                         influxdb::Point::new(&v["name"].as_str().unwrap().trim_matches('\"'))
                             .add_tag("test", influxdb::Value::String("bench".to_string()))
                             .add_tag("branch", influxdb::Value::String(branch.to_string()))
@@ -115,5 +115,5 @@ fn main() {
             println!("{}, {:10?}, {:10?}", entry, values.0, values.1);
         }
     }
-    morgan_metrics::flush();
+    morgan_metricbot::flush();
 }

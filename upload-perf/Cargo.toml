@@ -12,7 +12,7 @@ publish = false
 [dependencies]
 log = "0.4.2"
 serde_json = "1.0.39"
-morgan-metrics = { path = "../metrics", version = "0.15.3"     }
+morgan-metricbot = { path = "../metricbot", version = "0.15.3"     }
 
 [[bin]]
 name = "morgan-upload-perf"
