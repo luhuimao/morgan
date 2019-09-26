@@ -30,7 +30,7 @@ use core::cmp;
 use hashbrown::HashMap;
 use rand::{thread_rng, Rng};
 use rayon::prelude::*;
-use morgan_metrics::{datapoint_debug, inc_new_counter_debug, inc_new_counter_error};
+use morgan_metricbot::{datapoint_debug, inc_new_counter_debug, inc_new_counter_error};
 use morgan_netutil::{
     bind_in_range, bind_to, find_available_port_in_range, multi_bind_in_range, PortRange,
 };

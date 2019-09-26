@@ -4,7 +4,7 @@ use crate::result::Result;
 use crate::service::Service;
 use crate::sigverify_stage::VerifiedPackets;
 use crate::{packet, sigverify};
-use morgan_metrics::inc_new_counter_debug;
+use morgan_metricbot::inc_new_counter_debug;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::Sender;
 use std::sync::{Arc, Mutex, RwLock};

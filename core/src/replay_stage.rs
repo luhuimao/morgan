@@ -15,7 +15,7 @@ use crate::result::{Error, Result};
 use crate::rpc_subscriptions::RpcSubscriptions;
 use crate::service::Service;
 use hashbrown::HashMap;
-use morgan_metrics::{datapoint_warn, inc_new_counter_error, inc_new_counter_info};
+use morgan_metricbot::{datapoint_warn, inc_new_counter_error, inc_new_counter_info};
 use morgan_runtime::bank::Bank;
 use morgan_interface::hash::Hash;
 use morgan_interface::pubkey::Pubkey;

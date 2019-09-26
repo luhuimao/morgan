@@ -7,7 +7,7 @@ use byteorder::{ByteOrder, LittleEndian};
 use rand::seq::SliceRandom;
 use rand::SeedableRng;
 use rand_chacha::ChaChaRng;
-use morgan_metrics::datapoint;
+use morgan_metricbot::datapoint;
 use morgan_runtime::epoch_schedule::EpochSchedule;
 use morgan_interface::pubkey::Pubkey;
 use std::cmp;

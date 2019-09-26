@@ -7,7 +7,7 @@
 use crate::packet::{Packet, Packets};
 use crate::result::Result;
 use bincode::serialized_size;
-use morgan_metrics::inc_new_counter_debug;
+use morgan_metricbot::inc_new_counter_debug;
 use morgan_interface::message::MessageHeader;
 use morgan_interface::pubkey::Pubkey;
 use morgan_interface::short_vec::decode_len;

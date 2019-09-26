@@ -1,7 +1,7 @@
 //! The `bank_forks` module implments BankForks a DAG of checkpointed Banks
 
 use hashbrown::{HashMap, HashSet};
-use morgan_metrics::inc_new_counter_info;
+use morgan_metricbot::inc_new_counter_info;
 use morgan_runtime::bank::Bank;
 use morgan_interface::timing;
 use std::ops::Index;

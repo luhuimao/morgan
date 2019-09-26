@@ -8,7 +8,7 @@ use crate::cluster_info::ClusterInfo;
 use crate::cluster_info_repair_listener::ClusterInfoRepairListener;
 use crate::result::Result;
 use crate::service::Service;
-use morgan_metrics::datapoint_info;
+use morgan_metricbot::datapoint_info;
 use morgan_runtime::epoch_schedule::EpochSchedule;
 use morgan_interface::pubkey::Pubkey;
 use std::collections::BTreeSet;

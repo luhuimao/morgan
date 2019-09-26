@@ -9,7 +9,7 @@ use crate::repair_service::{RepairService, RepairStrategy};
 use crate::result::{Error, Result};
 use crate::service::Service;
 use crate::streamer::{BlobReceiver, BlobSender};
-use morgan_metrics::{inc_new_counter_debug, inc_new_counter_error};
+use morgan_metricbot::{inc_new_counter_debug, inc_new_counter_error};
 use morgan_runtime::bank::Bank;
 use morgan_interface::hash::Hash;
 use morgan_interface::pubkey::Pubkey;

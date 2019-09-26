@@ -15,7 +15,7 @@ use crate::service::Service;
 use crate::sigverify_stage::VerifiedPackets;
 use bincode::deserialize;
 use itertools::Itertools;
-use morgan_metrics::{inc_new_counter_debug, inc_new_counter_info, inc_new_counter_warn};
+use morgan_metricbot::{inc_new_counter_debug, inc_new_counter_info, inc_new_counter_warn};
 use morgan_runtime::accounts_db::ErrorCounters;
 use morgan_runtime::bank::Bank;
 use morgan_runtime::locked_accounts_results::LockedAccountsResults;

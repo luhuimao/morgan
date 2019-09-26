@@ -89,7 +89,7 @@ extern crate serde_derive;
 extern crate serde_json;
 
 #[macro_use]
-extern crate morgan_metrics;
+extern crate morgan_metricbot;
 
 #[cfg(test)]
 #[macro_use]

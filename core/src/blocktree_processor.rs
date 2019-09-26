@@ -4,7 +4,7 @@ use crate::blocktree::Blocktree;
 use crate::entry::{Entry, EntrySlice};
 use crate::leader_schedule_cache::LeaderScheduleCache;
 use rayon::prelude::*;
-use morgan_metrics::{datapoint, datapoint_error, inc_new_counter_debug};
+use morgan_metricbot::{datapoint, datapoint_error, inc_new_counter_debug};
 use morgan_runtime::bank::Bank;
 use morgan_runtime::locked_accounts_results::LockedAccountsResults;
 use morgan_interface::genesis_block::GenesisBlock;

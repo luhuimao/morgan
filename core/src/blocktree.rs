@@ -16,7 +16,7 @@ use hashbrown::HashMap;
 #[cfg(not(feature = "kvstore"))]
 use rocksdb;
 
-use morgan_metrics::{datapoint_error, datapoint_info};
+use morgan_metricbot::{datapoint_error, datapoint_info};
 
 use morgan_interface::genesis_block::GenesisBlock;
 use morgan_interface::hash::Hash;

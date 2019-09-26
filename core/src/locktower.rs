@@ -2,7 +2,7 @@
 use crate::bank_forks::BankForks;
 use crate::staking_utils;
 use hashbrown::{HashMap, HashSet};
-use morgan_metrics::datapoint_info;
+use morgan_metricbot::datapoint_info;
 use morgan_runtime::bank::Bank;
 use morgan_interface::account::Account;
 use morgan_interface::hash::Hash;

@@ -54,7 +54,7 @@ morgan-tokenbot = { path = "../tokenbot", version = "0.15.3"     }
 solana-ed25519-dalek = "0.2.0"
 morgan-kvstore = { path = "../kvstore", version = "0.15.3" , optional = true     }
 morgan-logger = { path = "../logger", version = "0.15.3"     }
-morgan-metrics = { path = "../metrics", version = "0.15.3"     }
+morgan-metricbot = { path = "../metricbot", version = "0.15.3"     }
 morgan-netutil = { path = "../netutil", version = "0.15.3"     }
 morgan-runtime = { path = "../runtime", version = "0.15.3"     }
 morgan-interface = { path = "../interface", version = "0.15.3"     }

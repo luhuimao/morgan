@@ -18,7 +18,7 @@ use crate::service::Service;
 use crate::storage_stage::StorageState;
 use crate::tpu::Tpu;
 use crate::tvu::{Sockets, Tvu};
-use morgan_metrics::inc_new_counter_info;
+use morgan_metricbot::inc_new_counter_info;
 use morgan_runtime::bank::Bank;
 use morgan_interface::genesis_block::GenesisBlock;
 use morgan_interface::poh_config::PohConfig;

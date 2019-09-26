@@ -10,7 +10,7 @@ use crate::result::{Error, Result};
 use crate::service::Service;
 use crate::staking_utils;
 use rayon::prelude::*;
-use morgan_metrics::{
+use morgan_metricbot::{
     datapoint, inc_new_counter_debug, inc_new_counter_error, inc_new_counter_info,
     inc_new_counter_warn,
 };
