@@ -9,7 +9,7 @@ use std::thread;
 
 fn main() -> Result<(), Box<error::Error>> {
     morgan_logger::setup();
-    morgan_metrics::set_panic_hook("drone");
+    morgan_metricbot::set_panic_hook("drone");
     let matches = App::new(crate_name!())
         .about(crate_description!())
         .version(crate_version!())

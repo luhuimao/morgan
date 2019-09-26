@@ -9,7 +9,7 @@ use byteorder::{ByteOrder, LittleEndian};
 use bytes::{Bytes, BytesMut};
 use log::*;
 use serde_derive::{Deserialize, Serialize};
-use morgan_metrics::datapoint_info;
+use morgan_metricbot::datapoint_info;
 use morgan_interface::hash::Hash;
 use morgan_interface::message::Message;
 use morgan_interface::packet::PACKET_DATA_SIZE;
@@ -212,7 +212,7 @@ impl Drone {
 
 impl Drop for Drone {
     fn drop(&mut self) {
-        morgan_metrics::flush();
+        morgan_metricbot::flush();
     }
 }
 
