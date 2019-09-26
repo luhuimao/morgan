@@ -1,11 +1,11 @@
-use morgan_metrics;
+use morgan_metricbot;
 
 use log::*;
 use rayon::prelude::*;
 use morgan::gen_keys::GenKeys;
 use morgan_client::perf_utils::{sample_txs, SampleStats};
 use morgan_tokenbot::drone::request_airdrop_transaction;
-use morgan_metrics::datapoint_info;
+use morgan_metricbot::datapoint_info;
 use morgan_interface::client::Client;
 use morgan_interface::hash::Hash;
 use morgan_interface::signature::{Keypair, KeypairUtil};

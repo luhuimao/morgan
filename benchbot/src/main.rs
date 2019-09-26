@@ -7,7 +7,7 @@ use std::process::exit;
 
 fn main() {
     morgan_logger::setup();
-    morgan_metrics::set_panic_hook("bench-tps");
+    morgan_metricbot::set_panic_hook("bench-tps");
 
     let matches = cli::build_args().get_matches();
     let cli_config = cli::extract_args(&matches);
