@@ -17,7 +17,7 @@ mod status_cache;
 mod system_instruction_processor;
 
 #[macro_use]
-extern crate morgan_metrics;
+extern crate morgan_metricbot;
 
 #[macro_use]
 extern crate morgan_vote_controller;

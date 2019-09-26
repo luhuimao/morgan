@@ -207,7 +207,7 @@ mod tests {
     fn test_create_system_account_with_reputation() {
         let new_program_owner = Pubkey::new(&[9; 32]);
         let from = Pubkey::new_rand();
-        let mut from_account = Account::new(0, 100, 0, &system_program::id());
+        let mut from_account = Account::new(2, 100, 0, &system_program::id());
 
         let to = Pubkey::new_rand();
         let mut to_account = Account::new(0, 0, 0, &Pubkey::default());

@@ -14,7 +14,7 @@ use crate::status_cache::StatusCache;
 use bincode::serialize;
 use hashbrown::HashMap;
 use log::*;
-use morgan_metrics::{
+use morgan_metricbot::{
     datapoint_info, inc_new_counter_debug, inc_new_counter_error, inc_new_counter_info,
 };
 use morgan_interface::account::Account;

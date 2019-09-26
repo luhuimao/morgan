@@ -8,7 +8,7 @@ use crate::message_processor::has_duplicates;
 use bincode::serialize;
 use hashbrown::{HashMap, HashSet};
 use log::*;
-use morgan_metrics::inc_new_counter_error;
+use morgan_metricbot::inc_new_counter_error;
 use morgan_interface::account::Account;
 use morgan_interface::fee_calculator::FeeCalculator;
 use morgan_interface::hash::{Hash, Hasher};
