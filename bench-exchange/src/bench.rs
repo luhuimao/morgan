@@ -11,7 +11,7 @@ use morgan_tokenbot::drone::request_airdrop_transaction;
 use morgan_exchange_api::exchange_instruction;
 use morgan_exchange_api::exchange_state::*;
 use morgan_exchange_api::id;
-use morgan_metrics::datapoint_info;
+use morgan_metricbot::datapoint_info;
 use morgan_interface::client::Client;
 use morgan_interface::client::SyncClient;
 use morgan_interface::pubkey::Pubkey;

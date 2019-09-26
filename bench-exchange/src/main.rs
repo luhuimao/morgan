@@ -13,7 +13,7 @@ use morgan_interface::signature::KeypairUtil;
 
 fn main() {
     morgan_logger::setup();
-    morgan_metrics::set_panic_hook("bench-exchange");
+    morgan_metricbot::set_panic_hook("bench-exchange");
 
     let matches = cli::build_args().get_matches();
     let cli_config = cli::extract_args(&matches);

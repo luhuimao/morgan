@@ -29,7 +29,7 @@ morgan-tokenbot = { path = "../tokenbot", version = "0.15.3"     }
 morgan-exchange-api = { path = "../controllers/exchange_api", version = "0.15.3"     }
 morgan-exchange-controller = { path = "../controllers/exchange_controller", version = "0.15.3"     }
 morgan-logger = { path = "../logger", version = "0.15.3"     }
-morgan-metrics = { path = "../metrics", version = "0.15.3"     }
+morgan-metricbot = { path = "../metricbot", version = "0.15.3"     }
 morgan-netutil = { path = "../netutil", version = "0.15.3"     }
 morgan-runtime = { path = "../runtime", version = "0.15.3"     }
 morgan-interface = { path = "../interface", version = "0.15.3"     }
