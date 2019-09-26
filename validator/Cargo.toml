@@ -16,7 +16,7 @@ morgan = { path = "../core", version = "0.15.3"     }
 morgan-tokenbot = { path = "../tokenbot", version = "0.15.3"     }
 morgan-logger = { path = "../logger", version = "0.15.3"     }
 morgan-netutil = { path = "../netutil", version = "0.15.3"     }
-morgan-metrics = { path = "../metrics", version = "0.15.3"     }
+morgan-metricbot = { path = "../metricbot", version = "0.15.3"     }
 morgan-runtime = { path = "../runtime", version = "0.15.3"     }
 morgan-interface = { path = "../interface", version = "0.15.3"     }
 morgan-vote-api = { path = "../controllers/vote_api", version = "0.15.3"     }

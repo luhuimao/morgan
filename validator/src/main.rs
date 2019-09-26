@@ -23,7 +23,7 @@ fn port_range_validator(port_range: String) -> Result<(), String> {
 
 fn main() {
     morgan_logger::setup();
-    morgan_metrics::set_panic_hook("validator");
+    morgan_metricbot::set_panic_hook("validator");
 
     let default_dynamic_port_range =
         &format!("{}-{}", FULLNODE_PORT_RANGE.0, FULLNODE_PORT_RANGE.1);
