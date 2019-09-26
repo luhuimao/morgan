@@ -4,7 +4,7 @@ use crate::exchange_instruction::*;
 use crate::exchange_state::*;
 use crate::faucet_id;
 use log::*;
-use morgan_metrics::inc_new_counter_info;
+use morgan_metricbot::inc_new_counter_info;
 use morgan_interface::account::KeyedAccount;
 use morgan_interface::instruction::InstructionError;
 use morgan_interface::pubkey::Pubkey;

@@ -14,7 +14,7 @@ log = "0.4.2"
 serde = "1.0.91"
 serde_derive = "1.0.91"
 morgan-logger = { path = "../../logger", version = "0.15.3"     }
-morgan-metrics = { path = "../../metrics", version = "0.15.3"     }
+morgan-metricbot = { path = "../../metricbot", version = "0.15.3"     }
 morgan-interface = { path = "../../interface", version = "0.15.3"     }
 [lib]
 name = "morgan_vote_api"

@@ -6,7 +6,7 @@ use crate::vote_state::{self, Vote, VoteState};
 use bincode::deserialize;
 use log::*;
 use serde_derive::{Deserialize, Serialize};
-use morgan_metrics::datapoint_warn;
+use morgan_metricbot::datapoint_warn;
 use morgan_interface::account::KeyedAccount;
 use morgan_interface::instruction::{AccountMeta, Instruction, InstructionError};
 use morgan_interface::pubkey::Pubkey;
