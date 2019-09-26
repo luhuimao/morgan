@@ -20,4 +20,4 @@ morgan-interface = { path = "../interface", version = "0.15.3"     }
 rand = "0.6.5"
 
 [lib]
-name = "morgan_metrics"
+name = "morgan_metricbot"

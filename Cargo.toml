@@ -14,7 +14,7 @@ members = [
     "kvstore",
     "ledgerbot",
     "logger",
-    "metrics",
+    "metricbot",
     "netutil",
     "controllers/bpf",
     "controllers/bpf_loader",
