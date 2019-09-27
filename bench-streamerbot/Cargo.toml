@@ -1,0 +1,18 @@
+[package]
+authors = ["Morgan Maintainers <maintainers@morgan.com>"]
+edition = "2018"
+name = "morgan-bench-streamerbot"
+version = "0.15.3"
+repository = "https://github.com/morgan-labs/morgan"
+license = "Apache-2.0"
+homepage = "https://morgan.com/"
+
+[dependencies]
+clap = "2.33.0"
+morgan = { path = "../core", version = "0.15.3"     }
+morgan-logger = { path = "../logger", version = "0.15.3"     }
+morgan-netutil = { path = "../netutil", version = "0.15.3"     }
+
+[features]
+cuda = ["morgan/cuda"]
+erasure = []
