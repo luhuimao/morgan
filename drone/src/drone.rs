@@ -4,7 +4,6 @@
 //! checking requests against a request cap for a given time time_slice
 //! and (to come) an IP rate limit.
 
-use backtrace::Backtrace;
 use bincode::{deserialize, serialize};
 use byteorder::{ByteOrder, LittleEndian};
 use bytes::{Bytes, BytesMut};
