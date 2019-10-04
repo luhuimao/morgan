@@ -438,7 +438,7 @@ impl RpcSol for RpcSolImpl {
     }
 
     fn send_transaction(&self, meta: Self::Metadata, data: Vec<u8>) -> Result<String> {
-    /*    let tx: Transaction = deserialize(&data).map_err(|err| {
+        let tx: Transaction = deserialize(&data).map_err(|err| {
             info!("send_transaction: deserialize error: {:?}", err);
             Error::invalid_request()
         })?;
@@ -465,8 +465,7 @@ impl RpcSol for RpcSolImpl {
             data.len(),
             signature
         );
-        Ok(signature)*/
-        Ok(String::from("haha"))
+        Ok(signature)
     }
 
     fn get_slot_leader(&self, meta: Self::Metadata) -> Result<String> {
