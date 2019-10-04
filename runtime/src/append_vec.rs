@@ -30,6 +30,8 @@ pub struct StorageMeta {
 pub struct AccountBalance {
     /// difs in the account
     pub difs: u64,
+    /// difs1 in the account
+    pub difs1: u64,
     /// the program that owns this account. If executable, the program that loads this account.
     pub owner: Pubkey,
     /// this account's data contains a loaded program (and is now read-only)
@@ -49,10 +51,10 @@ impl<'a> StoredAccount<'a> {
     pub fn clone_account(&self) -> Account {
         Account {
             difs: self.balance.difs,
+            difs1: self.balance.difs1,
             owner: self.balance.owner,
             executable: self.balance.executable,
             data: self.data.to_vec(),
-            difs1: self.balance.difs,
         }
     }
 }
@@ -212,6 +214,7 @@ impl AppendVec {
             let meta_ptr = storage_meta as *const StorageMeta;
             let balance = AccountBalance {
                 difs: account.difs,
+                difs1: account.difs1,
                 owner: account.owner,
                 executable: account.executable,
             };

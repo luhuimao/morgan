@@ -64,16 +64,7 @@ fn create_system_account_with_difs1(
         );
         Err(SystemError::AccountAlreadyInUse)?;
     }
-
-    if difs1 > keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 {
-        debug!(
-            "CreateAccount: insufficient difs1 ({}, need {})",
-            keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1, difs1
-        );
-        Err(SystemError::ResultWithNegativeDifs1)?;
-    }
     
-    //keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 -= difs1;
     keyed_accounts[TO_ACCOUNT_INDEX].account.difs1 += difs1;    
     keyed_accounts[TO_ACCOUNT_INDEX].account.owner = *program_id;
     keyed_accounts[TO_ACCOUNT_INDEX].account.data = vec![0; space as usize];
@@ -102,8 +93,6 @@ fn transfer_difs(
     }
     keyed_accounts[FROM_ACCOUNT_INDEX].account.difs -= difs;
     keyed_accounts[TO_ACCOUNT_INDEX].account.difs += difs;
-    keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 -= difs;
-    keyed_accounts[TO_ACCOUNT_INDEX].account.difs1 += difs;
     Ok(())
 }
 
@@ -118,8 +107,6 @@ fn transfer_difs1(
         );
         Err(SystemError::ResultWithNegativeDifs1)?;
     }
-    keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 -= difs1;
-    keyed_accounts[TO_ACCOUNT_INDEX].account.difs1 += difs1;
     keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 -= difs1;
     keyed_accounts[TO_ACCOUNT_INDEX].account.difs1 += difs1;
     Ok(())

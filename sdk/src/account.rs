@@ -27,8 +27,9 @@ impl fmt::Debug for Account {
         };
         write!(
             f,
-            "Account {{ difs: {} data.len: {} owner: {} executable: {}{} }}",
+            "Account {{ difs: {} difs1: {} data.len: {} owner: {} executable: {}{} }}",
             self.difs,
+            self.difs1,
             self.data.len(),
             self.owner,
             self.executable,
@@ -45,7 +46,7 @@ impl Account {
             data: vec![0u8; space],
             owner: *owner,
             executable: false,
-            difs1: difs,
+            difs1: 0,
         }
     }
 
