@@ -107,9 +107,8 @@ fn transfer_difs1(
         );
         Err(SystemError::ResultWithNegativeDifs1)?;
     }
-    println!("\n\nunaltered accounts = \n{:?}\n\n", keyed_accounts);
+    keyed_accounts[FROM_ACCOUNT_INDEX].accout.difs1 -= difs1;
     keyed_accounts[TO_ACCOUNT_INDEX].account.difs1 += difs1;
-    println!("\n\naltered accounts = \n{:?}\n\n", keyed_accounts);
     Ok(())
 }
 
