@@ -176,16 +176,16 @@ pub struct RpcContactInfo {
 pub trait RpcSol {
     type Metadata;
 
-    #[rpc(meta, name = "confirmTxn")]
+    #[rpc(meta, name = "confmTxn")]
     fn confirm_transaction(&self, _: Self::Metadata, _: String) -> Result<bool>;
 
     #[rpc(meta, name = "getAccountInfo")]
     fn get_account_info(&self, _: Self::Metadata, _: String) -> Result<Account>;
 
-    #[rpc(meta, name = "getDif")]
+    #[rpc(meta, name = "getDifs")]
     fn get_balance(&self, _: Self::Metadata, _: String) -> Result<u64>;
 
-    #[rpc(meta, name = "getDif1")]
+    #[rpc(meta, name = "getDifs1")]
     fn get_reputation(&self, _: Self::Metadata, _: String) -> Result<u64>;
 
     #[rpc(meta, name = "getClusterNodes")]
@@ -204,10 +204,10 @@ pub trait RpcSol {
     #[rpc(meta, name = "getTxnCnt")]
     fn get_transaction_count(&self, _: Self::Metadata) -> Result<u64>;
 
-    #[rpc(meta, name = "requestDif")]
+    #[rpc(meta, name = "requestDifs")]
     fn request_airdrop_of_balance(&self, _: Self::Metadata, _: String, _: u64) -> Result<String>;
 
-    #[rpc(meta, name = "requestDif1")]
+    #[rpc(meta, name = "requestDifs1")]
     fn request_airdrop_of_reputation(&self, _: Self::Metadata, _: String, _: u64) -> Result<String>;
 
     #[rpc(meta, name = "sendTxn")]
