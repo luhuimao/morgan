@@ -61,6 +61,12 @@ pub enum SystemInstruction {
         space: u64,
         program_id: Pubkey,
     },
+    /// Transfer difs1
+    /// * Transaction::keys[0] - source
+    /// * Transaction::keys[1] - destination
+    TransferDifs1 {
+        difs1: u64
+    },
 }
 
 pub fn create_account(

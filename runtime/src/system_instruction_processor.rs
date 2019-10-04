@@ -107,8 +107,9 @@ fn transfer_difs1(
         );
         Err(SystemError::ResultWithNegativeDifs1)?;
     }
-    keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 -= difs1;
+    println!("\n\nunaltered accounts = \n{:?}\n\n", keyed_accounts);
     keyed_accounts[TO_ACCOUNT_INDEX].account.difs1 += difs1;
+    println!("\n\naltered accounts = \n{:?}\n\n", keyed_accounts);
     Ok(())
 }
 
@@ -150,6 +151,8 @@ pub fn process_instruction(
             },
 
             SystemInstruction::Transfer { difs } => transfer_difs(keyed_accounts, difs),
+
+            SystemInstruction::TransferDifs1 { difs1 } => transfer_difs1(keyed_accounts, difs1),
         }
         .map_err(|e| InstructionError::CustomError(e as u32))
     } else {
