@@ -107,7 +107,7 @@ fn transfer_difs1(
         );
         Err(SystemError::ResultWithNegativeDifs1)?;
     }
-    keyed_accounts[FROM_ACCOUNT_INDEX].accout.difs1 -= difs1;
+    keyed_accounts[FROM_ACCOUNT_INDEX].account.difs1 -= difs1;
     keyed_accounts[TO_ACCOUNT_INDEX].account.difs1 += difs1;
     Ok(())
 }
