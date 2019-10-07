@@ -654,8 +654,13 @@ impl Bank {
             max_age,
             &mut error_counters,
         );
+
+        println!("\n\ntransactions = \n{:?}\n\n", txs);
+
         let mut loaded_accounts = self.load_accounts(txs, sig_results, &mut error_counters);
         let tick_height = self.tick_height();
+
+        println!("\n\nloaded accounts = \n{:?}\n\n", loaded_accounts);
 
         let load_elapsed = now.elapsed();
         let now = Instant::now();
@@ -706,6 +711,9 @@ impl Bank {
 
         inc_new_counter_info!("bank-process_transactions-txs", tx_count, 0, 1000);
         Self::update_error_counters(&error_counters);
+
+        println!("\n\naltered accounts = \n{:?}\n\n", loaded_accounts);
+
         (loaded_accounts, executed)
     }
 

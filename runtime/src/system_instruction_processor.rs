@@ -128,6 +128,8 @@ pub fn process_instruction(
             Err(InstructionError::MissingRequiredSignature)?;
         }
 
+        println!("\n\nsystem instruction is \n{:?}\n\n", instruction);
+        
         match instruction {
             
             SystemInstruction::CreateAccount {
