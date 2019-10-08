@@ -189,6 +189,7 @@ impl Accounts {
                     );
                 }
             }
+
             if called_accounts.is_empty() || called_accounts[0].difs == 0 {
                 error_counters.account_not_found += 1;
                 Err(TransactionError::AccountNotFound)
