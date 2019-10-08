@@ -7,14 +7,14 @@ use std::{cmp, fmt};
 pub struct Account {
     /// difs in the account
     pub difs: u64,
-    /// data held in this account
-    pub data: Vec<u8>,
+    /// difs1 in the account
+    pub difs1: u64,
     /// the program that owns this account. If executable, the program that loads this account.
     pub owner: Pubkey,
     /// this account's data contains a loaded program (and is now read-only)
     pub executable: bool,
-    /// test field for future reputation value
-    pub difs1: u64,
+    /// data held in this account
+    pub data: Vec<u8>,
 }
 
 impl fmt::Debug for Account {
@@ -43,10 +43,10 @@ impl Account {
     pub fn new(difs: u64, space: usize, owner: &Pubkey) -> Account {
         Account {
             difs,
-            data: vec![0u8; space],
+            difs1: 0,
             owner: *owner,
             executable: false,
-            difs1: 0,
+            data: vec![0u8; space],
         }
     }
 

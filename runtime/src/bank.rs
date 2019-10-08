@@ -654,14 +654,8 @@ impl Bank {
             max_age,
             &mut error_counters,
         );
-
-        println!("\n\ntransactions = \n{:?}\n\n", txs);
-
         let mut loaded_accounts = self.load_accounts(txs, sig_results, &mut error_counters);
         let tick_height = self.tick_height();
-
-        println!("\n\nloaded accounts = \n{:?}\n\n", loaded_accounts);
-
         let load_elapsed = now.elapsed();
         let now = Instant::now();
         let executed: Vec<Result<()>> =
@@ -711,9 +705,6 @@ impl Bank {
 
         inc_new_counter_info!("bank-process_transactions-txs", tx_count, 0, 1000);
         Self::update_error_counters(&error_counters);
-
-        println!("\n\naltered accounts = \n{:?}\n\n", loaded_accounts);
-
         (loaded_accounts, executed)
     }
 
@@ -898,6 +889,7 @@ impl Bank {
     pub fn transaction_count(&self) -> u64 {
         self.transaction_count.load(Ordering::Relaxed) as u64
     }
+
     fn increment_transaction_count(&self, tx_count: usize) {
         self.transaction_count
             .fetch_add(tx_count, Ordering::Relaxed);

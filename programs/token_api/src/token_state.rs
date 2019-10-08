@@ -84,6 +84,7 @@ pub enum TokenState {
     Account(TokenAccountInfo),
     Invalid,
 }
+
 impl Default for TokenState {
     fn default() -> TokenState {
         TokenState::Unallocated
@@ -394,11 +395,14 @@ impl TokenState {
             Err(TokenError::InvalidArgument)?;
         }
 
+        println!("\nprogram id = {:?}\nkeyed accounts = {:?}\n", program_id, info);
+
         let input_accounts: Vec<TokenState> = info
             .iter()
             .map(|keyed_account| {
                 let account = &keyed_account.account;
                 if account.owner == *program_id {
+                    println!("\nowner == program id\n");
                     match Self::deserialize(&account.data) {
                         Ok(token_state) => token_state,
                         Err(err) => {
@@ -443,6 +447,7 @@ impl TokenState {
             info!("output_account: index={} data={:?}", index, account);
             Self::serialize(account, &mut info[*index].account.data)?;
         }
+
         Ok(())
     }
 }
