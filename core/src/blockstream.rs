@@ -14,6 +14,7 @@ use std::io::prelude::*;
 use std::net::Shutdown;
 use std::os::unix::net::UnixStream;
 use std::path::Path;
+use log::*;
 
 pub trait EntryWriter: std::fmt::Debug {
     fn write(&self, payload: String) -> Result<()>;
@@ -94,21 +95,38 @@ where
         entry: &Entry,
     ) -> Result<()> {
         let transactions: Vec<Vec<u8>> = serialize_transactions(entry);
-        let stream_entry = json!({
-            "num_hashes": entry.num_hashes,
-            "hash": entry.hash,
-            "transactions": transactions
-        });
-        let json_entry = serde_json::to_string(&stream_entry)?;
-        let payload = format!(
-            r#"{{"dt":"{}","t":"entry","s":{},"h":{},"l":"{:?}","entry":{}}}"#,
-            Utc::now().to_rfc3339_opts(SecondsFormat::Nanos, true),
-            slot,
-            tick_height,
-            leader_pubkey,
-            json_entry,
-        );
-        self.output.write(payload)?;
+        let mut isVoteTx = false;
+        // ignore transaction's length entry
+        if transactions.len() > 0 {
+            // ignore entry.transaction.message's account_keys contain Vote111111111111111111111111111111111111111
+            for tx in &entry.transactions {
+                for key in &tx.message.account_keys {
+                    if key.to_string() == "Vote111111111111111111111111111111111111111" {
+                        isVoteTx = true;
+                        break;
+                    } 
+                }
+            }
+            if isVoteTx == false {
+                let stream_entry = json!({
+                    "num_hashes": entry.num_hashes,
+                    "hash": entry.hash,
+                    "transactions": transactions
+                });
+                let json_entry = serde_json::to_string(&stream_entry)?;
+                let payload = format!(
+                    r#"{{"dt":"{}","t":"entry","s":{},"h":{},"l":"{:?}","entry":{}}}"#,
+                    Utc::now().to_rfc3339_opts(SecondsFormat::Nanos, true),
+                    slot,
+                    tick_height,
+                    leader_pubkey,
+                    json_entry,
+                );
+                error!("entry event: {:?}", entry);
+                self.output.write(payload)?;
+            }
+
+        }
         Ok(())
     }
 
@@ -127,6 +145,7 @@ where
             leader_pubkey,
             blockhash,
         );
+        error!("block_event: {:?}", payload);
         self.output.write(payload)?;
         Ok(())
     }

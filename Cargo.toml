@@ -1,7 +1,7 @@
 [workspace]
 members = [
     "bench-exchange",
-    "bench-streamer",
+    "bench-streamerbot",
     "benchbot",
     "client",
     "core",
@@ -13,7 +13,6 @@ members = [
     "keybot",
     "kvstore",
     "ledgerbot",
-    "logger",
     "metricbot",
     "netutil",
     "controllers/bpf",
