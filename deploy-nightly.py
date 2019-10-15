@@ -197,7 +197,7 @@ def build(rust_version,cargoFeatures,release=False):
 
         BIN_CRATES=[
             "bench-exchange",
-            "bench-streamer",
+            "bench-streamerbot",
             "benchbot",
             "tokenbot",
             "genesis",
