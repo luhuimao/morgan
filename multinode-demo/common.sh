@@ -53,7 +53,7 @@ else
   }
 fi
 
-morgan_bench_tps=$(morgan_program bench-tps)
+morgan_benchbot=$(morgan_program benchbot)
 morgan_tokenbot=$(morgan_program tokenbot)
 morgan_validator=$(morgan_program validator)
 morgan_validator_cuda=$(morgan_program validator-cuda)
