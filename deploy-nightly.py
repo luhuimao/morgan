@@ -259,37 +259,37 @@ def deploy_bin(target):
     # execute_shell("source ~/.profile")
 
     # remove the previous installed service file
-    # if os.path.exists("/etc/systemd/system/soros-leader.service"):
-    #     prnt_run("Remove previous installed service file:soros-leader.service")
-    #     os.remove("/etc/systemd/system/soros-leader.service")
-    # if os.path.exists("/etc/systemd/system/soros-leader.socket"):
-    #     prnt_run("Remove previous installed socket file:soros-leader.socket")
-    #     os.remove("/etc/systemd/system/soros-leader.socket")
+    if os.path.exists("/etc/systemd/system/morgan-leader.service"):
+        prnt_run("Remove previous installed service file:morgan-leader.service")
+        os.remove("/etc/systemd/system/morgan-leader.service")
+    if os.path.exists("/etc/systemd/system/morgan-leader.socket"):
+        prnt_run("Remove previous installed socket file:morgan-leader.socket")
+        os.remove("/etc/systemd/system/morgan-leader.socket")
 
-    # if os.path.exists("/etc/systemd/system/soros-tokenbot.service"):
-    #     prnt_run("Remove previous installed service file:soros-tokenbot.service")
-    #     os.remove("/etc/systemd/system/soros-tokenbot.service")
-    # if os.path.exists("/etc/systemd/system/soros-tokenbot.socket"):
-    #     prnt_run("Remove previous installed socket file:soros-tokenbot.socket")
-    #     os.remove("/etc/systemd/system/soros-tokenbot.socket")
+    if os.path.exists("/etc/systemd/system/morgan-tokenbot.service"):
+        prnt_run("Remove previous installed service file:morgan-tokenbot.service")
+        os.remove("/etc/systemd/system/morgan-tokenbot.service")
+    if os.path.exists("/etc/systemd/system/morgan-tokenbot.socket"):
+        prnt_run("Remove previous installed socket file:morgan-tokenbot.socket")
+        os.remove("/etc/systemd/system/morgan-tokenbot.socket")
 
-    # if os.path.exists("/etc/systemd/system/soros-validator.service"):
-    #     prnt_run("Remove previous installed service file:soros-validator.service")
-    #     os.remove("/etc/systemd/system/soros-validator.service")
-    # if os.path.exists("/etc/systemd/system/soros-validator.socket"):
-    #     prnt_run("Remove previous installed socket file:soros-validator.socket")
-    #     os.remove("/etc/systemd/system/soros-validator.socket")
+    if os.path.exists("/etc/systemd/system/morgan-validator.service"):
+        prnt_run("Remove previous installed service file:morgan-validator.service")
+        os.remove("/etc/systemd/system/morgan-validator.service")
+    if os.path.exists("/etc/systemd/system/morgan-validator.socket"):
+        prnt_run("Remove previous installed socket file:morgan-validator.socket")
+        os.remove("/etc/systemd/system/morgan-validator.socket")
 
     # cp the service files into service folder
-    # execute_shell("cp soros.service.template/*  /etc/systemd/system")
+    execute_shell("cp morgan.service.template/*  /etc/systemd/system")
 
-    # if os.path.exists("/bitconch/morgan"):
-    #     prnt_run("Remove previous installed version")
-    #     rmtree("/bitconch/morgan",onerror=rmtree_onerror)
-    #     prnt_run("Copy the soros scripts to /bitconch/soros")
+    if os.path.exists("/bitconch/morgan"):
+        prnt_run("Remove previous installed version")
+        rmtree("/bitconch/morgan",onerror=rmtree_onerror)
+        prnt_run("Copy the morgan scripts to /bitconch/morgan")
     # create the working directory data directory
-    # copytree(f"multinode-demo", "/bitconch/soros/demo")
-    # copytree(f"scripts", "/bitconch/soros/scripts")
+    copytree(f"multinode-demo", "/bitconch/morgan/demo")
+    copytree(f"scripts", "/bitconch/morgan/scripts")
 
    
 parser = argparse.ArgumentParser()
@@ -303,8 +303,8 @@ argv = parser.parse_args(sys.argv[1:])
 # update_submodules()
 build("1.35","erasure",release=argv.release)
 prnt_run("Update PATH")
-# execute_shell(f"source ~/.profile")
-prnt_run("Please run /usr/bin/bitconch/morgan/demo/setup.sh")
+execute_shell(f"source ~/.profile")
+prnt_run("Please run /bitconch/morgan/demo/setup.sh")
 
 # Setup the boot leader with stake of 500K dif
 if click.confirm('Do you want to run setup to create genesis file and id files?', default=True):
