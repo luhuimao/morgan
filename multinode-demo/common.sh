@@ -7,25 +7,28 @@
 # shellcheck disable=2034
 #
 
-SOLANA_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. || exit 1; pwd)"
+MORGAN_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. || exit 1; pwd)"
 
 rsync=rsync
+bootstrap_leader_logger="tee bootstrap-leader.log"
+fullnode_logger="tee fullnode.log"
+drone_logger="tee drone.log"
 
 if [[ $(uname) != Linux ]]; then
   # Protect against unsupported configurations to prevent non-obvious errors
   # later. Arguably these should be fatal errors but for now prefer tolerance.
-  if [[ -n $SOLANA_CUDA ]]; then
+  if [[ -n $MORGAN_CUDA ]]; then
     echo "Warning: CUDA is not supported on $(uname)"
-    SOLANA_CUDA=
+    MORGAN_CUDA=
   fi
 fi
 
-if [[ -f "$SOLANA_ROOT"/target/perf-libs/env.sh ]]; then
+if [[ -f "$MORGAN_ROOT"/target/perf-libs/env.sh ]]; then
   # shellcheck source=/dev/null
-  source "$SOLANA_ROOT"/target/perf-libs/env.sh
+  source "$MORGAN_ROOT"/target/perf-libs/env.sh
 fi
 
-if [[ -n $USE_INSTALL || ! -f "$SOLANA_ROOT"/Cargo.toml ]]; then
+if [[ -n $USE_INSTALL || ! -f "$MORGAN_ROOT"/Cargo.toml ]]; then
   morgan_program() {
     declare program="$1"
     printf "morgan-%s" "$program"
@@ -42,13 +45,13 @@ else
       features+="chacha,"
     fi
 
-    if [[ -r "$SOLANA_ROOT/$program"/Cargo.toml ]]; then
+    if [[ -r "$MORGAN_ROOT/$program"/Cargo.toml ]]; then
       maybe_package="--package morgan-$program"
     fi
     if [[ -n $NDEBUG ]]; then
       maybe_release=--release
     fi
-    declare manifest_path="--manifest-path=$SOLANA_ROOT/$program/Cargo.toml"
+    declare manifest_path="--manifest-path=$MORGAN_ROOT/$program/Cargo.toml"
     printf "cargo run $manifest_path $maybe_release $maybe_package --bin morgan-%s %s -- " "$program" "$features"
   }
 fi
@@ -68,13 +71,13 @@ export RUST_LOG=${RUST_LOG:-morgan=info} # if RUST_LOG is unset, default to info
 export RUST_BACKTRACE=1
 
 # shellcheck source=scripts/configure-metrics.sh
-source "$SOLANA_ROOT"/scripts/configure-metrics.sh
+source "$MORGAN_ROOT"/scripts/configure-metrics.sh
 
 # The directory on the cluster entrypoint that is rsynced by other full nodes
-SOLANA_RSYNC_CONFIG_DIR=$SOLANA_ROOT/config
+MORGAN_RSYNC_CONFIG_DIR=$MORGAN_ROOT/config
 
 # Configuration that remains local
-SOLANA_CONFIG_DIR=$SOLANA_ROOT/config-local
+MORGAN_CONFIG_DIR=$MORGAN_ROOT/config-local
 
 default_arg() {
   declare name=$1

@@ -102,8 +102,8 @@ def update_submodules():
 
 def build(rust_version,cargoFeatures,release=False):
     target_list = execute_shell("rustup target list", silent=True).decode()
-    m = re.search(r"(.*?)\s*\(default\)", target_list)
-    
+    # m = re.search(r"(.*?)\s*\(default\)", target_list)
+    m = re.search(r"(.*?)\s*\(installed\)", target_list)
     #currentWorking directory
     pwd = os.getcwd()
     
@@ -303,7 +303,7 @@ argv = parser.parse_args(sys.argv[1:])
 # update_submodules()
 build("1.35","erasure",release=argv.release)
 prnt_run("Update PATH")
-execute_shell(f"source ~/.profile")
+# execute_shell(f"source ~/.profile")
 prnt_run("Please run /bitconch/morgan/demo/setup.sh")
 
 # Setup the boot leader with stake of 500K dif
