@@ -102,8 +102,8 @@ def update_submodules():
 
 def build(rust_version,cargoFeatures,release=False):
     target_list = execute_shell("rustup target list", silent=True).decode()
-    # m = re.search(r"(.*?)\s*\(default\)", target_list)
-    m = re.search(r"(.*?)\s*\(installed\)", target_list)
+    m = re.search(r"(.*?)\s*\(default\)", target_list)
+    # m = re.search(r"(.*?)\s*\(installed\)", target_list)
     #currentWorking directory
     pwd = os.getcwd()
     
@@ -322,7 +322,7 @@ if click.confirm('Are you running on the leader node?', default=True):
         copy2(f"/etc/rsyncd.conf", f"/etc/rsyncd.conf.bk")
         os.remove("/etc/rsyncd.conf")
     prnt_run("Setup new rsyncd.conf.")
-    copy2(f"rsyncd-soros.conf", f"/etc/rsyncd.conf")
+    copy2(f"rsyncd-morgan.conf", f"/etc/rsyncd.conf")
     execute_shell("systemctl enable rsync")
     execute_shell("systemctl start rsync")
 

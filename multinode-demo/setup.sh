@@ -8,11 +8,11 @@ set -e
 "$here"/clear-config.sh
 
 # Create genesis ledger
-$morgan_keybot -o "$MORGAN_CONFIG_DIR"/mint-keypair.json
-$morgan_keybot -o "$MORGAN_CONFIG_DIR"/bootstrap-leader-keypair.json
-$morgan_keybot -o "$MORGAN_CONFIG_DIR"/bootstrap-leader-vote-keypair.json
-$morgan_keybot -o "$MORGAN_CONFIG_DIR"/bootstrap-leader-stake-keypair.json
-$morgan_keybot -o "$MORGAN_CONFIG_DIR"/bootstrap-leader-storage-keypair.json
+morgan-keybot -o "$MORGAN_CONFIG_DIR"/mint-keypair.json
+morgan-keybot -o "$MORGAN_CONFIG_DIR"/bootstrap-leader-keypair.json
+morgan-keybot -o "$MORGAN_CONFIG_DIR"/bootstrap-leader-vote-keypair.json
+morgan-keybot -o "$MORGAN_CONFIG_DIR"/bootstrap-leader-stake-keypair.json
+morgan-keybot -o "$MORGAN_CONFIG_DIR"/bootstrap-leader-storage-keypair.json
 
 args=("$@")
 default_arg --bootstrap-leader-keypair "$MORGAN_CONFIG_DIR"/bootstrap-leader-keypair.json

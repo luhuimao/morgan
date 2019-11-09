@@ -19,8 +19,8 @@ set -x
 # exec $morgan_tokenbot --keypair "$MORGAN_CONFIG_DIR"/mint-keypair.json "$@"
 trap 'kill "$pid" && wait "$pid"' INT TERM ERR
 
-morgan_tokenbot \
-  --keypair "$MORGAN_CONFIG_DIR"/mint-id.json \
+morgan-tokenbot \
+  --keypair "$MORGAN_CONFIG_DIR"/mint-keypair.json \
   "$@" \
   > >($drone_logger) 2>&1 &
 pid=$!
