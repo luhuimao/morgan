@@ -1,10 +1,10 @@
 pub mod genesis_block_util;
 
 #[macro_export]
-macro_rules! morgan_storage_program {
+macro_rules! morgan_storage_controller {
     () => {
         (
-            "morgan_storage_program".to_string(),
+            "morgan_storage_controller".to_string(),
             morgan_storage_api::id(),
         )
     };

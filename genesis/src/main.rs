@@ -221,7 +221,7 @@ fn main() -> Result<(), Box<dyn error::Error>> {
             morgan_exchange_controller!(),
         ],
     );
-    genesis_block.add_storage_program(&bootstrap_storage_keypair.pubkey());
+    genesis_block.add_storage_controller(&bootstrap_storage_keypair.pubkey());
 
     genesis_block.fee_calculator.difs_per_signature =
         value_t_or_exit!(matches, "difs_per_signature", u64);

@@ -131,7 +131,7 @@ impl LocalCluster {
             config.node_stakes[0],
         );
         let storage_keypair = Keypair::new();
-        genesis_block.add_storage_program(&storage_keypair.pubkey());
+        genesis_block.add_storage_controller(&storage_keypair.pubkey());
         genesis_block.ticks_per_slot = config.ticks_per_slot;
         genesis_block.slots_per_epoch = config.slots_per_epoch;
         genesis_block.stakers_slot_offset = config.stakers_slot_offset;
