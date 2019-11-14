@@ -381,8 +381,7 @@ while true; do
     if [[ $node_type = bootstrap_leader ]]; then
       ledger_not_setup "$MORGAN_RSYNC_CONFIG_DIR/ledger does not exist"
     fi
-    # $rsync -vPr "${rsync_entrypoint_url:?}"/config/ledger "$MORGAN_RSYNC_CONFIG_DIR"
-    $rsync -vPr caesar@192.168.0.74:/bitconch/morgan/config/ledger "$MORGAN_RSYNC_CONFIG_DIR"
+    $rsync -vPr "${rsync_entrypoint_url:?}"/config/ledger "$MORGAN_RSYNC_CONFIG_DIR"
   fi
 
   if new_gensis_block; then
@@ -446,9 +445,7 @@ while true; do
       ((secs_to_next_genesis_poll--)) && continue
       (
         set -x
-        # $rsync -r "${rsync_entrypoint_url:?}"/config/ledger "$MORGAN_RSYNC_CONFIG_DIR"
-        $rsync -vPr caesar@192.168.0.74:/bitconch/morgan/config/ledger "$MORGAN_RSYNC_CONFIG_DIR"
-
+        $rsync -r "${rsync_entrypoint_url:?}"/config/ledger "$MORGAN_RSYNC_CONFIG_DIR"
       ) || true
       new_gensis_block && break
 
