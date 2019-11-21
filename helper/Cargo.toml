@@ -1,0 +1,12 @@
+[package]
+name = "morgan-helper"
+version = "0.1.0"
+authors = ["benjamin <luhuimao@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ansi_term = "0.12"
+log = "0.4.2"
+chrono = { version = "0.4.0", features = ["serde"] }
