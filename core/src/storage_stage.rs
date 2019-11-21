@@ -31,6 +31,7 @@ use std::sync::mpsc::{channel, Receiver, RecvTimeoutError, Sender};
 use std::sync::{Arc, RwLock};
 use std::thread::{self, sleep, Builder, JoinHandle};
 use std::time::Duration;
+use morgan_helper::logHelper::*;
 
 // Block of hash answers to validate against
 // Vec of [ledger blocks] x [keys]
@@ -172,7 +173,15 @@ impl StorageStage {
                                         break
                                     }
                                     Error::RecvTimeoutError(RecvTimeoutError::Timeout) => (),
-                                    _ => info!("Error from process_entries: {:?}", e),
+                                    _ => {
+                                        // info!("{}", Info(format!("Error from process_entries: {:?}", e).to_string())),
+                                        println!("{}",
+                                            printLn(
+                                                format!("Error from process_entries: {:?}", e).to_string(),
+                                                module_path!().to_string()
+                                            )
+                                        );
+                                    }
                                 }
                             }
                         }
@@ -199,7 +208,14 @@ impl StorageStage {
                         let working_bank = bank_forks.read().unwrap().working_bank();
                         let storage_account = working_bank.get_account(&storage_keypair.pubkey());
                         if storage_account.is_none() {
-                            warn!("Storage account not found: {}", storage_keypair.pubkey());
+                            // warn!("Storage account not found: {}", storage_keypair.pubkey());
+                            println!(
+                                "{}",
+                                Warn(
+                                    format!("Storage account not found: {}", storage_keypair.pubkey()).to_string(),
+                                    module_path!().to_string()
+                                )
+                            );
                         }
                     }
 
@@ -215,7 +231,13 @@ impl StorageStage {
                                     &transactions_socket,
                                 )
                                 .unwrap_or_else(|err| {
-                                    info!("failed to send storage transaction: {:?}", err)
+                                    // info!("{}", Info(format!("failed to send storage transaction: {:?}", err).to_string()))
+                                    println!("{}",
+                                        printLn(
+                                            format!("failed to send storage transaction: {:?}", err).to_string(),
+                                            module_path!().to_string()
+                                        )
+                                    );
                                 });
                             }
                             Err(e) => match e {
@@ -252,7 +274,14 @@ impl StorageStage {
         let keypair_balance = working_bank.get_balance(&keypair.pubkey());
 
         if keypair_balance == 0 {
-            warn!("keypair account balance empty: {}", keypair.pubkey(),);
+            // warn!("keypair account balance empty: {}", keypair.pubkey(),);
+            println!(
+                "{}",
+                Warn(
+                    format!("keypair account balance empty: {}", keypair.pubkey()).to_string(),
+                    module_path!().to_string()
+                )
+            );
         } else {
             debug!(
                 "keypair account balance: {}: {}",
@@ -264,9 +293,17 @@ impl StorageStage {
             .get_account(&storage_keypair.pubkey())
             .is_none()
         {
-            warn!(
-                "storage account does not exist: {}",
-                storage_keypair.pubkey()
+            // warn!(
+            //     "storage account does not exist: {}",
+            //     storage_keypair.pubkey()
+            // );
+            println!(
+                "{}",
+                Warn(
+                    format!("storage account does not exist: {}",
+                        storage_keypair.pubkey()).to_string(),
+                    module_path!().to_string()
+                )
             );
         }
 
@@ -308,7 +345,13 @@ impl StorageStage {
         // Regenerate the answers
         let num_segments = get_segment_from_slot(slot) as usize;
         if num_segments == 0 {
-            info!("Ledger has 0 segments!");
+            // info!("{}", Info(format!("Ledger has 0 segments!").to_string()));
+            println!("{}",
+                printLn(
+                    format!("Ledger has 0 segments!").to_string(),
+                    module_path!().to_string()
+                )
+            );
             return Ok(());
         }
         // TODO: what if the validator does not have this segment
@@ -347,7 +390,13 @@ impl StorageStage {
                     statew.storage_results.copy_from_slice(&hashes);
                 }
                 Err(e) => {
-                    info!("error encrypting file: {:?}", e);
+                    // info!("{}", Info(format!("error encrypting file: {:?}", e).to_string()));
+                    println!("{}",
+                        printLn(
+                            format!("error encrypting file: {:?}", e).to_string(),
+                            module_path!().to_string()
+                        )
+                    );
                     Err(e)?;
                 }
             }
@@ -404,7 +453,13 @@ impl StorageStage {
             }
             Ok(_) => {}
             Err(e) => {
-                info!("error: {:?}", e);
+                // info!("{}", Info(format!("error: {:?}", e).to_string()));
+                println!("{}",
+                    printLn(
+                        format!("error: {:?}", e).to_string(),
+                        module_path!().to_string()
+                    )
+                );
             }
         }
     }
@@ -634,14 +689,32 @@ mod tests {
         for _ in 0..5 {
             result = storage_state.get_mining_result(&signature);
             if result != Hash::default() {
-                info!("found result = {:?} sleeping..", result);
+                // info!("{}", Info(format!("found result = {:?} sleeping..", result).to_string()));
+                println!("{}",
+                    printLn(
+                        format!("found result = {:?} sleeping..", result).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 break;
             }
-            info!("result = {:?} sleeping..", result);
+            // info!("{}", Info(format!("result = {:?} sleeping..", result).to_string()));
+            println!("{}",
+                printLn(
+                    format!("result = {:?} sleeping..", result).to_string(),
+                    module_path!().to_string()
+                )
+            );
             sleep(Duration::new(1, 0));
         }
 
-        info!("joining..?");
+        // info!("{}", Info(format!("joining..?").to_string()));
+        println!("{}",
+            printLn(
+                format!("joining..?").to_string(),
+                module_path!().to_string()
+            )
+        );
         exit.store(true, Ordering::Relaxed);
         storage_stage.join().unwrap();
 
@@ -763,7 +836,13 @@ mod tests {
             hist_max = max(val, hist_max);
             hist_min = min(val, hist_min);
         }
-        info!("min: {} max: {}", hist_min, hist_max);
+        // info!("{}", Info(format!("min: {} max: {}", hist_min, hist_max).to_string()));
+        println!("{}",
+            printLn(
+                format!("min: {} max: {}", hist_min, hist_max).to_string(),
+                module_path!().to_string()
+            )
+        );
         assert_ne!(hist_min, 0);
     }
 }

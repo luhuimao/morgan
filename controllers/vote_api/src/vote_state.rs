@@ -11,6 +11,7 @@ use morgan_interface::instruction::InstructionError;
 use morgan_interface::pubkey::Pubkey;
 use morgan_interface::syscall::slot_hashes;
 use std::collections::VecDeque;
+use morgan_helper::logHelper::*;
 
 // Maximum number of votes to keep around
 pub const MAX_LOCKOUT_HISTORY: usize = 31;
@@ -148,15 +149,31 @@ impl VoteState {
             if log_enabled!(log::Level::Warn) {
                 for (slot, hash) in slot_hashes {
                     if vote.slot == *slot {
-                        warn!(
-                            "dropped vote {:?} matched slot {}, but not hash {:?}",
-                            vote, *slot, *hash
+                        // warn!(
+                        //     "dropped vote {:?} matched slot {}, but not hash {:?}",
+                        //     vote, *slot, *hash
+                        // );
+                        println!(
+                            "{}",
+                            Warn(
+                                format!("dropped vote {:?} matched slot {}, but not hash {:?}",
+                                    vote, *slot, *hash).to_string(),
+                                module_path!().to_string()
+                            )
                         );
                     }
                     if vote.hash == *hash {
-                        warn!(
-                            "dropped vote {:?} matched hash {:?}, but not slot {}",
-                            vote, *hash, *slot,
+                        // warn!(
+                        //     "dropped vote {:?} matched hash {:?}, but not slot {}",
+                        //     vote, *hash, *slot,
+                        // );
+                        println!(
+                            "{}",
+                            Warn(
+                                format!("dropped vote {:?} matched hash {:?}, but not slot {}",
+                                    vote, *hash, *slot).to_string(),
+                                module_path!().to_string()
+                            )
                         );
                     }
                 }

@@ -11,6 +11,7 @@ use morgan_storage_api::SLOTS_PER_SEGMENT;
 use std::io;
 use std::mem::size_of;
 use std::sync::Arc;
+use morgan_helper::logHelper::*;
 
 // Encrypt a file with multiple starting IV states, determined by ivecs.len()
 //
@@ -83,7 +84,14 @@ pub fn chacha_cbc_encrypt_file_many_keys(
                 }
             }
             Err(e) => {
-                info!("Error encrypting file: {:?}", e);
+                // info!("{}", Info(format!("Error encrypting file: {:?}", e).to_string()));
+                let loginfo: String = format!("Error encrypting file: {:?}", e).to_string();
+                println!("{}",
+                    printLn(
+                        loginfo,
+                        module_path!().to_string()
+                    )
+                );
                 break;
             }
         }
@@ -181,11 +189,22 @@ mod tests {
             chacha_cbc_encrypt_ledger(&blocktree.clone(), 0, out_path, &mut ivec).unwrap();
 
             ref_hashes.push(sample_file(&out_path, &samples).unwrap());
-            info!(
-                "ivec: {:?} hash: {:?} ivecs: {:?}",
+            // info!(
+            //     "{}",
+            //     Info(format!("ivec: {:?} hash: {:?} ivecs: {:?}",
+            //     ivec.to_vec(),
+            //     ref_hashes.last(),
+            //     ivecs).to_string())
+            // );
+            let loginfo: String = format!("ivec: {:?} hash: {:?} ivecs: {:?}",
                 ivec.to_vec(),
                 ref_hashes.last(),
-                ivecs
+                ivecs).to_string();
+            println!("{}",
+                printLn(
+                    loginfo,
+                    module_path!().to_string()
+                )
             );
         }
 

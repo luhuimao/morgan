@@ -16,6 +16,7 @@ use std::sync::mpsc::{Receiver, RecvTimeoutError};
 use std::sync::Arc;
 use std::thread::{self, Builder, JoinHandle};
 use std::time::Duration;
+use morgan_helper::logHelper::*;
 
 pub struct BlockstreamService {
     t_blockstream: JoinHandle<()>,
@@ -43,7 +44,16 @@ impl BlockstreamService {
                     match e {
                         Error::RecvTimeoutError(RecvTimeoutError::Disconnected) => break,
                         Error::RecvTimeoutError(RecvTimeoutError::Timeout) => (),
-                        _ => info!("Error from process_entries: {:?}", e),
+                        _ => {
+                            // info!("{}", Info(format!("Error from process_entries: {:?}", e).to_string())),
+                            let loginfo: String = format!("Error from process_entries: {:?}", e).to_string();
+                            println!("{}",
+                                printLn(
+                                    loginfo,
+                                    module_path!().to_string()
+                                )
+                            );
+                        }
                     }
                 }
             })

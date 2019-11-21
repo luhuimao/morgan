@@ -29,6 +29,8 @@ use std::sync::{Arc, Mutex, RwLock};
 use std::thread::{self, Builder, JoinHandle};
 use std::time::Duration;
 use std::time::Instant;
+use morgan_helper::logHelper::*;
+use chrono::prelude::*;
 
 pub const MAX_ENTRY_RECV_PER_ITER: usize = 512;
 
@@ -232,12 +234,6 @@ impl ReplayStage {
             };
             assert!(parent.is_frozen());
 
-            // info!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-            // info!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-            // info!("leader_schedule_cache.slot_leader_at() being called");
-            // info!("poh_slot : {:?}", poh_slot);
-            // info!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-            // info!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
             leader_schedule_cache.slot_leader_at(poh_slot, Some(&parent))
                 .map(|next_leader| {
                     debug!(
@@ -269,7 +265,14 @@ impl ReplayStage {
                     }
                 })
                 .or_else(|| {
-                    warn!("{} No next leader found", my_pubkey);
+                    // warn!("{} No next leader found", my_pubkey);
+                    println!(
+                        "{}",
+                        Warn(
+                            format!("{} No next leader found", my_pubkey).to_string(),
+                            module_path!().to_string()
+                        )
+                    );
                     None
                 });
         }
@@ -286,7 +289,13 @@ impl ReplayStage {
             trace!("verified entries {}", len);
             inc_new_counter_info!("replicate-stage_process_entries", len);
         } else {
-            info!("debug to verify entries {}", len);
+            // info!("{}", Info(format!("debug to verify entries {}", len).to_string()));
+            println!("{}",
+                printLn(
+                    format!("debug to verify entries {}", len).to_string(),
+                    module_path!().to_string()
+                )
+            );
             //TODO: mark this fork as failed
             inc_new_counter_error!("replicate-stage_failed_process_entries", len);
         }
@@ -466,13 +475,33 @@ impl ReplayStage {
         trace!("votable_banks {}", votable.len());
         if !votable.is_empty() {
             let weights: Vec<u128> = votable.iter().map(|x| x.0).collect();
-            info!(
-                "@{:?} locktower duration: {:?} len: {} weights: {:?}",
+            // info!(
+            //     "{}",
+            //     Info(format!("@{:?} locktower duration: {:?} len: {} weights: {:?}",
+            //     timing::timestamp(),
+            //     ms,
+            //     votable.len(),
+            //     weights).to_string())
+            // );
+            // let local: DateTime<Local> = Local::now();
+            // println!(
+            //     "< {} {} {} {} >",
+            //     Info(format!("{}", local).to_string()),
+            //     Info(format!("INFO").to_string()),
+            //     Info(format!("@{:?} locktower duration: {:?} len: {} weights: {:?}",
+            //         timing::timestamp(),
+            //         ms,
+            //         votable.len(),
+            //         weights).to_string()
+            //     ),
+            //     Info(format!("morgan::replay_stage").to_string())
+            // );
+            let info: String = format!("@{:?} locktower duration: {:?} len: {} weights: {:?}",
                 timing::timestamp(),
                 ms,
                 votable.len(),
-                weights
-            );
+                weights).to_string();
+            println!("{}", printLn(info, module_path!().to_string()));
         }
         inc_new_counter_info!("replay_stage-locktower_duration", ms as usize);
 
@@ -495,7 +524,13 @@ impl ReplayStage {
                     .map(|s| s.is_frozen())
                     .unwrap_or(true)
             {
-                info!("validator fork confirmed {} {}", *slot, duration);
+                // info!("{}", Info(format!("validator fork confirmed {} {}", *slot, duration).to_string()));
+                println!("{}",
+                    printLn(
+                        format!("validator fork confirmed {} {}", *slot, duration).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 datapoint_warn!("validator-confirmation", ("duration_ms", duration, i64));
                 false
             } else {
@@ -573,7 +608,13 @@ impl ReplayStage {
         slot_full_sender: &Sender<(u64, Pubkey)>,
     ) {
         bank.freeze();
-        info!("bank frozen {}", bank.slot());
+        // info!("{}", Info(format!("bank frozen {}", bank.slot()).to_string()));
+        let info:String = format!(
+            "bank frozen {}",
+            bank.slot()
+        ).to_string();
+        println!("{}", printLn(info, module_path!().to_string()));
+
         if let Err(e) = slot_full_sender.send((bank.slot(), bank.collector_id())) {
             trace!("{} slot_full alert failed: {:?}", my_pubkey, e);
         }
@@ -606,7 +647,13 @@ impl ReplayStage {
                 let leader = leader_schedule_cache
                     .slot_leader_at(child_id, Some(&parent_bank))
                     .unwrap();
-                info!("new fork:{} parent:{}", child_id, parent_id);
+                // info!("{}", Info(format!("new fork:{} parent:{}", child_id, parent_id).to_string()));
+                println!("{}",
+                    printLn(
+                        format!("new fork:{} parent:{}", child_id, parent_id).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 forks.insert(Bank::new_from_parent(&parent_bank, &leader, child_id));
             }
         }

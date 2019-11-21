@@ -15,6 +15,7 @@ use morgan_interface::transaction::Transaction;
 use std::result;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
+use morgan_helper::logHelper::*;
 
 fn first_err(results: &[Result<()>]) -> Result<()> {
     for r in results {
@@ -45,7 +46,14 @@ fn par_execute_entries(
                         first_err = Some(r.clone());
                     }
                     if !Bank::can_commit(&r) {
-                        warn!("Unexpected validator error: {:?}, tx: {:?}", e, tx);
+                        // warn!("Unexpected validator error: {:?}, tx: {:?}", e, tx);
+                        println!(
+                            "{}",
+                            Warn(
+                                format!("Unexpected validator error: {:?}, tx: {:?}", e, tx).to_string(),
+                                module_path!().to_string()
+                            )
+                        );
                         datapoint_error!(
                             "validator_process_entry_error",
                             ("error", format!("error: {:?}, tx: {:?}", e, tx), String)
@@ -136,7 +144,14 @@ pub fn process_blocktree(
     account_paths: Option<String>,
 ) -> result::Result<(BankForks, Vec<BankForksInfo>, LeaderScheduleCache), BlocktreeProcessorError> {
     let now = Instant::now();
-    info!("processing ledger...");
+    // info!("{}", Info(format!("processing ledger...").to_string()));
+    let loginfo: String = format!("processing ledger...").to_string();
+    println!("{}",
+        printLn(
+            loginfo,
+            "morgan::blocktree_processor".to_string()
+        )
+    );
     // Setup bank for slot 0
     let mut pending_slots = {
         let slot = 0;
@@ -148,7 +163,14 @@ pub fn process_blocktree(
         let meta = blocktree
             .meta(slot)
             .map_err(|err| {
-                warn!("Failed to load meta for slot {}: {:?}", slot, err);
+                // warn!("Failed to load meta for slot {}: {:?}", slot, err);
+                println!(
+                    "{}",
+                    Warn(
+                        format!("Failed to load meta for slot {}: {:?}", slot, err).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 BlocktreeProcessorError::LedgerVerificationFailed
             })?
             .unwrap();
@@ -168,13 +190,27 @@ pub fn process_blocktree(
             pending_slots.pop().unwrap();
 
         if last_status_report.elapsed() > Duration::from_secs(2) {
-            info!("processing ledger...block {}", slot);
+            // info!("{}", Info(format!("processing ledger...block {}", slot).to_string()));
+            let loginfo: String = format!("processing ledger...block {}", slot).to_string();
+            println!("{}",
+                printLn(
+                    loginfo,
+                    "morgan::blocktree_processor".to_string()
+                )
+            );
             last_status_report = Instant::now();
         }
 
         // Fetch all entries for this slot
         let mut entries = blocktree.get_slot_entries(slot, 0, None).map_err(|err| {
-            warn!("Failed to load entries for slot {}: {:?}", slot, err);
+            // warn!("Failed to load entries for slot {}: {:?}", slot, err);
+            println!(
+                "{}",
+                Warn(
+                    format!("Failed to load entries for slot {}: {:?}", slot, err).to_string(),
+                    module_path!().to_string()
+                )
+            );
             BlocktreeProcessorError::LedgerVerificationFailed
         })?;
 
@@ -183,12 +219,26 @@ pub fn process_blocktree(
             // in slot 0 is the same as the number of ticks in all subsequent slots.  It is not
             // processed by the bank, skip over it.
             if entries.is_empty() {
-                warn!("entry0 not present");
+                // warn!("entry0 not present");
+                println!(
+                    "{}",
+                    Warn(
+                        format!("entry0 not present").to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 return Err(BlocktreeProcessorError::LedgerVerificationFailed);
             }
             let entry0 = entries.remove(0);
             if !(entry0.is_tick() && entry0.verify(&last_entry_hash)) {
-                warn!("Ledger proof of history failed at entry0");
+                // warn!("Ledger proof of history failed at entry0");
+                println!(
+                    "{}",
+                    Warn(
+                        format!("Ledger proof of history failed at entry0").to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 return Err(BlocktreeProcessorError::LedgerVerificationFailed);
             }
             last_entry_hash = entry0.hash;
@@ -197,15 +247,30 @@ pub fn process_blocktree(
 
         if !entries.is_empty() {
             if !entries.verify(&last_entry_hash) {
-                warn!(
-                    "Ledger proof of history failed at slot: {}, entry: {}",
-                    slot, entry_height
+                // warn!(
+                //     "Ledger proof of history failed at slot: {}, entry: {}",
+                //     slot, entry_height
+                // );
+                println!(
+                    "{}",
+                    Warn(
+                        format!("Ledger proof of history failed at slot: {}, entry: {}",
+                            slot, entry_height).to_string(),
+                        module_path!().to_string()
+                    )
                 );
                 return Err(BlocktreeProcessorError::LedgerVerificationFailed);
             }
 
             process_entries(&bank, &entries).map_err(|err| {
-                warn!("Failed to process entries for slot {}: {:?}", slot, err);
+                // warn!("Failed to process entries for slot {}: {:?}", slot, err);
+                println!(
+                    "{}",
+                    Warn(
+                        format!("Failed to process entries for slot {}: {:?}", slot, err).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 BlocktreeProcessorError::LedgerVerificationFailed
             })?;
 
@@ -238,7 +303,14 @@ pub fn process_blocktree(
             let next_meta = blocktree
                 .meta(next_slot)
                 .map_err(|err| {
-                    warn!("Failed to load meta for slot {}: {:?}", slot, err);
+                    // warn!("Failed to load meta for slot {}: {:?}", slot, err);
+                    println!(
+                        "{}",
+                        Warn(
+                            format!("Failed to load meta for slot {}: {:?}", slot, err).to_string(),
+                            module_path!().to_string()
+                        )
+                    );
                     BlocktreeProcessorError::LedgerVerificationFailed
                 })?
                 .unwrap();
@@ -278,18 +350,56 @@ pub fn process_blocktree(
 
     let (banks, bank_forks_info): (Vec<_>, Vec<_>) = fork_info.into_iter().unzip();
     let bank_forks = BankForks::new_from_banks(&banks, root);
-    info!(
-        "processing ledger...complete in {}ms, forks={}...",
+    // info!(
+    //     "{}",
+    //     Info(format!("processing ledger...complete in {}ms, forks={}...",
+    //     duration_as_ms(&now.elapsed()),
+    //     bank_forks_info.len()).to_string())
+    // );
+    let loginfo: String = format!("processing ledger...complete in {}ms, forks={}...",
         duration_as_ms(&now.elapsed()),
-        bank_forks_info.len(),
+        bank_forks_info.len()).to_string();
+    println!("{}",
+        printLn(
+            loginfo,
+            "morgan::blocktree_processor".to_string()
+        )
     );
-
-    info!(
-        "---------------------------leader_schedule_cache--------------------------------"
+    // info!(
+    //     "{}",
+    //     Info(format!("---------------------------leader_schedule_cache--------------------------------").to_string())
+    // );
+    let loginfo: String = format!("---------------------------leader_schedule_cache--------------------------------").to_string();
+    println!("{}",
+        printLn(
+            loginfo,
+            "morgan::blocktree_processor".to_string()
+        )
     );
-    info!("#############################################################################");
-    info!("#############################################################################");
-    info!("leader_schedule_cache.cached_schedules : {:?}", leader_schedule_cache.cached_schedules);
+    // info!("{}", Info(format!("#############################################################################").to_string()));
+    let loginfo: String = format!("#############################################################################").to_string();
+    println!("{}",
+        printLn(
+            loginfo,
+            "morgan::blocktree_processor".to_string()
+        )
+    );
+    // info!("{}", Info(format!("#############################################################################").to_string()));
+    let loginfo: String = format!("#############################################################################").to_string();
+    println!("{}",
+        printLn(
+            loginfo,
+            "morgan::blocktree_processor".to_string()
+        )
+    );
+    // info!("{}", Info(format!("leader_schedule_cache.cached_schedules : {:?}", leader_schedule_cache.cached_schedules).to_string()));
+    let loginfo: String = format!("leader_schedule_cache.cached_schedules : {:?}", leader_schedule_cache.cached_schedules).to_string();
+    println!("{}",
+        printLn(
+            loginfo,
+            "morgan::blocktree_processor".to_string()
+        )
+    );
     Ok((bank_forks, bank_forks_info, leader_schedule_cache))
 }
 
@@ -424,9 +534,22 @@ pub mod tests {
         let last_fork2_entry_hash =
             fill_blocktree_slot_with_ticks(&blocktree, ticks_per_slot, 4, 1, last_slot1_entry_hash);
 
-        info!("last_fork1_entry.hash: {:?}", last_fork1_entry_hash);
-        info!("last_fork2_entry.hash: {:?}", last_fork2_entry_hash);
-
+        // info!("{}", Info(format!("last_fork1_entry.hash: {:?}", last_fork1_entry_hash).to_string()));
+        // info!("{}", Info(format!("last_fork2_entry.hash: {:?}", last_fork2_entry_hash).to_string()));
+        let loginfo: String = format!("last_fork1_entry.hash: {:?}", last_fork1_entry_hash).to_string();
+        println!("{}",
+            printLn(
+                loginfo,
+                "morgan::blocktree_processor".to_string()
+            )
+        );
+        let loginfo: String = format!("last_fork2_entry.hash: {:?}", last_fork2_entry_hash).to_string();
+        println!("{}",
+            printLn(
+                loginfo,
+                "morgan::blocktree_processor".to_string()
+            )
+        );
         blocktree.set_root(4, 0).unwrap();
 
         let (bank_forks, bank_forks_info, _) =
@@ -498,9 +621,22 @@ pub mod tests {
         let last_fork2_entry_hash =
             fill_blocktree_slot_with_ticks(&blocktree, ticks_per_slot, 4, 1, last_slot1_entry_hash);
 
-        info!("last_fork1_entry.hash: {:?}", last_fork1_entry_hash);
-        info!("last_fork2_entry.hash: {:?}", last_fork2_entry_hash);
-
+        // info!("{}", Info(format!("last_fork1_entry.hash: {:?}", last_fork1_entry_hash).to_string()));
+        // info!("{}", Info(foramt!("last_fork2_entry.hash: {:?}", last_fork2_entry_hash).to_string()));
+        let loginfo: String = format!("last_fork1_entry.hash: {:?}", last_fork1_entry_hash).to_string();
+        println!("{}",
+            printLn(
+                loginfo,
+                "morgan::blocktree_processor".to_string()
+            )
+        );
+        let loginfo: String = foramt!("last_fork2_entry.hash: {:?}", last_fork2_entry_hash).to_string();
+        println!("{}",
+            printLn(
+                loginfo,
+                "morgan::blocktree_processor".to_string()
+            )
+        );
         blocktree.set_root(0, 0).unwrap();
         blocktree.set_root(1, 0).unwrap();
 
@@ -1288,7 +1424,14 @@ pub mod tests {
                     )
                 })
                 .collect();
-            info!("paying iteration {}", i);
+            // info!("paying iteration {}", i);
+            let loginfo: String = foramt!("paying iteration {}", i).to_string();
+            println!("{}",
+                printLn(
+                    loginfo,
+                    "morgan::blocktree_processor".to_string()
+                )
+            );
             process_entries(&bank, &entries).expect("paying failed");
 
             let entries: Vec<_> = (0..NUM_TRANSFERS)
@@ -1306,7 +1449,14 @@ pub mod tests {
                 })
                 .collect();
 
-            info!("refunding iteration {}", i);
+            // info!("{}", Info(format!("refunding iteration {}", i).to_string()));
+            let loginfo: String = foramt!("refunding iteration {}", i).to_string();
+            println!("{}",
+                printLn(
+                    loginfo,
+                    "morgan::blocktree_processor".to_string()
+                )
+            );
             process_entries(&bank, &entries).expect("refunding failed");
 
             // advance to next block

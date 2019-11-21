@@ -18,6 +18,7 @@ use std::mem::size_of;
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr, UdpSocket};
 use std::ops::{Deref, DerefMut};
 use std::sync::{Arc, RwLock};
+use morgan_helper::logHelper::*;
 
 pub type SharedBlob = Arc<RwLock<Blob>>;
 pub type SharedBlobs = Vec<SharedBlob>;
@@ -555,7 +556,13 @@ impl Blob {
                 }
                 Err(e) => {
                     if e.kind() != io::ErrorKind::WouldBlock {
-                        info!("recv_from err {:?}", e);
+                        // info!("{}", Info(format!("recv_from err {:?}", e).to_string()));
+                        println!("{}",
+                            printLn(
+                                format!("recv_from err {:?}", e).to_string(),
+                                module_path!().to_string()
+                            )
+                        );
                     }
                     return Err(Error::IO(e));
                 }
@@ -575,9 +582,17 @@ impl Blob {
                 let p = r.read().unwrap();
                 let a = p.meta.addr();
                 if let Err(e) = socket.send_to(&p.data[..p.meta.size], &a) {
-                    warn!(
-                        "error sending {} byte packet to {:?}: {:?}",
-                        p.meta.size, a, e
+                    // warn!(
+                    //     "error sending {} byte packet to {:?}: {:?}",
+                    //     p.meta.size, a, e
+                    // );
+                    println!(
+                        "{}",
+                        Warn(
+                            format!("error sending {} byte packet to {:?}: {:?}",
+                                p.meta.size, a, e).to_string(),
+                            module_path!().to_string()
+                        )
                     );
                     Err(e)?;
                 }

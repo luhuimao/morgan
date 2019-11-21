@@ -4,6 +4,7 @@ use crate::instruction_processor_utils::DecodeError;
 use crate::pubkey::Pubkey;
 use crate::system_program;
 use num_derive::FromPrimitive;
+use morgan_helper::logHelper::*;
 
 #[derive(Serialize, Debug, Clone, PartialEq, FromPrimitive)]
 pub enum SystemError {
@@ -99,7 +100,13 @@ pub fn create_account_with_reputation(
         AccountMeta::new(*from_pubkey, true),
         AccountMeta::new(*to_pubkey, false),
     ];
-    info!("create_account_with_reputation: {:?}", account_metas);
+    // info!("{}", Info(format!("create_account_with_reputation: {:?}", account_metas).to_string()));
+    println!("{}",
+        printLn(
+            format!("create_account_with_reputation: {:?}", account_metas).to_string(),
+            module_path!().to_string()
+        )
+    );
     Instruction::new(
         system_program::id(),
         &SystemInstruction::CreateAccountWithReputation {
@@ -120,7 +127,13 @@ pub fn create_user_account(from_pubkey: &Pubkey, to_pubkey: &Pubkey, difs: u64) 
 /// Create and sign a transaction to create a system account with reputation
 pub fn create_user_account_with_reputation(from_pubkey: &Pubkey, to_pubkey: &Pubkey, reputations: u64) -> Instruction {
     let program_id = system_program::id();
-    info!("create_user_account_with_reputation to : {:?}", to_pubkey);
+    // info!("{}", Info(format!("create_user_account_with_reputation to : {:?}", to_pubkey).to_string()));
+    println!("{}",
+        printLn(
+            format!("create_user_account_with_reputation to : {:?}", to_pubkey).to_string(),
+            module_path!().to_string()
+        )
+    );
     create_account_with_reputation(from_pubkey, to_pubkey, reputations, 0, &program_id)
 }
 

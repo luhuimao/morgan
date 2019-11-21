@@ -23,6 +23,7 @@ use std::sync::mpsc::{Receiver, RecvTimeoutError};
 use std::sync::{Arc, RwLock};
 use std::thread::{self, Builder, JoinHandle};
 use std::time::{Duration, Instant};
+use morgan_helper::logHelper::*;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum BroadcastStageReturnType {
@@ -167,9 +168,18 @@ impl Broadcast {
         self.stats.to_blobs_elapsed.push(to_blobs_elapsed);
         self.stats.run_elapsed.push(run_elapsed);
         if self.stats.num_entries.len() >= 16 {
-            info!(
-                "broadcast: entries: {:?} blob times ms: {:?} broadcast times ms: {:?}",
-                self.stats.num_entries, self.stats.to_blobs_elapsed, self.stats.run_elapsed
+            // info!(
+            //     "{}",
+            //     Info(format!("broadcast: entries: {:?} blob times ms: {:?} broadcast times ms: {:?}",
+            //     self.stats.num_entries, self.stats.to_blobs_elapsed, self.stats.run_elapsed).to_string())
+            // );
+            let loginfo: String = format!("broadcast: entries: {:?} blob times ms: {:?} broadcast times ms: {:?}",
+                self.stats.num_entries, self.stats.to_blobs_elapsed, self.stats.run_elapsed).to_string();
+            println!("{}",
+                printLn(
+                    loginfo,
+                    module_path!().to_string()
+                )
             );
             self.stats.num_entries.clear();
             self.stats.to_blobs_elapsed.clear();
@@ -232,7 +242,14 @@ impl BroadcastStage {
                     Error::ClusterInfoError(ClusterInfoError::NoPeers) => (), // TODO: Why are the unit-tests throwing hundreds of these?
                     _ => {
                         inc_new_counter_error!("streamer-broadcaster-error", 1, 1);
-                        error!("broadcaster error: {:?}", e);
+                        // error!("{}", Error(format!("broadcaster error: {:?}", e).to_string()));
+                        println!(
+                            "{}",
+                            Error(
+                                format!("broadcaster error: {:?}", e).to_string(),
+                                module_path!().to_string()
+                            )
+                        );
                     }
                 }
             }

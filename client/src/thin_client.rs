@@ -20,6 +20,7 @@ use morgan_interface::transport::Result as TransportResult;
 use std::io;
 use std::net::{SocketAddr, UdpSocket};
 use std::time::Duration;
+use morgan_helper::logHelper::*;
 
 /// An object for querying and sending transactions to the network.
 pub struct ThinClient {
@@ -107,7 +108,14 @@ impl ThinClient {
             {
                 return Ok(transaction.signatures[0]);
             }
-            info!("{} tries failed transfer to {}", x, self.transactions_addr);
+            // info!("{}", Info(format!("{} tries failed transfer to {}", x, self.transactions_addr).to_string()));
+            let info:String = format!("{} tries failed transfer to {}", x, self.transactions_addr).to_string();
+            println!("{}",
+                printLn(
+                    info,
+                    module_path!().to_string()
+                )
+            );
             let (blockhash, _fee_calculator) = self.rpc_client.get_recent_blockhash()?;
             transaction.sign(keypairs, blockhash);
         }

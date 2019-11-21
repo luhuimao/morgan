@@ -11,6 +11,7 @@ use std::sync::atomic::AtomicBool;
 use std::sync::mpsc::{channel, RecvTimeoutError};
 use std::sync::{Arc, Mutex};
 use std::thread::{self, Builder, JoinHandle};
+use morgan_helper::logHelper::*;
 
 pub struct FetchStage {
     thread_hdls: Vec<JoinHandle<()>>,
@@ -109,7 +110,16 @@ impl FetchStage {
                         Error::RecvTimeoutError(RecvTimeoutError::Timeout) => (),
                         Error::RecvError(_) => break,
                         Error::SendError => break,
-                        _ => error!("{:?}", e),
+                        _ => {
+                            // error!("{}", Error(format!("{:?}", e).to_string())),
+                            println!(
+                                "{}",
+                                Error(
+                                    format!("{:?}", e).to_string(),
+                                    module_path!().to_string()
+                                )
+                            );
+                        }
                     }
                 }
             })

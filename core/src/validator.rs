@@ -31,6 +31,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::Receiver;
 use std::sync::{Arc, Mutex, RwLock};
 use std::thread::Result;
+use morgan_helper::logHelper::*;
 
 #[derive(Clone, Debug)]
 pub struct ValidatorConfig {
@@ -82,8 +83,13 @@ impl Validator {
         entrypoint_info_option: Option<&ContactInfo>,
         config: &ValidatorConfig,
     ) -> Self {
-        info!("creating bank...");
-
+        // info!("{}", Info(format!("creating bank...").to_string()));
+        println!("{}",
+            printLn(
+                format!("creating bank...").to_string(),
+                module_path!().to_string()
+            )
+        );
         let id = keypair.pubkey();
         assert_eq!(id, node.info.id);
         let genesis_block =
@@ -106,10 +112,19 @@ impl Validator {
         let bank_info = &bank_forks_info[0];
         let bank = bank_forks[bank_info.bank_slot].clone();
 
-        info!(
-            "starting PoH... {} {}",
-            bank.tick_height(),
-            bank.last_blockhash(),
+        // info!(
+        //     "{}",
+        //     Info(format!("starting PoH... {} {}",
+        //     bank.tick_height(),
+        //     bank.last_blockhash()).to_string())
+        // );
+        println!("{}",
+            printLn(
+                format!("starting PoH... {} {}",
+                    bank.tick_height(),
+                    bank.last_blockhash()).to_string(),
+                module_path!().to_string()
+            )
         );
         let blocktree = Arc::new(blocktree);
 
@@ -134,13 +149,32 @@ impl Validator {
             "New blob signal for the TVU should be the same as the clear bank signal."
         );
 
-        info!("node info: {:?}", node.info);
-        info!("node entrypoint_info: {:?}", entrypoint_info_option);
-        info!(
-            "node local gossip address: {}",
-            node.sockets.gossip.local_addr().unwrap()
+        // info!("{}", Info(format!("node info: {:?}", node.info).to_string()));
+        // info!("{}", Info(format!("node entrypoint_info: {:?}", entrypoint_info_option).to_string()));
+        // info!(
+        //     "{}",
+        //     Info(format!("node local gossip address: {}",
+        //     node.sockets.gossip.local_addr().unwrap()).to_string())
+        // );
+        println!("{}",
+            printLn(
+                format!("node info: {:?}", node.info).to_string(),
+                module_path!().to_string()
+            )
         );
-
+        println!("{}",
+            printLn(
+                format!("node entrypoint_info: {:?}", entrypoint_info_option).to_string(),
+                module_path!().to_string()
+            )
+        );
+        println!("{}",
+            printLn(
+                format!("node local gossip address: {}",
+                    node.sockets.gossip.local_addr().unwrap()).to_string(),
+                module_path!().to_string()
+            )
+        );
         let bank_forks = Arc::new(RwLock::new(bank_forks));
 
         node.info.wallclock = timestamp();
@@ -245,7 +279,14 @@ impl Validator {
         );
 
         if config.sigverify_disabled {
-            warn!("signature verification disabled");
+            // warn!("signature verification disabled");
+            println!(
+                "{}",
+                Warn(
+                    format!("signature verification disabled").to_string(),
+                    module_path!().to_string()
+                )
+            );
         }
 
         let tpu = Tpu::new(

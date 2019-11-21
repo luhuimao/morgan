@@ -113,8 +113,14 @@ mod tests {
         vote_tx.partial_sign(&[&vote_keypair], Hash::default());
 
         use bincode::serialized_size;
-        info!("max vote size {}", serialized_size(&vote_tx).unwrap());
-
+        // info!("{}", Info(format!("max vote size {}", serialized_size(&vote_tx).unwrap()).to_string()));
+        let loginfo: String = format!("max vote size {}", serialized_size(&vote_tx).unwrap()).to_string();
+        println!("{}",
+            printLn(
+                loginfo,
+                module_path!().to_string()
+            )
+        );
         let msgs = packet::to_packets(&[vote_tx]); // panics if won't fit
 
         assert_eq!(msgs.len(), 1);

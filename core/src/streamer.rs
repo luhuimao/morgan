@@ -13,6 +13,7 @@ use std::sync::mpsc::{Receiver, RecvTimeoutError, Sender};
 use std::sync::Arc;
 use std::thread::{Builder, JoinHandle};
 use std::time::{Duration, Instant};
+use morgan_helper::logHelper::*;
 
 pub type PacketReceiver = Receiver<Packets>;
 pub type PacketSender = Sender<Packets>;
@@ -89,7 +90,16 @@ pub fn responder(name: &'static str, sock: Arc<UdpSocket>, r: BlobReceiver) -> J
                 match e {
                     Error::RecvTimeoutError(RecvTimeoutError::Disconnected) => break,
                     Error::RecvTimeoutError(RecvTimeoutError::Timeout) => (),
-                    _ => warn!("{} responder error: {:?}", name, e),
+                    _ => {
+                        // warn!("{} responder error: {:?}", name, e),
+                        println!(
+                            "{}",
+                            Warn(
+                                format!("{} responder error: {:?}", name, e).to_string(),
+                                module_path!().to_string()
+                            )
+                        );
+                    }
                 }
             }
         })

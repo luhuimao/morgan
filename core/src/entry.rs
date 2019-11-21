@@ -15,6 +15,7 @@ use morgan_interface::transaction::Transaction;
 use std::borrow::Borrow;
 use std::sync::mpsc::{Receiver, Sender};
 use std::sync::{Arc, RwLock};
+use morgan_helper::logHelper::*;
 
 pub type EntrySender = Sender<Vec<Entry>>;
 pub type EntryReceiver = Receiver<Vec<Entry>>;
@@ -137,9 +138,17 @@ impl Entry {
     pub fn verify(&self, start_hash: &Hash) -> bool {
         let ref_hash = next_hash(start_hash, self.num_hashes, &self.transactions);
         if self.hash != ref_hash {
-            warn!(
-                "next_hash is invalid expected: {:?} actual: {:?}",
-                self.hash, ref_hash
+            // warn!(
+            //     "next_hash is invalid expected: {:?} actual: {:?}",
+            //     self.hash, ref_hash
+            // );
+            println!(
+                "{}",
+                Warn(
+                    format!("next_hash is invalid expected: {:?} actual: {:?}",
+                        self.hash, ref_hash).to_string(),
+                    module_path!().to_string()
+                )
             );
             return false;
         }
@@ -222,11 +231,21 @@ impl EntrySlice for [Entry] {
         entry_pairs.all(|(x0, x1)| {
             let r = x1.verify(&x0.hash);
             if !r {
-                warn!(
-                    "entry invalid!: x0: {:?}, x1: {:?} num txs: {}",
-                    x0.hash,
-                    x1.hash,
-                    x1.transactions.len()
+                // warn!(
+                //     "entry invalid!: x0: {:?}, x1: {:?} num txs: {}",
+                //     x0.hash,
+                //     x1.hash,
+                //     x1.transactions.len()
+                // );
+                println!(
+                    "{}",
+                    Warn(
+                        format!("entry invalid!: x0: {:?}, x1: {:?} num txs: {}",
+                            x0.hash,
+                            x1.hash,
+                            x1.transactions.len()).to_string(),
+                        module_path!().to_string()
+                    )
                 );
             }
             r

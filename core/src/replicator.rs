@@ -39,6 +39,7 @@ use std::sync::mpsc::channel;
 use std::sync::{Arc, RwLock};
 use std::thread::{sleep, spawn, JoinHandle};
 use std::time::Duration;
+use morgan_helper::logHelper::*;
 
 #[derive(Serialize, Deserialize)]
 pub enum ReplicatorRequest {
@@ -92,7 +93,14 @@ pub(crate) fn sample_file(in_path: &Path, sample_offsets: &[u64]) -> io::Result<
                 hasher.hash(&buf);
             }
             Err(e) => {
-                warn!("Error sampling file");
+                // warn!("Error sampling file");
+                println!(
+                    "{}",
+                    Warn(
+                        format!("Error sampling file").to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 return Err(e);
             }
         }
@@ -141,7 +149,13 @@ fn create_request_processor(
                         }
                     }
                     Err(e) => {
-                        info!("invalid request: {:?}", e);
+                        // info!("{}", Info(format!("invalid request: {:?}", e).to_string()));
+                        println!("{}",
+                            printLn(
+                                format!("invalid request: {:?}", e).to_string(),
+                                module_path!().to_string()
+                            )
+                        );
                     }
                 }
             }
@@ -173,8 +187,20 @@ impl Replicator {
     ) -> Result<Self> {
         let exit = Arc::new(AtomicBool::new(false));
 
-        info!("Replicator: id: {}", keypair.pubkey());
-        info!("Creating cluster info....");
+        // info!("{}", Info(format!("Replicator: id: {}", keypair.pubkey()).to_string()));
+        // info!("{}", Info(format!("Creating cluster info....").to_string()));
+        println!("{}",
+            printLn(
+                format!("Replicator: id: {}", keypair.pubkey()).to_string(),
+                module_path!().to_string()
+            )
+        );
+        println!("{}",
+            printLn(
+                format!("Creating cluster info....").to_string(),
+                module_path!().to_string()
+            )
+        );
         let mut cluster_info = ClusterInfo::new(node.info.clone(), keypair.clone());
         cluster_info.set_entrypoint(cluster_entrypoint.clone());
         let cluster_info = Arc::new(RwLock::new(cluster_info));
@@ -198,7 +224,13 @@ impl Replicator {
             &exit,
         );
 
-        info!("Connecting to the cluster via {:?}", cluster_entrypoint);
+        // info!("{}", Info(format!("Connecting to the cluster via {:?}", cluster_entrypoint).to_string()));
+        println!("{}",
+            printLn(
+                format!("Connecting to the cluster via {:?}", cluster_entrypoint).to_string(),
+                module_path!().to_string()
+            )
+        );
         let (nodes, _) = crate::gossip_service::discover_cluster(&cluster_entrypoint.gossip, 1)?;
         let client = crate::gossip_service::get_client(&nodes);
 
@@ -206,8 +238,13 @@ impl Replicator {
 
         let signature = storage_keypair.sign(storage_blockhash.as_ref());
         let slot = get_slot_from_blockhash(&signature, storage_slot);
-        info!("replicating slot: {}", slot);
-
+        // info!("{}", Info(format!("replicating slot: {}", slot).to_string()));
+        println!("{}",
+            printLn(
+                format!("replicating slot: {}", slot).to_string(),
+                module_path!().to_string()
+            )
+        );
         let mut repair_slot_range = RepairSlotRange::default();
         repair_slot_range.end = slot + SLOTS_PER_SEGMENT;
         repair_slot_range.start = slot;
@@ -284,14 +321,27 @@ impl Replicator {
     }
 
     pub fn run(&mut self) {
-        info!("waiting for ledger download");
+        // info!("{}", Info(format!("waiting for ledger download").to_string()));
+        println!("{}",
+            printLn(
+                format!("waiting for ledger download").to_string(),
+                module_path!().to_string()
+            )
+        );
         self.thread_handles.pop().unwrap().join().unwrap();
         self.encrypt_ledger()
             .expect("ledger encrypt not successful");
         loop {
             self.create_sampling_offsets();
             if let Err(err) = self.sample_file_to_create_mining_hash() {
-                warn!("Error sampling file, exiting: {:?}", err);
+                // warn!("Error sampling file, exiting: {:?}", err);
+                println!(
+                    "{}",
+                    Warn(
+                        format!("Error sampling file, exiting: {:?}", err).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 break;
             }
             self.submit_mining_proof();
@@ -307,9 +357,18 @@ impl Replicator {
         node_info: &ContactInfo,
         cluster_info: Arc<RwLock<ClusterInfo>>,
     ) {
-        info!(
-            "window created, waiting for ledger download starting at slot {:?}",
-            start_slot
+        // info!(
+        //     "{}",
+        //     Info(format!("window created, waiting for ledger download starting at slot {:?}",
+        //     start_slot).to_string())
+        // );
+        println!("{}",
+            printLn(
+                format!("window created, waiting for ledger download starting at slot {:?}",
+                    start_slot
+                ).to_string(),
+                module_path!().to_string()
+            )
         );
         let mut current_slot = start_slot;
         'outer: loop {
@@ -317,7 +376,13 @@ impl Replicator {
                 if let Some(meta) = meta {
                     if meta.is_full() {
                         current_slot += 1;
-                        info!("current slot: {}", current_slot);
+                        // info!("{}", Info(format!("current slot: {}", current_slot).to_string()));
+                        println!("{}",
+                            printLn(
+                                format!("current slot: {}", current_slot).to_string(),
+                                module_path!().to_string()
+                            )
+                        );
                         if current_slot >= start_slot + SLOTS_PER_SEGMENT {
                             break 'outer;
                         }
@@ -334,8 +399,13 @@ impl Replicator {
             sleep(Duration::from_secs(1));
         }
 
-        info!("Done receiving entries from window_service");
-
+        // info!("{}", Info(format!("Done receiving entries from window_service").to_string()));
+        println!("{}",
+            printLn(
+                format!("Done receiving entries from window_service").to_string(),
+                module_path!().to_string()
+            )
+        );
         // Remove replicator from the data plane
         let mut contact_info = node_info.clone();
         contact_info.tvu = "0.0.0.0:0".parse().unwrap();
@@ -365,9 +435,17 @@ impl Replicator {
             self.num_chacha_blocks = num_encrypted_bytes / CHACHA_BLOCK_SIZE;
         }
 
-        info!(
-            "Done encrypting the ledger: {:?}",
-            self.ledger_data_file_encrypted
+        // info!(
+        //     "{}", Info(format!("Done encrypting the ledger: {:?}",
+        //     self.ledger_data_file_encrypted).to_string())
+        // );
+        println!("{}",
+            printLn(
+                format!("Done encrypting the ledger: {:?}",
+                    self.ledger_data_file_encrypted
+                ).to_string(),
+                module_path!().to_string()
+            )
         );
         Ok(())
     }
@@ -396,7 +474,13 @@ impl Replicator {
 
     fn sample_file_to_create_mining_hash(&mut self) -> Result<()> {
         self.hash = sample_file(&self.ledger_data_file_encrypted, &self.sampling_offsets)?;
-        info!("sampled hash: {}", self.hash);
+        // info!("{}", Info(format!("sampled hash: {}", self.hash).to_string()));
+        println!("{}",
+            printLn(
+                format!("sampled hash: {}", self.hash).to_string(),
+                module_path!().to_string()
+            )
+        );
         Ok(())
     }
 
@@ -508,11 +592,23 @@ impl Replicator {
                 .expect("rpc request")
                 .as_u64()
                 .unwrap();
-            info!("storage slot: {}", storage_slot);
+            // info!("{}", Info(format!("storage slot: {}", storage_slot).to_string()));
+            println!("{}",
+                printLn(
+                    format!("storage slot: {}", storage_slot).to_string(),
+                    module_path!().to_string()
+                )
+            );
             if get_segment_from_slot(storage_slot) != 0 {
                 return Ok((storage_blockhash, storage_slot));
             }
-            info!("waiting for segment...");
+            // info!("{}", Info(format!("waiting for segment...").to_string()));
+            println!("{}",
+                printLn(
+                    format!("waiting for segment...").to_string(),
+                    module_path!().to_string()
+                )
+            );
             sleep(Duration::from_secs(5));
         }
         Err(Error::new(

@@ -8,6 +8,7 @@ license = "Apache-2.0"
 homepage = "https://morgan.com/"
 
 [dependencies]
+ansi_term = "0.12"
 clap = "2.33.0"
 log = "0.4.6"
 rayon = "1.0.3"
@@ -20,6 +21,7 @@ morgan-metricbot = { path = "../metricbot", version = "0.15.3"     }
 morgan-netutil = { path = "../netutil", version = "0.15.3"     }
 morgan-runtime = { path = "../runtime", version = "0.15.3"     }
 morgan-interface = { path = "../interface", version = "0.15.3"     }
+morgan-helper = { path = "../helper", version = "0.1.0"     }
 
 [features]
 cuda = ["morgan/cuda"]

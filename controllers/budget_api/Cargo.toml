@@ -17,6 +17,8 @@ num-traits = "0.2"
 serde = "1.0.91"
 serde_derive = "1.0.91"
 morgan-interface = { path = "../../interface", version = "0.15.3"     }
+morgan-helper = { path = "../../helper", version = "0.1.0"     }
+
 [dev-dependencies]
 morgan-runtime = { path = "../../runtime", version = "0.15.3"     }
 

@@ -34,6 +34,7 @@ use std::thread::{self, Builder, JoinHandle};
 use std::time::Duration;
 use std::time::Instant;
 use sys_info;
+use morgan_helper::logHelper::*;
 
 type PacketsAndOffsets = (Packets, Vec<usize>);
 pub type UnprocessedPackets = Vec<PacketsAndOffsets>;
@@ -521,10 +522,20 @@ impl BankingStage {
             trace!("process_transactions: {:?}", result);
             unprocessed_txs.extend_from_slice(&unprocessed_txs_in_chunk);
             if let Err(Error::PohRecorderError(PohRecorderError::MaxHeightReached)) = result {
-                info!(
-                    "process transactions: max height reached slot: {} height: {}",
+                // info!(
+                //     "{}",
+                //     Info(format!("process transactions: max height reached slot: {} height: {}",
+                //     bank.slot(),
+                //     bank.tick_height()).to_string())
+                // );
+                let loginfo: String = format!("process transactions: max height reached slot: {} height: {}",
                     bank.slot(),
-                    bank.tick_height()
+                    bank.tick_height()).to_string();
+                println!("{}",
+                    printLn(
+                        loginfo,
+                        module_path!().to_string()
+                    )
                 );
                 let range: Vec<usize> = (chunk_start..chunk_end).collect();
                 unprocessed_txs.extend_from_slice(&range);

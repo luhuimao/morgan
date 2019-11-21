@@ -8,6 +8,7 @@ use log::*;
 use morgan_interface::account::KeyedAccount;
 use morgan_interface::instruction::InstructionError;
 use morgan_interface::pubkey::Pubkey;
+use morgan_helper::logHelper::*;
 
 /// Process a Witness Signature. Any payment plans waiting on this signature
 /// will progress one step.
@@ -77,7 +78,14 @@ pub fn process_instruction(
     _tick_height: u64,
 ) -> Result<(), InstructionError> {
     let instruction = deserialize(data).map_err(|err| {
-        info!("Invalid transaction data: {:?} {:?}", data, err);
+        // info!("{}", Info(format!("Invalid transaction data: {:?} {:?}", data, err).to_string()));
+        let info:String = format!("Invalid transaction data: {:?} {:?}", data, err).to_string();
+        println!("{}",
+            printLn(
+                info,
+                module_path!().to_string()
+            )
+        );
         InstructionError::InvalidInstructionData
     })?;
 

@@ -25,6 +25,7 @@ use morgan_interface::transaction::Transaction;
 use std::sync::mpsc::{channel, Receiver, Sender, SyncSender};
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
+use morgan_helper::logHelper::*;
 
 const MAX_LAST_LEADER_GRACE_TICKS_FACTOR: u64 = 2;
 
@@ -179,10 +180,20 @@ impl PohRecorder {
         let mut cache = vec![];
         {
             let mut poh = self.poh.lock().unwrap();
-            info!(
+            // info!(
+            //     "{}",
+            //     Info(format!("reset poh from: {},{} to: {},{}",
+            //     poh.hash, self.tick_height, blockhash, tick_height,).to_string())
+            // );
+            let info:String = format!(
                 "reset poh from: {},{} to: {},{}",
-                poh.hash, self.tick_height, blockhash, tick_height,
-            );
+                poh.hash,
+                self.tick_height,
+                blockhash,
+                tick_height
+            ).to_string();
+            println!("{}", printLn(info, module_path!().to_string()));
+
             poh.reset(blockhash, self.poh_config.hashes_per_tick);
         }
 
@@ -261,16 +272,29 @@ impl PohRecorder {
             Ok(())
         };
         if self.tick_height >= working_bank.max_tick_height {
-            info!(
+            // info!(
+            //     "{}",
+            //     Info(format!("poh_record: max_tick_height reached, setting working bank {} to None",
+            //     working_bank.bank.slot()).to_string())
+            // );
+            let info:String = format!(
                 "poh_record: max_tick_height reached, setting working bank {} to None",
                 working_bank.bank.slot()
-            );
+            ).to_string();
+            println!("{}", printLn(info, module_path!().to_string()));
+
             self.start_slot = working_bank.max_tick_height / working_bank.bank.ticks_per_slot();
             self.start_tick = (self.start_slot + 1) * working_bank.bank.ticks_per_slot();
             self.clear_bank();
         }
         if send_result.is_err() {
-            info!("WorkingBank::sender disconnected {:?}", send_result);
+            // info!("{}", Info(format!("WorkingBank::sender disconnected {:?}", send_result).to_string()));
+            println!("{}",
+                printLn(
+                    format!("WorkingBank::sender disconnected {:?}", send_result).to_string(),
+                    module_path!().to_string()
+                )
+            );
             // revert the cache, but clear the working bank
             self.clear_bank();
         } else {

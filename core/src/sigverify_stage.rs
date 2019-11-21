@@ -16,6 +16,7 @@ use std::sync::mpsc::{Receiver, RecvTimeoutError, Sender};
 use std::sync::{Arc, Mutex};
 use std::thread::{self, Builder, JoinHandle};
 use std::time::Instant;
+use morgan_helper::logHelper::*;
 
 #[cfg(feature = "cuda")]
 const RECV_BATCH_MAX: usize = 60_000;
@@ -123,7 +124,16 @@ impl SigVerifyStage {
                         Error::SendError => {
                             break;
                         }
-                        _ => error!("{:?}", e),
+                        _ => {
+                            // error!("{}", Error(format!("{:?}", e).to_string())),
+                            println!(
+                                "{}",
+                                Error(
+                                    format!("{:?}", e).to_string(),
+                                    module_path!().to_string()
+                                )
+                            );
+                        }
                     }
                 }
             })

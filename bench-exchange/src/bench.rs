@@ -19,6 +19,7 @@ use morgan_interface::signature::{Keypair, KeypairUtil};
 use morgan_interface::system_instruction;
 use morgan_interface::timing::{duration_as_ms, duration_as_s};
 use morgan_interface::transaction::Transaction;
+use morgan_helper::logHelper::*;
 use std::cmp;
 use std::collections::VecDeque;
 use std::mem;
@@ -29,6 +30,7 @@ use std::sync::mpsc::{channel, Receiver, Sender};
 use std::sync::{Arc, RwLock};
 use std::thread::{sleep, Builder};
 use std::time::{Duration, Instant};
+use ansi_term::Color::{Green};
 
 // TODO Chunk length as specified results in a bunch of failures, divide by 10 helps...
 // Assume 4MB network buffers, and 512 byte packets
@@ -80,15 +82,51 @@ where
         account_groups,
     } = config;
 
-    info!(
+    // info!(
+    //     "{}",
+    //     Info(
+    //         format!(
+    //             "Exchange client: threads {} duration {} fund_amount {}",
+    //             threads,
+    //             duration_as_s(&duration),
+    //             fund_amount
+    //         ).to_string()
+    //     )3
+    // );
+    let info:String = format!(
         "Exchange client: threads {} duration {} fund_amount {}",
         threads,
         duration_as_s(&duration),
         fund_amount
+    ).to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
     );
-    info!(
+    // info!(
+    //     "{}",
+    //     Info(
+    //         format!(
+    //             "Exchange client: transfer delay {} batch size {} chunk size {}",
+    //             transfer_delay,
+    //             batch_size,
+    //             chunk_size
+    //         ).to_string()
+    //     )
+    // );
+    let info:String = format!(
         "Exchange client: transfer delay {} batch size {} chunk size {}",
-        transfer_delay, batch_size, chunk_size
+        transfer_delay,
+        batch_size,
+        chunk_size
+    ).to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
     );
 
     let accounts_in_groups = batch_size * account_groups;
@@ -98,7 +136,26 @@ where
 
     const NUM_KEYPAIR_GROUPS: u64 = 4;
     let total_keys = accounts_in_groups as u64 * NUM_KEYPAIR_GROUPS;
-    info!("Generating {:?} keys", total_keys);
+    // info!(
+    //     "{}",
+    //     Info(
+    //         format!(
+    //             "Generating {:?} keys",
+    //             total_keys
+    //         ).to_string()
+    //     )
+    // );
+    let info:String =  format!(
+        "Generating {:?} keys",
+        total_keys
+    ).to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
+    );
+
     let mut keypairs = generate_keypairs(total_keys);
     let trader_signers: Vec<_> = keypairs
         .drain(0..accounts_in_groups)
@@ -117,24 +174,121 @@ where
         .map(|keypair| keypair.pubkey())
         .collect();
 
-    info!("Fund trader accounts");
+    // info!(
+    //     "{}",
+    //     Info(format!(
+    //         "Fund trader accounts").to_string()
+    //     )
+    // );
+    let info:String = format!(
+            "Fund trader accounts").to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
+    );
+
     fund_keys(client, &identity, &trader_signers, fund_amount);
-    info!("Fund swapper accounts");
+    // info!(
+    //     "{}",
+    //     Info(format!(
+    //         "Fund swapper accounts").to_string()
+    //     )
+    // );
+    let info:String = format!(
+            "Fund swapper accounts").to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
+    );
+
     fund_keys(client, &identity, &swapper_signers, fund_amount);
 
-    info!("Create {:?} source token accounts", src_pubkeys.len());
+    // info!(
+    //     "{}",
+    //     Info(
+    //         format!(
+    //         "Create {:?} source token accounts",
+    //         src_pubkeys.len()).to_string()
+    //     )
+    // );
+    let info:String = format!(
+            "Create {:?} source token accounts",
+            src_pubkeys.len()).to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
+    );
+
     create_token_accounts(client, &trader_signers, &src_pubkeys);
-    info!("Create {:?} profit token accounts", profit_pubkeys.len());
+    // info!(
+    //     "{}",
+    //     Info(format!(
+    //         "Create {:?} profit token accounts",
+    //         profit_pubkeys.len()).to_string()
+    //     )
+    // );
+    let info:String = format!(
+            "Create {:?} profit token accounts",
+            profit_pubkeys.len()).to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
+    );
+
+
     create_token_accounts(client, &swapper_signers, &profit_pubkeys);
 
     // Collect the max transaction rate and total tx count seen (single node only)
     let sample_stats = Arc::new(RwLock::new(Vec::new()));
     let sample_period = 1; // in seconds
-    info!("Sampling clients for tps every {} s", sample_period);
-    info!(
-        "Requesting and swapping trades with {} ms delay per thread...",
-        transfer_delay
+    // info!(
+    //     "{}",
+    //     Info(
+    //         format!(
+    //             "Sampling clients for tps every {} s",
+    //             sample_period
+    //         ).to_string()
+    //     )
+    // );
+    let info:String = format!(
+                "Sampling clients for tps every {} s",
+                sample_period
+            ).to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
     );
+
+    // info!(
+    //     "{}",
+    //     Info(
+    //         format!(
+    //             "Requesting and swapping trades with {} ms delay per thread...",
+    //             transfer_delay
+    //         ).to_string()
+    //     )
+    // );
+    let info:String = format!(
+                "Requesting and swapping trades with {} ms delay per thread...",
+                transfer_delay
+            ).to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
+    );
+
 
     let shared_txs: SharedTransactions = Arc::new(RwLock::new(VecDeque::new()));
     let total_txs_sent_count = Arc::new(AtomicUsize::new(0));
@@ -217,17 +371,66 @@ where
 
     sleep(duration);
 
-    info!("Stopping threads");
+    // info!("{}",
+    //     Info(format!(
+    //         "Stopping threads").to_string()
+    //     )
+    // );
+    let info:String = format!(
+            "Stopping threads").to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
+    );
+
     exit_signal.store(true, Ordering::Relaxed);
-    info!("Wait for trader thread");
+    // info!("{}",
+    //     Info(format!("Wait for trader thread").to_string()));
+    let info:String = format!("Wait for trader thread").to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
+    );
+
     let _ = trader_thread.join();
-    info!("Waiting for swapper thread");
+    // info!("{}",
+    //     Info(format!("Waiting for swapper thread").to_string()));
+    let info:String = format!("Waiting for swapper thread").to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
+    );
+
     let _ = swapper_thread.join();
-    info!("Wait for tx threads");
+    // info!("{}",
+    //     Info(format!("Wait for tx threads").to_string()));
+    let info:String = format!("Wait for tx threads").to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
+    );
+
     for t in s_threads {
         let _ = t.join();
     }
-    info!("Wait for sample threads");
+    // info!("{}",
+    //     Info(format!("Wait for sample threads").to_string()));
+    let info:String = format!("Wait for sample threads").to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
+    );
+
     for t in sample_threads {
         let _ = t.join();
     }
@@ -327,9 +530,23 @@ fn swapper<T>(
                     if exit_signal.load(Ordering::Relaxed) {
                         break 'outer;
                     }
-                    error!("Give up and dump batch");
+                    // error!("{}", Error(format!("Give up and dump batch").to_string()));
+                    println!(
+                        "{}",
+                        Error(
+                            format!("Give up and dump batch").to_string(),
+                            module_path!().to_string()
+                        )
+                    );
                     if dumps >= MAX_DUMPS {
-                        error!("Max batches dumped, reset wait back-off");
+                        // error!("{}", Error(format!("Max batches dumped, reset wait back-off").to_string()));
+                        println!(
+                            "{}",
+                            Error(
+                                format!("Max batches dumped, reset wait back-off").to_string(),
+                                module_path!().to_string()
+                            )
+                        );
                         max_tries = CHECK_TX_TIMEOUT_MAX_MS / CHECK_TX_DELAY_MS;
                         dumps = 0;
                     } else {
@@ -399,13 +616,27 @@ fn swapper<T>(
             if duration_as_s(&duration) >= 1_f32 {
                 now = Instant::now();
                 let tps = txs as f32 / duration_as_s(&duration);
-                info!(
+                // info!("{}",
+                //     Info(format!(
+                //     "Swapper {:9.2} TPS, Transactions: {:6}, Total transactions: {} over {} s",
+                //     tps,
+                //     txs,
+                //     total_txs,
+                //     total_elapsed.as_secs(),).to_string())
+                // );
+                let info:String = format!(
                     "Swapper {:9.2} TPS, Transactions: {:6}, Total transactions: {} over {} s",
                     tps,
                     txs,
                     total_txs,
-                    total_elapsed.as_secs(),
+                    total_elapsed.as_secs(),).to_string();
+                println!("{}",
+                    printLn(
+                        info,
+                        module_path!().to_string()
+                    )
                 );
+
                 txs = 0;
             }
 
@@ -426,11 +657,24 @@ fn swapper<T>(
             break 'outer;
         }
     }
-    info!(
+    // info!(
+    //     "{}",
+    //     Info(format!(
+    //         "Swapper sent {} at {:9.2} TPS",
+    //         total_txs,
+    //         total_txs as f32 / duration_as_s(&total_elapsed)).to_string())
+    // );
+    let info:String = format!(
         "Swapper sent {} at {:9.2} TPS",
         total_txs,
-        total_txs as f32 / duration_as_s(&total_elapsed)
+        total_txs as f32 / duration_as_s(&total_elapsed)).to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
     );
+
     assert_eq!(
         order_book.get_num_outstanding().0 + order_book.get_num_outstanding().1,
         0
@@ -531,13 +775,27 @@ fn trader<T>(
                 if duration_as_s(&duration) >= 1_f32 {
                     now = Instant::now();
                     let tps = txs as f32 / duration_as_s(&duration);
-                    info!(
+                    // info!("{}",
+                    //     Info(format!(
+                    //         "Trader  {:9.2} TPS, Transactions: {:6}, Total transactions: {} over {} s",
+                    //         tps,
+                    //         txs,
+                    //         total_txs,
+                    //         total_elapsed.as_secs()).to_string())
+                    // );
+                    let info:String = format!(
                         "Trader  {:9.2} TPS, Transactions: {:6}, Total transactions: {} over {} s",
                         tps,
                         txs,
                         total_txs,
-                        total_elapsed.as_secs(),
+                        total_elapsed.as_secs()).to_string();
+                    println!("{}",
+                        printLn(
+                            info,
+                            module_path!().to_string()
+                        )
                     );
+
                     txs = 0;
                 }
 
@@ -556,11 +814,24 @@ fn trader<T>(
         });
 
         if exit_signal.load(Ordering::Relaxed) {
-            info!(
+            // info!(
+            //     "{}",
+            //     Info(format!(
+            //         "Trader sent {} at {:9.2} TPS",
+            //         total_txs,
+            //         total_txs as f32 / duration_as_s(&total_elapsed)).to_string())
+            // );
+            let info:String = format!(
                 "Trader sent {} at {:9.2} TPS",
                 total_txs,
-                total_txs as f32 / duration_as_s(&total_elapsed)
+                total_txs as f32 / duration_as_s(&total_elapsed)).to_string();
+            println!("{}",
+                printLn(
+                    info,
+                    module_path!().to_string()
+                )
             );
+
             return;
         }
 
@@ -582,7 +853,21 @@ where
                     return true;
                 }
                 Err(e) => {
-                    info!("error: {:?}", e);
+                    // info!("{}",
+                    //     Info(format!(
+                    //         "error: {:?}",
+                    //         e).to_string()
+                    //     )
+                    // );
+                    let info:String = format!(
+                        "error: {:?}",
+                        e).to_string();
+                    println!("{}",
+                        printLn(
+                            info,
+                            module_path!().to_string()
+                        )
+                    );
                 }
             }
         }
@@ -595,11 +880,25 @@ pub fn fund_keys(client: &Client, source: &Keypair, dests: &[Arc<Keypair>], difs
     let mut funded: Vec<(&Keypair, u64)> = vec![(source, total)];
     let mut notfunded: Vec<&Arc<Keypair>> = dests.iter().collect();
 
-    info!(
+    // info!(
+    //     "{}",
+    //     Info(format!(
+    //         "  Funding {} keys with {} difs each",
+    //         dests.len(),
+    //         difs).to_string()
+    //     )
+    // );
+    let info:String = format!(
         "  Funding {} keys with {} difs each",
         dests.len(),
-        difs
+        difs).to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
     );
+
     while !notfunded.is_empty() {
         if funded.is_empty() {
             panic!("No funded accounts left to fund remaining");
@@ -693,7 +992,14 @@ pub fn fund_keys(client: &Client, source: &Keypair, dests: &[Arc<Keypair>], difs
                     retries += 1;
                     debug!("  Retry {:?}", retries);
                     if retries >= 10 {
-                        error!("  Too many retries, give up");
+                        // error!("{}", Error(format!("  Too many retries, give up").to_string()));
+                        println!(
+                            "{}",
+                            Error(
+                                format!("  Too many retries, give up").to_string(),
+                                module_path!().to_string()
+                            )
+                        );
                         exit(1);
                     }
                 }
@@ -772,7 +1078,14 @@ pub fn create_token_accounts(client: &Client, signers: &[Arc<Keypair>], accounts
                     retries += 1;
                     debug!("  Retry {:?}", retries);
                     if retries >= 20 {
-                        error!("  Too many retries, give up");
+                        // error!("{}", Error(format!("  Too many retries, give up").to_string()));
+                        println!(
+                            "{}",
+                            Error(
+                                format!("  Too many retries, give up").to_string(),
+                                module_path!().to_string()
+                            )
+                        );
                         exit(1);
                     }
                 }
@@ -793,8 +1106,25 @@ pub fn create_token_accounts(client: &Client, signers: &[Arc<Keypair>], accounts
 fn compute_and_report_stats(maxes: &Arc<RwLock<Vec<(String, SampleStats)>>>, total_txs_sent: u64) {
     let mut max_txs = 0;
     let mut max_elapsed = Duration::new(0, 0);
-    info!("|       Max TPS | Total Transactions");
-    info!("+---------------+--------------------");
+    // info!("{}",
+    //     Info(format!("|       Max TPS | Total Transactions").to_string()));
+    let info:String = format!("|       Max TPS | Total Transactions").to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
+    );
+
+    // info!("{}",
+    //     Info(format!("+---------------+--------------------").to_string()));
+    let info:String = format!("+---------------+--------------------").to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
+    );
 
     for (_sock, stats) in maxes.read().unwrap().iter() {
         let maybe_flag = match stats.txs {
@@ -802,7 +1132,15 @@ fn compute_and_report_stats(maxes: &Arc<RwLock<Vec<(String, SampleStats)>>>, tot
             _ => "",
         };
 
-        info!("| {:13.2} | {} {}", stats.tps, stats.txs, maybe_flag);
+        // info!("{}",
+        // Info(format!("| {:13.2} | {} {}", stats.tps, stats.txs, maybe_flag).to_string()));
+        let info:String = format!("| {:13.2} | {} {}", stats.tps, stats.txs, maybe_flag).to_string();
+        println!("{}",
+            printLn(
+                info,
+                module_path!().to_string()
+            )
+        );
 
         if stats.elapsed > max_elapsed {
             max_elapsed = stats.elapsed;
@@ -811,23 +1149,69 @@ fn compute_and_report_stats(maxes: &Arc<RwLock<Vec<(String, SampleStats)>>>, tot
             max_txs = stats.txs;
         }
     }
-    info!("+---------------+--------------------");
-
+    // info!("{}",
+    //     Info(format!("+---------------+--------------------").to_string()));
+    let info:String = format!("+---------------+--------------------").to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
+    );
+        
     if max_txs >= total_txs_sent {
-        info!(
-            "Warning: Average TPS might be under reported, there were no txs sent for a portion of the duration"
+        // info!("{}",
+        //     Info(format!(
+        //         "Warning: Average TPS might be under reported, there were no txs sent for a portion of the duration").to_string()
+        //     )
+        // );
+        let info:String = format!(
+                "Warning: Average TPS might be under reported, there were no txs sent for a portion of the duration").to_string();
+        println!("{}",
+            printLn(
+                info,
+                module_path!().to_string()
+            )
         );
+
         max_txs = total_txs_sent;
     }
-    info!(
+    // info!(
+    //     "{}",
+    //     Info(format!(
+    //         "{} txs outstanding when test ended (lag) ({:.2}%)",
+    //         total_txs_sent - max_txs,
+    //         (total_txs_sent - max_txs) as f64 / total_txs_sent as f64 * 100_f64).to_string()
+    //     )
+    // );
+    let info:String = format!(
         "{} txs outstanding when test ended (lag) ({:.2}%)",
         total_txs_sent - max_txs,
-        (total_txs_sent - max_txs) as f64 / total_txs_sent as f64 * 100_f64
+        (total_txs_sent - max_txs) as f64 / total_txs_sent as f64 * 100_f64).to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
     );
-    info!(
+
+    // info!(
+    //     "{}",
+    //     Info(format!(
+    //         "\tAverage TPS: {:.2}",
+    //         max_txs as f32 / max_elapsed.as_secs() as f32).to_string()
+    //     )
+    // );
+    let info:String = format!(
         "\tAverage TPS: {:.2}",
-        max_txs as f32 / max_elapsed.as_secs() as f32
+        max_txs as f32 / max_elapsed.as_secs() as f32).to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
     );
+
 }
 
 fn generate_keypairs(num: u64) -> Vec<Keypair> {
@@ -846,11 +1230,24 @@ pub fn airdrop_difs(client: &Client, drone_addr: &SocketAddr, id: &Keypair, amou
 
     let amount_to_drop = amount - balance;
 
-    info!(
+    // info!("{}",
+    //     Info(format!(
+    //         "Airdropping {:?} difs from {} for {}",
+    //         amount_to_drop,
+    //         drone_addr,
+    //         id.pubkey()).to_string()
+    //     )
+    // );
+    let info:String = format!(
         "Airdropping {:?} difs from {} for {}",
         amount_to_drop,
         drone_addr,
-        id.pubkey(),
+        id.pubkey()).to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
     );
 
     let mut tries = 0;
@@ -882,7 +1279,14 @@ pub fn airdrop_difs(client: &Client, drone_addr: &SocketAddr, id: &Keypair, amou
         debug!("  Retry...");
         tries += 1;
         if tries > 50 {
-            error!("Too many retries, give up");
+            // error!("{}", Error(format!("Too many retries, give up").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Too many retries, give up").to_string(),
+                    module_path!().to_string()
+                )
+            );
             exit(1);
         }
         sleep(Duration::from_secs(2));
@@ -945,19 +1349,44 @@ mod tests {
         run_local_drone(drone_keypair, addr_sender, Some(1_000_000_000_000));
         let drone_addr = addr_receiver.recv_timeout(Duration::from_secs(2)).unwrap();
 
-        info!("Connecting to the cluster");
+        // info!("{}",
+        // Green.bold().paint(format!("Connecting to the cluster")));
+        let info:String = format!("Connecting to the cluster").to_string();
+        println!("{}",
+            printLn(
+                info,
+                module_path!().to_string()
+            )
+        );
+
         let (nodes, _) = discover_cluster(&cluster.entry_point_info.gossip, NUM_NODES)
             .unwrap_or_else(|err| {
-                error!("Failed to discover {} nodes: {:?}", NUM_NODES, err);
+                // error!("{}", Error(format!("Failed to discover {} nodes: {:?}", NUM_NODES, err).to_string()));
+                println!(
+                    "{}",
+                    Error(
+                        format!("Failed to discover {} nodes: {:?}", NUM_NODES, err).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 exit(1);
             });
 
         let clients = get_clients(&nodes);
 
         if clients.len() < NUM_NODES {
-            error!(
-                "Error: Insufficient nodes discovered.  Expecting {} or more",
-                NUM_NODES
+            // error!(
+            //     "{}",
+            //     Error(format!("Error: Insufficient nodes discovered.  Expecting {} or more",
+            //     NUM_NODES).to_string())
+            // );
+            println!(
+                "{}",
+                Error(
+                    format!("Error: Insufficient nodes discovered.  Expecting {} or more",
+                        NUM_NODES).to_string(),
+                    module_path!().to_string()
+                )
             );
             exit(1);
         }

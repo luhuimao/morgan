@@ -9,13 +9,21 @@ use morgan_interface::account::KeyedAccount;
 use morgan_interface::instruction::InstructionError;
 use morgan_interface::pubkey::Pubkey;
 use std::cmp;
+use morgan_helper::logHelper::*;
 
 pub struct ExchangeProcessor {}
 
 impl ExchangeProcessor {
     #[allow(clippy::needless_pass_by_value)]
     fn map_to_invalid_arg(err: std::boxed::Box<bincode::ErrorKind>) -> InstructionError {
-        warn!("Deserialize failed, not a valid state: {:?}", err);
+        // warn!("Deserialize failed, not a valid state: {:?}", err);
+        println!(
+            "{}",
+            Warn(
+                format!("Deserialize failed, not a valid state: {:?}", err).to_string(),
+                module_path!().to_string()
+            )
+        );
         InstructionError::InvalidArgument
     }
 
@@ -24,7 +32,14 @@ impl ExchangeProcessor {
         if let ExchangeState::Unallocated = state {
             Ok(())
         } else {
-            error!("New account is already in use");
+            // error!("{}", Error(format!("New account is already in use").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("New account is already in use").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidAccountData)?
         }
     }
@@ -34,7 +49,14 @@ impl ExchangeProcessor {
         if let ExchangeState::Account(account) = state {
             Ok(account)
         } else {
-            error!("Not a valid account");
+            // error!("{}", Error(format!("Not a valid account").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Not a valid account").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidAccountData)?
         }
     }
@@ -44,7 +66,14 @@ impl ExchangeProcessor {
         if let ExchangeState::Trade(info) = state {
             Ok(info)
         } else {
-            error!("Not a valid trade");
+            // error!("{}", Error(format!("Not a valid trade").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Not a valid trade").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidAccountData)?
         }
     }
@@ -54,7 +83,14 @@ impl ExchangeProcessor {
         match bincode::serialize_into(writer, state) {
             Ok(_) => Ok(()),
             Err(e) => {
-                error!("Serialize failed: {:?}", e);
+                // error!("{}", Error(format!("Serialize failed: {:?}", e).to_string()));
+                println!(
+                    "{}",
+                    Error(
+                        format!("Serialize failed: {:?}", e).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 Err(InstructionError::GenericError)?
             }
         }
@@ -80,11 +116,25 @@ impl ExchangeProcessor {
         profit_account: &mut TokenAccountInfo,
     ) -> Result<(), InstructionError> {
         if to_trade.tokens == 0 || from_trade.tokens == 0 {
-            error!("Inactive Trade, balance is zero");
+            // error!("{}", Error(format!("Inactive Trade, balance is zero").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Inactive Trade, balance is zero").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidArgument)?
         }
         if to_trade.price == 0 || from_trade.price == 0 {
-            error!("Inactive Trade, price is zero");
+            // error!("{}", Error(format!("Inactive Trade, price is zero").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Inactive Trade, price is zero").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidArgument)?
         }
 
@@ -115,7 +165,14 @@ impl ExchangeProcessor {
         };
 
         if primary_tokens == 0 || secondary_tokens == 0 {
-            error!("Trade quantities to low to be fulfilled");
+            // error!("{}", Error(format!("Trade quantities to low to be fulfilled").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Trade quantities to low to be fulfilled").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidArgument)?
         }
 
@@ -137,11 +194,25 @@ impl ExchangeProcessor {
         // Update tokens
 
         if to_trade.tokens < primary_cost {
-            error!("Not enough tokens in to account");
+            // error!("{}", Error(format!("Not enough tokens in to account").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Not enough tokens in to account").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidArgument)?
         }
         if from_trade.tokens < secondary_cost {
-            error!("Not enough tokens in from account");
+            // error!("{}", Error(format!("Not enough tokens in from account").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Not enough tokens in from account").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidArgument)?
         }
         to_trade.tokens -= primary_cost;
@@ -160,7 +231,14 @@ impl ExchangeProcessor {
         const NEW_ACCOUNT_INDEX: usize = 1;
 
         if keyed_accounts.len() < 2 {
-            error!("Not enough accounts");
+            // error!("{}", Error(format!("Not enough accounts").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Not enough accounts").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidArgument)?
         }
 
@@ -185,7 +263,14 @@ impl ExchangeProcessor {
         const FROM_ACCOUNT_INDEX: usize = 2;
 
         if keyed_accounts.len() < 3 {
-            error!("Not enough accounts");
+            // error!("{}", Error(format!("Not enough accounts").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Not enough accounts").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidArgument)?
         }
 
@@ -201,12 +286,26 @@ impl ExchangeProcessor {
             match state {
                 ExchangeState::Account(mut from_account) => {
                     if &from_account.owner != keyed_accounts[OWNER_INDEX].unsigned_key() {
-                        error!("Signer does not own from account");
+                        // error!("{}", Error(format!("Signer does not own from account").to_string()));
+                        println!(
+                            "{}",
+                            Error(
+                                format!("Signer does not own from account").to_string(),
+                                module_path!().to_string()
+                            )
+                        );
                         Err(InstructionError::GenericError)?
                     }
 
                     if from_account.tokens[token] < tokens {
-                        error!("From account balance too low");
+                        // error!("{}", Error(format!("From account balance too low").to_string()));
+                        println!(
+                            "{}",
+                            Error(
+                                format!("From account balance too low").to_string(),
+                                module_path!().to_string()
+                            )
+                        );
                         Err(InstructionError::GenericError)?
                     }
 
@@ -220,7 +319,14 @@ impl ExchangeProcessor {
                 }
                 ExchangeState::Trade(mut from_trade) => {
                     if &from_trade.owner != keyed_accounts[OWNER_INDEX].unsigned_key() {
-                        error!("Signer does not own from account");
+                        // error!("{}", Error(format!("Signer does not own from account").to_string()));
+                        println!(
+                            "{}",
+                            Error(
+                                format!("Signer does not own from account").to_string(),
+                                module_path!().to_string()
+                            )
+                        );
                         Err(InstructionError::GenericError)?
                     }
 
@@ -229,12 +335,26 @@ impl ExchangeProcessor {
                         Direction::From => from_trade.pair.primary(),
                     };
                     if token != from_token {
-                        error!("Trade to transfer from does not hold correct token");
+                        // error!("{}", Error(format!("Trade to transfer from does not hold correct token").to_string()));
+                        println!(
+                            "{}",
+                            Error(
+                                format!("Trade to transfer from does not hold correct token").to_string(),
+                                module_path!().to_string()
+                            )
+                        );
                         Err(InstructionError::GenericError)?
                     }
 
                     if from_trade.tokens_settled < tokens {
-                        error!("From trade balance too low");
+                        // error!("{}", Error(format!("From trade balance too low").to_string()));
+                        println!(
+                            "{}",
+                            Error(
+                                format!("From trade balance too low").to_string(),
+                                module_path!().to_string()
+                            )
+                        );
                         Err(InstructionError::GenericError)?
                     }
 
@@ -247,7 +367,14 @@ impl ExchangeProcessor {
                     )?;
                 }
                 _ => {
-                    error!("Not a valid from account for transfer");
+                    // error!("{}", Error(format!("Not a valid from account for transfer").to_string()));
+                    println!(
+                        "{}",
+                        Error(
+                            format!("Not a valid from account for transfer").to_string(),
+                            module_path!().to_string()
+                        )
+                    );
                     Err(InstructionError::InvalidArgument)?
                 }
             }
@@ -268,7 +395,14 @@ impl ExchangeProcessor {
         const ACCOUNT_INDEX: usize = 2;
 
         if keyed_accounts.len() < 3 {
-            error!("Not enough accounts");
+            // error!("{}", Error(format!("Not enough accounts").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Not enough accounts").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidArgument)?
         }
 
@@ -277,7 +411,14 @@ impl ExchangeProcessor {
         let mut account = Self::deserialize_account(&keyed_accounts[ACCOUNT_INDEX].account.data)?;
 
         if &account.owner != keyed_accounts[OWNER_INDEX].unsigned_key() {
-            error!("Signer does not own account");
+            // error!("{}", Error(format!("Signer does not own account").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Signer does not own account").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::GenericError)?
         }
         let from_token = match info.direction {
@@ -285,7 +426,14 @@ impl ExchangeProcessor {
             Direction::From => info.pair.secondary(),
         };
         if account.tokens[from_token] < info.tokens {
-            error!("From token balance is too low");
+            // error!("{}", Error(format!("From token balance is too low").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("From token balance is too low").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::GenericError)?
         }
 
@@ -320,14 +468,28 @@ impl ExchangeProcessor {
         const TRADE_INDEX: usize = 1;
 
         if keyed_accounts.len() < 2 {
-            error!("Not enough accounts");
+            // error!("{}", Error(format!("Not enough accounts").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Not enough accounts").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidArgument)?
         }
 
         let trade = Self::deserialize_trade(&keyed_accounts[TRADE_INDEX].account.data)?;
 
         if &trade.owner != keyed_accounts[OWNER_INDEX].unsigned_key() {
-            error!("Signer does not own trade");
+            // error!("{}", Error(format!("Signer does not own trade").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Signer does not own trade").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::GenericError)?
         }
 
@@ -353,7 +515,14 @@ impl ExchangeProcessor {
         const PROFIT_ACCOUNT_INDEX: usize = 3;
 
         if keyed_accounts.len() < 4 {
-            error!("Not enough accounts");
+            // error!("{}", Error(format!("Not enough accounts").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Not enough accounts").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidArgument)?
         }
 
@@ -364,28 +533,66 @@ impl ExchangeProcessor {
             Self::deserialize_account(&keyed_accounts[PROFIT_ACCOUNT_INDEX].account.data)?;
 
         if to_trade.direction != Direction::To {
-            error!("To trade is not a To");
+            // error!("{}", Error(format!("To trade is not a To").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("To trade is not a To").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidArgument)?
         }
         if from_trade.direction != Direction::From {
-            error!("From trade is not a From");
+            // error!("{}", Error(format!("From trade is not a From").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("From trade is not a From").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidArgument)?
         }
         if to_trade.pair != from_trade.pair {
-            error!("Mismatched token pairs");
+            // error!("{}", Error(format!("Mismatched token pairs").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Mismatched token pairs").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidArgument)?
         }
         if to_trade.direction == from_trade.direction {
-            error!("Matching trade directions");
+            // error!("{}", Error(format!("Matching trade directions").to_string()));
+            println!(
+                "{}",
+                Error(
+                    format!("Matching trade directions").to_string(),
+                    module_path!().to_string()
+                )
+            );
             Err(InstructionError::InvalidArgument)?
         }
 
         if let Err(e) =
             Self::calculate_swap(SCALER, &mut to_trade, &mut from_trade, &mut profit_account)
         {
-            error!(
-                "Swap calculation failed from {} for {} to {} for {}",
-                from_trade.tokens, from_trade.price, to_trade.tokens, to_trade.price,
+            // error!(
+            //     "{}",
+            //     Error(format!("Swap calculation failed from {} for {} to {} for {}",
+            //     from_trade.tokens, from_trade.price, to_trade.tokens, to_trade.price).to_string())
+            // );
+            println!(
+                "{}",
+                Error(
+                    format!("Swap calculation failed from {} for {} to {} for {}",
+                        from_trade.tokens, from_trade.price, to_trade.tokens, to_trade.price
+                    ).to_string(),
+                    module_path!().to_string()
+                )
             );
             Err(e)?
         }
@@ -434,7 +641,14 @@ pub fn process_instruction(
     morgan_logger::setup();
 
     let command = bincode::deserialize::<ExchangeInstruction>(data).map_err(|err| {
-        info!("Invalid transaction data: {:?} {:?}", data, err);
+        // info!("{}", Info(format!("Invalid transaction data: {:?} {:?}", data, err).to_string()));
+        let info:String = format!("Invalid transaction data: {:?} {:?}", data, err).to_string();
+        println!("{}",
+            printLn(
+                info,
+                module_path!().to_string()
+            )
+        );
         InstructionError::InvalidInstructionData
     })?;
 

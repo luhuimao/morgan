@@ -20,6 +20,7 @@ use std::sync::{Arc, RwLock};
 use std::thread::sleep;
 use std::thread::{self, JoinHandle};
 use std::time::{Duration, Instant};
+use morgan_helper::logHelper::*;
 
 pub struct GossipService {
     thread_hdls: Vec<JoinHandle<()>>,
@@ -75,9 +76,20 @@ pub fn discover(
     let (gossip_service, spy_ref) = make_gossip_node(entry_point, &exit, gossip_addr);
 
     let id = spy_ref.read().unwrap().keypair.pubkey();
-    info!("Gossip entry point: {:?}", entry_point);
-    info!("Spy node id: {:?}", id);
-
+    // info!("{}", Info(format!("Gossip entry point: {:?}", entry_point).to_string()));
+    // info!("{}", Info(format!("Spy node id: {:?}", id).to_string()));
+    println!("{}",
+        printLn(
+            format!("Gossip entry point: {:?}", entry_point).to_string(),
+            module_path!().to_string()
+        )
+    );
+    println!("{}",
+        printLn(
+            format!("Spy node id: {:?}", id).to_string(),
+            module_path!().to_string()
+        )
+    );
     let (met_criteria, secs, tvu_peers, replicators) =
         spy(spy_ref.clone(), num_nodes, timeout, find_node);
 
@@ -85,25 +97,53 @@ pub fn discover(
     gossip_service.join().unwrap();
 
     if met_criteria {
-        info!(
-            "discover success in {}s...\n{}",
-            secs,
-            spy_ref.read().unwrap().contact_info_trace()
+        // info!(
+        //     "{}",
+        //     Info(format!("discover success in {}s...\n{}",
+        //     secs,
+        //     spy_ref.read().unwrap().contact_info_trace()).to_string())
+        // );
+        println!("{}",
+            printLn(
+                format!("discover success in {}s...\n{}",
+                    secs,
+                    spy_ref.read().unwrap().contact_info_trace()
+                ).to_string(),
+                module_path!().to_string()
+            )
         );
         return Ok((tvu_peers, replicators));
     }
 
     if !tvu_peers.is_empty() {
-        info!(
-            "discover failed to match criteria by timeout...\n{}",
-            spy_ref.read().unwrap().contact_info_trace()
+        // info!(
+        //     "{}",
+        //     Info(format!("discover failed to match criteria by timeout...\n{}",
+        //     spy_ref.read().unwrap().contact_info_trace()).to_string())
+        // );
+        println!("{}",
+            printLn(
+                format!("discover failed to match criteria by timeout...\n{}",
+                    spy_ref.read().unwrap().contact_info_trace()
+                ).to_string(),
+                module_path!().to_string()
+            )
         );
         return Ok((tvu_peers, replicators));
     }
 
-    info!(
-        "discover failed...\n{}",
-        spy_ref.read().unwrap().contact_info_trace()
+    // info!(
+    //     "{}",
+    //     Info(format!("discover failed...\n{}",
+    //     spy_ref.read().unwrap().contact_info_trace()).to_string())
+    // );
+    println!("{}",
+        printLn(
+            format!("discover failed...\n{}",
+                spy_ref.read().unwrap().contact_info_trace()
+            ).to_string(),
+            module_path!().to_string()
+        )
     );
     Err(std::io::Error::new(
         std::io::ErrorKind::Other,
@@ -186,9 +226,18 @@ fn spy(
             }
         }
         if i % 20 == 0 {
-            info!(
-                "discovering...\n{}",
-                spy_ref.read().unwrap().contact_info_trace()
+            // info!(
+            //     "{}",
+            //     Info(format!("discovering...\n{}",
+            //     spy_ref.read().unwrap().contact_info_trace()).to_string())
+            // );
+            println!("{}",
+                printLn(
+                    format!("discovering...\n{}",
+                        spy_ref.read().unwrap().contact_info_trace())
+                    .to_string(),
+                    module_path!().to_string()
+                )
             );
         }
         sleep(Duration::from_millis(

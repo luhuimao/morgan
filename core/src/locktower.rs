@@ -10,6 +10,7 @@ use morgan_interface::pubkey::Pubkey;
 use morgan_vote_api::vote_state::{Lockout, Vote, VoteState, MAX_LOCKOUT_HISTORY};
 use std::collections::VecDeque;
 use std::sync::Arc;
+use morgan_helper::logHelper::*;
 
 pub const VOTE_THRESHOLD_DEPTH: usize = 8;
 pub const VOTE_THRESHOLD_SIZE: f64 = 2f64 / 3f64;
@@ -224,10 +225,20 @@ impl Locktower {
                 self.is_recent_epoch(bank),
                 "epoch_stakes cannot move backwards"
             );
-            info!(
-                "Locktower updated epoch bank slot: {} epoch: {}",
-                bank.slot(),
-                self.epoch_stakes.epoch
+            // info!(
+            //     "{}",
+            //     Info(format!("Locktower updated epoch bank slot: {} epoch: {}",
+            //     bank.slot(),
+            //     self.epoch_stakes.epoch).to_string())
+            // );
+            println!("{}",
+                printLn(
+                    format!("Locktower updated epoch bank slot: {} epoch: {}",
+                        bank.slot(),
+                        self.epoch_stakes.epoch
+                    ).to_string(),
+                    module_path!().to_string()
+                )
             );
             self.epoch_stakes =
                 EpochStakes::new_from_bank(bank, &self.epoch_stakes.delegate_pubkey);

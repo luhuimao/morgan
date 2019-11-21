@@ -1,10 +1,13 @@
 use log::*;
 use morgan_interface::client::Client;
 use morgan_interface::timing::duration_as_s;
+use morgan_helper::logHelper::*;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, RwLock};
 use std::thread::sleep;
-use std::time::{Duration, Instant};
+use std::time::{Duration, Instant, SystemTime};
+use ansi_term::Color::{Green};
+use chrono::prelude::*;
 
 #[derive(Default)]
 pub struct SampleStats {
@@ -39,7 +42,16 @@ pub fn sample_txs<T>(
         let mut txs = client.get_transaction_count().expect("transaction count");
 
         if txs < last_txs {
-            info!("Expected txs({}) >= last_txs({})", txs, last_txs);
+            // info!("{}",
+            // Info(format!("Expected txs({}) >= last_txs({})", txs, last_txs).to_string()));
+            let info:String = format!("Expected txs({}) >= last_txs({})", txs, last_txs).to_string();
+            println!("{}",
+                printLn(
+                    info,
+                    module_path!().to_string()
+                )
+            );
+
             txs = last_txs;
         }
         total_txs = txs - initial_txs;
@@ -50,15 +62,43 @@ pub fn sample_txs<T>(
         if tps > max_tps {
             max_tps = tps;
         }
-
-        info!(
-            "Sampler {:9.2} TPS, Transactions: {:6}, Total transactions: {} over {} s",
+        // info!(
+        //     "{}", 
+        //     Info(
+        //         format!(
+        //             "Sampler {:9.2} TPS, Transactions: {:6}, Total transactions: {} over {} s", 
+        //             tps,
+        //             sample_txs,
+        //             total_txs,
+        //             total_elapsed.as_secs()
+        //         ).to_string()
+        //     )
+        // );
+        let info:String = format!(
+            "Sampler {:9.2} TPS, Transactions: {:6}, Total transactions: {} over {} s", 
             tps,
             sample_txs,
             total_txs,
-            total_elapsed.as_secs(),
+            total_elapsed.as_secs()
+        ).to_string();
+        println!("{}",
+            printLn(
+                info,
+                module_path!().to_string()
+            )
         );
 
+        // let local: DateTime<Local> = Local::now();
+        // println!("{}: {}",
+        //     local,
+        //     Green.bold().paint(format!(
+        //         "Sampler {:9.2} TPS, Transactions: {:6}, Total transactions: {} over {} s", 
+        //         tps,
+        //         sample_txs,
+        //         total_txs,
+        //         total_elapsed.as_secs())
+        //     )
+        // );
         if exit_signal.load(Ordering::Relaxed) {
             let stats = SampleStats {
                 tps: max_tps,

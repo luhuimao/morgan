@@ -10,6 +10,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::thread::{self, sleep, Builder, JoinHandle};
 use std::time::Duration;
+use morgan_helper::logHelper::*;
 
 pub struct PubSubService {
     thread_hdl: JoinHandle<()>,
@@ -29,7 +30,13 @@ impl PubSubService {
         pubsub_addr: SocketAddr,
         exit: &Arc<AtomicBool>,
     ) -> Self {
-        info!("rpc_pubsub bound to {:?}", pubsub_addr);
+        // info!("{}", Info(format!("rpc_pubsub bound to {:?}", pubsub_addr).to_string()));
+        println!("{}",
+            printLn(
+                format!("rpc_pubsub bound to {:?}", pubsub_addr).to_string(),
+                module_path!().to_string()
+            )
+        );
         let rpc = RpcSolPubSubImpl::new(subscriptions.clone());
         let exit_ = exit.clone();
         let thread_hdl = Builder::new()
@@ -39,17 +46,36 @@ impl PubSubService {
                 io.extend_with(rpc.to_delegate());
 
                 let server = ServerBuilder::with_meta_extractor(io, |context: &RequestContext| {
-                        info!("New pubsub connection");
+                        // info!("{}", Info(format!("New pubsub connection").to_string()));
+                        println!("{}",
+                            printLn(
+                                format!("New pubsub connection").to_string(),
+                                module_path!().to_string()
+                            )
+                        );
                         let session = Arc::new(Session::new(context.sender().clone()));
                         session.on_drop(|| {
-                            info!("Pubsub connection dropped");
+                            // info!("{}", Info(format!("Pubsub connection dropped").to_string()));
+                            println!("{}",
+                                printLn(
+                                    format!("Pubsub connection dropped").to_string(),
+                                    module_path!().to_string()
+                                )
+                            );
                         });
                         session
                 })
                 .start(&pubsub_addr);
 
                 if let Err(e) = server {
-                    warn!("Pubsub service unavailable error: {:?}. \nAlso, check that port {} is not already in use by another application", e, pubsub_addr.port());
+                    // warn!("Pubsub service unavailable error: {:?}. \nAlso, check that port {} is not already in use by another application", e, pubsub_addr.port());
+                    println!(
+                        "{}",
+                        Warn(
+                            format!("Pubsub service unavailable error: {:?}. \nAlso, check that port {} is not already in use by another application", e, pubsub_addr.port()).to_string(),
+                            module_path!().to_string()
+                        )
+                    );
                     return;
                 }
                 while !exit_.load(Ordering::Relaxed) {

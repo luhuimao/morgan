@@ -18,6 +18,8 @@ use std::io;
 use std::net::SocketAddr;
 use std::thread::sleep;
 use std::time::{Duration, Instant};
+use ansi_term::Color::{Green};
+use morgan_helper::logHelper::*;
 
 pub struct RpcClient {
     client: Box<GenericRpcClientRequest + Send + Sync>,
@@ -432,10 +434,23 @@ impl RpcClient {
             match response {
                 Ok(count) => {
                     if confirmed_blocks != count {
-                        info!(
+                        // info!(
+                        //     "{}",
+                        //     Info(format!(
+                        //         "signature {} confirmed {} out of {}",
+                        //         signature, count, min_confirmed_blocks).to_string()
+                        //     )
+                        // );
+                        let info:String = format!(
                             "signature {} confirmed {} out of {}",
-                            signature, count, min_confirmed_blocks
+                            signature, count, min_confirmed_blocks).to_string();
+                        println!("{}",
+                            printLn(
+                                info,
+                                module_path!().to_string()
+                            )
                         );
+
                         now = Instant::now();
                         confirmed_blocks = count;
                     }

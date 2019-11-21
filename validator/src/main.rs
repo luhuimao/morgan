@@ -12,6 +12,7 @@ use std::fs::File;
 use std::net::SocketAddr;
 use std::process::exit;
 use std::sync::Arc;
+use morgan_helper::logHelper::*;
 
 fn port_range_validator(port_range: String) -> Result<(), String> {
     if parse_port_range(&port_range).is_some() {
@@ -266,7 +267,19 @@ fn main() {
     if let Some(filename) = init_complete_file {
         File::create(filename).unwrap_or_else(|_| panic!("Unable to create: {}", filename));
     }
-    info!("Validator initialized");
+    // info!("{}", Info(format!("Validator initialized").to_string()));
+    println!("{}",
+        printLn(
+            format!("Validator initialized").to_string(),
+            module_path!().to_string()
+        )
+    );
     validator.join().expect("validator exit");
-    info!("Validator exiting..");
+    // info!("{}", Info(format!("Validator exiting..").to_string()));
+    println!("{}",
+        printLn(
+            format!("Validator exiting..").to_string(),
+            module_path!().to_string()
+        )
+    );
 }

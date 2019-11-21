@@ -19,6 +19,7 @@ use std::sync::{Arc, RwLock};
 use std::thread::sleep;
 use std::thread::{self, Builder, JoinHandle};
 use std::time::Duration;
+use morgan_helper::logHelper::*;
 
 pub const MAX_REPAIR_LENGTH: usize = 16;
 pub const REPAIR_MS: u64 = 100;
@@ -186,7 +187,13 @@ impl RepairService {
                         );
                     }
                     repair_socket.send_to(&req, to).unwrap_or_else(|e| {
-                        info!("{} repair req send_to({}) error {:?}", id, to, e);
+                        // info!("{}", Info(format!("{} repair req send_to({}) error {:?}", id, to, e).to_string()));
+                        println!("{}",
+                            printLn(
+                                format!("{} repair req send_to({}) error {:?}", id, to, e).to_string(),
+                                module_path!().to_string()
+                            )
+                        );
                         0
                     });
                 }

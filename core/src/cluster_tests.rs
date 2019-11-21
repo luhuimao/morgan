@@ -22,6 +22,7 @@ use morgan_interface::timing::{
 use morgan_interface::transport::TransportError;
 use std::thread::sleep;
 use std::time::Duration;
+use morgan_helper::logHelper::*;
 
 const DEFAULT_SLOT_MILLIS: u64 = (DEFAULT_TICKS_PER_SLOT * 1000) / DEFAULT_NUM_TICKS_PER_SECOND;
 
@@ -127,7 +128,14 @@ pub fn sleep_n_epochs(
     let num_ticks_per_second = (1000 / duration_as_ms(&config.target_tick_duration)) as f64;
     let num_ticks_to_sleep = num_epochs * ticks_per_slot as f64 * slots_per_epoch as f64;
     let secs = ((num_ticks_to_sleep + num_ticks_per_second - 1.0) / num_ticks_per_second) as u64;
-    warn!("sleep_n_epochs: {} seconds", secs);
+    // warn!("sleep_n_epochs: {} seconds", secs);
+    println!(
+        "{}",
+        Warn(
+            format!("sleep_n_epochs: {} seconds", secs).to_string(),
+            module_path!().to_string()
+        )
+    );
     sleep(Duration::from_secs(secs));
 }
 
@@ -149,18 +157,50 @@ pub fn kill_entry_and_spend_and_verify_rest(
             .unwrap_or_else(|err| panic!("Node {} has no balance: {}", ingress_node.id, err));
     }
 
-    info!("sleeping for 2 leader fortnights");
+    // info!("{}", Info(format!("sleeping for 2 leader fortnights").to_string()));
+    let loginfo: String = format!("sleeping for 2 leader fortnights").to_string();
+    println!("{}",
+        printLn(
+            loginfo,
+            module_path!().to_string()
+        )
+    );
+
     sleep(Duration::from_millis(
         slot_millis * first_two_epoch_slots as u64,
     ));
-    info!("done sleeping for first 2 warmup epochs");
-    info!("killing entry point: {}", entry_point_info.id);
+    // info!("{}", Info(format!("done sleeping for first 2 warmup epochs").to_string()));
+    println!("{}",
+        printLn(
+            format!("done sleeping for first 2 warmup epochs").to_string(),
+            module_path!().to_string()
+        )
+    );
+    // info!("{}", Info(format!("killing entry point: {}", entry_point_info.id).to_string()));
+    println!("{}",
+        printLn(
+            format!("killing entry point: {}", entry_point_info.id).to_string(),
+            module_path!().to_string()
+        )
+    );
     assert!(client.fullnode_exit().unwrap());
-    info!("sleeping for some time");
+    // info!("{}", Info(format!("sleeping for some time").to_string()));
+    println!("{}",
+        printLn(
+            format!("sleeping for some time").to_string(),
+            module_path!().to_string()
+        )
+    );
     sleep(Duration::from_millis(
         slot_millis * NUM_CONSECUTIVE_LEADER_SLOTS,
     ));
-    info!("done sleeping for 2 fortnights");
+    // info!("{}", Info(format!("done sleeping for 2 fortnights").to_string()));
+    println!("{}",
+        printLn(
+            format!("done sleeping for 2 fortnights").to_string(),
+            module_path!().to_string()
+        )
+    );
     for ingress_node in &cluster_nodes {
         if ingress_node.id == entry_point_info.id {
             continue;

@@ -7,6 +7,8 @@ use reqwest::header::CONTENT_TYPE;
 use morgan_interface::timing::{DEFAULT_NUM_TICKS_PER_SECOND, DEFAULT_TICKS_PER_SLOT};
 use std::thread::sleep;
 use std::time::Duration;
+use ansi_term::Color::{Green};
+use morgan_helper::logHelper::*;
 
 pub struct RpcClientRequest {
     client: reqwest::Client,
@@ -62,10 +64,23 @@ impl GenericRpcClientRequest for RpcClientRequest {
                     return Ok(json["result"].clone());
                 }
                 Err(e) => {
-                    info!(
+                    // info!(
+                    //     "{}",
+                    //     Info(format!(
+                    //         "make_rpc_request({:?}) failed, {} retries left: {:?}",
+                    //         request, retries, e).to_string()
+                    //     )
+                    // );
+                    let info:String = format!(
                         "make_rpc_request({:?}) failed, {} retries left: {:?}",
-                        request, retries, e
+                        request, retries, e).to_string();
+                    println!("{}",
+                        printLn(
+                            info,
+                            module_path!().to_string()
+                        )
                     );
+
                     if retries == 0 {
                         Err(e)?;
                     }

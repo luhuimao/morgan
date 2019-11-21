@@ -10,6 +10,7 @@ use morgan_interface::pubkey::Pubkey;
 use morgan_interface::signature::Signature;
 use morgan_interface::transaction;
 use std::sync::{atomic, Arc};
+use morgan_helper::logHelper::*;
 
 #[rpc(server)]
 pub trait RpcSolPubSub {
@@ -122,7 +123,13 @@ impl RpcSolPubSub for RpcSolPubSubImpl {
             Ok(pubkey) => {
                 let id = self.uid.fetch_add(1, atomic::Ordering::SeqCst);
                 let sub_id = SubscriptionId::Number(id as u64);
-                info!("account_subscribe: account={:?} id={:?}", pubkey, sub_id);
+                // info!("{}", Info(format!("account_subscribe: account={:?} id={:?}", pubkey, sub_id).to_string()));
+                println!("{}",
+                    printLn(
+                        format!("account_subscribe: account={:?} id={:?}", pubkey, sub_id).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 let sink = subscriber.assign_id(sub_id.clone()).unwrap();
 
                 self.subscriptions
@@ -137,7 +144,13 @@ impl RpcSolPubSub for RpcSolPubSubImpl {
         _meta: Option<Self::Metadata>,
         id: SubscriptionId,
     ) -> Result<bool> {
-        info!("account_unsubscribe: id={:?}", id);
+        // info!("{}", Info(format!("account_unsubscribe: id={:?}", id).to_string()));
+        println!("{}",
+            printLn(
+                format!("account_unsubscribe: id={:?}", id).to_string(),
+                module_path!().to_string()
+            )
+        );
         if self.subscriptions.remove_account_subscription(&id) {
             Ok(true)
         } else {
@@ -160,7 +173,13 @@ impl RpcSolPubSub for RpcSolPubSubImpl {
             Ok(pubkey) => {
                 let id = self.uid.fetch_add(1, atomic::Ordering::SeqCst);
                 let sub_id = SubscriptionId::Number(id as u64);
-                info!("program_subscribe: account={:?} id={:?}", pubkey, sub_id);
+                // info!("{}", Info(format!("program_subscribe: account={:?} id={:?}", pubkey, sub_id).to_string()));
+                println!("{}",
+                    printLn(
+                        format!("program_subscribe: account={:?} id={:?}", pubkey, sub_id).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 let sink = subscriber.assign_id(sub_id.clone()).unwrap();
 
                 self.subscriptions
@@ -175,7 +194,13 @@ impl RpcSolPubSub for RpcSolPubSubImpl {
         _meta: Option<Self::Metadata>,
         id: SubscriptionId,
     ) -> Result<bool> {
-        info!("program_unsubscribe: id={:?}", id);
+        // info!("{}", Info(format!("program_unsubscribe: id={:?}", id).to_string()));
+        println!("{}",
+            printLn(
+                format!("program_unsubscribe: id={:?}", id).to_string(),
+                module_path!().to_string()
+            )
+        );
         if self.subscriptions.remove_program_subscription(&id) {
             Ok(true)
         } else {
@@ -194,14 +219,28 @@ impl RpcSolPubSub for RpcSolPubSubImpl {
         signature_str: String,
         confirmations: Option<Confirmations>,
     ) {
-        info!("signature_subscribe");
+        // info!("{}", Info(format!("signature_subscribe").to_string()));
+        println!("{}",
+            printLn(
+                format!("signature_subscribe").to_string(),
+                module_path!().to_string()
+            )
+        );
         match param::<Signature>(&signature_str, "signature") {
             Ok(signature) => {
                 let id = self.uid.fetch_add(1, atomic::Ordering::SeqCst);
                 let sub_id = SubscriptionId::Number(id as u64);
-                info!(
-                    "signature_subscribe: signature={:?} id={:?}",
-                    signature, sub_id
+                // info!(
+                //     "{}",
+                //     Info(format!("signature_subscribe: signature={:?} id={:?}",
+                //     signature, sub_id).to_string())
+                // );
+                println!("{}",
+                    printLn(
+                        format!("signature_subscribe: signature={:?} id={:?}",
+                            signature, sub_id).to_string(),
+                        module_path!().to_string()
+                    )
                 );
                 let sink = subscriber.assign_id(sub_id.clone()).unwrap();
 
@@ -221,7 +260,13 @@ impl RpcSolPubSub for RpcSolPubSubImpl {
         _meta: Option<Self::Metadata>,
         id: SubscriptionId,
     ) -> Result<bool> {
-        info!("signature_unsubscribe");
+        // info!("{}", Info(format!("signature_unsubscribe").to_string()));
+        println!("{}",
+            printLn(
+                format!("signature_unsubscribe").to_string(),
+                module_path!().to_string()
+            )
+        );
         if self.subscriptions.remove_signature_subscription(&id) {
             Ok(true)
         } else {

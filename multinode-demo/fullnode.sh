@@ -82,52 +82,52 @@ setup_validator_accounts() {
   declare stake=$6
 
   declare node_pubkey
-  # node_pubkey=$($morgan_keybot pubkey "$node_keypair_path")
-  node_pubkey=$(morgan-keybot pubkey "$node_keypair_path")
+  node_pubkey=$($morgan_keybot pubkey "$node_keypair_path")
+  # node_pubkey=$(morgan-keybot pubkey "$node_keypair_path")
 
   declare vote_pubkey
-  # vote_pubkey=$($morgan_keybot pubkey "$vote_keypair_path")
-  vote_pubkey=$(morgan-keybot pubkey "$vote_keypair_path")
+  vote_pubkey=$($morgan_keybot pubkey "$vote_keypair_path")
+  # # vote_pubkey=$(morgan-keybot pubkey "$vote_keypair_path")
 
   declare stake_pubkey
-  # stake_pubkey=$($morgan_keybot pubkey "$stake_keypair_path")
-  stake_pubkey=$(morgan-keybot pubkey "$stake_keypair_path")
+  stake_pubkey=$($morgan_keybot pubkey "$stake_keypair_path")
+  # stake_pubkey=$(morgan-keybot pubkey "$stake_keypair_path")
 
   declare storage_pubkey
-  # storage_pubkey=$($morgan_keybot pubkey "$storage_keypair_path")
-  storage_pubkey=$(morgan-keybot pubkey "$storage_keypair_path")
+  storage_pubkey=$($morgan_keybot pubkey "$storage_keypair_path")
+  # storage_pubkey=$(morgan-keybot pubkey "$storage_keypair_path")
 
   if [[ -f $configured_flag ]]; then
     echo "Vote and stake accounts have already been configured"
   else
     # Fund the node with enough tokens to fund its Vote, Staking, and Storage accounts
-    morgan-wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" airdrop $((stake*2+2)) || return $?
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" airdrop $((stake*2+2)) || return $?
 
     # Fund the vote account from the node, with the node as the node_pubkey
-    morgan-wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
       create-vote-account "$vote_pubkey" "$node_pubkey" "$stake" || return $?
 
     # Fund the stake account from the node, with the node as the node_pubkey
-    morgan-wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
       create-stake-account "$stake_pubkey" "$stake" || return $?
 
     # Delegate the stake.  The transaction fee is paid by the node but the
     #  transaction must be signed by the stake_keypair
-    morgan-wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
       delegate-stake "$stake_keypair_path" "$vote_pubkey" || return $?
 
     # Setup validator storage account
-    morgan-wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
       create-validator-storage-account "$storage_pubkey" || return $?
 
     touch "$configured_flag"
   fi
 
-  morgan-wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+  $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
     show-vote-account "$vote_pubkey"
-  morgan-wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+  $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
     show-stake-account "$stake_pubkey"
-  morgan-wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+  $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
     show-storage-account "$storage_pubkey"
 
   return 0
@@ -145,16 +145,16 @@ setup_replicator_account() {
   if [[ -f $configured_flag ]]; then
     echo "Replicator account has already been configured"
   else
-    morgan-wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" airdrop "$stake" || return $?
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" airdrop "$stake" || return $?
 
     # Setup replicator storage account
-    morgan-wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+    $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
       create-replicator-storage-account "$storage_pubkey" || return $?
 
     touch "$configured_flag"
   fi
 
-  morgan-wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
+  $morgan_wallet --keypair "$node_keypair_path" --url "http://$entrypoint_ip:10099" \
     show-storage-account "$storage_pubkey"
 
   return 0
@@ -268,7 +268,8 @@ storage pubkey: $storage_pubkey
 ledger: $ledger_config_dir
 ======================================================================
 EOF
-  program=morgan-replicator
+  # program=morgan-replicator
+  program=$morgan_replicator
   default_arg --entrypoint "$entrypoint_address"
   default_arg --identity "$identity_keypair_path"
   default_arg --storage-keypair "$storage_keypair_path"
@@ -358,10 +359,11 @@ EOF
   default_arg --accounts "$accounts_config_dir"
 
   if [[ -n $MORGAN_CUDA ]]; then
-    program=morgan-validator-cuda
+    # program=morgan-validator-cuda
+    program=$morgan_validator_cuda
   else
-    # program=$morgan_validator
-    program=morgan-validator
+    program=$morgan_validator
+    # program=morgan-validator
   fi
 fi
 

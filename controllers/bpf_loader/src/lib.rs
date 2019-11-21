@@ -19,7 +19,7 @@ use std::ffi::CStr;
 use std::io::prelude::*;
 use std::io::{Error, ErrorKind};
 use std::mem;
-
+use morgan_helper::logHelper::*;
 /// Program heap allocators are intended to allocate/free from a given
 /// chunk of memory.  The specific allocator implementation is
 /// selectable at build-time.
@@ -135,8 +135,26 @@ pub fn helper_sol_log(
     let c_buf: *const c_char = addr as *const c_char;
     let c_str: &CStr = unsafe { CStr::from_ptr(c_buf) };
     match c_str.to_str() {
-        Ok(slice) => info!("sol_log: {:?}", slice),
-        Err(e) => warn!("Error: Cannot print invalid string: {}", e),
+        Ok(slice) => {
+            // info!("{}", Info(format!("sol_log: {:?}", slice).to_string()))
+            let info:String = format!("sol_log: {:?}", slice).to_string();
+            println!("{}",
+                printLn(
+                    info,
+                    module_path!().to_string()
+                )
+            );
+        },
+        Err(e) => {
+                // warn!("{}", Warn(format!("Error: Cannot print invalid string: {}", e).to_string())),
+                println!(
+                    "{}",
+                    Warn(
+                        format!("Error: Cannot print invalid string: {}", e).to_string(),
+                        module_path!().to_string()
+                    )
+                )
+            }
     };
     0
 }
@@ -148,9 +166,19 @@ pub fn helper_sol_log_u64(
     arg5: u64,
     _context: &mut Option<Box<Any + 'static>>,
 ) -> u64 {
-    info!(
-        "sol_log_u64: {:#x}, {:#x}, {:#x}, {:#x}, {:#x}",
-        arg1, arg2, arg3, arg4, arg5
+    // info!(
+    //     "{}",
+    //     Info(format!("sol_log_u64: {:#x}, {:#x}, {:#x}, {:#x}, {:#x}",
+    //     arg1, arg2, arg3, arg4, arg5).to_string()
+    //     )
+    // );
+    let info:String = format!("sol_log_u64: {:#x}, {:#x}, {:#x}, {:#x}, {:#x}",
+        arg1, arg2, arg3, arg4, arg5).to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
     );
     0
 }
@@ -288,11 +316,26 @@ fn entrypoint(
     if keyed_accounts[0].account.executable {
         let (progs, params) = keyed_accounts.split_at_mut(1);
         let prog = &progs[0].account.data;
-        info!("Call BPF program");
+        // info!("{}", Info(format!("Call BPF program").to_string()));
+        let info:String = format!("Call BPF program").to_string();
+        println!("{}",
+            printLn(
+                info,
+                module_path!().to_string()
+            )
+        );
+
         let (mut vm, heap_region) = match create_vm(prog) {
             Ok(info) => info,
             Err(e) => {
-                warn!("Failed to create BPF VM: {}", e);
+                // warn!("{}", Warn(format!("Failed to create BPF VM: {}", e).to_string()));
+                println!(
+                    "{}",
+                    Warn(
+                        format!("Failed to create BPF VM: {}", e).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 return Err(InstructionError::GenericError);
             }
         };
@@ -301,23 +344,52 @@ fn entrypoint(
         match vm.execute_program(v.as_mut_slice(), &[], &[heap_region]) {
             Ok(status) => {
                 if 0 == status {
-                    warn!("BPF program failed: {}", status);
+                    // warn!("{}", Warn(format!("BPF program failed: {}", status).to_string()));
+                    println!(
+                        "{}",
+                        Warn(
+                            format!("BPF program failed: {}", status).to_string(),
+                            module_path!().to_string()
+                        )
+                    );
                     return Err(InstructionError::GenericError);
                 }
             }
             Err(e) => {
-                warn!("BPF VM failed to run program: {}", e);
+                // warn!("{}", Warn(format!("BPF VM failed to run program: {}", e).to_string()));
+                println!(
+                    "{}",
+                    Warn(
+                        format!("BPF VM failed to run program: {}", e).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 return Err(InstructionError::GenericError);
             }
         }
         deserialize_parameters(params, &v);
-        info!(
-            "BPF program executed {} instructions",
-            vm.get_last_instruction_count()
+        // info!(
+        //     "{}", Info(format!("BPF program executed {} instructions",
+        //     vm.get_last_instruction_count()).to_string())
+        // );
+        let info:String = format!("BPF program executed {} instructions",
+            vm.get_last_instruction_count()).to_string();
+        println!("{}",
+            printLn(
+                info,
+                module_path!().to_string()
+            )
         );
     } else if let Ok(instruction) = bincode::deserialize(tx_data) {
         if keyed_accounts[0].signer_key().is_none() {
-            warn!("key[0] did not sign the transaction");
+            // warn!("{}", Warn(format!("key[0] did not sign the transaction").to_string()));
+            println!(
+                "{}",
+                Warn(
+                    format!("key[0] did not sign the transaction").to_string(),
+                    module_path!().to_string()
+                )
+            );
             return Err(InstructionError::GenericError);
         }
         match instruction {
@@ -326,10 +398,20 @@ fn entrypoint(
                 let len = bytes.len();
                 debug!("Write: offset={} length={}", offset, len);
                 if keyed_accounts[0].account.data.len() < offset + len {
-                    warn!(
-                        "Write overflow: {} < {}",
-                        keyed_accounts[0].account.data.len(),
-                        offset + len
+                    // warn!(
+                    //     "{}",
+                    //     Warn(format!("Write overflow: {} < {}",
+                    //     keyed_accounts[0].account.data.len(),
+                    //     offset + len).to_string())
+                    // );
+                    println!(
+                        "{}",
+                        Warn(
+                            format!("Write overflow: {} < {}",
+                                keyed_accounts[0].account.data.len(),
+                                offset + len).to_string(),
+                            module_path!().to_string()
+                        )
                     );
                     return Err(InstructionError::GenericError);
                 }
@@ -337,14 +419,30 @@ fn entrypoint(
             }
             LoaderInstruction::Finalize => {
                 keyed_accounts[0].account.executable = true;
-                info!(
-                    "Finalize: account {:?}",
-                    keyed_accounts[0].signer_key().unwrap()
+                // info!(
+                //     "{}",
+                //     Info(format!("Finalize: account {:?}",
+                //     keyed_accounts[0].signer_key().unwrap()).to_string())
+                // );
+                let info:String = format!("Finalize: account {:?}",
+                    keyed_accounts[0].signer_key().unwrap()).to_string();
+                println!("{}",
+                    printLn(
+                        info,
+                        module_path!().to_string()
+                    )
                 );
             }
         }
     } else {
-        warn!("Invalid program transaction: {:?}", tx_data);
+        // warn!("{}", Warn(format!("Invalid program transaction: {:?}", tx_data).to_string()));
+        println!(
+            "{}",
+            Warn(
+                format!("Invalid program transaction: {:?}", tx_data).to_string(),
+                module_path!().to_string()
+            )
+        );
         return Err(InstructionError::GenericError);
     }
     Ok(())

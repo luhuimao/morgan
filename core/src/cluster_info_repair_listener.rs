@@ -19,6 +19,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, RwLock};
 use std::thread::{self, sleep, Builder, JoinHandle};
 use std::time::Duration;
+use morgan_helper::logHelper::*;
 
 pub const REPAIRMEN_SLEEP_MILLIS: usize = 100;
 pub const REPAIR_REDUNDANCY: usize = 1;
@@ -263,7 +264,14 @@ impl ClusterInfoRepairListener {
         let slot_iter = blocktree.rooted_slot_iterator(repairee_epoch_slots.root + 1);
 
         if slot_iter.is_err() {
-            warn!("Root for repairee is on different fork OR replay_stage hasn't marked this slot as root yet");
+            // warn!("Root for repairee is on different fork OR replay_stage hasn't marked this slot as root yet");
+            println!(
+                "{}",
+                Warn(
+                    format!("Root for repairee is on different fork OR replay_stage hasn't marked this slot as root yet").to_string(),
+                    module_path!().to_string()
+                )
+            );
             return Ok(());
         }
 

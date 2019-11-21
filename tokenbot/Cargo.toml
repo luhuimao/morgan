@@ -25,6 +25,7 @@ morgan-interface = { path = "../interface", version = "0.15.3"     }
 morgan-metricbot = { path = "../metricbot", version = "0.15.3"     }
 tokio = "0.1"
 tokio-codec = "0.1"
+morgan-helper = { path = "../helper", version = "0.1.0"     }
 
 [lib]
 name = "morgan_tokenbot"

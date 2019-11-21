@@ -13,6 +13,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, RwLock};
 use std::thread::{self, sleep, Builder, JoinHandle};
 use std::time::Duration;
+use morgan_helper::logHelper::*;
 
 pub struct JsonRpcService {
     thread_hdl: JoinHandle<()>,
@@ -30,8 +31,20 @@ impl JsonRpcService {
         bank_forks: Arc<RwLock<BankForks>>,
         exit: &Arc<AtomicBool>,
     ) -> Self {
-        info!("rpc bound to {:?}", rpc_addr);
-        info!("rpc configuration: {:?}", config);
+        // info!("{}", Info(format!("rpc bound to {:?}", rpc_addr).to_string()));
+        // info!("{}", Info(format!("rpc configuration: {:?}", config).to_string()));
+        println!("{}",
+            printLn(
+                format!("rpc bound to {:?}", rpc_addr).to_string(),
+                module_path!().to_string()
+            )
+        );
+        println!("{}",
+            printLn(
+                format!("rpc configuration: {:?}", config).to_string(),
+                module_path!().to_string()
+            )
+        );
         let request_processor = Arc::new(RwLock::new(JsonRpcRequestProcessor::new(
             storage_state,
             config,
@@ -60,7 +73,14 @@ impl JsonRpcService {
                         ]))
                         .start_http(&rpc_addr);
                 if let Err(e) = server {
-                    warn!("JSON RPC service unavailable error: {:?}. \nAlso, check that port {} is not already in use by another application", e, rpc_addr.port());
+                    // warn!("JSON RPC service unavailable error: {:?}. \nAlso, check that port {} is not already in use by another application", e, rpc_addr.port());
+                    println!(
+                        "{}",
+                        Warn(
+                            format!("JSON RPC service unavailable error: {:?}. \nAlso, check that port {} is not already in use by another application", e, rpc_addr.port()).to_string(),
+                            module_path!().to_string()
+                        )
+                    );
                     return;
                 }
                 while !exit_.load(Ordering::Relaxed) {

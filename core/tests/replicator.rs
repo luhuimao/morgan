@@ -27,6 +27,7 @@ use std::sync::mpsc::channel;
 use std::sync::Arc;
 use std::thread::sleep;
 use std::time::Duration;
+use morgan_helper::logHelper::*;
 
 fn get_slot_height(to: SocketAddr) -> u64 {
     let socket = UdpSocket::bind("0.0.0.0:0").unwrap();
@@ -53,8 +54,13 @@ fn download_from_replicator(replicator_info: &ContactInfo) {
     let tn = Node::new_localhost();
     let cluster_info = ClusterInfo::new_with_invalid_keypair(tn.info.clone());
     let mut repair_index = get_slot_height(replicator_info.storage_addr);
-    info!("repair index: {}", repair_index);
-
+    // info!("{}", Info(format!("repair index: {}", repair_index).to_string()));
+    println!("{}",
+        printLn(
+            format!("repair index: {}", repair_index).to_string(),
+            module_path!().to_string()
+        )
+    );
     repair_index = 0;
     let req = cluster_info
         .window_index_request_bytes(0, repair_index)
@@ -65,11 +71,18 @@ fn download_from_replicator(replicator_info: &ContactInfo) {
     let repair_socket = Arc::new(tn.sockets.repair);
     let t_receiver = blob_receiver(repair_socket.clone(), &exit, s_reader);
 
-    info!(
-        "Sending repair requests from: {} to: {}",
-        tn.info.id, replicator_info.gossip
+    // info!(
+    //     "{}",
+    //     Info(format!("Sending repair requests from: {} to: {}",
+    //     tn.info.id, replicator_info.gossip).to_string())
+    // );
+    println!("{}",
+        printLn(
+            format!("Sending repair requests from: {} to: {}",
+                tn.info.id, replicator_info.gossip).to_string(),
+            module_path!().to_string()
+        )
     );
-
     let mut received_blob = false;
     for _ in 0..5 {
         repair_socket.send_to(&req, replicator_info.gossip).unwrap();
@@ -80,10 +93,22 @@ fn download_from_replicator(replicator_info: &ContactInfo) {
             for b in blobs {
                 let br = b.read().unwrap();
                 assert!(br.index() == repair_index);
-                info!("br: {:?}", br);
+                // info!("{}", Info(format!("br: {:?}", br).to_string()));
+                println!("{}",
+                    printLn(
+                        format!("br: {:?}", br).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 let entries = Blocktree::deserialize_blob_data(&br.data()).unwrap();
                 for entry in &entries {
-                    info!("entry: {:?}", entry);
+                    // info!("{}", Info(format!("entry: {:?}", entry).to_string()));
+                    println!("{}",
+                        printLn(
+                            format!("entry: {:?}", entry).to_string(),
+                            module_path!().to_string()
+                        )
+                    );
                     assert_ne!(entry.hash, Hash::default());
                     received_blob = true;
                 }
@@ -101,8 +126,13 @@ fn download_from_replicator(replicator_info: &ContactInfo) {
 /// Then download blobs from one of them.
 fn run_replicator_startup_basic(num_nodes: usize, num_replicators: usize) {
     morgan_logger::setup();
-    info!("starting replicator test");
-
+    // info!("{}", Info(format!("starting replicator test").to_string()));
+    println!("{}",
+        printLn(
+            format!("starting replicator test").to_string(),
+            module_path!().to_string()
+        )
+    );
     let mut validator_config = ValidatorConfig::default();
     validator_config.storage_rotate_count = STORAGE_ROTATE_TEST_COUNT;
     let config = ClusterConfig {
@@ -126,7 +156,13 @@ fn run_replicator_startup_basic(num_nodes: usize, num_replicators: usize) {
     let mut replicator_count = 0;
     let mut replicator_info = ContactInfo::default();
     for node in &cluster_replicators {
-        info!("storage: {:?} rpc: {:?}", node.storage_addr, node.rpc);
+        // info!("{}", Info(format!("storage: {:?} rpc: {:?}", node.storage_addr, node.rpc).to_string()));
+        println!("{}",
+            printLn(
+                format!("storage: {:?} rpc: {:?}", node.storage_addr, node.rpc).to_string(),
+                module_path!().to_string()
+            )
+        );
         if ContactInfo::is_valid_address(&node.storage_addr) {
             replicator_count += 1;
             replicator_info = node.clone();
@@ -152,8 +188,13 @@ fn test_replicator_startup_leader_hang() {
     use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 
     morgan_logger::setup();
-    info!("starting replicator test");
-
+    // info!("{}", Info(format!("starting replicator test").to_string()));
+    println!("{}",
+        printLn(
+            format!("starting replicator test").to_string(),
+            module_path!().to_string()
+        )
+    );
     let leader_ledger_path = "replicator_test_leader_ledger";
     let (genesis_block, _mint_keypair) = create_genesis_block(10_000);
     let (replicator_ledger_path, _blockhash) = create_new_tmp_ledger!(&genesis_block);
@@ -162,7 +203,13 @@ fn test_replicator_startup_leader_hang() {
         let replicator_keypair = Arc::new(Keypair::new());
         let storage_keypair = Arc::new(Keypair::new());
 
-        info!("starting replicator node");
+        // info!("{}", Info(format!("starting replicator node").to_string()));
+        println!("{}",
+            printLn(
+                format!("starting replicator node").to_string(),
+                module_path!().to_string()
+            )
+        );
         let replicator_node = Node::new_localhost_with_pubkey(&replicator_keypair.pubkey());
 
         let fake_gossip = SocketAddr::new(IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0)), 0);
@@ -188,12 +235,24 @@ fn test_replicator_startup_leader_hang() {
 #[test]
 fn test_replicator_startup_ledger_hang() {
     morgan_logger::setup();
-    info!("starting replicator test");
+    // info!("{}", Info(format!("starting replicator test").to_string()));
+    println!("{}",
+        printLn(
+            format!("starting replicator test").to_string(),
+            module_path!().to_string()
+        )
+    );
     let mut validator_config = ValidatorConfig::default();
     validator_config.storage_rotate_count = STORAGE_ROTATE_TEST_COUNT;
     let cluster = LocalCluster::new_with_equal_stakes(2, 10_000, 100);;
 
-    info!("starting replicator node");
+    // info!("{}", Info(format!("starting replicator node").to_string()));
+    println!("{}",
+        printLn(
+            format!("starting replicator node").to_string(),
+            module_path!().to_string()
+        )
+    );
     let bad_keys = Arc::new(Keypair::new());
     let storage_keypair = Arc::new(Keypair::new());
     let mut replicator_node = Node::new_localhost_with_pubkey(&bad_keys.pubkey());

@@ -49,6 +49,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, RwLock};
 use std::thread::{sleep, Builder, JoinHandle};
 use std::time::{Duration, Instant};
+use morgan_helper::logHelper::*;
 
 pub const FULLNODE_PORT_RANGE: PortRange = (10_000, 12_000);
 
@@ -299,9 +300,18 @@ impl ClusterInfo {
     /// Record the id of the current leader for use by `leader_tpu_via_blobs()`
     pub fn set_leader(&mut self, leader_pubkey: &Pubkey) {
         if *leader_pubkey != self.gossip_leader_pubkey {
-            warn!(
-                "{}: LEADER_UPDATE TO {} from {}",
-                self.gossip.id, leader_pubkey, self.gossip_leader_pubkey,
+            // warn!(
+            //     "{}",
+            //     Warn(format!("{}: LEADER_UPDATE TO {} from {}",
+            //     self.gossip.id, leader_pubkey, self.gossip_leader_pubkey).to_string())
+            // );
+            println!(
+                "{}",
+                Warn(
+                    format!("{}: LEADER_UPDATE TO {} from {}",
+                        self.gossip.id, leader_pubkey, self.gossip_leader_pubkey).to_string(),
+                    module_path!().to_string()
+                )
             );
             self.gossip_leader_pubkey = *leader_pubkey;
         }
@@ -766,7 +776,14 @@ impl ClusterInfo {
         for e in errs {
             if let Err(e) = &e {
                 inc_new_counter_error!("cluster_info-retransmit-send_to_error", 1, 1);
-                error!("retransmit result {:?}", e);
+                // error!("{}", Error(format!("retransmit result {:?}", e).to_string()));
+                println!(
+                    "{}",
+                    Error(
+                        format!("retransmit result {:?}", e).to_string(),
+                        module_path!().to_string()
+                    )
+                );
             }
             e?;
         }
@@ -1159,9 +1176,17 @@ impl ClusterInfo {
         }
         let mut from = caller.contact_info().cloned().unwrap();
         if from.id == self_id {
-            warn!(
-                "PullRequest ignored, I'm talking to myself: me={} remoteme={}",
-                self_id, from.id
+            // warn!(
+            //     "PullRequest ignored, I'm talking to myself: me={} remoteme={}",
+            //     self_id, from.id
+            // );
+            println!(
+                "{}",
+                Warn(
+                    format!("PullRequest ignored, I'm talking to myself: me={} remoteme={}",
+                        self_id, from.id).to_string(),
+                    module_path!().to_string()
+                )
             );
             inc_new_counter_debug!("cluster_info-window-request-loopback", 1);
             return vec![];
@@ -1270,9 +1295,17 @@ impl ClusterInfo {
         let self_id = me.read().unwrap().gossip.id;
         let from = Self::get_repair_sender(&request);
         if from.id == me.read().unwrap().gossip.id {
-            warn!(
-                "{}: Ignored received repair request from ME {}",
-                self_id, from.id,
+            // warn!(
+            //     "{}: Ignored received repair request from ME {}",
+            //     self_id, from.id,
+            // );
+            println!(
+                "{}",
+                Warn(
+                    format!("{}: Ignored received repair request from ME {}",
+                        self_id, from.id,).to_string(),
+                    module_path!().to_string()
+                )
             );
             inc_new_counter_debug!("cluster_info-handle-repair--eq", 1);
             return vec![];
@@ -1707,7 +1740,14 @@ impl Node {
 fn report_time_spent(label: &str, time: &Duration, extra: &str) {
     let count = duration_as_ms(time);
     if count > 5 {
-        info!("{} took: {} ms {}", label, count, extra);
+        // info!("{}", Info(format!("{} took: {} ms {}", label, count, extra).to_string()));
+        let loginfo: String = format!("{} took: {} ms {}", label, count, extra).to_string();
+        println!("{}",
+            printLn(
+                loginfo,
+                module_path!().to_string()
+            )
+        );
     }
 }
 

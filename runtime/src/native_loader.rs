@@ -14,6 +14,7 @@ use morgan_interface::pubkey::Pubkey;
 use std::env;
 use std::path::PathBuf;
 use std::str;
+use morgan_helper::logHelper::*;
 
 /// Dynamic link library prefixes
 #[cfg(unix)]
@@ -74,7 +75,8 @@ pub fn entrypoint(
         let name = match str::from_utf8(name_vec) {
             Ok(v) => v,
             Err(e) => {
-                warn!("Invalid UTF-8 sequence: {}", e);
+                // warn!("Invalid UTF-8 sequence: {}", e);
+                println!("{}",Warn(format!("Invalid UTF-8 sequence: {}", e).to_string(),module_path!().to_string()));
                 return Err(InstructionError::GenericError);
             }
         };
@@ -87,11 +89,19 @@ pub fn entrypoint(
                     match library.get(instruction_processor_utils::ENTRYPOINT.as_bytes()) {
                         Ok(s) => s,
                         Err(e) => {
-                            warn!(
-                                "{:?}: Unable to find {:?} in program",
-                                e,
-                                instruction_processor_utils::ENTRYPOINT
+                            // warn!(
+                            //     "{:?}: Unable to find {:?} in program",
+                            //     e,
+                            //     instruction_processor_utils::ENTRYPOINT
+                            // );
+                            println!(
+                                "{}",
+                                Warn(format!("{:?}: Unable to find {:?} in program",
+                                    e,
+                                    instruction_processor_utils::ENTRYPOINT).to_string(),
+                                module_path!().to_string())
                             );
+
                             return Err(InstructionError::GenericError);
                         }
                     };
@@ -103,13 +113,23 @@ pub fn entrypoint(
                 return ret;
             },
             Err(e) => {
-                warn!("Unable to load: {:?}", e);
+                // warn!("Unable to load: {:?}", e);
+                println!(
+                    "{}",
+                    Warn(format!("Unable to load: {:?}", e).to_string(),
+                    module_path!().to_string())
+                );
                 return Err(InstructionError::GenericError);
             }
         }
     } else if let Ok(instruction) = deserialize(ix_data) {
         if keyed_accounts[0].signer_key().is_none() {
-            warn!("key[0] did not sign the transaction");
+            // warn!("key[0] did not sign the transaction");
+            println!(
+                "{}",
+                Warn(format!("key[0] did not sign the transaction").to_string(),
+                module_path!().to_string())
+            );
             return Err(InstructionError::GenericError);
         }
         match instruction {
@@ -117,10 +137,18 @@ pub fn entrypoint(
                 trace!("NativeLoader::Write offset {} bytes {:?}", offset, bytes);
                 let offset = offset as usize;
                 if keyed_accounts[0].account.data.len() < offset + bytes.len() {
-                    warn!(
-                        "Error: Overflow, {} < {}",
-                        keyed_accounts[0].account.data.len(),
-                        offset + bytes.len()
+                    // warn!(
+                    //     "Error: Overflow, {} < {}",
+                    //     keyed_accounts[0].account.data.len(),
+                    //     offset + bytes.len()
+                    // );
+                    println!(
+                        "{}",
+                        Warn(
+                            format!("Error: Overflow, {} < {}",
+                                keyed_accounts[0].account.data.len(),
+                                offset + bytes.len()).to_string(),
+                            module_path!().to_string())
                     );
                     return Err(InstructionError::GenericError);
                 }
@@ -137,7 +165,13 @@ pub fn entrypoint(
             }
         }
     } else {
-        warn!("Invalid data in instruction: {:?}", ix_data);
+        // warn!("Invalid data in instruction: {:?}", ix_data);
+        println!(
+            "{}",
+            Warn(
+                format!("Invalid data in instruction: {:?}", ix_data).to_string(),
+                module_path!().to_string())
+        );
         return Err(InstructionError::GenericError);
     }
     Ok(())

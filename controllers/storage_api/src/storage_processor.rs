@@ -7,6 +7,7 @@ use morgan_interface::account::KeyedAccount;
 use morgan_interface::instruction::InstructionError;
 use morgan_interface::pubkey::Pubkey;
 use morgan_interface::timing::DEFAULT_TICKS_PER_SLOT;
+use morgan_helper::logHelper::*;
 
 pub fn process_instruction(
     _program_id: &Pubkey,
@@ -133,7 +134,14 @@ mod tests {
             .collect();
 
         let ret = process_instruction(&id(), &mut keyed_accounts, &ix.data, tick_height);
-        info!("ret: {:?}", ret);
+        // info!("{}", Info(format!("ret: {:?}", ret).to_string()));
+        let info:String = format!("ret: {:?}", ret).to_string();
+        println!("{}",
+            printLn(
+                info,
+                module_path!().to_string()
+            )
+        );
         ret
     }
 
@@ -469,12 +477,28 @@ mod tests {
                         StorageContract::ValidatorStorage { slot, .. } => {
                             return slot;
                         }
-                        _ => info!("error in reading slot"),
+                        _ => {
+                            // info!("{}", Info(format!("error in reading slot".to_string()))),
+                            let info:String = format!("error in reading slot").to_string();
+                            println!("{}",
+                                printLn(
+                                    info,
+                                    module_path!().to_string()
+                                )
+                            );
+                        }
                     }
                 }
             }
             None => {
-                info!("error in reading slot");
+                // info!("{}", Info(format!("error in reading slot").to_string()));
+                let info:String = format!("error in reading slot").to_string();
+                println!("{}",
+                    printLn(
+                        info,
+                        module_path!().to_string()
+                    )
+                );
             }
         }
         0

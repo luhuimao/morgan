@@ -26,6 +26,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::channel;
 use std::sync::{Arc, RwLock};
 use std::time::Duration;
+use morgan_helper::logHelper::*;
 
 fn new_gossip(
     cluster_info: Arc<RwLock<ClusterInfo>>,
@@ -182,7 +183,13 @@ fn test_replay() {
         // receive retransmitted messages
         let timer = Duration::new(1, 0);
         while let Ok(_msg) = r_reader.recv_timeout(timer) {
-            info!("got msg");
+            info!("{}", Info(format!("got msg").to_string()));
+            println!("{}",
+                printLn(
+                    format!("got msg").to_string(),
+                    module_path!().to_string()
+                )
+            );
         }
 
         let working_bank = bank_forks.read().unwrap().working_bank();

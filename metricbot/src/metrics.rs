@@ -13,6 +13,7 @@ use std::thread;
 use std::time::{Duration, Instant};
 use std::{cmp, env};
 use sys_info::hostname;
+use morgan_helper::logHelper::*;
 
 #[macro_export]
 macro_rules! datapoint {
@@ -216,10 +217,20 @@ impl MetricsAgent {
         let num_points = points.len();
         debug!("run: attempting to write {} points", num_points);
         if num_points > max_points {
-            warn!(
-                "max submission rate of {} datapoints per second exceeded.  only the
-                    first {} of {} points will be submitted",
-                max_points_per_sec, max_points, num_points
+            // warn!(
+            //     "{}",
+            //     Warn(format!("max submission rate of {} datapoints per second exceeded.  only the
+            //         first {} of {} points will be submitted",
+            //     max_points_per_sec, max_points, num_points).to_string())
+            // );
+            println!(
+                "{}",
+                Warn(
+                    format!("max submission rate of {} datapoints per second exceeded.  only the
+                        first {} of {} points will be submitted",
+                        max_points_per_sec, max_points, num_points).to_string(),
+                    module_path!().to_string()
+                )
             );
         }
         let points_written = cmp::min(num_points, max_points - 1);
@@ -471,10 +482,20 @@ mod test {
             self.points_written
                 .fetch_add(points.len(), Ordering::SeqCst);
 
-            info!(
-                "Writing {} points ({} total)",
-                points.len(),
-                self.points_written.load(Ordering::SeqCst)
+            // info!(
+            //     "{}",
+            //     Info(format!("Writing {} points ({} total)",
+            //     points.len(),
+            //     self.points_written.load(Ordering::SeqCst)).to_string())
+            // );
+            println!("{}",
+                printLn(
+                    format!("Writing {} points ({} total)",
+                        points.len(),
+                        self.points_written.load(Ordering::SeqCst)
+                    ).to_string(),
+                    module_path!().to_string()
+                )
             );
         }
     }

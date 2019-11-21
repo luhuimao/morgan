@@ -9,6 +9,7 @@ homepage = "https://morgan.com/"
 publish = false
 
 [dependencies]
+ansi_term = "0.12"
 bs58 = "0.2.0"
 clap = "2.32.0"
 bincode = "1.1.4"
@@ -33,6 +34,7 @@ morgan-metricbot = { path = "../metricbot", version = "0.15.3"     }
 morgan-netutil = { path = "../netutil", version = "0.15.3"     }
 morgan-runtime = { path = "../runtime", version = "0.15.3"     }
 morgan-interface = { path = "../interface", version = "0.15.3"     }
+morgan-helper = { path = "../helper", version = "0.1.0" }
 ws = "0.8.1"
 untrusted = "0.6.2"
 

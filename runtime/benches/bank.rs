@@ -19,6 +19,7 @@ use std::sync::Arc;
 use std::thread::sleep;
 use std::time::Duration;
 use test::Bencher;
+use morgan_helper::logHelper::*;
 
 const BUILTIN_PROGRAM_ID: [u8; 32] = [
     098, 117, 105, 108, 116, 105, 110, 095, 112, 114, 111, 103, 114, 097, 109, 095, 105, 100, 0, 0,
@@ -102,10 +103,20 @@ fn async_bencher(bank: &Arc<Bank>, bank_client: &BankClient, transactions: &Vec<
         .unwrap()
         .is_ok()
     {
-        error!(
-            "transaction failed: {:?}",
-            bank.get_signature_status(&transactions.last().unwrap().signatures.get(0).unwrap())
-                .unwrap()
+        // error!(
+        //     "{}",
+        //     Error(format!("transaction failed: {:?}",
+        //     bank.get_signature_status(&transactions.last().unwrap().signatures.get(0).unwrap())
+        //         .unwrap()).to_string())
+        // );
+        println!(
+            "{}",
+            Error(
+                format!("transaction failed: {:?}",
+                    bank.get_signature_status(&transactions.last().unwrap().signatures.get(0).unwrap())
+                    .unwrap()).to_string(),
+                module_path!().to_string()
+            )
         );
         assert!(false);
     }
@@ -136,11 +147,29 @@ fn do_bench_transactions(
     });
 
     let summary = bencher.bench(|_bencher| {}).unwrap();
-    info!("  {:?} transactions", transactions.len());
-    info!("  {:?} ns/iter median", summary.median as u64);
+    // info!("{}", Info(format!("  {:?} transactions", transactions.len()).to_string()));
+    // info!("{}", Info(format!("  {:?} ns/iter median", summary.median as u64).to_string()));
+    println!("{}",
+        printLn(
+            format!("  {:?} transactions", transactions.len()).to_string(),
+            module_path!().to_string()
+        )
+    );
+    println!("{}",
+        printLn(
+            format!("  {:?} ns/iter median", summary.median as u64).to_string(),
+            module_path!().to_string()
+        )
+    );
     assert!(0f64 != summary.median);
     let tps = transactions.len() as u64 * (ns_per_s / summary.median as u64);
-    info!("  {:?} TPS", tps);
+    // info!("{}", Info(format!("  {:?} TPS", tps).to_String()));
+    println!("{}",
+        printLn(
+            format!("  {:?} TPS", tps).to_string(),
+            module_path!().to_string()
+        )
+    );
 }
 
 #[bench]

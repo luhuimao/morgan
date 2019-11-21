@@ -27,6 +27,8 @@ morgan-stake-api = { path = "../controllers/stake_api", version = "0.15.3"     }
 morgan-storage-api = { path = "../controllers/storage_api", version = "0.15.3"     }
 morgan-vote-api = { path = "../controllers/vote_api", version = "0.15.3"     }
 morgan-vote-signer = { path = "../vote-signer", version = "0.15.3"     }
+morgan-helper = { path = "../helper", version = "0.1.0"     }
+
 url = "1.7.2"
 
 [dev-dependencies]

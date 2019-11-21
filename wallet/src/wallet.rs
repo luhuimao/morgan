@@ -35,6 +35,7 @@ use std::net::{IpAddr, SocketAddr};
 use std::thread::sleep;
 use std::time::Duration;
 use std::{error, fmt};
+use morgan_helper::logHelper::*;
 
 const USERDATA_CHUNK_SIZE: usize = 229; // Keep program chunks under PACKET_DATA_SIZE
 
@@ -1192,16 +1193,34 @@ where
         )) = err
         {
             if let Some(specific_error) = E::decode_custom_error_to_enum(code) {
-                error!(
-                    "{:?}: {}::{:?}",
-                    err,
-                    specific_error.type_of(),
-                    specific_error
+                // error!(
+                //     "{}",
+                //     Error(format!("{:?}: {}::{:?}",
+                //     err,
+                //     specific_error.type_of(),
+                //     specific_error).to_string())
+                // );
+                println!(
+                    "{}",
+                    Error(
+                        format!("{:?}: {}::{:?}",
+                            err,
+                            specific_error.type_of(),
+                            specific_error).to_string(),
+                        module_path!().to_string()
+                    )
                 );
                 Err(specific_error)?
             }
         }
-        error!("{:?}", err);
+        // error!("{}", Error(format!("{:?}", err).to_string()));
+        println!(
+            "{}",
+            Error(
+                format!("{:?}", err).to_string(),
+                module_path!().to_string()
+            )
+        );
         Err(err)?
     } else {
         Ok(result.unwrap())

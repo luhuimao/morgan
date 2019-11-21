@@ -28,6 +28,7 @@ use tokio;
 use tokio::net::TcpListener;
 use tokio::prelude::{Future, Read, Sink, Stream, Write};
 use tokio_codec::{BytesCodec, Decoder};
+use morgan_helper::logHelper::*;
 
 #[macro_export]
 macro_rules! socketaddr {
@@ -123,8 +124,13 @@ impl Drone {
                         ("request_amount", difs, i64),
                         ("request_current", self.request_current, i64)
                     );
-                    info!("Requesting airdrop of {} to {:?}", difs, to);
-
+                    // info!("{}", Info(format!("Requesting airdrop of {} to {:?}", difs, to).to_string()));
+                    println!("{}",
+                        printLn(
+                            format!("Requesting airdrop of {} to {:?}", difs, to).to_string(),
+                            module_path!().to_string()
+                        )
+                    );
                     let create_instruction = system_instruction::create_user_account(
                         &self.mint_keypair.pubkey(),
                         &to,
@@ -154,8 +160,13 @@ impl Drone {
                         ("request_amount", reputations, i64),
                         ("request_current", self.request_current, i64)
                     );
-                    info!("Requesting reputation airdrop of {} to {:?}", reputations, to);
-
+                    // info!("{}", Info(format!("Requesting reputation airdrop of {} to {:?}", reputations, to).to_string()));
+                    println!("{}",
+                        printLn(
+                            format!("Requesting reputation airdrop of {} to {:?}", reputations, to).to_string(),
+                            module_path!().to_string()
+                        )
+                    );
                     let create_instruction = system_instruction::create_user_account_with_reputation(
                         &self.mint_keypair.pubkey(),
                         &to,
@@ -183,7 +194,13 @@ impl Drone {
             ))
         })?;
 
-        info!("Airdrop transaction requested...{:?}", req);
+        // info!("{}", Info(format!("Airdrop transaction requested...{:?}", req).to_string()));
+        println!("{}",
+            printLn(
+                format!("Airdrop transaction requested...{:?}", req).to_string(),
+                module_path!().to_string()
+            )
+        );
         let res = self.build_airdrop_transaction(req);
         match res {
             Ok(tx) => {
@@ -199,11 +216,23 @@ impl Drone {
                 response_vec_with_length.extend_from_slice(&response_vec);
 
                 let response_bytes = Bytes::from(response_vec_with_length);
-                info!("Airdrop transaction granted");
+                // info!("{}", Info(format!("Airdrop transaction granted").to_string()));
+                println!("{}",
+                    printLn(
+                        format!("Airdrop transaction granted").to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 Ok(response_bytes)
             }
             Err(err) => {
-                warn!("Airdrop transaction failed: {:?}", err);
+                // warn!("Airdrop transaction failed: {:?}", err);
+                println!(
+                    "{}",
+                    Warn(
+                        format!("Airdrop transaction failed: {:?}", err).to_string(),
+                        module_path!().to_string())
+                );
                 Err(err)
             }
         }
@@ -222,9 +251,17 @@ pub fn request_airdrop_transaction(
     difs: u64,
     blockhash: Hash,
 ) -> Result<Transaction, Error> {
-    info!(
-        "request_airdrop_transaction: drone_addr={} id={} difs={} blockhash={}",
-        drone_addr, id, difs, blockhash
+    // info!(
+    //     "{}",
+    //     Info(format!("request_airdrop_transaction: drone_addr={} id={} difs={} blockhash={}",
+    //     drone_addr, id, difs, blockhash).to_string())
+    // );
+    println!("{}",
+        printLn(
+            format!("request_airdrop_transaction: drone_addr={} id={} difs={} blockhash={}",
+                drone_addr, id, difs, blockhash).to_string(),
+            module_path!().to_string()
+        )
     );
     // TODO: make this async tokio client
     let mut stream = TcpStream::connect_timeout(drone_addr, Duration::new(3, 0))?;
@@ -240,9 +277,17 @@ pub fn request_airdrop_transaction(
     // Read length of transaction
     let mut buffer = [0; 2];
     stream.read_exact(&mut buffer).or_else(|err| {
-        info!(
-            "request_airdrop_transaction: buffer length read_exact error: {:?}",
-            err
+        // info!(
+        //     "{}",
+        //     Info(format!("request_airdrop_transaction: buffer length read_exact error: {:?}",
+        //     err).to_string())
+        // );
+        println!("{}",
+            printLn(
+                format!("request_airdrop_transaction: buffer length read_exact error: {:?}",
+                    err).to_string(),
+                module_path!().to_string()
+            )
         );
         Err(Error::new(ErrorKind::Other, "Airdrop failed"))
     })?;
@@ -261,9 +306,17 @@ pub fn request_airdrop_transaction(
     let mut buffer = Vec::new();
     buffer.resize(transaction_length, 0);
     stream.read_exact(&mut buffer).or_else(|err| {
-        info!(
-            "request_airdrop_transaction: buffer read_exact error: {:?}",
-            err
+        // info!(
+        //     "{}",
+        //     Info(format!("request_airdrop_transaction: buffer read_exact error: {:?}",
+        //     err).to_string())
+        // );
+        println!("{}",
+            printLn(
+                format!("request_airdrop_transaction: buffer read_exact error: {:?}",
+                    err).to_string(),
+                module_path!().to_string()
+            )
         );
         Err(Error::new(ErrorKind::Other, "Airdrop failed"))
     })?;
@@ -283,9 +336,17 @@ pub fn request_reputation_airdrop_transaction(
     reputations: u64,
     blockhash: Hash,
 ) -> Result<Transaction, Error> {
-    info!(
-        "request_reputation_airdrop_transaction: drone_addr={} id={} reputations={} blockhash={}",
-        drone_addr, id, reputations, blockhash
+    // info!(
+    //     "{}",
+    //     Info(format!("request_reputation_airdrop_transaction: drone_addr={} id={} reputations={} blockhash={}",
+    //     drone_addr, id, reputations, blockhash).to_string())
+    // );
+    println!("{}",
+        printLn(
+            format!("request_reputation_airdrop_transaction: drone_addr={} id={} reputations={} blockhash={}",
+                drone_addr, id, reputations, blockhash).to_string(),
+            module_path!().to_string()
+        )
     );
     // TODO: make this async tokio client
     let mut stream = TcpStream::connect_timeout(drone_addr, Duration::new(3, 0))?;
@@ -301,9 +362,17 @@ pub fn request_reputation_airdrop_transaction(
     // Read length of transaction
     let mut buffer = [0; 2];
     stream.read_exact(&mut buffer).or_else(|err| {
-        info!(
-            "request_reputation_airdrop_transaction: buffer length read_exact error: {:?}",
-            err
+        // info!(
+        //     "{}",
+        //     Info(format!("request_reputation_airdrop_transaction: buffer length read_exact error: {:?}",
+        //     err).to_string())
+        // );
+        println!("{}",
+            printLn(
+                format!("request_reputation_airdrop_transaction: buffer length read_exact error: {:?}",
+                    err).to_string(),
+                module_path!().to_string()
+            )
         );
         Err(Error::new(ErrorKind::Other, "Airdrop failed"))
     })?;
@@ -322,9 +391,17 @@ pub fn request_reputation_airdrop_transaction(
     let mut buffer = Vec::new();
     buffer.resize(transaction_length, 0);
     stream.read_exact(&mut buffer).or_else(|err| {
-        info!(
-            "request_reputation_airdrop_transaction: buffer read_exact error: {:?}",
-            err
+        // info!(
+        //     "{}",
+        //     Info(format!("request_reputation_airdrop_transaction: buffer read_exact error: {:?}",
+        //     err).to_string())
+        // );
+        println!("{}",
+            printLn(
+                format!("request_reputation_airdrop_transaction: buffer read_exact error: {:?}",
+                    err).to_string(),
+                module_path!().to_string()
+            )
         );
         Err(Error::new(ErrorKind::Other, "Airdrop failed"))
     })?;
@@ -367,7 +444,13 @@ pub fn run_drone(
             .send(socket.local_addr().unwrap())
             .unwrap();
     }
-    info!("Drone started. Listening on: {}", drone_addr);
+    // info!("{}", Info(format!("Drone started. Listening on: {}", drone_addr).to_string()));
+    println!("{}",
+        printLn(
+            format!("Drone started. Listening on: {}", drone_addr).to_string(),
+            module_path!().to_string()
+        )
+    );
     let done = socket
         .incoming()
         .map_err(|e| debug!("failed to accept socket; error = {:?}", e))
@@ -383,7 +466,13 @@ pub fn run_drone(
                         Ok(response_bytes)
                     }
                     Err(e) => {
-                        info!("Error in request: {:?}", e);
+                        // info!("{}", Info(format!("Error in request: {:?}", e).to_string()));
+                        println!("{}",
+                            printLn(
+                                format!("Error in request: {:?}", e).to_string(),
+                                module_path!().to_string()
+                            )
+                        );
                         Ok(Bytes::from(&b""[..]))
                     }
                 }

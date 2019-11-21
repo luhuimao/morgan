@@ -21,6 +21,7 @@ use morgan_metricbot::{datapoint_error, datapoint_info};
 use morgan_interface::genesis_block::GenesisBlock;
 use morgan_interface::hash::Hash;
 use morgan_interface::signature::{Keypair, KeypairUtil};
+use morgan_helper::logHelper::*;
 
 use std::borrow::{Borrow, Cow};
 use std::cell::RefCell;
@@ -1377,11 +1378,19 @@ fn try_erasure_recover(
                 Err(Error::ErasureError(e)) => {
                     submit_metrics(true, format!("error: {}", e));
 
-                    error!(
-                        "[try_erasure] slot: {}, set_index: {}, recovery failed: cause: {}",
-                        slot, erasure_meta.set_index, e
+                    // error!(
+                    //     "{}",
+                    //     Error(format!("[try_erasure] slot: {}, set_index: {}, recovery failed: cause: {}",
+                    //     slot, erasure_meta.set_index, e).to_string())
+                    // );
+                    println!(
+                        "{}",
+                        Error(
+                            format!("[try_erasure] slot: {}, set_index: {}, recovery failed: cause: {}",
+                                slot, erasure_meta.set_index, e).to_string(),
+                            module_path!().to_string()
+                        )
                     );
-
                     None
                 }
 

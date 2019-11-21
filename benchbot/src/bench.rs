@@ -24,6 +24,8 @@ use std::thread::sleep;
 use std::thread::Builder;
 use std::time::Duration;
 use std::time::Instant;
+use ansi_term::Color::{Green};
+use morgan_helper::logHelper::*;
 
 pub const MAX_SPENDS_PER_TX: usize = 4;
 pub const NUM_DIFS_PER_ACCOUNT: u64 = 20;
@@ -592,10 +594,31 @@ pub fn generate_and_fund_keypairs<T: Client>(
     tx_count: usize,
     difs_per_account: u64,
 ) -> (Vec<Keypair>, u64) {
-    info!("Creating {} keypairs...", tx_count * 2);
+    // info!("Creating {} keypairs...", tx_count * 2);
+    // info!(target: "bench", "{}",
+    //     Info(format!("Creating {} keypairs...", tx_count * 2).to_string())
+    // );
+    let info:String = format!("Creating {} keypairs...", tx_count * 2).to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
+    );
+
     let mut keypairs = generate_keypairs(funding_pubkey, tx_count * 2);
 
-    info!("Get difs...");
+    // info!("Get difs...");
+    // info!(target: "bench", "{}",
+    //     Info(format!("Get difs...").to_string())
+    // );
+    let info:String = format!("Get difs...").to_string();
+    println!("{}",
+        printLn(
+            info,
+            module_path!().to_string()
+        )
+    );
 
     // Sample the first keypair, see if it has difs, if so then resume.
     // This logic is to prevent dif loss on repeated morgan-bench-tps executions
@@ -609,7 +632,18 @@ pub fn generate_and_fund_keypairs<T: Client>(
         if client.get_balance(&funding_pubkey.pubkey()).unwrap_or(0) < total {
             airdrop_difs(client, &drone_addr.unwrap(), funding_pubkey, total);
         }
-        info!("adding more difs {}", extra);
+        // info!("adding more difs {}", extra);
+        // info!(target: "bench", "{}",
+        //     Info(format!("adding more difs {}", extra).to_string())
+        // );
+        let info:String = format!("adding more difs {}", extra).to_string();
+        println!("{}",
+            printLn(
+                info,
+                module_path!().to_string()
+            )
+        );
+
         fund_keys(client, funding_pubkey, &keypairs, extra);
     }
 

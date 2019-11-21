@@ -22,6 +22,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, RwLock};
 use std::thread::sleep;
 use std::time::{Duration, Instant};
+use morgan_helper::logHelper::*;
 
 #[derive(Debug, Clone)]
 pub struct JsonRpcConfig {
@@ -131,7 +132,14 @@ impl JsonRpcRequestProcessor {
 
     pub fn fullnode_exit(&self) -> Result<bool> {
         if self.config.enable_fullnode_exit {
-            warn!("fullnode_exit request...");
+            // warn!("fullnode_exit request...");
+            println!(
+                "{}",
+                Warn(
+                    format!("fullnode_exit request...").to_string(),
+                    module_path!().to_string()
+                )
+            );
             self.fullnode_exit.store(true, Ordering::Relaxed);
             Ok(true)
         } else {
@@ -378,12 +386,24 @@ impl RpcSol for RpcSolImpl {
             .confirmed_last_blockhash();
         let transaction = request_airdrop_transaction(&drone_addr, &pubkey, difs, blockhash)
             .map_err(|err| {
-                info!("request_airdrop_transaction failed: {:?}", err);
+                // info!("{}", Info(format!("request_airdrop_transaction failed: {:?}", err).to_string()));
+                println!("{}",
+                    printLn(
+                        format!("request_airdrop_transaction failed: {:?}", err).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 Error::internal_error()
             })?;;
 
         let data = serialize(&transaction).map_err(|err| {
-            info!("request_airdrop: serialize error: {:?}", err);
+            // info!("{}", Info(format!("request_airdrop: serialize error: {:?}", err).to_string()));
+            println!("{}",
+                printLn(
+                    format!("request_airdrop: serialize error: {:?}", err).to_string(),
+                    module_path!().to_string()
+                )
+            );
             Error::internal_error()
         })?;
 
@@ -392,7 +412,13 @@ impl RpcSol for RpcSolImpl {
         transactions_socket
             .send_to(&data, transactions_addr)
             .map_err(|err| {
-                info!("request_airdrop: send_to error: {:?}", err);
+                // info!("{}", Info(format!("request_airdrop: send_to error: {:?}", err).to_string()));
+                println!("{}",
+                    printLn(
+                        format!("request_airdrop: send_to error: {:?}", err).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 Error::internal_error()
             })?;
 
@@ -407,10 +433,22 @@ impl RpcSol for RpcSolImpl {
                 .get_signature_status(signature);
 
             if signature_status == Some(Ok(())) {
-                info!("airdrop signature ok");
+                // info!("{}", Info(format!("airdrop signature ok").to_string()));
+                println!("{}",
+                    printLn(
+                        format!("airdrop signature ok").to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 return Ok(signature.to_string());
             } else if now.elapsed().as_secs() > 5 {
-                info!("airdrop signature timeout");
+                // info!("{}", Info(format!("airdrop signature timeout").to_string()));
+                println!("{}",
+                    printLn(
+                        format!("airdrop signature timeout").to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 return Err(Error::internal_error());
             }
             sleep(Duration::from_millis(100));
@@ -437,12 +475,24 @@ impl RpcSol for RpcSolImpl {
             .confirmed_last_blockhash();
         let transaction = request_reputation_airdrop_transaction(&drone_addr, &pubkey, reputations, blockhash)
             .map_err(|err| {
-                info!("request_reputation_airdrop_transaction failed: {:?}", err);
+                // info!("{}", Info(format!("request_reputation_airdrop_transaction failed: {:?}", err).to_string()));
+                println!("{}",
+                    printLn(
+                        format!("request_reputation_airdrop_transaction failed: {:?}", err).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 Error::internal_error()
             })?;;
 
         let data = serialize(&transaction).map_err(|err| {
-            info!("request_airdrop: serialize error: {:?}", err);
+            // info!("{}", Info(format!("request_airdrop: serialize error: {:?}", err).to_string()));
+            println!("{}",
+                printLn(
+                    format!("request_airdrop: serialize error: {:?}", err).to_string(),
+                    module_path!().to_string()
+                )
+            );
             Error::internal_error()
         })?;
 
@@ -451,7 +501,13 @@ impl RpcSol for RpcSolImpl {
         transactions_socket
             .send_to(&data, transactions_addr)
             .map_err(|err| {
-                info!("request_airdrop: send_to error: {:?}", err);
+                // info!("{}", Info(format!("request_airdrop: send_to error: {:?}", err).to_string()));
+                println!("{}",
+                    printLn(
+                        format!("request_airdrop: send_to error: {:?}", err).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 Error::internal_error()
             })?;
 
@@ -466,10 +522,22 @@ impl RpcSol for RpcSolImpl {
                 .get_signature_status(signature);
 
             if signature_status == Some(Ok(())) {
-                info!("airdrop signature ok");
+                // info!("{}", Info(format!("airdrop signature ok").to_string()));
+                println!("{}",
+                    printLn(
+                        format!("airdrop signature ok").to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 return Ok(signature.to_string());
             } else if now.elapsed().as_secs() > 5 {
-                info!("airdrop signature timeout");
+                // info!("{}", Info(format!("airdrop signature timeout").to_string()));
+                println!("{}",
+                    printLn(
+                        format!("airdrop signature timeout").to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 return Err(Error::internal_error());
             }
             sleep(Duration::from_millis(100));
@@ -478,14 +546,29 @@ impl RpcSol for RpcSolImpl {
 
     fn send_transaction(&self, meta: Self::Metadata, data: Vec<u8>) -> Result<String> {
         let tx: Transaction = deserialize(&data).map_err(|err| {
-            info!("send_transaction: deserialize error: {:?}", err);
+            // info!("{}", Info(format!("send_transaction: deserialize error: {:?}", err).to_string()));
+            println!("{}",
+                printLn(
+                    format!("send_transaction: deserialize error: {:?}", err).to_string(),
+                    module_path!().to_string()
+                )
+            );
             Error::invalid_request()
         })?;
         if data.len() >= PACKET_DATA_SIZE {
-            info!(
-                "send_transaction: transaction too large: {} bytes (max: {} bytes)",
-                data.len(),
-                PACKET_DATA_SIZE
+            // info!(
+            //     "{}",
+            //     Info(format!("send_transaction: transaction too large: {} bytes (max: {} bytes)",
+            //     data.len(),
+            //     PACKET_DATA_SIZE).to_string())
+            // );
+            println!("{}",
+                printLn(
+                    format!("send_transaction: transaction too large: {} bytes (max: {} bytes)",
+                        data.len(),
+                        PACKET_DATA_SIZE).to_string(),
+                    module_path!().to_string()
+                )
             );
             return Err(Error::invalid_request());
         }
@@ -495,7 +578,13 @@ impl RpcSol for RpcSolImpl {
         transactions_socket
             .send_to(&data, transactions_addr)
             .map_err(|err| {
-                info!("send_transaction: send_to error: {:?}", err);
+                // info!("{}", Info(format!("send_transaction: send_to error: {:?}", err).to_string()));
+                println!("{}",
+                    printLn(
+                        format!("send_transaction: send_to error: {:?}", err).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 Error::internal_error()
             })?;
         let signature = tx.signatures[0].to_string();

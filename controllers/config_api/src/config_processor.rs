@@ -4,6 +4,7 @@ use log::*;
 use morgan_interface::account::KeyedAccount;
 use morgan_interface::instruction::InstructionError;
 use morgan_interface::pubkey::Pubkey;
+use morgan_helper::logHelper::*;
 
 pub fn process_instruction(
     _program_id: &Pubkey,
@@ -12,12 +13,26 @@ pub fn process_instruction(
     _tick_height: u64,
 ) -> Result<(), InstructionError> {
     if keyed_accounts[0].signer_key().is_none() {
-        error!("account[0].signer_key().is_none()");
+        // error!("{}", Error(format!("account[0].signer_key().is_none()").to_string()));
+        println!(
+            "{}",
+            Error(
+                format!("account[0].signer_key().is_none()").to_string(),
+                module_path!().to_string()
+            )
+        );
         Err(InstructionError::MissingRequiredSignature)?;
     }
 
     if keyed_accounts[0].account.data.len() < data.len() {
-        error!("instruction data too large");
+        // error!("{}", Error(format!("instruction data too large").to_string()));
+        println!(
+            "{}",
+            Error(
+                format!("instruction data too large").to_string(),
+                module_path!().to_string()
+            )
+        );
         Err(InstructionError::InvalidInstructionData)?;
     }
 

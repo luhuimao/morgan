@@ -17,6 +17,8 @@ serde = "1.0.91"
 serde_derive = "1.0.91"
 morgan-logger = { path = "../../logger", version = "0.15.3"     }
 morgan-interface = { path = "../../interface", version = "0.15.3"     }
+morgan-helper = { path = "../../helper", version = "0.1.0"     }
+
 [lib]
 name = "morgan_token_api"
 crate-type = ["lib"]

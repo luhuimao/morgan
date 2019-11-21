@@ -102,8 +102,8 @@ def update_submodules():
 
 def build(rust_version,cargoFeatures,release=False):
     target_list = execute_shell("rustup target list", silent=True).decode()
-    m = re.search(r"(.*?)\s*\(default\)", target_list)
-    # m = re.search(r"(.*?)\s*\(installed\)", target_list)
+    # m = re.search(r"(.*?)\s*\(default\)", target_list)
+    m = re.search(r"(.*?)\s*\(installed\)", target_list)
     #currentWorking directory
     pwd = os.getcwd()
     

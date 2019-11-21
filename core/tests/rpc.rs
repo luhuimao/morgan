@@ -11,6 +11,7 @@ use morgan_interface::system_transaction;
 use std::fs::remove_dir_all;
 use std::thread::sleep;
 use std::time::Duration;
+use morgan_helper::logHelper::*;
 
 #[test]
 fn test_rpc_send_tx() {
@@ -37,7 +38,13 @@ fn test_rpc_send_tx() {
     let json: Value = serde_json::from_str(&response.text().unwrap()).unwrap();
     let blockhash: Hash = json["result"][0].as_str().unwrap().parse().unwrap();
 
-    info!("blockhash: {:?}", blockhash);
+    // info!("{}", Info(format!("blockhash: {:?}", blockhash).to_string()));
+    println!("{}",
+        printLn(
+            format!("blockhash: {:?}", blockhash).to_string(),
+            module_path!().to_string()
+        )
+    );
     let tx = system_transaction::transfer(&alice, &bob_pubkey, 20, blockhash);
     let serial_tx = serialize(&tx).unwrap();
 

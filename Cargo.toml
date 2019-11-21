@@ -39,5 +39,6 @@ members = [
     "upload-perf",
     "vote-signer",
     "wallet",
+    "helper",
 ]
 exclude = ["controllers/bpf/rust/noop"]

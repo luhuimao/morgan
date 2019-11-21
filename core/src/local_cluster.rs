@@ -28,6 +28,7 @@ use std::collections::HashMap;
 use std::fs::remove_dir_all;
 use std::io::{Error, ErrorKind, Result};
 use std::sync::Arc;
+use morgan_helper::logHelper::*;
 
 pub struct ValidatorInfo {
     pub keypair: Arc<Keypair>,
@@ -244,7 +245,13 @@ impl LocalCluster {
 
         if validator_config.voting_disabled {
             // setup as a listener
-            info!("listener {} ", validator_pubkey,);
+            // info!("{}", Info(format!("listener {} ", validator_pubkey,).to_string()));
+            println!("{}",
+                printLn(
+                    format!("listener {} ", validator_pubkey).to_string(),
+                    module_path!().to_string()
+                )
+            );
         } else {
             // Give the validator some difs to setup vote and storage accounts
             let validator_balance = Self::transfer_with_client(
@@ -253,11 +260,19 @@ impl LocalCluster {
                 &validator_pubkey,
                 stake * 2 + 2,
             );
-            info!(
-                "validator {} balance {}",
-                validator_pubkey, validator_balance
+            // info!(
+            //     "{}",
+            //     Info(format!("validator {} balance {}",
+            //     validator_pubkey, validator_balance).to_string())
+            // );
+            println!("{}",
+                printLn(
+                    format!("validator {} balance {}",
+                        validator_pubkey, validator_balance
+                    ).to_string(),
+                    module_path!().to_string()
+                )
             );
-
             Self::setup_vote_and_stake_accounts(
                 &client,
                 &voting_keypair,
@@ -380,11 +395,22 @@ impl LocalCluster {
             difs,
             blockhash,
         );
-        info!(
-            "executing transfer of {} from {} to {}",
-            difs,
-            source_keypair.pubkey(),
-            *dest_pubkey
+        // info!(
+        //     "{}",
+        //     Info(format!("executing transfer of {} from {} to {}",
+        //     difs,
+        //     source_keypair.pubkey(),
+        //     *dest_pubkey).to_string())
+        // );
+        println!("{}",
+            printLn(
+                format!("executing transfer of {} from {} to {}",
+                    difs,
+                    source_keypair.pubkey(),
+                    *dest_pubkey
+                ).to_string(),
+                module_path!().to_string()
+            )
         );
         client
             .retry_transfer(&source_keypair, &mut tx, 5)
@@ -462,12 +488,24 @@ impl LocalCluster {
                 )
                 .expect("delegate stake");
         }
-        info!("Checking for vote account registration");
+        // info!("{}", Info(format!("Checking for vote account registration").to_string()));
+        println!("{}",
+            printLn(
+                format!("Checking for vote account registration").to_string(),
+                module_path!().to_string()
+            )
+        );
         let vote_account_user_data = client.get_account_data(&vote_account_pubkey);
         if let Ok(Some(vote_account_user_data)) = vote_account_user_data {
             if let Ok(vote_state) = VoteState::deserialize(&vote_account_user_data) {
                 if vote_state.node_pubkey == node_pubkey {
-                    info!("vote account registered");
+                    // info!("{}", Info(format!("vote account registered").to_string()));
+                    println!("{}",
+                        printLn(
+                            format!("vote account registered").to_string(),
+                            module_path!().to_string()
+                        )
+                    );
                     return Ok(());
                 }
             }

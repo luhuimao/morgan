@@ -21,6 +21,7 @@ morgan-runtime = { path = "../runtime", version = "0.15.3"     }
 morgan-interface = { path = "../interface", version = "0.15.3"     }
 morgan-vote-api = { path = "../controllers/vote_api", version = "0.15.3"     }
 morgan-vote-signer = { path = "../vote-signer", version = "0.15.3"     }
+morgan-helper = { path = "../helper", version = "0.1.0"     }
 
 [features]
 chacha = ["morgan/chacha"]

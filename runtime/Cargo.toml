@@ -31,6 +31,7 @@ morgan-vote-api = { path = "../controllers/vote_api", version = "0.15.3"     }
 morgan-vote-controller = { path = "../controllers/vote_controller", version = "0.15.3"     }
 morgan-stake-controller = { path = "../controllers/stake_controller", version = "0.15.3"     }
 morgan-noop-controller = { path = "../controllers/noop_controller", version = "0.15.3"     }
+morgan-helper = { path = "../helper", version = "0.1.0"     }
 
 [lib]
 name = "morgan_runtime"

@@ -3,6 +3,7 @@ use log::*;
 use morgan_interface::timing;
 use std::env;
 use std::sync::atomic::{AtomicUsize, Ordering};
+use morgan_helper::logHelper::*;
 
 const DEFAULT_LOG_RATE: usize = 1000;
 const DEFAULT_METRICS_RATE: usize = 1;
@@ -157,14 +158,115 @@ impl Counter {
             self.metricsrate.store(metricsrate, Ordering::Relaxed);
         }
         if times % lograte == 0 && times > 0 && log_enabled!(level) {
-            log!(level,
-                "COUNTER:{{\"name\": \"{}\", \"counts\": {}, \"samples\": {},  \"now\": {}, \"events\": {}}}",
-                self.name,
-                counts + events,
-                times,
-                timing::timestamp(),
-                events,
-            );
+
+            match level {
+                log::Level::Info => {
+                    // info!(
+                    //     "{}",
+                    //     Info(
+                    //         format!(
+                    //             "COUNTER:{{\"name\": \"{}\", \"counts\": {}, \"samples\": {},  \"now\": {}, \"events\": {}}}",
+                    //             self.name,
+                    //             counts + events,
+                    //             times,
+                    //             timing::timestamp(),
+                    //             events
+                    //         ).to_string()
+                    //     )
+                    // );
+                    println!("{}",
+                        printLn(
+                            format!(
+                                "COUNTER:{{\"name\": \"{}\", \"counts\": {}, \"samples\": {},  \"now\": {}, \"events\": {}}}",
+                                self.name,
+                                counts + events,
+                                times,
+                                timing::timestamp(),
+                                events
+                            ).to_string(),
+                            module_path!().to_string()
+                        )
+                    );
+                }
+                log::Level::Error => {
+                    // error!(
+                    //     "{}",
+                    //     Error(
+                    //         format!(
+                    //             "COUNTER:{{\"name\": \"{}\", \"counts\": {}, \"samples\": {},  \"now\": {}, \"events\": {}}}",
+                    //             self.name,
+                    //             counts + events,
+                    //             times,
+                    //             timing::timestamp(),
+                    //             events
+                    //         ).to_string()
+                    //     )
+                    // );
+                    println!(
+                        "{}",
+                        Error(
+                            format!(
+                                "COUNTER:{{\"name\": \"{}\", \"counts\": {}, \"samples\": {},  \"now\": {}, \"events\": {}}}",
+                                self.name,
+                                counts + events,
+                                times,
+                                timing::timestamp(),
+                                events
+                            ).to_string(),
+                            module_path!().to_string()
+                        )
+                    );
+                }
+                log::Level::Warn => {
+                    // warn!(
+                    //     "{}",
+                    //     Warn(
+                    //         format!(
+                    //             "COUNTER:{{\"name\": \"{}\", \"counts\": {}, \"samples\": {},  \"now\": {}, \"events\": {}}}",
+                    //             self.name,
+                    //             counts + events,
+                    //             times,
+                    //             timing::timestamp(),
+                    //             events
+                    //         ).to_string()
+                    //     )
+                    // );
+                    println!(
+                        "{}",
+                        Warn(
+                            format!(
+                                "COUNTER:{{\"name\": \"{}\", \"counts\": {}, \"samples\": {},  \"now\": {}, \"events\": {}}}",
+                                self.name,
+                                counts + events,
+                                times,
+                                timing::timestamp(),
+                                events
+                            ).to_string(),
+                            module_path!().to_string()
+                        )
+                    );
+                }
+                log::Level::Debug => {
+                    log!(level,
+                        "COUNTER:{{\"name\": \"{}\", \"counts\": {}, \"samples\": {},  \"now\": {}, \"events\": {}}}",
+                        self.name,
+                        counts + events,
+                        times,
+                        timing::timestamp(),
+                        events,
+                    );
+                }
+                log::Level::Trace => {
+                    log!(level,
+                        "COUNTER:{{\"name\": \"{}\", \"counts\": {}, \"samples\": {},  \"now\": {}, \"events\": {}}}",
+                        self.name,
+                        counts + events,
+                        times,
+                        timing::timestamp(),
+                        events,
+                    );
+                }
+            }
         }
 
         if times % metricsrate == 0 && times > 0 {

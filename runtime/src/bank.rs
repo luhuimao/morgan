@@ -33,6 +33,7 @@ use std::cmp;
 use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 use std::sync::{Arc, RwLock, RwLockReadGuard};
 use std::time::Instant;
+use morgan_helper::logHelper::*;
 
 type BankStatusCache = StatusCache<Result<()>>;
 
@@ -403,7 +404,8 @@ impl Bank {
     /// bank will reject transactions using that `hash`.
     pub fn register_tick(&self, hash: &Hash) {
         if self.is_frozen() {
-            warn!("=========== FIXME: register_tick() working on a frozen bank! ================");
+            // warn!("{}", Warn(format!("=========== FIXME: register_tick() working on a frozen bank! ================").to_string()));
+            println!("{}",Warn(format!("=========== FIXME: register_tick() working on a frozen bank! ================").to_string(),module_path!().to_string()));
         }
 
         // TODO: put this assert back in
@@ -435,7 +437,9 @@ impl Bank {
         I: std::borrow::Borrow<Transaction>,
     {
         if self.is_frozen() {
-            warn!("=========== FIXME: lock_accounts() working on a frozen bank! ================");
+            // warn!("{}", Warn(format!("=========== FIXME: lock_accounts() working on a frozen bank! ================").to_string()));
+            println!("{}",Warn(format!("=========== FIXME: lock_accounts() working on a frozen bank! ================").to_string(),module_path!().to_string()));
+
         }
         // TODO: put this assert back in
         // assert!(!self.is_frozen());
@@ -745,7 +749,9 @@ impl Bank {
         executed: &[Result<()>],
     ) -> Vec<Result<()>> {
         if self.is_frozen() {
-            warn!("=========== FIXME: commit_transactions() working on a frozen bank! ================");
+            // warn!("{}", Warn(format!("=========== FIXME: commit_transactions() working on a frozen bank! ================").to_string()));
+            println!("{}",Warn(format!("=========== FIXME: commit_transactions() working on a frozen bank! ================").to_string().to_string(),module_path!().to_string()));
+
         }
 
         if executed.iter().any(|res| Self::can_commit(res)) {

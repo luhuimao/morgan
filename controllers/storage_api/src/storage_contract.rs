@@ -9,6 +9,7 @@ use morgan_interface::instruction::InstructionError;
 use morgan_interface::pubkey::Pubkey;
 use morgan_interface::signature::Signature;
 use std::collections::HashMap;
+use morgan_helper::logHelper::*;
 
 pub const TOTAL_VALIDATOR_REWARDS: u64 = 1;
 pub const TOTAL_REPLICATOR_REWARDS: u64 = 1;
@@ -325,11 +326,22 @@ impl<'a> StorageAccount<'a> {
                 || !reward_validations.contains_key(&claim_segment)
                 || !proofs.contains_key(&claim_segment)
             {
-                info!(
-                    "current {:?}, claim {:?}, have rewards for {:?} segments",
+                // info!(
+                //     "{}",
+                //     Info(format!("current {:?}, claim {:?}, have rewards for {:?} segments",
+                //     claim_index,
+                //     claim_segment,
+                //     reward_validations.len()).to_string())
+                // );
+                let info:String = format!("current {:?}, claim {:?}, have rewards for {:?} segments",
                     claim_index,
                     claim_segment,
-                    reward_validations.len()
+                    reward_validations.len()).to_string();
+                println!("{}",
+                    printLn(
+                        info,
+                        module_path!().to_string()
+                    )
                 );
                 return Err(InstructionError::InvalidArgument);
             }

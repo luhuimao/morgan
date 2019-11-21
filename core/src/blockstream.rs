@@ -15,6 +15,7 @@ use std::net::Shutdown;
 use std::os::unix::net::UnixStream;
 use std::path::Path;
 use log::*;
+use morgan_helper::logHelper::*;
 
 pub trait EntryWriter: std::fmt::Debug {
     fn write(&self, payload: String) -> Result<()>;
@@ -122,7 +123,14 @@ where
                     leader_pubkey,
                     json_entry,
                 );
-                error!("entry event: {:?}", entry);
+                // error!("{}", Error(format!("entry event: {:?}", entry).to_string()));
+                println!(
+                    "{}",
+                    Error(
+                        format!("entry event: {:?}", entry).to_string(),
+                        module_path!().to_string()
+                    )
+                );
                 self.output.write(payload)?;
             }
 
@@ -145,7 +153,14 @@ where
             leader_pubkey,
             blockhash,
         );
-        error!("block_event: {:?}", payload);
+        // error!("{}", Error(format!("block_event: {:?}", payload).to_string()));
+        println!(
+            "{}",
+            Error(
+                format!("block_event: {:?}", payload).to_string(),
+                module_path!().to_string()
+            )
+        );
         self.output.write(payload)?;
         Ok(())
     }

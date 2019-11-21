@@ -20,6 +20,7 @@ use std::sync::mpsc::RecvTimeoutError;
 use std::sync::{Arc, RwLock};
 use std::thread::{self, Builder, JoinHandle};
 use std::time::{Duration, Instant};
+use morgan_helper::logHelper::*;
 
 fn retransmit_blobs(blobs: &[SharedBlob], retransmit: &BlobSender, id: &Pubkey) -> Result<()> {
     let mut retransmit_queue: Vec<SharedBlob> = Vec::new();
@@ -226,7 +227,14 @@ impl WindowService {
                             Error::RecvTimeoutError(RecvTimeoutError::Timeout) => (),
                             _ => {
                                 inc_new_counter_error!("streamer-window-error", 1, 1);
-                                error!("window error: {:?}", e);
+                                // error!("{}", Error(format!("window error: {:?}", e).to_string()));
+                                println!(
+                                    "{}",
+                                    Error(
+                                        format!("window error: {:?}", e).to_string(),
+                                        module_path!().to_string()
+                                    )
+                                );
                             }
                         }
                     }

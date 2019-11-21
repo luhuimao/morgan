@@ -70,7 +70,14 @@ pub fn chacha_cbc_encrypt_ledger(
 
                 chacha_cbc_encrypt(&buffer[..size], &mut encrypted_buffer[..size], &key, ivec);
                 if let Err(res) = out_file.write(&encrypted_buffer[..size]) {
-                    warn!("Error writing file! {:?}", res);
+                    // warn!("Error writing file! {:?}", res);
+                    println!(
+                        "{}",
+                        Warn(
+                            format!("Error writing file! {:?}", res).to_string(),
+                            module_path!().to_string()
+                        )
+                    );
                     return Err(res);
                 }
 
@@ -78,7 +85,14 @@ pub fn chacha_cbc_encrypt_ledger(
                 entry += num_entries;
             }
             Err(e) => {
-                info!("Error encrypting file: {:?}", e);
+                // info!("{}", Info(format!("Error encrypting file: {:?}", e).to_string()));
+                let loginfo: String = format!("Error encrypting file: {:?}", e).to_string();
+                println!("{}",
+                    printLn(
+                        loginfo,
+                        module_path!().to_string()
+                    )
+                );
                 break;
             }
         }

@@ -12,6 +12,7 @@ use morgan_runtime::epoch_schedule::{EpochSchedule, MINIMUM_SLOT_LENGTH};
 use morgan_interface::poh_config::PohConfig;
 use morgan_interface::timing;
 use std::time::Duration;
+use morgan_helper::logHelper::*;
 
 #[test]
 fn test_spend_and_verify_all_nodes_1() {
@@ -306,10 +307,20 @@ fn run_repairman_catchup(num_repairmen: u64) {
         validator_ledger.rooted_slot_iterator(0).unwrap().collect();
 
     if validator_rooted_slots.len() as u64 <= num_expected_slots {
-        error!(
-            "Num expected slots: {}, number of rooted slots: {}",
-            num_expected_slots,
-            validator_rooted_slots.len()
+        // error!(
+        //     "{}",
+        //     Error(format!("Num expected slots: {}, number of rooted slots: {}",
+        //     num_expected_slots,
+        //     validator_rooted_slots.len()).to_string())
+        // );
+        println!(
+            "{}",
+            Error(
+                format!("Num expected slots: {}, number of rooted slots: {}",
+                    num_expected_slots,
+                    validator_rooted_slots.len()).to_string(),
+                module_path!().to_string()
+            )
         );
     }
     assert!(validator_rooted_slots.len() as u64 > num_expected_slots);

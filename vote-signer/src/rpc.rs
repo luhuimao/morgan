@@ -11,6 +11,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, RwLock};
 use std::thread::{self, sleep, Builder, JoinHandle};
 use std::time::Duration;
+use morgan_helper::logHelper::*;
 
 pub struct VoteSignerRpcService {
     thread_hdl: JoinHandle<()>,
@@ -36,7 +37,13 @@ impl VoteSignerRpcService {
                         ]))
                         .start_http(&rpc_addr);
                 if server.is_err() {
-                    warn!("JSON RPC service unavailable: unable to bind to RPC port {}. \nMake sure this port is not already in use by another application", rpc_addr.port());
+                    // warn!("JSON RPC service unavailable: unable to bind to RPC port {}. \nMake sure this port is not already in use by another application", rpc_addr.port());
+                    println!(
+                        "{}",
+                        Warn(
+                            format!("JSON RPC service unavailable: unable to bind to RPC port {}. \nMake sure this port is not already in use by another application", rpc_addr.port()).to_string(),
+                            module_path!().to_string())
+                    );
                     return;
                 }
                 while !exit.load(Ordering::Relaxed) {
@@ -84,7 +91,13 @@ impl VoteSignerRpc for VoteSignerRpcImpl {
         sig: Signature,
         signed_msg: Vec<u8>,
     ) -> Result<Pubkey> {
-        info!("register rpc request received: {:?}", id);
+        // info!("{}", Info(format!("register rpc request received: {:?}", id).to_string()));
+        println!("{}",
+            printLn(
+                format!("register rpc request received: {:?}", id).to_string(),
+                module_path!().to_string()
+            )
+        );
         meta.request_processor.register(&id, &sig, &signed_msg)
     }
 
@@ -95,7 +108,13 @@ impl VoteSignerRpc for VoteSignerRpcImpl {
         sig: Signature,
         signed_msg: Vec<u8>,
     ) -> Result<Signature> {
-        info!("sign rpc request received: {:?}", id);
+        // info!("{}", Info(format!("sign rpc request received: {:?}", id).to_string()));
+        println!("{}",
+            printLn(
+                format!("sign rpc request received: {:?}", id).to_string(),
+                module_path!().to_string()
+            )
+        );
         meta.request_processor.sign(&id, &sig, &signed_msg)
     }
 
@@ -106,7 +125,13 @@ impl VoteSignerRpc for VoteSignerRpcImpl {
         sig: Signature,
         signed_msg: Vec<u8>,
     ) -> Result<()> {
-        info!("deregister rpc request received: {:?}", id);
+        // info!("{}", Info(format!("deregister rpc request received: {:?}", id).to_string()));
+        println!("{}",
+            printLn(
+                format!("deregister rpc request received: {:?}", id).to_string(),
+                module_path!().to_string()
+            )
+        );
         meta.request_processor.deregister(&id, &sig, &signed_msg)
     }
 }
