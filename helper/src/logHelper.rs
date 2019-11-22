@@ -1,4 +1,4 @@
-use ansi_term::Color::{Green, Red, Yellow};
+use ansi_term::Color::{Green, Red, Yellow, Blue, Cyan, White};
 use log::*;
 use chrono::prelude::*;
 
@@ -9,35 +9,41 @@ pub fn Info(info: String) -> String {
 
 pub fn printLn(info: String, target: String) -> String {
     let local: DateTime<Local> = Local::now();
-    return Green.bold().paint(format!(
-        "< {} {} {} {} >",
-        local,
-        "INFO",
-        info,
-        target)
+    return format!(
+        "{} {} {} {} {} {}",
+        Cyan.bold().paint(format!("<")),
+        White.bold().paint(format!("{}", local)),
+        Green.bold().paint(format!("INFO")),
+        Green.bold().paint(format!("{}", info)),
+        Blue.bold().paint(format!("{}", target)),
+        Cyan.bold().paint(format!(">"))
     ).to_string();
 }
 
 pub fn Error(err: String, target: String) -> String {
     let local: DateTime<Local> = Local::now();
-    return Red.bold().paint(format!(
-        "< {} {} {} {} >",
-        local,
-        "ERROR",
-        err,
-        target)
+    return format!(
+        "{} {} {} {} {} {}",
+        Cyan.bold().paint(format!("<")),
+        White.bold().paint(format!("{}", local)),
+        Red.bold().paint(format!("ERROR")),
+        Red.bold().paint(format!("{}", err)),
+        Blue.bold().paint(format!("{}", target)),
+        Cyan.bold().paint(format!(">"))
     ).to_string();
 }
 
 
-pub fn Warn(warm: String, target: String) -> String {
+pub fn Warn(warn: String, target: String) -> String {
     let local: DateTime<Local> = Local::now();
-    return Yellow.bold().paint(format!(
-        "< {} {} {} {} >",
-        local,
-        "WARN",
-        warm,
-        target)
+    return format!(
+        "{} {} {} {} {} {}",
+        Cyan.bold().paint(format!("<")),
+        White.bold().paint(format!("{}", local)),
+        Yellow.bold().paint(format!("WARN")),
+        Yellow.bold().paint(format!("{}", warn)),
+        Blue.bold().paint(format!("{}", target)),
+        Cyan.bold().paint(format!(">"))
     ).to_string();
 }
 
