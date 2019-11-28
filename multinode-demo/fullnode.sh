@@ -283,7 +283,7 @@ elif [[ $node_type = bootstrap_leader ]]; then
   [[ -f "$MORGAN_CONFIG_DIR"/bootstrap-leader-keypair.json ]] ||
     ledger_not_setup "$MORGAN_CONFIG_DIR/bootstrap-leader-keypair.json not found"
 
-  #$morgan_ledgerbot --ledger "$MORGAN_CONFIG_DIR"/bootstrap-leader-ledger verify
+  $morgan_ledgerbot --ledger "$MORGAN_CONFIG_DIR"/bootstrap-leader-ledger verify
 
   : "${identity_keypair_path:=$MORGAN_CONFIG_DIR/bootstrap-leader-keypair.json}"
   vote_keypair_path="$MORGAN_CONFIG_DIR"/bootstrap-leader-vote-keypair.json
