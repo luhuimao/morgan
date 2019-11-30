@@ -1,11 +1,11 @@
 //! The `rpc` module implements the Morgan RPC interface.
 
 // use crate::bank_forks::BankForks;
-use crate::bank_forks::BankForks;
-use crate::cluster_info::ClusterInfo;
-use crate::contact_info::ContactInfo;
+use crate::treasuryForks::BankForks;
+use crate::clusterMessage::ClusterInfo;
+use crate::connectionInfo::ContactInfo;
 use crate::packet::PACKET_DATA_SIZE;
-use crate::storage_stage::StorageState;
+use crate::storageStage::StorageState;
 use bincode::{deserialize, serialize};
 use jsonrpc_core::{Error, Metadata, Result};
 use jsonrpc_derive::rpc;
@@ -641,8 +641,8 @@ impl RpcSol for RpcSolImpl {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::contact_info::ContactInfo;
-    use crate::genesis_utils::{create_genesis_block, GenesisBlockInfo};
+    use crate::connectionInfo::ContactInfo;
+    use crate::genesisUtils::{create_genesis_block, GenesisBlockInfo};
     use jsonrpc_core::{MetaIoHandler, Response};
     use morgan_interface::hash::{hash, Hash};
     use morgan_interface::instruction::InstructionError;

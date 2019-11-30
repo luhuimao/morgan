@@ -8,8 +8,8 @@ extern crate morgan;
 
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
-use morgan::blocktree::{get_tmp_ledger_path, Blocktree};
-use morgan::entry::{make_large_test_entries, make_tiny_test_entries, EntrySlice};
+use morgan::blockBufferPool::{get_tmp_ledger_path, Blocktree};
+use morgan::entryInfo::{make_large_test_entries, make_tiny_test_entries, EntrySlice};
 use morgan::packet::{Blob, BLOB_HEADER_SIZE};
 use test::Bencher;
 

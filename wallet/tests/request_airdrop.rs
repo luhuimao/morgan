@@ -1,4 +1,4 @@
-use morgan::validator::new_validator_for_tests;
+use morgan::verifier::new_validator_for_tests;
 use morgan_client::rpc_client::RpcClient;
 use morgan_tokenbot::drone::run_local_drone;
 use morgan_interface::signature::KeypairUtil;

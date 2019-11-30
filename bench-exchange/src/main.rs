@@ -8,7 +8,7 @@ extern crate morgan_exchange_controller;
 
 use crate::bench::{airdrop_difs, do_bench_exchange, Config};
 use log::*;
-use morgan::gossip_service::{discover_cluster, get_clients};
+use morgan::gossipService::{discover_cluster, get_clients};
 use morgan_interface::signature::KeypairUtil;
 use ansi_term::Color::{Green};
 use morgan_helper::logHelper::*;

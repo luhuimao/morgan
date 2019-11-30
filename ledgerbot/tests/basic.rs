@@ -2,8 +2,8 @@
 extern crate morgan;
 
 use assert_cmd::prelude::*;
-use morgan::blocktree::create_new_tmp_ledger;
-use morgan::genesis_utils::create_genesis_block;
+use morgan::blockBufferPool::create_new_tmp_ledger;
+use morgan::genesisUtils::create_genesis_block;
 use std::process::Command;
 use std::process::Output;
 

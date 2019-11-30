@@ -2,21 +2,21 @@
 extern crate morgan;
 
 use log::*;
-use morgan::banking_stage::create_test_recorder;
-use morgan::blocktree::{create_new_tmp_ledger, Blocktree};
-use morgan::cluster_info::{ClusterInfo, Node};
-use morgan::entry::next_entry_mut;
-use morgan::entry::EntrySlice;
-use morgan::genesis_utils::{create_genesis_block_with_leader, GenesisBlockInfo};
-use morgan::gossip_service::GossipService;
+use morgan::treasuryStage::create_test_recorder;
+use morgan::blockBufferPool::{create_new_tmp_ledger, Blocktree};
+use morgan::clusterMessage::{ClusterInfo, Node};
+use morgan::entryInfo::next_entry_mut;
+use morgan::entryInfo::EntrySlice;
+use morgan::genesisUtils::{create_genesis_block_with_leader, GenesisBlockInfo};
+use morgan::gossipService::GossipService;
 use morgan::packet::index_blobs;
-use morgan::rpc_subscriptions::RpcSubscriptions;
+use morgan::rpcSubscriptions::RpcSubscriptions;
 use morgan::service::Service;
-use morgan::storage_stage::StorageState;
-use morgan::storage_stage::STORAGE_ROTATE_TEST_COUNT;
+use morgan::storageStage::StorageState;
+use morgan::storageStage::STORAGE_ROTATE_TEST_COUNT;
 use morgan::streamer;
-use morgan::tvu::{Sockets, Tvu};
-use morgan::validator;
+use morgan::transactionVerifyCentre::{Sockets, Tvu};
+use morgan::verifier;
 use morgan_runtime::epoch_schedule::MINIMUM_SLOT_LENGTH;
 use morgan_interface::signature::{Keypair, KeypairUtil};
 use morgan_interface::system_transaction;
@@ -95,7 +95,7 @@ fn test_replay() {
         completed_slots_receiver,
         leader_schedule_cache,
         _,
-    ) = validator::new_banks_from_blocktree(&blocktree_path, None);
+    ) = verifier::new_banks_from_blocktree(&blocktree_path, None);
     let working_bank = bank_forks.working_bank();
     assert_eq!(
         working_bank.get_balance(&mint_keypair.pubkey()),

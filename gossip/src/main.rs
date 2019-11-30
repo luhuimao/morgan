@@ -4,8 +4,8 @@
 extern crate morgan;
 
 use clap::{crate_description, crate_name, crate_version, App, AppSettings, Arg, SubCommand};
-use morgan::contact_info::ContactInfo;
-use morgan::gossip_service::discover;
+use morgan::connectionInfo::ContactInfo;
+use morgan::gossipService::discover;
 use morgan_client::rpc_client::RpcClient;
 use morgan_interface::pubkey::Pubkey;
 use std::error;

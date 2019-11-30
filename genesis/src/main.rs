@@ -13,7 +13,7 @@ extern crate morgan_config_controller;
 extern crate morgan_exchange_controller;
 
 use clap::{crate_description, crate_name, crate_version, value_t_or_exit, App, Arg};
-use morgan::blocktree::create_new_ledger;
+use morgan::blockBufferPool::create_new_ledger;
 use morgan_interface::account::Account;
 use morgan_interface::fee_calculator::FeeCalculator;
 use morgan_interface::genesis_block::GenesisBlock;

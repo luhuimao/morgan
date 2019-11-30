@@ -221,7 +221,7 @@ mod tests {
         let to_reputations = to_account.reputations;
         let to_owner = to_account.owner;
         let to_data = to_account.data.clone();
-        assert_eq!(from_reputations, 50);
+        assert_eq!(from_reputations, 100);
         assert_eq!(to_reputations, 50);
         assert_eq!(to_owner, new_program_owner);
         assert_eq!(to_data, [0, 0]);
@@ -265,7 +265,7 @@ mod tests {
             KeyedAccount::new(&to, false, &mut to_account),
         ];
         let result = create_system_account_with_reputation(&mut keyed_accounts, 150, 2, &new_program_owner);
-        assert_eq!(result, Err(SystemError::ResultWithNegativeReputations));
+        assert_eq!(result, Err(SystemError::ResultWithNegativeDifs));
         let from_reputations = from_account.reputations;
         assert_eq!(from_reputations, 100);
         assert_eq!(to_account, unchanged_account);
@@ -411,8 +411,8 @@ mod tests {
         ];
         let result = transfer_reputations(&mut keyed_accounts, 100);
         assert_eq!(result, Err(SystemError::ResultWithNegativeReputations));
-        assert_eq!(from_account.difs, 50);
-        assert_eq!(to_account.difs, 50);
+        assert_eq!(from_account.difs, 100);
+        assert_eq!(to_account.difs, 1);
     }
 
     #[test]

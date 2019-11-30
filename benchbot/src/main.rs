@@ -2,7 +2,7 @@ mod bench;
 mod cli;
 
 use crate::bench::{do_bench_tps, generate_and_fund_keypairs, Config, NUM_DIFS_PER_ACCOUNT};
-use morgan::gossip_service::{discover_cluster, get_clients};
+use morgan::gossipService::{discover_cluster, get_clients};
 use std::process::exit;
 
 fn main() {

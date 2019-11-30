@@ -1,7 +1,7 @@
 use clap::{crate_description, crate_name, crate_version, App, Arg};
-use morgan::cluster_info::{Node, FULLNODE_PORT_RANGE};
-use morgan::contact_info::ContactInfo;
-use morgan::replicator::Replicator;
+use morgan::clusterMessage::{Node, FULLNODE_PORT_RANGE};
+use morgan::connectionInfo::ContactInfo;
+use morgan::cloner::Replicator;
 use morgan::socketaddr;
 use morgan_interface::signature::{read_keypair, Keypair, KeypairUtil};
 use std::process::exit;

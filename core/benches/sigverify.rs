@@ -3,8 +3,8 @@
 extern crate test;
 
 use morgan::packet::to_packets;
-use morgan::sigverify;
-use morgan::test_tx::test_tx;
+use morgan::signatureVerify;
+use morgan::testTx::test_tx;
 use test::Bencher;
 
 #[bench]

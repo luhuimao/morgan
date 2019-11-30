@@ -265,7 +265,7 @@ if [[ $node_type = replicator ]]; then
 ======================[ $node_type configuration ]======================
 replicator pubkey: $identity_pubkey
 storage pubkey: $storage_pubkey
-ledger: $ledger_config_dir
+ledger path: $ledger_config_dir
 ======================================================================
 EOF
   # program=morgan-replicator
@@ -346,8 +346,8 @@ if [[ $node_type != replicator ]]; then
 identity pubkey: $identity_pubkey
 vote pubkey: $vote_pubkey
 storage pubkey: $storage_pubkey
-ledger: $ledger_config_dir
-accounts: $accounts_config_dir
+ledger path: $ledger_config_dir
+accounts path: $accounts_config_dir
 ========================================================================
 EOF
 

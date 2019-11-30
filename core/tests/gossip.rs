@@ -2,8 +2,8 @@
 extern crate log;
 
 use rayon::iter::*;
-use morgan::cluster_info::{ClusterInfo, Node};
-use morgan::gossip_service::GossipService;
+use morgan::clusterMessage::{ClusterInfo, Node};
+use morgan::gossipService::GossipService;
 
 use morgan::packet::{Blob, SharedBlob};
 use morgan::result;

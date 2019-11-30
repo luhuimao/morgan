@@ -5,7 +5,7 @@ use itertools::izip;
 use log::*;
 use rand::{thread_rng, Rng};
 use rayon::prelude::*;
-use morgan::gen_keys::GenKeys;
+use morgan::createKeys::GenKeys;
 use morgan_client::perf_utils::{sample_txs, SampleStats};
 use morgan_tokenbot::drone::request_airdrop_transaction;
 use morgan_exchange_api::exchange_instruction;
@@ -1296,9 +1296,9 @@ pub fn airdrop_difs(client: &Client, drone_addr: &SocketAddr, id: &Keypair, amou
 #[cfg(test)]
 mod tests {
     use super::*;
-    use morgan::gossip_service::{discover_cluster, get_clients};
-    use morgan::local_cluster::{ClusterConfig, LocalCluster};
-    use morgan::validator::ValidatorConfig;
+    use morgan::gossipService::{discover_cluster, get_clients};
+    use morgan::localCluster::{ClusterConfig, LocalCluster};
+    use morgan::verifier::ValidatorConfig;
     use morgan_tokenbot::drone::run_local_drone;
     use morgan_exchange_api::exchange_processor::process_instruction;
     use morgan_runtime::bank::Bank;

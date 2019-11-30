@@ -11,7 +11,7 @@ use std::fs::remove_dir_all;
 use std::sync::mpsc::channel;
 
 #[cfg(test)]
-use morgan::validator::new_validator_for_tests;
+use morgan::verifier::new_validator_for_tests;
 
 fn check_balance(expected_balance: u64, client: &RpcClient, pubkey: &Pubkey) {
     let balance = client.retry_get_balance(pubkey, 1).unwrap().unwrap();

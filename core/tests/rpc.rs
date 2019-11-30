@@ -3,7 +3,7 @@ use log::*;
 use reqwest;
 use reqwest::header::CONTENT_TYPE;
 use serde_json::{json, Value};
-use morgan::validator::new_validator_for_tests;
+use morgan::verifier::new_validator_for_tests;
 use morgan_client::rpc_client::get_rpc_request_str;
 use morgan_interface::hash::Hash;
 use morgan_interface::pubkey::Pubkey;

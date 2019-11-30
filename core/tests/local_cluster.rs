@@ -1,13 +1,13 @@
 extern crate morgan;
 
-use crate::morgan::blocktree::Blocktree;
+use crate::morgan::blockBufferPool::Blocktree;
 use hashbrown::HashSet;
 use log::*;
 use morgan::cluster::Cluster;
-use morgan::cluster_tests;
-use morgan::gossip_service::discover_cluster;
-use morgan::local_cluster::{ClusterConfig, LocalCluster};
-use morgan::validator::ValidatorConfig;
+use morgan::clusterTests;
+use morgan::gossipService::discover_cluster;
+use morgan::localCluster::{ClusterConfig, LocalCluster};
+use morgan::verifier::ValidatorConfig;
 use morgan_runtime::epoch_schedule::{EpochSchedule, MINIMUM_SLOT_LENGTH};
 use morgan_interface::poh_config::PohConfig;
 use morgan_interface::timing;
@@ -19,7 +19,7 @@ fn test_spend_and_verify_all_nodes_1() {
     morgan_logger::setup();
     let num_nodes = 1;
     let local = LocalCluster::new_with_equal_stakes(num_nodes, 10_000, 100);
-    cluster_tests::spend_and_verify_all_nodes(
+    clusterTests::spend_and_verify_all_nodes(
         &local.entry_point_info,
         &local.funding_keypair,
         num_nodes,
@@ -31,7 +31,7 @@ fn test_spend_and_verify_all_nodes_2() {
     morgan_logger::setup();
     let num_nodes = 2;
     let local = LocalCluster::new_with_equal_stakes(num_nodes, 10_000, 100);
-    cluster_tests::spend_and_verify_all_nodes(
+    clusterTests::spend_and_verify_all_nodes(
         &local.entry_point_info,
         &local.funding_keypair,
         num_nodes,
@@ -43,7 +43,7 @@ fn test_spend_and_verify_all_nodes_3() {
     morgan_logger::setup();
     let num_nodes = 3;
     let local = LocalCluster::new_with_equal_stakes(num_nodes, 10_000, 100);
-    cluster_tests::spend_and_verify_all_nodes(
+    clusterTests::spend_and_verify_all_nodes(
         &local.entry_point_info,
         &local.funding_keypair,
         num_nodes,
@@ -59,7 +59,7 @@ fn test_spend_and_verify_all_nodes_env_num_nodes() {
         .parse()
         .expect("could not parse NUM_NODES as a number");
     let local = LocalCluster::new_with_equal_stakes(num_nodes, 10_000, 100);
-    cluster_tests::spend_and_verify_all_nodes(
+    clusterTests::spend_and_verify_all_nodes(
         &local.entry_point_info,
         &local.funding_keypair,
         num_nodes,
@@ -72,7 +72,7 @@ fn test_fullnode_exit_default_config_should_panic() {
     morgan_logger::setup();
     let num_nodes = 2;
     let local = LocalCluster::new_with_equal_stakes(num_nodes, 10_000, 100);
-    cluster_tests::fullnode_exit(&local.entry_point_info, num_nodes);
+    clusterTests::fullnode_exit(&local.entry_point_info, num_nodes);
 }
 
 #[test]
@@ -88,7 +88,7 @@ fn test_fullnode_exit_2() {
         ..ClusterConfig::default()
     };
     let local = LocalCluster::new(&config);
-    cluster_tests::fullnode_exit(&local.entry_point_info, num_nodes);
+    clusterTests::fullnode_exit(&local.entry_point_info, num_nodes);
 }
 
 // Cluster needs a supermajority to remain, so the minimum size for this test is 4
@@ -105,7 +105,7 @@ fn test_leader_failure_4() {
         ..ClusterConfig::default()
     };
     let local = LocalCluster::new(&config);
-    cluster_tests::kill_entry_and_spend_and_verify_rest(
+    clusterTests::kill_entry_and_spend_and_verify_rest(
         &local.entry_point_info,
         &local.funding_keypair,
         num_nodes,
@@ -131,7 +131,7 @@ fn test_two_unbalanced_stakes() {
         ..ClusterConfig::default()
     });
 
-    cluster_tests::sleep_n_epochs(
+    clusterTests::sleep_n_epochs(
         10.0,
         &cluster.genesis_block.poh_config,
         num_ticks_per_slot,
@@ -140,7 +140,7 @@ fn test_two_unbalanced_stakes() {
     cluster.close_preserve_ledgers();
     let leader_pubkey = cluster.entry_point_info.id;
     let leader_ledger = cluster.fullnode_infos[&leader_pubkey].ledger_path.clone();
-    cluster_tests::verify_ledger_ticks(&leader_ledger, num_ticks_per_slot as usize);
+    clusterTests::verify_ledger_ticks(&leader_ledger, num_ticks_per_slot as usize);
 }
 
 #[test]
@@ -166,7 +166,7 @@ fn test_forwarding() {
         .unwrap();
 
     // Confirm that transactions were forwarded to and processed by the leader.
-    cluster_tests::send_many_transactions(&validator_info, &cluster.funding_keypair, 20);
+    clusterTests::send_many_transactions(&validator_info, &cluster.funding_keypair, 20);
 }
 
 #[test]
@@ -183,20 +183,20 @@ fn test_restart_node() {
         ..ClusterConfig::default()
     });
     let nodes = cluster.get_node_pubkeys();
-    cluster_tests::sleep_n_epochs(
+    clusterTests::sleep_n_epochs(
         1.0,
         &cluster.genesis_block.poh_config,
         timing::DEFAULT_TICKS_PER_SLOT,
         slots_per_epoch,
     );
     cluster.restart_node(nodes[0]);
-    cluster_tests::sleep_n_epochs(
+    clusterTests::sleep_n_epochs(
         0.5,
         &cluster.genesis_block.poh_config,
         timing::DEFAULT_TICKS_PER_SLOT,
         slots_per_epoch,
     );
-    cluster_tests::send_many_transactions(&cluster.entry_point_info, &cluster.funding_keypair, 1);
+    clusterTests::send_many_transactions(&cluster.entry_point_info, &cluster.funding_keypair, 1);
 }
 
 #[test]
@@ -270,7 +270,7 @@ fn run_repairman_catchup(num_repairmen: u64) {
     let num_warmup_epochs = (epoch_schedule.get_stakers_epoch(0) + 1) as f64;
 
     // Sleep for longer than the first N warmup epochs, with a one epoch buffer for timing issues
-    cluster_tests::sleep_n_epochs(
+    clusterTests::sleep_n_epochs(
         num_warmup_epochs + 1.0,
         &cluster.genesis_block.poh_config,
         num_ticks_per_slot,
@@ -290,7 +290,7 @@ fn run_repairman_catchup(num_repairmen: u64) {
         .unwrap();
 
     // Wait for repairman protocol to catch this validator up
-    cluster_tests::sleep_n_epochs(
+    clusterTests::sleep_n_epochs(
         num_warmup_epochs + 1.0,
         &cluster.genesis_block.poh_config,
         num_ticks_per_slot,

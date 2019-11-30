@@ -1,5 +1,5 @@
 use clap::{crate_description, crate_name, crate_version, value_t, App, Arg, ArgMatches};
-use morgan::gen_keys::GenKeys;
+use morgan::createKeys::GenKeys;
 use morgan_tokenbot::drone::DRONE_PORT;
 use morgan_interface::signature::{read_keypair, Keypair, KeypairUtil};
 use std::net::SocketAddr;

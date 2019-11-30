@@ -1,5 +1,5 @@
 use serde_json::{json, Value};
-use morgan::validator::new_validator_for_tests;
+use morgan::verifier::new_validator_for_tests;
 use morgan_client::rpc_client::RpcClient;
 use morgan_client::rpc_request::RpcRequest;
 use morgan_tokenbot::drone::run_local_drone;
